@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rabbit : MonoBehaviour
+public class Rabbit : Animal
 {
     public SceneSetter scene;
     private float xPos, zPos;
