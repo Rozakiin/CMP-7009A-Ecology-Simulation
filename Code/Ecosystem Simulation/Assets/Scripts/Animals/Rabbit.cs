@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Rabbit : Animal
 {
-    public SceneSetter scene;
+    public Simulation scene;
     private float xPos, zPos;
     private float currentXPos, currentZPos;
     public float moveSpeed;
