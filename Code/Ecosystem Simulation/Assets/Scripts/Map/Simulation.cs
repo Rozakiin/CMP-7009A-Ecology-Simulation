@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEditor; //used for readin
+using System.IO; //used for readin
+
 public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
@@ -16,6 +19,8 @@ public class Simulation : MonoBehaviour
     private float leftLimit, upLimit, rightLimit, downLimit;
     private System.Random rnd;
 
+    public GameObject mapReader;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,6 +28,16 @@ public class Simulation : MonoBehaviour
         CreateTiles();
         SetLimits();
         CreateRabbits();
+        ReadString("Assets/Scripts/Map/TESTREADFILE.txt");
+    }
+
+    // code snippet adapted from https://support.unity3d.com/hc/en-us/articles/115000341143-How-do-I-read-and-write-data-from-a-text-file-
+    static void ReadString(string path)
+    {
+        //Read the text from directly from the test.txt file
+        StreamReader reader = new StreamReader(path);
+        Debug.Log(reader.ReadToEnd());
+        reader.Close();
     }
 
     // Start is called before the first frame update
