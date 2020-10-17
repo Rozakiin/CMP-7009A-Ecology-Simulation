@@ -6,7 +6,7 @@ public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
 
-     // Start is called before the first frame update
+    // Start is called before the first frame update
     public GameObject grassTile;
     public GameObject lightGrassTile;
     public GameObject rabbit;
@@ -15,6 +15,7 @@ public class Simulation : MonoBehaviour
     private float tileSize;
     private float leftLimit, upLimit, rightLimit, downLimit;
     private System.Random rnd;
+    private int numberOfTurns;
 
     // Start is called before the first frame update
     void Awake()
@@ -22,19 +23,22 @@ public class Simulation : MonoBehaviour
         rnd = new System.Random();
         CreateTiles();
         SetLimits();
-        CreateRabbits();
+        for (int i = 0; i < 5; i++)
+        {
+            CreateRabbit();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void CreateTiles()
@@ -59,7 +63,7 @@ public class Simulation : MonoBehaviour
         }
     }
 
-    void CreateRabbits()
+    void CreateRabbit()
     {
         int rnd1 = rnd.Next(0, (int)gridWidth);
         int rnd2 = rnd.Next(0, (int)gridHeight);
@@ -67,13 +71,14 @@ public class Simulation : MonoBehaviour
         float rabZPos = rnd2 * tileSize;
         Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation);
         rabbit.transform.localScale = new Vector3(3f, 3f, 3f);
+
     }
 
     void SetLimits()
     {
         upLimit = (float)(gridHeight - 1) * tileSize;
         leftLimit = 0;
-        rightLimit = (gridWidth - 1) * tileSize;
+        rightLimit = (float)(gridWidth - 1) * tileSize;
         downLimit = 0;
     }
 
@@ -110,6 +115,11 @@ public class Simulation : MonoBehaviour
     public float GetDownLimit()
     {
         return downLimit;
+    }
+
+    public int GetNumberOfTurns()
+    {
+        return numberOfTurns;
     }
 }
 
