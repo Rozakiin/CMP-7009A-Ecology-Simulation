@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
+    public abstract int Anima;
     // Start is called before the first frame update
     void Start()
     {
