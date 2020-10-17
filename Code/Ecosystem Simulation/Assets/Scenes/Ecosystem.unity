@@ -154,7 +154,7 @@ MonoBehaviour:
     type: 3}
   lightGrassTile: {fileID: 555318781069503079, guid: 299a86df992454149938ed63f6952a94,
     type: 3}
-  rabbit: {fileID: 2082340914}
+  rabbit: {fileID: 100042, guid: 0962bdca27eaca34aaa15f7fdf608faf, type: 3}
 --- !u!4 &1530961241
 Transform:
   m_ObjectHideFlags: 0
