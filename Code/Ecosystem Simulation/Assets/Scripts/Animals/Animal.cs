@@ -2,9 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animal : MonoBehaviour
+public abstract class Animal : MonoBehaviour
 {
-    public abstract int Animal
+    protected float hunger;
+    protected float thirsty;
+    protected float age;
+    protected float reproUrge;
+    protected float rabEatTime = 1;
+    protected float pregnaTime = 5;
+    protected abstract float maxLifeExpe { get; set;}
+    protected abstract float babyNum { get; set;}
+    protected Animal()
+    {
+    	hunger = 60;
+    	thirsty = 60;
+    	age = 0;
+    	reproUrge= 0;
+    }
+    public static void destroyBody()
+    {
+    	
+    }
     // Start is called before the first frame update
     void Start()
     {
