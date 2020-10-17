@@ -8,7 +8,8 @@ MonoImporter:
       type: 3}
   - lightGrassTile: {fileID: 555318781069503079, guid: 299a86df992454149938ed63f6952a94,
       type: 3}
-  - rabbit: {fileID: 100042, guid: 0962bdca27eaca34aaa15f7fdf608faf, type: 3}
+  - rabbit: {fileID: 7344803392488206227, guid: 8b2c730dc67fbd847b8db569268b2c26,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
