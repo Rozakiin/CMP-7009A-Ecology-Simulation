@@ -26,8 +26,9 @@ public class Simulation : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit();
+            CreateGrass();
         }
-        CreateGrass();
+        
     }
 
     // Start is called before the first frame update
@@ -71,14 +72,17 @@ public class Simulation : MonoBehaviour
         float rabXPos = rnd1 * tileSize;
         float rabZPos = rnd2 * tileSize;
         Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation);
-        rabbit.transform.localScale = new Vector3(3f, 3f, 3f);
-
     }
 
     void CreateGrass()
     {
-        
+        int randWidth = rnd.Next(0, (int)gridWidth);
+        int randHeight = rnd.Next(0, (int)gridHeight);
+        float grassXPos = randWidth * tileSize;
+        float grassZPos = randHeight * tileSize;
+        Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation);
     }
+
     void SetLimits()
     {
         upLimit = (float)(gridHeight - 1) * tileSize;
