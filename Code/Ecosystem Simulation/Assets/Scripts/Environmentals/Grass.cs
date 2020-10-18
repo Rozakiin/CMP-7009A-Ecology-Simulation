@@ -10,24 +10,6 @@ public class Grass : MonoBehaviour
     private static int baseEnergy = 20; // base energy to be shared by all grass
     private float xPos, zPos; // x and z position
     private float leftLimit, upLimit, rightLimit, downLimit; // limits of where the grass can be
-    
-    // Default Grass constructor
-    Grass()
-    {
-        currentHeight = 0;
-    }
-
-    // Grass constructor with specifed current height
-    Grass(int height)
-    {
-        currentHeight = height;
-    }
-
-    // Setter for Max Height of grass
-    void SetMaxHeight(int height)
-    {
-        maxHeight = height;
-    }
 
     // Energy is a property that multiplies baseEnergy with grass height
     // to give the energy when eaten
@@ -50,6 +32,7 @@ public class Grass : MonoBehaviour
         zPos = transform.position.z;
         GetLimits();
         transform.localScale = new Vector3(3f, 3f, 3f);
+        currentHeight = 0;
     }
 
     // Update is called once per frame
@@ -64,5 +47,11 @@ public class Grass : MonoBehaviour
         upLimit = scene.GetUpLimit();
         rightLimit = scene.GetRightLimit();
         downLimit = scene.GetDownLimit();
+    }
+
+    // Setter for Max Height of grass
+    void SetMaxHeight(int height)
+    {
+        maxHeight = height;
     }
 }
