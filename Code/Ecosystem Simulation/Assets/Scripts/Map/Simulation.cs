@@ -72,7 +72,6 @@ public class Simulation : MonoBehaviour
         float rabXPos = rnd1 * tileSize;
         float rabZPos = rnd2 * tileSize;
         Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation);
-        rabbit.transform.localScale = new Vector3(3f, 3f, 3f);
     }
 
     void CreateGrass()
@@ -82,7 +81,6 @@ public class Simulation : MonoBehaviour
         float grassXPos = randWidth * tileSize;
         float grassZPos = randHeight * tileSize;
         Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation);
-        grass.transform.localScale = new Vector3(3f, 3f, 3f);
     }
 
     void SetLimits()

@@ -31,7 +31,7 @@ public class Grass : MonoBehaviour
         xPos = transform.position.x;
         zPos = transform.position.z;
         GetLimits();
-        transform.localScale = new Vector3(3f, 3f, 3f);
+        transform.localScale = new Vector3(10f, 10f, 10f);
         currentHeight = 0;
     }
 
