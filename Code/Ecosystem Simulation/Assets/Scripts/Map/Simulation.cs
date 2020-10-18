@@ -6,10 +6,10 @@ public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
 
-     // Start is called before the first frame update
     public GameObject grassTile;
     public GameObject lightGrassTile;
     public GameObject rabbit;
+    public GameObject grass;
     private int gridWidth = 10;
     private int gridHeight = 10;
     private float tileSize;
@@ -23,6 +23,7 @@ public class Simulation : MonoBehaviour
         CreateTiles();
         SetLimits();
         CreateRabbits();
+        CreateGrass();
     }
 
     // Start is called before the first frame update
@@ -69,6 +70,10 @@ public class Simulation : MonoBehaviour
         rabbit.transform.localScale = new Vector3(3f, 3f, 3f);
     }
 
+    void CreateGrass()
+    {
+        
+    }
     void SetLimits()
     {
         upLimit = (float)(gridHeight - 1) * tileSize;
