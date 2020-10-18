@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Grass : MonoBehaviour
 {
-    private int currentHeight;
+    public Simulation scene;
+    private int currentHeight; // current growth height of the grass
     private static int maxHeight = 4; // max height to be shared by all grass
     private static int baseEnergy = 20; // base energy to be shared by all grass
-
+    private float xPos, zPos; // x and z position
+    private float leftLimit, upLimit, rightLimit, downLimit; // limits of where the grass can be
+    
     // Default Grass constructor
     Grass()
     {
@@ -43,12 +46,23 @@ public class Grass : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        xPos = transform.position.x;
+        zPos = transform.position.z;
+        GetLimits();
+        transform.localScale = new Vector3(3f, 3f, 3f);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void GetLimits()
+    {
+        leftLimit = scene.GetLeftLimit();
+        upLimit = scene.GetUpLimit();
+        rightLimit = scene.GetRightLimit();
+        downLimit = scene.GetDownLimit();
     }
 }
