@@ -26,8 +26,9 @@ public class Simulation : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit();
+            CreateGrass();
         }
-        CreateGrass();
+        
     }
 
     // Start is called before the first frame update
