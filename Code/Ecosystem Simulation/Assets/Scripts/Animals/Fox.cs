@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class Fox : Animal
 {
+	protected override float maxLifeExpe   // overriding property
+    {
+        get
+        {
+            return maxLifeExpe;
+        }
+        set
+        {
+        }
+    }
+    protected override float babyNum   // overriding property
+    {
+        get
+        {
+            return babyNum;
+        }
+        set
+        {
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
