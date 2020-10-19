@@ -15,7 +15,6 @@ public class Rabbit : Animal
     public float hunger;
     private int numberOfTurns;
     private int eatingSpeed;
-    private List<GameObject> grassList;
     private enum Directions
     {
         Left, Up, Right, Down
@@ -26,6 +25,7 @@ public class Rabbit : Animal
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
     }
     private States state;
+    private LineRenderer lineRenderer;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +40,7 @@ public class Rabbit : Animal
         numberOfTurns = 0;
         hunger = 0;
         eatingSpeed = 2;
-        grassList = new List<GameObject>();
+        CreateLineRenderer();
         transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
     }                                                                                       //the standard one is quite small and barely visible
 
@@ -51,16 +51,20 @@ public class Rabbit : Animal
         if (state == States.Wandering)
         {
             WanderAround();
-            if(hunger >= 10)
+            if(hunger >= 2)
             {
                 state = States.Hungry;
+
             }
         }
         else if(state == States.Hungry)
         {
             print("Hungry!");
-            //scene.GetGrassList();
-            //WanderAround();
+            WanderAround();
+            DisableLineRenderer();
+            Transform closestGrass = FindClosestGrass();
+            DrawLine(transform.position, closestGrass.position);
+
             //if(food.distance < sightRadius
             //{
             //  go towards grass
@@ -106,7 +110,7 @@ public class Rabbit : Animal
             xPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
             zPos = currentZPos;                                                             //allows for calculating the distance travelled.
             RandomizeDirection();
-        }
+        }       
     }
 
     //Randomize what direction the rabbit should move next. The number of is randomized from 0 up to directionsCounter,
@@ -198,5 +202,47 @@ public class Rabbit : Animal
         upLimit = scene.GetUpLimit();
         rightLimit = scene.GetRightLimit();
         downLimit = scene.GetDownLimit();
+    }
+
+    private void CreateLineRenderer()
+    {
+        //For creating line renderer object
+        lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
+        lineRenderer.startColor = Color.black;
+        lineRenderer.endColor = Color.black;
+        lineRenderer.startWidth = 1f;
+        lineRenderer.endWidth = 1f;
+        lineRenderer.positionCount = 2;
+        lineRenderer.useWorldSpace = true;
+    }
+
+    private void DrawLine(Vector3 position1, Vector3 position2)
+    {
+        lineRenderer.SetVertexCount(2);
+        lineRenderer.SetPosition(0, position1); 
+        lineRenderer.SetPosition(1, position2); 
+    }
+
+    private Transform FindClosestGrass()
+    {
+        Transform closestGrass = transform;
+        float distanceToGrass;
+        float shortestDistance = -1;
+        GameObject grassContainer = scene.grassContainer;
+        Transform[] allChildren = grassContainer.GetComponentsInChildren<Transform>();
+        foreach (Transform childGrass in allChildren)
+        {
+            distanceToGrass = Vector3.Distance(transform.position, childGrass.position);
+            if (shortestDistance == -1 || distanceToGrass < shortestDistance)
+            {
+                shortestDistance = distanceToGrass;
+                closestGrass = childGrass;
+            }
+        }
+        return closestGrass;
+    }
+    private void DisableLineRenderer()
+    {
+        lineRenderer.SetVertexCount(0);
     }
 }
