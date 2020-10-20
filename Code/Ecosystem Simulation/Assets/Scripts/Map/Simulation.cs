@@ -29,11 +29,6 @@ public class Simulation : MonoBehaviour
         CreateMap("Assets/Scripts/Map/MapExample.txt");
     }
 
-    void CreateMap(string path)
-    {
-        MapReader.ReadMap(path);
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +39,12 @@ public class Simulation : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void CreateMap(string path)
+    {
+        List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
+        MapReader.ReadInMap(path, ref mapList);
     }
 
     void CreateTiles()

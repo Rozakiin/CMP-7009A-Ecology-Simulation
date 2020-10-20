@@ -33,15 +33,17 @@ public class MapReader
         reader.Close();
     }*/
 
-    enum TerrainCost
+    public enum TerrainCost
     {
         Water, 
         Grass,
         Sand,
         Rock
     }
-//ref List<List<TerrainCost>> mapList
-    public static void ReadMap(string filePath)
+
+    // Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
+    // This is stored in mapList which is a List of lists passed by reference.
+    public static void ReadInMap(string filePath, ref List<List<TerrainCost>> mapList)
     {
         try 
         {
@@ -49,12 +51,10 @@ public class MapReader
             // The using statement also closes the StreamReader.
             using (StreamReader reader = new StreamReader(filePath)) 
             {
-                string line;
                 string column;
                 string row;
                 char[] charSeparators = {' ', '\n'}; // delimeters of space and newline
                 string[] words = reader.ReadToEnd().Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
-                List<List<TerrainCost>> mapList = new List<List<TerrainCost>>();                
 
                 int mapListIndex = 0;
                 foreach(string word in words) //iterate over each string in the words array
