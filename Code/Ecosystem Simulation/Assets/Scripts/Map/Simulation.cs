@@ -1,9 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEditor; //used for readin
-using System.IO; //used for readin
 
 public class Simulation : MonoBehaviour
 {
