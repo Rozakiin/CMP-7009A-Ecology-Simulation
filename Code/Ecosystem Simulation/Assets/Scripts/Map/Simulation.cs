@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,12 +23,12 @@ public class Simulation : MonoBehaviour
         rnd = new System.Random();
         CreateTiles();
         SetLimits();
+        CreateMap("Assets/Scripts/Map/MapExample.txt");
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit();
             CreateGrass();
         }
-        
     }
 
     // Start is called before the first frame update
@@ -41,6 +41,12 @@ public class Simulation : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void CreateMap(string path)
+    {
+        List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
+        MapReader.ReadInMap(path, ref mapList);
     }
 
     void CreateTiles()
