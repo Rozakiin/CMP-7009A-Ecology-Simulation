@@ -9,15 +9,16 @@ public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
 
-     // Start is called before the first frame update
     public GameObject grassTile;
     public GameObject lightGrassTile;
     public GameObject rabbit;
+    public GameObject grass;
     private int gridWidth = 10;
     private int gridHeight = 10;
     private float tileSize;
     private float leftLimit, upLimit, rightLimit, downLimit;
     private System.Random rnd;
+    private int numberOfTurns;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,20 +26,24 @@ public class Simulation : MonoBehaviour
         rnd = new System.Random();
         CreateTiles();
         SetLimits();
-        CreateRabbits();
         CreateMap("Assets/Scripts/Map/MapExample.txt");
+        for (int i = 0; i < 5; i++)
+        {
+            CreateRabbit();
+            CreateGrass();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void CreateMap(string path)
@@ -69,21 +74,29 @@ public class Simulation : MonoBehaviour
         }
     }
 
-    void CreateRabbits()
+    void CreateRabbit()
     {
         int rnd1 = rnd.Next(0, (int)gridWidth);
         int rnd2 = rnd.Next(0, (int)gridHeight);
         float rabXPos = rnd1 * tileSize;
         float rabZPos = rnd2 * tileSize;
         Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation);
-        rabbit.transform.localScale = new Vector3(3f, 3f, 3f);
+    }
+
+    void CreateGrass()
+    {
+        int randWidth = rnd.Next(0, (int)gridWidth);
+        int randHeight = rnd.Next(0, (int)gridHeight);
+        float grassXPos = randWidth * tileSize;
+        float grassZPos = randHeight * tileSize;
+        Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation);
     }
 
     void SetLimits()
     {
         upLimit = (float)(gridHeight - 1) * tileSize;
         leftLimit = 0;
-        rightLimit = (gridWidth - 1) * tileSize;
+        rightLimit = (float)(gridWidth - 1) * tileSize;
         downLimit = 0;
     }
 
@@ -120,6 +133,11 @@ public class Simulation : MonoBehaviour
     public float GetDownLimit()
     {
         return downLimit;
+    }
+
+    public int GetNumberOfTurns()
+    {
+        return numberOfTurns;
     }
 }
 
