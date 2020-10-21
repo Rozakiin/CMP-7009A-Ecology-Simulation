@@ -13,6 +13,18 @@ public abstract class Animal : MonoBehaviour
     protected float pregnancyLength = 5;
     protected abstract float maxLifeExpe { get; set;}
     protected abstract float babyNum { get; set;}
+    public enum DeathReason
+    {
+        Hunger,
+        Thirst,
+        Age,
+        Eaten
+    }
+    // count death reason
+    static dieForHunger;
+    static dieForThirst;
+    static dieForAge;
+    static dieForEaten;
     protected Animal()
     {
     	hunger = 60;
@@ -20,19 +32,62 @@ public abstract class Animal : MonoBehaviour
     	age = 0;
     	reproductiveUrge= 0;
     }
-    public static void destroyBody()
+    protected virtual void RandomMove()
     {
-    	
+
     }
-    // Start is called before the first frame update
-    void Start()
+    //create path to somewhere coordinate (x,y)
+    protected virtual void MoveToward(int x, int y)
     {
-        
+
+    }
+    protected virtual void LookForFood()
+    {
+
+    }
+    protected virtual void LookForWater()
+    {
+
+    }
+    protected virtual void LookForMate()
+    {
+
+    }
+    protected virtual void Mating()
+    {
+
+    }
+    protected virtual void FLee()
+    {
+
+    }
+    protected virtual void Eating()
+    {
+
+    }
+    protected virtual void Drinking()
+    {
+
+    }
+    public static void destroyBody(DeathReason reason)
+    {
+        if (reason == Hunger)
+        {
+            dieForHunger++;
+        }
+        else if (reason == Thirst)
+        {
+            dieForThirst++;
+        }
+        else if (reason == Age)
+        {
+            dirForAge++;
+        }
+        else (reason == Eaten)
+        {
+            dieForEaten++;
+        }
+        Destroy (gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
