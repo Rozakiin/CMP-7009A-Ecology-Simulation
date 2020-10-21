@@ -6,14 +6,20 @@ public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
 
+    // GameObjects
     public GameObject grassTile;
     public GameObject lightGrassTile;
+    public GameObject tileContainer;
     public GameObject rabbit;
+    public GameObject rabbitContainer;
     public GameObject grass;
+    public GameObject grassContainer;
+
     private int gridWidth = 10;
     private int gridHeight = 10;
     private float tileSize;
     private float leftLimit, upLimit, rightLimit, downLimit;
+
     private System.Random rnd;
     private int numberOfTurns;
 
@@ -26,8 +32,8 @@ public class Simulation : MonoBehaviour
         CreateMap("Assets/Scripts/Map/MapExample.txt");
         for (int i = 0; i < 5; i++)
         {
-            CreateRabbit();
-            CreateGrass();
+            CreateRabbit(i);
+            CreateGrass(i);
         }
     }
 
@@ -59,34 +65,41 @@ public class Simulation : MonoBehaviour
                 float xPos = i * tileSize;                                                     //Get the tile's x position
                 float yPos = grassTile.transform.position.y;                                //Get the tile's y position (always the same)
                 float zPos = j * tileSize;                                                     //Get the tile's z position
+                GameObject tileClone;
                 if ((i % 2 == 0 && j % 2 != 0) || (i % 2 != 0 && j % 2 == 0))
                 {
-                    GameObject lightTileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);  //Place the light green tile
+                    tileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);  //Place the light green tile
                 }
                 else
                 {
-                    GameObject grassTileClone = Instantiate(grassTile, new Vector3(xPos, yPos, zPos), grassTile.transform.rotation);             //Place the green tile
+                    tileClone = Instantiate(grassTile, new Vector3(xPos, yPos, zPos), grassTile.transform.rotation);             //Place the green tile
                 }
+                tileClone.transform.parent = tileContainer.transform;
+                tileClone.name += i + "" + (j + 1);
             }
         }
     }
 
-    void CreateRabbit()
+    void CreateRabbit(int iterator)
     {
         int rnd1 = rnd.Next(0, (int)gridWidth);
         int rnd2 = rnd.Next(0, (int)gridHeight);
         float rabXPos = rnd1 * tileSize;
         float rabZPos = rnd2 * tileSize;
-        Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation);
+        GameObject rabbitClone = Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation) as GameObject;
+        rabbitClone.transform.parent = rabbitContainer.transform;
+        rabbitClone.name = "RabbitClone" + (iterator + 1);
     }
 
-    void CreateGrass()
+    void CreateGrass(int iterator)
     {
         int randWidth = rnd.Next(0, (int)gridWidth);
         int randHeight = rnd.Next(0, (int)gridHeight);
         float grassXPos = randWidth * tileSize;
         float grassZPos = randHeight * tileSize;
-        Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation);
+        GameObject grassClone = Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation) as GameObject;
+        grassClone.transform.parent = grassContainer.transform;
+        grassClone.name = "GrassClone" + (iterator + 1);
     }
 
     void SetLimits()
