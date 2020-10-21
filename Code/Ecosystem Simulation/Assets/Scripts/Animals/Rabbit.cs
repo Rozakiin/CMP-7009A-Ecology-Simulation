@@ -9,7 +9,7 @@ public class Rabbit : Animal
     private float leftLimit, upLimit, rightLimit, downLimit;
     private int numberOfTurns;
 
-    
+    private LineRenderer lineRenderer;
 
     protected override float maxLifeExpectancy   // overriding property
     {
@@ -45,6 +45,7 @@ public class Rabbit : Animal
         state = States.Wandering;
         numberOfTurns = 0;
         eatingSpeed = 2f;
+        CreateLineRenderer();
         transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
     }                                                                                       //the standard one is quite small and barely visible
 
@@ -63,7 +64,11 @@ public class Rabbit : Animal
         else if(state == States.Hungry)
         {
             print("Hungry!");
-            //WanderAround();
+            WanderAround();
+            DisableLineRenderer();
+            Transform closestGrass = FindClosestGrass();
+            DrawLine(transform.position, closestGrass.position);
+
             //if(food.distance < sightRadius
             //{
             //  go towards grass
@@ -108,6 +113,7 @@ public class Rabbit : Animal
             currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
             startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
             startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
+            transform.position = new Vector3(startXPos, 0, startZPos);
             RandomizeDirection();
         }
     }
@@ -201,5 +207,47 @@ public class Rabbit : Animal
         upLimit = scene.GetUpLimit();
         rightLimit = scene.GetRightLimit();
         downLimit = scene.GetDownLimit();
+    }
+
+    private void CreateLineRenderer()
+    {
+        //For creating line renderer object
+        lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
+        lineRenderer.startColor = Color.black;
+        lineRenderer.endColor = Color.black;
+        lineRenderer.startWidth = 1f;
+        lineRenderer.endWidth = 1f;
+        lineRenderer.positionCount = 2;
+        lineRenderer.useWorldSpace = true;
+    }
+
+    private void DrawLine(Vector3 position1, Vector3 position2)
+    {
+        lineRenderer.SetVertexCount(2);
+        lineRenderer.SetPosition(0, position1);
+        lineRenderer.SetPosition(1, position2);
+    }
+
+    private Transform FindClosestGrass()
+    {
+        Transform closestGrass = transform;
+        float distanceToGrass;
+        float shortestDistance = -1;
+        GameObject grassContainer = scene.grassContainer;
+        Transform[] allChildren = grassContainer.GetComponentsInChildren<Transform>();
+        foreach (Transform childGrass in allChildren)
+        {
+            distanceToGrass = Vector3.Distance(transform.position, childGrass.position);
+            if (shortestDistance == -1 || distanceToGrass < shortestDistance)
+            {
+                shortestDistance = distanceToGrass;
+                closestGrass = childGrass;
+            }
+        }
+        return closestGrass;
+    }
+    private void DisableLineRenderer()
+    {
+        lineRenderer.SetVertexCount(0);
     }
 }
