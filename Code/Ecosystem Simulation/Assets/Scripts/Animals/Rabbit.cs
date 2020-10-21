@@ -5,42 +5,27 @@ using UnityEngine;
 
 public class Rabbit : Animal
 {
-    public Simulation scene;
-    private float xPos, zPos;                                                               //The rabbit's starting x and z position
-    private float currentXPos, currentZPos;                                                 //The rabbit's current x and z position
-    public float moveSpeed;
-    private int rnd;
     private float tileSize;                                                                 //The size of each tile on the map
     private float leftLimit, upLimit, rightLimit, downLimit;
-    public float hunger;
     private int numberOfTurns;
-    private int eatingSpeed;
-    private enum Directions
-    {
-        Left, Up, Right, Down
-    }
-    private Directions currentDirection;
-    private enum States
-    {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
-    }
-    private States state;
 
-    protected override float maxLifeExpe   // overriding property
+    
+
+    protected override float maxLifeExpectancy   // overriding property
     {
         get
         {
-            return maxLifeExpe;
+            return maxLifeExpectancy;
         }
         set
         {
         }
     }
-    protected override float babyNum   // overriding property
+    protected override float babyNumber   // overriding property
     {
         get
         {
-            return babyNum;
+            return babyNumber;
         }
         set
         {
@@ -50,17 +35,16 @@ public class Rabbit : Animal
     // Start is called before the first frame update
     void Start()
     {
-
-        xPos = transform.position.x;
-        zPos = transform.position.z;
+        hunger = 0f;
+        startXPos = transform.position.x;
+        startZPos = transform.position.z;
         moveSpeed = 25f;
         GetLimits();
         RandomizeDirection();
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         numberOfTurns = 0;
-        hunger = 0;
-        eatingSpeed = 2;
+        eatingSpeed = 2f;
         transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
     }                                                                                       //the standard one is quite small and barely visible
 
@@ -112,18 +96,18 @@ public class Rabbit : Animal
         currentZPos = transform.position.z;
         if (currentDirection == Directions.Left || currentDirection == Directions.Right)
         {
-            distanceMoved = CalculateDistanceMoved(xPos, currentXPos);
+            distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
         }
         else
         {
-            distanceMoved = CalculateDistanceMoved(zPos, currentZPos);
+            distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
         }
         if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
         {                                                                                   //it means that it's time to randomize a new direction.
             currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
             currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
-            xPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
-            zPos = currentZPos;                                                             //allows for calculating the distance travelled.
+            startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
+            startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
             RandomizeDirection();
         }
     }
@@ -139,7 +123,7 @@ public class Rabbit : Animal
         do
         {
             int directionsCounter = Directions.GetNames(typeof(Directions)).Length;
-            rnd = UnityEngine.Random.Range(0, directionsCounter);
+            int rnd = UnityEngine.Random.Range(0, directionsCounter);
             switch (rnd)
             {
                 case 0:

@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Fox : Animal
 {
-	protected override float maxLifeExpe   // overriding property
+	protected override float maxLifeExpectancy   // overriding property
     {
         get
         {
-            return maxLifeExpe;
+            return maxLifeExpectancy;
         }
         set
         {
         }
     }
-    protected override float babyNum   // overriding property
+    protected override float babyNumber   // overriding property
     {
         get
         {
-            return babyNum;
+            return babyNumber;
         }
         set
         {
