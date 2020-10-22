@@ -259,6 +259,8 @@ MonoBehaviour:
     type: 3}
   lightGrassTile: {fileID: 555318781069503079, guid: 299a86df992454149938ed63f6952a94,
     type: 3}
+  waterTile: {fileID: 4814683984116599111, guid: 2a4625c7296ca1848bf85307ce47de11,
+    type: 3}
   tileContainer: {fileID: 1020543198}
   rabbit: {fileID: 2082340914}
   rabbitContainer: {fileID: 1928260513}

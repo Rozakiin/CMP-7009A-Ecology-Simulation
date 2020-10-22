@@ -9,6 +9,7 @@ public class Simulation : MonoBehaviour
     // GameObjects
     public GameObject grassTile;
     public GameObject lightGrassTile;
+    public GameObject waterTile;
     public GameObject tileContainer;
     public GameObject rabbit;
     public GameObject rabbitContainer;
@@ -27,9 +28,9 @@ public class Simulation : MonoBehaviour
     void Awake()
     {
         rnd = new System.Random();
-        CreateTiles();
-        SetLimits();
+        //CreateTiles();
         CreateMap("Assets/Scripts/Map/MapExample.txt");
+        SetLimits();
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit(i);
@@ -53,6 +54,47 @@ public class Simulation : MonoBehaviour
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
         MapReader.ReadInMap(path, ref mapList);
+        CreateTilesFromMapList(ref mapList);
+    }
+
+    void CreateTilesFromMapList(ref List<List<MapReader.TerrainCost>> mapList)
+    {
+        for (int i = 0; i < mapList.Count; i++)
+        {
+            for (int j = 0; j < mapList[i].Count; j++)
+            {
+                tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
+                float xPos = i * tileSize;                                                     //Get the tile's x position
+                float yPos = grassTile.transform.position.y;                                //Get the tile's y position (always the same)
+                float zPos = j * tileSize;                                                     //Get the tile's z position
+                GameObject tileClone;
+                Debug.Log(mapList[i][j].ToString());
+                switch (mapList[i][j])
+                {
+                    case MapReader.TerrainCost.Water:
+                        tileClone = Instantiate(waterTile, new Vector3(xPos, yPos, zPos), waterTile.transform.rotation);  //Place the water tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += i + "" + (j + 1);
+                        break;
+                    case MapReader.TerrainCost.Grass:
+                        tileClone = Instantiate(grassTile, new Vector3(xPos, yPos, zPos), grassTile.transform.rotation);  //Place the grass tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += i + "" + (j + 1);
+                        break;
+                    case MapReader.TerrainCost.Sand:
+                        //tileClone = Instantiate(sandTile, new Vector3(xPos, yPos, zPos), sandTile.transform.rotation);  //Place the sand tile
+                        break;
+                    case MapReader.TerrainCost.Rock:
+                        //tileClone = Instantiate(rockTile, new Vector3(xPos, yPos, zPos), rockTile.transform.rotation);  //Place the rock tile
+                        break;
+                    default:
+                        tileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += i + "" + (j + 1);
+                        throw new System.InvalidOperationException("Unknown TerrainCost value"); //TODO check correct Exception thrown
+                }
+            }
+        }
     }
 
     void CreateTiles()
