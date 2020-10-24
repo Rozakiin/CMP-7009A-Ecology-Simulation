@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Animal : MonoBehaviour
+public abstract class Animal : MonoBehaviour, Edible
 {
     public Simulation scene;
 
@@ -14,13 +14,21 @@ public abstract class Animal : MonoBehaviour
     // status properties (could be made into a struct?)
     protected float hunger;
     protected float thirsty;
-    protected float age;
+    protected int age;
     protected float reproductiveUrge;
     protected float sightRadius;
     protected float eatingSpeed;
     protected float pregnancyLength;
     protected abstract float maxLifeExpectancy { get; set;}
     protected abstract float babyNumber { get; set;}
+
+    //Edible Interface
+    public int baseNutritionalValue { get; set; } = 10;
+    public bool canBeEaten { get; set; } = true;
+    public int NutritionalValue()
+    {
+        return baseNutritionalValue * age;
+    }
 
     protected enum Directions
     {
