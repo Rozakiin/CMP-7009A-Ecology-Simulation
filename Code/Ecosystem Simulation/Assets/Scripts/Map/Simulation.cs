@@ -16,8 +16,8 @@ public class Simulation : MonoBehaviour
     public GameObject grass;
     public GameObject grassContainer;
 
-    private int gridWidth = 10;
-    private int gridHeight = 10;
+    private int gridWidth;
+    private int gridHeight;
     private float tileSize;
     private float leftLimit, upLimit, rightLimit, downLimit;
 
@@ -59,6 +59,9 @@ public class Simulation : MonoBehaviour
 
     void CreateTilesFromMapList(ref List<List<MapReader.TerrainCost>> mapList)
     {
+        gridWidth = mapList.Count;
+        gridHeight = mapList[0].Count;
+
         for (int i = 0; i < mapList.Count; i++)
         {
             for (int j = 0; j < mapList[i].Count; j++)
@@ -68,7 +71,7 @@ public class Simulation : MonoBehaviour
                 float yPos = grassTile.transform.position.y;                                //Get the tile's y position (always the same)
                 float zPos = j * tileSize;                                                     //Get the tile's z position
                 GameObject tileClone;
-                Debug.Log(mapList[i][j].ToString());
+                //Debug.Log(mapList[i][j].ToString());
                 switch (mapList[i][j])
                 {
                     case MapReader.TerrainCost.Water:
@@ -83,9 +86,13 @@ public class Simulation : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Sand:
                         //tileClone = Instantiate(sandTile, new Vector3(xPos, yPos, zPos), sandTile.transform.rotation);  //Place the sand tile
+                        //tileClone.transform.parent = tileContainer.transform;
+                        //tileClone.name += i + "" + (j + 1);
                         break;
                     case MapReader.TerrainCost.Rock:
                         //tileClone = Instantiate(rockTile, new Vector3(xPos, yPos, zPos), rockTile.transform.rotation);  //Place the rock tile
+                        //tileClone.transform.parent = tileContainer.transform;
+                        //tileClone name += i + "" + (j + 1);
                         break;
                     default:
                         tileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);
