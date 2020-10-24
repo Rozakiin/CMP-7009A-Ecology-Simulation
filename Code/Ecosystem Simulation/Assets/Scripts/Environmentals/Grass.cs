@@ -2,18 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grass : MonoBehaviour
+public class Grass : MonoBehaviour, Edible
 {
     public Simulation scene;
     private int currentHeight; // current growth height of the grass
     private static int maxHeight = 4; // max height to be shared by all grass
-    private static int baseEnergy = 20; // base energy to be shared by all grass
+    //private static int baseEnergy = 20; // base energy to be shared by all grass
     private float xPos, zPos; // x and z position
     private float leftLimit, upLimit, rightLimit, downLimit; // limits of where the grass can be
 
+    //Edible Interface
+    public int baseNutritionalValue { get; set; } = 20;
+    public bool canBeEaten { get; set; } = true;
+    public int NutritionalValue()
+    {
+        return baseNutritionalValue * currentHeight;
+    }
+
     // Energy is a property that multiplies baseEnergy with grass height
     // to give the energy when eaten
-    public int Energy
+/*    public int Energy
     {
         get
         {
@@ -23,7 +31,7 @@ public class Grass : MonoBehaviour
         {
             baseEnergy = value / currentHeight;
         }
-    }
+    }*/
 
     // Start is called before the first frame update
     void Start()
