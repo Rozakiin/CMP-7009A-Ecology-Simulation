@@ -15,7 +15,15 @@ public class Simulation : MonoBehaviour
     public GameObject rabbitContainer;
     public GameObject grass;
     public GameObject grassContainer;
+    public GameObject plane; //used for spawning rabbit on mouseclick
 
+    // GameObject Counters
+    private int grassTileCount;
+    private int waterTileCount;
+    private int rabbitCount;
+    private int grassCount;
+
+    // Grid Data
     private int gridWidth;
     private int gridHeight;
     private float tileSize;
@@ -27,14 +35,29 @@ public class Simulation : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        // Initiate property values
+        // Object Counts
+        grassTileCount = 0;
+        waterTileCount = 0;
+        rabbitCount = 0;
+        grassCount = 0;
+        // Grid data
+        gridWidth = 0;
+        gridHeight = 0;
+        tileSize = 0;
+        leftLimit = 0;
+        upLimit = 0;
+        rightLimit = 0;
+        downLimit = 0;
+
         rnd = new System.Random();
-        //CreateTiles();
+
         CreateMap("Assets/Scripts/Map/MapExample.txt");
         SetLimits();
         for (int i = 0; i < 5; i++)
         {
-            CreateRabbit(i);
-            CreateGrass(i);
+            CreateRabbit();
+            CreateGrass();
         }
     }
 
@@ -47,7 +70,15 @@ public class Simulation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(0)){
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)){
+                Vector3 targetPosition = hit.point;
+                CreateRabbitAtPos(ref targetPosition);
+            }
+        }
     }
 
     void CreateMap(string path)
@@ -129,26 +160,44 @@ public class Simulation : MonoBehaviour
         }
     }
 
-    void CreateRabbit(int iterator)
+    //Unfinished
+    // void CreateGameObjectAtPos(ref GameObject object, ref GameObject objectContainer, int iterator, ref Vector3 position)
+    // {
+    //     GameObject objClone = Instantiate(object, position, obj.transform.rotation) as GameObject;
+    //     objectClone.transform.parent = objectContainer.transform;
+    //     objectClone.name = iterator;
+    // }
+
+    void CreateRabbitAtPos(ref Vector3 position)
+    {
+        GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;
+        rabbitCount++;
+        rabbitClone.transform.parent = rabbitContainer.transform;
+        rabbitClone.name = "RabbitClone" + rabbitCount;
+    }
+
+    void CreateRabbit() 
     {
         int rnd1 = rnd.Next(0, (int)gridWidth);
         int rnd2 = rnd.Next(0, (int)gridHeight);
         float rabXPos = rnd1 * tileSize;
         float rabZPos = rnd2 * tileSize;
         GameObject rabbitClone = Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation) as GameObject;
+        rabbitCount++;
         rabbitClone.transform.parent = rabbitContainer.transform;
-        rabbitClone.name = "RabbitClone" + (iterator + 1);
+        rabbitClone.name = "RabbitClone" + rabbitCount;
     }
 
-    void CreateGrass(int iterator)
+    void CreateGrass()
     {
         int randWidth = rnd.Next(0, (int)gridWidth);
         int randHeight = rnd.Next(0, (int)gridHeight);
         float grassXPos = randWidth * tileSize;
         float grassZPos = randHeight * tileSize;
         GameObject grassClone = Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation) as GameObject;
+        grassCount++;
         grassClone.transform.parent = grassContainer.transform;
-        grassClone.name = "GrassClone" + (iterator + 1);
+        grassClone.name = "GrassClone" + grassCount;
     }
 
     void SetLimits()
