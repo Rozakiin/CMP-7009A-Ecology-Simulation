@@ -11,10 +11,13 @@ public class Simulation : MonoBehaviour
     public GameObject lightGrassTile;
     public GameObject waterTile;
     public GameObject tileContainer;
+    public GameObject waterContainer;//will
     public GameObject rabbit;
     public GameObject rabbitContainer;
     public GameObject grass;
     public GameObject grassContainer;
+
+
 
     private int gridWidth;
     private int gridHeight;
@@ -76,7 +79,7 @@ public class Simulation : MonoBehaviour
                 {
                     case MapReader.TerrainCost.Water:
                         tileClone = Instantiate(waterTile, new Vector3(xPos, yPos, zPos), waterTile.transform.rotation);  //Place the water tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = waterContainer.transform;
                         tileClone.name += i + "" + (j + 1);
                         break;
                     case MapReader.TerrainCost.Grass:
