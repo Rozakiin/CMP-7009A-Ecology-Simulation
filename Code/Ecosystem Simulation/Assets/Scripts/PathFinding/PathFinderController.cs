@@ -15,9 +15,10 @@ public class PathFinderController : MonoBehaviour
     Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
     public List<Node> finalPath;//The completed path that the red line will be drawn along
 
-
     float nodeDiameter;//Twice the amount of the radius (Set in the start function)
     int gridSizeX, gridSizeY;//Size of the Grid in Array units.
+
+    public int MaxSize{ get{ return gridSizeX * gridSizeY; } }
 
 
     private void Start()//Ran once the program starts

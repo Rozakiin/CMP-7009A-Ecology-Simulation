@@ -26,24 +26,14 @@ public class PathFinder : MonoBehaviour
         Node targetNode = grid.NodeFromWorldPoint(_targetPosition);//Gets the node closest to the target position
 
         // List is slow searching, to be optimised
-        List<Node> openList = new List<Node>();//List of nodes for the open list
+        Heap<Node> openList = new Heap<Node>(grid.MaxSize);//List of nodes for the open list
         HashSet<Node> closedList = new HashSet<Node>();//Hashset of nodes for the closed list
 
         openList.Add(startNode);//Add the starting node to the open list to begin the program
 
         while(openList.Count > 0)//Whilst there is something in the open list
         {
-            Node currentNode = openList[0];//Create a node and set it to the first item in the open list
-            //unoptimised
-            for(int i = 1; i < openList.Count; i++)//Loop through the open list starting from the second object
-            {
-                if (openList[i].FCost < currentNode.FCost || openList[i].FCost == currentNode.FCost && openList[i].hCost < currentNode.hCost)//If the f cost of that object is less than or equal to the f cost of the current node
-                {
-                    currentNode = openList[i];//Set the current node to that object
-                }
-            }
-            
-            openList.Remove(currentNode);//Remove that from the open list
+            Node currentNode = openList.RemoveFirst();//Create a node and set it to the first item in the open list
             closedList.Add(currentNode);//And add it to the closed list
 
             //Found the Path!
