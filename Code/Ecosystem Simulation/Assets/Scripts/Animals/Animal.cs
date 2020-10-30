@@ -13,7 +13,7 @@ public abstract class Animal : MonoBehaviour, Edible
 
     // status properties (could be made into a struct?)
     protected float hunger;
-    protected float thirsty;
+    protected float thirst;
     protected int age;
     protected float reproductiveUrge;
     protected float sightRadius;
