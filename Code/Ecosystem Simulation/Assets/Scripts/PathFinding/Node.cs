@@ -8,6 +8,7 @@ public class Node : IHeapItem<Node>
     public int gridY;// Y position in Node Array
 
     public bool isWalkable;// Is node obstructed
+    public int penalty; //penaty for walking the node
     public Vector3 position;// World position of node
 
     public Node parentNode;// For A* algo, store previous node came from to trace path
@@ -18,6 +19,16 @@ public class Node : IHeapItem<Node>
     public int FCost { get { return gCost + hCost; } }//Total Cost of the Node
 
     protected int heapIndex;
+
+    public Node(bool _isWalkable, Vector3 _position, int _gridX, int _gridY, int _penalty)// Constructor for Node
+    {
+        isWalkable = _isWalkable;
+        position = _position;
+        gridX = _gridX;
+        gridY = _gridY;
+        penalty = _penalty;
+    }
+
     public int HeapIndex 
     {
         get 
@@ -39,14 +50,4 @@ public class Node : IHeapItem<Node>
         }
         return -compare;//higher priority is lower cost
     }
-
-    public Node(bool _isWalkable, Vector3 _position, int _gridX, int _gridY)// Constructor for Node
-    {
-        isWalkable = _isWalkable;
-        position = _position;
-        gridX = _gridX;
-        gridY = _gridY;
-    }
-
-
 }

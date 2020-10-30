@@ -57,16 +57,20 @@ public class PathFinder : MonoBehaviour
                         continue;//Skip it
                     }
 
-                    int moveCost = currentNode.gCost + GetManhattenDistance(currentNode, neighbourNode);//Get the F cost of that neighbor
-                    if (moveCost < neighbourNode.gCost || !openList.Contains(neighbourNode))//If the f cost is greater than the g cost or it is not in the open list
+                    int moveCost = currentNode.gCost + GetManhattenDistance(currentNode, neighbourNode) + neighbourNode.penalty;//Get the total cost of that neighbor
+                    if (moveCost < neighbourNode.gCost || !openList.Contains(neighbourNode))//If the total cost is greater than the g cost or it is not in the open list
                     {
-                        neighbourNode.gCost = moveCost;//Set the g cost to the f cost
+                        neighbourNode.gCost = moveCost;//Set the g cost to the total cost
                         neighbourNode.hCost = GetManhattenDistance(neighbourNode, targetNode);//Set the h cost
                         neighbourNode.parentNode = currentNode;//Set the parent of the node for retracing steps
 
                         if(!openList.Contains(neighbourNode))//If the neighbor is not in the openList
                         {
                             openList.Add(neighbourNode);//Add it to the list
+                        }
+                        else
+                        {
+                            openList.UpdateItem(neighbourNode);// value changed so must be updated 
                         }
                     }
                 }

@@ -10,7 +10,9 @@ public class PathFinderController : MonoBehaviour
     public Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
     public float nodeRadius;//This stores how big each square on the graph will be
     public float distanceBetweenNodes;//The distance that the squares will spawn from eachother.
-
+    public TerrainType[] walkableRegions;
+    LayerMask walkableMask;
+    Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
     Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
 
     float nodeDiameter;//Twice the amount of the radius (Set in the start function)
@@ -24,6 +26,13 @@ public class PathFinderController : MonoBehaviour
         nodeDiameter = nodeRadius * 2;//Double the radius to get diameter
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
+        
+        foreach(TerrainType region in walkableRegions)
+        {
+            walkableMask.value |= region.terrainMask.value;//use Bitwise OR to add together
+            walkableRegionsDictionary.Add((int)Mathf.Log(region.terrainMask.value, 2), region.terrainPenalty);//store in dictionary, key calc from power to raise 2 by
+        }
+        
         CreateGrid();//Draw the grid
     }
 
@@ -41,7 +50,19 @@ public class PathFinderController : MonoBehaviour
                 //Quick collision check against the current node and anything in the world at its position. If it is colliding with an object with a unwalkableMask,
                 bool isWalkable = !Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask);
 
-                nodeArray[x, y] = new Node(isWalkable, worldPoint, x, y);//Create a new node in the array.
+                int movementPenalty = 0;//penalty for walking over node
+                
+                if(isWalkable)
+                {
+                    Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, 100, walkableMask)) 
+                    {
+                        walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
+                    }
+                }
+
+                nodeArray[x, y] = new Node(isWalkable, worldPoint, x, y, movementPenalty);//Create a new node in the array.
             }
         }
     }
@@ -125,5 +146,12 @@ public class PathFinderController : MonoBehaviour
                 Gizmos.DrawCube(n.position, Vector3.one * (nodeDiameter - distanceBetweenNodes));//Draw the node at the position of the node.
             }
         }
+    }
+
+    [System.Serializable]//show in inspector
+    public class TerrainType 
+    {
+        public LayerMask terrainMask;
+        public int terrainPenalty;
     }
 }
