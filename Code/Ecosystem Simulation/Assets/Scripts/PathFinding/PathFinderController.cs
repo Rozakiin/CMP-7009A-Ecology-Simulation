@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class PathFinderController : MonoBehaviour
 {
-
-    public Transform startPosition;//This is where the program will start the pathfinding from.
+    public bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
     public LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
     public Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
     public float nodeRadius;//This stores how big each square on the graph will be
     public float distanceBetweenNodes;//The distance that the squares will spawn from eachother.
 
     Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
-    public List<Node> finalPath;//The completed path that the red line will be drawn along
 
     float nodeDiameter;//Twice the amount of the radius (Set in the start function)
     int gridSizeX, gridSizeY;//Size of the Grid in Array units.
@@ -21,7 +19,7 @@ public class PathFinderController : MonoBehaviour
     public int MaxSize{ get{ return gridSizeX * gridSizeY; } }
 
 
-    private void Start()//Ran once the program starts
+    private void Awake()//Ran once the program starts
     {
         nodeDiameter = nodeRadius * 2;//Double the radius to get diameter
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
@@ -107,12 +105,12 @@ public class PathFinderController : MonoBehaviour
         return nodeArray[x, y];// position of closest node in array
     }
 
-    //Function that draws the wireframe, the nodes, and final path
+    //Function that draws the wireframe, and the nodes
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));//Draw a wire cube with the given dimensions from the Unity inspector
 
-        if (nodeArray != null)//If the grid is not empty
+        if (nodeArray != null && displayGridGizmos)//If the grid is not empty and displayGridGizmos is true
         {
             foreach (Node n in nodeArray)//Loop through every node in the grid
             {
@@ -123,14 +121,6 @@ public class PathFinderController : MonoBehaviour
                 else
                 {
                     Gizmos.color = Color.red;//node colour red
-                }
-
-                if (finalPath != null)//If the final path is not empty
-                {
-                    if (finalPath.Contains(n))//If the current node is in the final path
-                    {
-                        Gizmos.color = Color.cyan;//node colour cyan
-                    }
                 }
                 Gizmos.DrawCube(n.position, Vector3.one * (nodeDiameter - distanceBetweenNodes));//Draw the node at the position of the node.
             }
