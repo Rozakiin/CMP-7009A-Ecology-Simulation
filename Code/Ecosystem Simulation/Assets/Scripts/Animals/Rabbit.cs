@@ -36,7 +36,7 @@ public class Rabbit : Animal
     void Start()
     {
         hunger = 0f;
-        thirsty = 0f;
+        thirst = 0f;
         startXPos = transform.position.x;
         startZPos = transform.position.z;
         moveSpeed = 25f;
