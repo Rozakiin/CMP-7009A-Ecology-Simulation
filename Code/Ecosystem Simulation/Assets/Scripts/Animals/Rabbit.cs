@@ -54,7 +54,6 @@ public class Rabbit : Animal
     void Update()
     {
         hunger += 1 * Time.deltaTime;
-        //thirsty += 1 * Time.deltaTime;
         if (state == States.Wandering)
         {
             WanderAround();
@@ -98,7 +97,6 @@ public class Rabbit : Animal
             WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
-            //DrawLine(transform.position, closestWater.position);
         }
     }
 
