@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,11 +64,11 @@ public class Rabbit : Animal
         else if(state == States.Hungry)
         {
             print("Hungry!");
-            WanderAround();
+            //WanderAround();
             DisableLineRenderer();
-            Transform closestGrass = FindClosestGrass();
-            DrawLine(transform.position, closestGrass.position);
-
+            target = FindClosestGrass();
+            DrawLine(transform.position, target.position);
+            
             //if(food.distance < sightRadius
             //{
             //  go towards grass
