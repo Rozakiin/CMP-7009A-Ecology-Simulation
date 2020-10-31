@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class PathFinderController : MonoBehaviour
 {
+    public Simulation scene;
     public bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
     public LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
-    public Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
+    private Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
     public float nodeRadius;//This stores how big each square on the graph will be
     public float distanceBetweenNodes;//The distance that the squares will spawn from eachother.
     public TerrainType[] walkableRegions;
@@ -21,9 +22,15 @@ public class PathFinderController : MonoBehaviour
     public int MaxSize{ get{ return gridSizeX * gridSizeY; } }
 
 
-    private void Awake()//Ran once the program starts
+    void Awake()//Ran once the program starts
     {
+        scene = GetComponent<Simulation>(); // get reference to Simulation
         nodeDiameter = nodeRadius * 2;//Double the radius to get diameter
+    }
+
+    void Start()
+    {
+        gridWorldSize = scene.worldSize;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         
@@ -44,8 +51,8 @@ public class PathFinderController : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)//Loop through the array of nodes
             {
-                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);//Get the world co ordinates of the bottom left of the graph
-
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);//Get the world co ordinates of the node from the bottom left of the graph
+                //Vector3 worldPoint = Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);//Get the world co ordinates of the bottom left of the graph
                 //If the node is not being obstructed
                 //Quick collision check against the current node and anything in the world at its position. If it is colliding with an object with a unwalkableMask,
                 bool isWalkable = !Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask);
@@ -146,12 +153,5 @@ public class PathFinderController : MonoBehaviour
                 Gizmos.DrawCube(n.position, Vector3.one * (nodeDiameter - distanceBetweenNodes));//Draw the node at the position of the node.
             }
         }
-    }
-
-    [System.Serializable]//show in inspector
-    public class TerrainType 
-    {
-        public LayerMask terrainMask;
-        public int terrainPenalty;
     }
 }

@@ -33,6 +33,11 @@ public class Grass : MonoBehaviour, Edible
         }
     }*/
 
+    void Awake()
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

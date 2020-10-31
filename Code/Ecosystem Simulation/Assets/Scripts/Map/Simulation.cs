@@ -16,8 +16,10 @@ public class Simulation : MonoBehaviour
     public GameObject grass;
     public GameObject grassContainer;
 
-    private int gridWidth;
-    private int gridHeight;
+    public int gridWidth;
+    public int gridHeight;
+    public Vector2 worldSize;
+    public Vector3 worldBottomLeft;
     private float tileSize;
     private float leftLimit, upLimit, rightLimit, downLimit;
 
@@ -59,94 +61,74 @@ public class Simulation : MonoBehaviour
 
     void CreateTilesFromMapList(ref List<List<MapReader.TerrainCost>> mapList)
     {
-        gridWidth = mapList.Count;
-        gridHeight = mapList[0].Count;
-
-        for (int i = 0; i < mapList.Count; i++)
+        gridWidth = mapList[0].Count;
+        gridHeight = mapList.Count;
+        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
+        worldSize.x = gridWidth*tileSize;
+        worldSize.y = gridHeight*tileSize;
+        worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
+        
+        for (int y = 0; y < gridHeight; y++)
         {
-            for (int j = 0; j < mapList[i].Count; j++)
+            for (int x = 0; x < gridWidth; x++)
             {
-                tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
-                float xPos = i * tileSize;                                                     //Get the tile's x position
-                float yPos = grassTile.transform.position.y;                                //Get the tile's y position (always the same)
-                float zPos = j * tileSize;                                                     //Get the tile's z position
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * tileSize + tileSize/2) + Vector3.forward * (y * tileSize + tileSize/2);//Get the world co ordinates of the tile from the bottom left of the graph
                 GameObject tileClone;
-                //Debug.Log(mapList[i][j].ToString());
-                switch (mapList[i][j])
+
+                switch (mapList[y][x])
                 {
                     case MapReader.TerrainCost.Water:
-                        tileClone = Instantiate(waterTile, new Vector3(xPos, yPos, zPos), waterTile.transform.rotation);  //Place the water tile
+                        tileClone = Instantiate(waterTile, worldPoint, waterTile.transform.rotation);  //Place the water tile
                         tileClone.transform.parent = tileContainer.transform;
-                        tileClone.name += i + "" + (j + 1);
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 8; //set layer to unwalkable
                         break;
                     case MapReader.TerrainCost.Grass:
-                        tileClone = Instantiate(grassTile, new Vector3(xPos, yPos, zPos), grassTile.transform.rotation);  //Place the grass tile
+                        tileClone = Instantiate(grassTile, worldPoint, grassTile.transform.rotation);  //Place the grass tile
                         tileClone.transform.parent = tileContainer.transform;
-                        tileClone.name += i + "" + (j + 1);
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
-                        //tileClone = Instantiate(sandTile, new Vector3(xPos, yPos, zPos), sandTile.transform.rotation);  //Place the sand tile
+                        //tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
                         //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone.name += i + "" + (j + 1);
+                        //tileClone.name += y + "" + x;
+                        //tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
-                        //tileClone = Instantiate(rockTile, new Vector3(xPos, yPos, zPos), rockTile.transform.rotation);  //Place the rock tile
+                        //tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
                         //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone name += i + "" + (j + 1);
+                        //tileClone name += y + "" + x;
+                        //tileClone.layer = 11; //set layer to grass
                         break;
                     default:
-                        tileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);
+                        tileClone = Instantiate(lightGrassTile, worldPoint, lightGrassTile.transform.rotation);
                         tileClone.transform.parent = tileContainer.transform;
-                        tileClone.name += i + "" + (j + 1);
+                        tileClone.name += y + "" + x;
                         throw new System.InvalidOperationException("Unknown TerrainCost value"); //TODO check correct Exception thrown
                 }
             }
         }
     }
 
-    void CreateTiles()
-    {
-        for (int i = 0; i < gridWidth; i++)
-        {
-            for (int j = 0; j < gridHeight; j++)
-            {
-                tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
-                float xPos = i * tileSize;                                                     //Get the tile's x position
-                float yPos = grassTile.transform.position.y;                                //Get the tile's y position (always the same)
-                float zPos = j * tileSize;                                                     //Get the tile's z position
-                GameObject tileClone;
-                if ((i % 2 == 0 && j % 2 != 0) || (i % 2 != 0 && j % 2 == 0))
-                {
-                    tileClone = Instantiate(lightGrassTile, new Vector3(xPos, yPos, zPos), lightGrassTile.transform.rotation);  //Place the light green tile
-                }
-                else
-                {
-                    tileClone = Instantiate(grassTile, new Vector3(xPos, yPos, zPos), grassTile.transform.rotation);             //Place the green tile
-                }
-                tileClone.transform.parent = tileContainer.transform;
-                tileClone.name += i + "" + (j + 1);
-            }
-        }
-    }
-
     void CreateRabbit(int iterator)
     {
-        int rnd1 = rnd.Next(0, (int)gridWidth);
-        int rnd2 = rnd.Next(0, (int)gridHeight);
-        float rabXPos = rnd1 * tileSize;
-        float rabZPos = rnd2 * tileSize;
-        GameObject rabbitClone = Instantiate(rabbit, new Vector3(rabXPos, 0, rabZPos), rabbit.transform.rotation) as GameObject;
+        int randWidth = rnd.Next(0, (int)gridWidth-1);
+        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
+        
+        GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + (iterator + 1);
     }
 
     void CreateGrass(int iterator)
     {
-        int randWidth = rnd.Next(0, (int)gridWidth);
-        int randHeight = rnd.Next(0, (int)gridHeight);
-        float grassXPos = randWidth * tileSize;
-        float grassZPos = randHeight * tileSize;
-        GameObject grassClone = Instantiate(grass, new Vector3(grassXPos, 0, grassZPos), grass.transform.rotation) as GameObject;
+        int randWidth = rnd.Next(0, (int)gridWidth-1);
+        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
+
+        GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + (iterator + 1);
     }
