@@ -1,19 +1,41 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour 
 {
+    Animal animal;
+    Transform targetOld;
 
-    public Transform target;
     float speed = 20;
     float rotationSpeed = 10;
     Vector3[] path;
     int targetIndex;
 
-    void Start() 
+    void Awake()
     {
-        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        //animal = FindObjectOfType<Animal>();
+        animal = GetComponent<Animal>();
+    }
+
+    void Update()
+    {
+        //if animal has a target
+        if(animal.target != null)
+        {
+            if(targetOld == null)//if target not set set the target
+            {
+                targetOld = animal.target;
+                print("transform: "+transform.position.ToString());
+                print("animal target:"+animal.target.position.ToString());
+                PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
+            }
+            if(animal.target.position != targetOld.position)// if the target position has changed or target not set
+            {
+                targetOld = animal.target;
+                PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
+            }
+        }
     }
 
     // 
