@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8836799556217920119}
   - component: {fileID: 5532894732956887120}
   - component: {fileID: 7152523263108916547}
+  - component: {fileID: -1810281268556567763}
   m_Layer: 0
   m_Name: Grass Patch 1
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -89,7 +91,20 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -7825443460256949968, guid: 5f5482c224678d9429071f111f544d8c, type: 3}
+--- !u!114 &-1810281268556567763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2485608032364271217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9891f0cb9b32e34cac91cf58d0d3c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scene: {fileID: 0}

@@ -44,11 +44,11 @@ public class MapReader
                     mapListIndex++; //increment the index position accessing the words array
                 }
 
-                row = words[0].Length.ToString(); // length of one row string
-                column = words.Length.ToString(); // number of row strings in array
-
+                mapList.Reverse(); // reverse YList to match how it looks on the map since starts at bottom left in simulation
 
                 // Debugging
+                // row = words[0].Length.ToString(); // length of one row string
+                // column = words.Length.ToString(); // number of row strings in array
                 // Debug.Log("Row: "+row);
                 // Debug.Log("Column"+column);
                 // Debug.Log("Printing mapList");

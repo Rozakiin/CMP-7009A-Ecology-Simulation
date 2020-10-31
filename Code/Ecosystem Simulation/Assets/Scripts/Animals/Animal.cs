@@ -1,10 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Animal : MonoBehaviour, Edible
 {
     public Simulation scene;
+
+    public Transform target;
 
     // possition and movement properties
     protected float startXPos, startZPos;                                                               //The starting x and z position
@@ -54,6 +56,11 @@ public abstract class Animal : MonoBehaviour, Edible
     public static int diedFromThirst;
     public static int diedFromAge;
     public static int diedFromEaten;
+
+    protected virtual void Awake()
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>();
+    }
 
     protected virtual void RandomMove()
     {
