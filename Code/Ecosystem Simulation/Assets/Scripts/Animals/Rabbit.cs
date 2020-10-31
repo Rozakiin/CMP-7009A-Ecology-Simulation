@@ -116,7 +116,7 @@ public class Rabbit : Animal
         }
         if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
         {                                                                                   //it means that it's time to randomize a new direction.
-            currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
+            currentXPos = (int)Math.Round(currentXPos);                                         //With the float being inaccurate each movement is slightly off,
             currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
             startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
             startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
@@ -159,19 +159,19 @@ public class Rabbit : Animal
     //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
     private bool CheckIfCanMove(Directions currentDirection)
     {
-        if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
+        if(currentXPos <= (leftLimit+tileSize) && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
         {
             return false;
         }
-        else if(currentXPos >= rightLimit && currentDirection == Directions.Right)      //Check if the rabbit want to go right despite being at the right edge of the map
+        else if(currentXPos >= (rightLimit-tileSize) && currentDirection == Directions.Right)      //Check if the rabbit want to go right despite being at the right edge of the map
         {
             return false;
         }
-        else if(currentZPos <= downLimit && currentDirection == Directions.Down)        //Same but down
+        else if(currentZPos <= (downLimit+tileSize) && currentDirection == Directions.Down)        //Same but down
         {
             return false;
         }
-        else if(currentZPos >= upLimit && currentDirection == Directions.Up)            //Same but up
+        else if(currentZPos >= (upLimit-tileSize) && currentDirection == Directions.Up)            //Same but up
         {
             return false;
         }
