@@ -36,6 +36,7 @@ public class Rabbit : Animal
     void Start()
     {
         hunger = 0f;
+        thirst = 0f;
         startXPos = transform.position.x;
         startZPos = transform.position.z;
         moveSpeed = 25f;
@@ -56,14 +57,14 @@ public class Rabbit : Animal
         if (state == States.Wandering)
         {
             WanderAround();
-            if(hunger >= 10)
+
+            if (hunger >= 10)
             {
                 state = States.Hungry;
             }
         }
-        else if(state == States.Hungry)
+        else if (state == States.Hungry)
         {
-            print("Hungry!");
             //WanderAround();
             DisableLineRenderer();
             target = FindClosestGrass();
@@ -78,11 +79,11 @@ public class Rabbit : Animal
             //  }
             //}
         }
-        else if(state == States.Eating)
+        else if (state == States.Eating)
         {
             hunger -= eatingSpeed * Time.deltaTime;
             //grass.health--;
-            if(hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
+            if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
             {
                 state = States.Wandering;
             }
@@ -90,6 +91,12 @@ public class Rabbit : Animal
             //{
             //  state = States.Hungry;
             //}
+        }
+        else if (state == States.Thirsty)
+        {
+            WanderAround();
+            DisableLineRenderer();
+            Transform closestWater = FindClosestWater();
         }
     }
 
@@ -245,6 +252,25 @@ public class Rabbit : Animal
             }
         }
         return closestGrass;
+    }
+    private Transform FindClosestWater()
+    {
+        Transform closestWater = transform;
+        float distanceToWater;
+        float shortestDistance = -1;
+        GameObject waterContainer = scene.waterContainer;
+        Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
+        foreach (Transform childWater in allWaterTile)
+        {
+            distanceToWater = Vector3.Distance(transform.position, childWater.position);
+            if (shortestDistance == -1 || distanceToWater < shortestDistance)
+            {
+                shortestDistance = distanceToWater;
+                closestWater = childWater;
+            }
+        }
+
+        return closestWater;
     }
     private void DisableLineRenderer()
     {

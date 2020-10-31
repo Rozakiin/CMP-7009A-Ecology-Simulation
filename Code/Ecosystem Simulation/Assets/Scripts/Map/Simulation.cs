@@ -11,6 +11,7 @@ public class Simulation : MonoBehaviour
     public GameObject lightGrassTile;
     public GameObject waterTile;
     public GameObject tileContainer;
+    public GameObject waterContainer;//will
     public GameObject rabbit;
     public GameObject rabbitContainer;
     public GameObject grass;
@@ -79,7 +80,7 @@ public class Simulation : MonoBehaviour
                 {
                     case MapReader.TerrainCost.Water:
                         tileClone = Instantiate(waterTile, worldPoint, waterTile.transform.rotation);  //Place the water tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = waterContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 8; //set layer to unwalkable
                         break;
