@@ -27,7 +27,7 @@ public class TimeControlSystem : MonoBehaviour
     public void Pause()
     {
         fastForwardMultiplier = 0f;
-        Time.timeScale = fastForwardMultiplier = 1f; ;
+        Time.timeScale = fastForwardMultiplier;
     }
     public void FastForward()
     {
