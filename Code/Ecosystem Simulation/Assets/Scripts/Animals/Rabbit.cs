@@ -43,8 +43,8 @@ public class Rabbit : Animal
         moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
-        startXPos = transform.position.x;
-        startZPos = transform.position.z;
+        startXPos = position.x;
+        startZPos = position.z;
         numberOfTurns = 0;
         age = 1;
         baseNutritionalValue = 5;
@@ -57,11 +57,18 @@ public class Rabbit : Animal
         scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
         transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
 
-        RandomizeDirection();
+        SetPosition();
         CreateLineRenderer();
         GetLimits();
+        RandomizeDirection();
         SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
+
+    
+    void Awake()//Ran once the program starts
+    {
+        //scene = GetComponent<Simulation>(); // get reference to Simulation
+    }
 
     // Update is called once per frame
     void Update()
@@ -72,7 +79,7 @@ public class Rabbit : Animal
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
-            print(reproductiveUrge);
+            //print(reproductiveUrge);
         }
         if (state == States.Wandering)
         {
@@ -93,9 +100,9 @@ public class Rabbit : Animal
                 state = States.SexuallyActive;
             }
             //WanderAround();
-            //DisableLineRenderer();            
+            DisableLineRenderer();            
             
-            List<Edible> edibleList = scene.GetGrassList();
+            //List<Edible> edibleList = scene.GetGrassList();
             //GameObject grassObject = LookForConsumable(scene.grassContainer, scene.GetGrassList());
 
             closestGrass = LookForConsumable("Grass");
@@ -123,7 +130,7 @@ public class Rabbit : Animal
         }
         else if (state == States.Thirsty)
         {
-            WanderAround();
+            //WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
         }
@@ -136,6 +143,7 @@ public class Rabbit : Animal
 
     private void WanderAround()
     {
+        tileSize = scene.GetTileSize(); //temp 
         float distanceMoved;
         Move();
         currentXPos = transform.position.x;

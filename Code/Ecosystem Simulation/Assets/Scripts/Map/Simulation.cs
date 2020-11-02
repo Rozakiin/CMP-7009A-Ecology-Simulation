@@ -162,7 +162,7 @@ public class Simulation : MonoBehaviour
         
         GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
-        //rabbitClone.GetComponent<Rabbit>().scene = this;
+        rabbitClone.GetComponent<Rabbit>().scene = this;
         rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + rabbitCount;
