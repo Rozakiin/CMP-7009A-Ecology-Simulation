@@ -255,6 +255,7 @@ MonoBehaviour:
   rabbitContainer: {fileID: 1928260513}
   grass: {fileID: 2485608032364271217, guid: d483cda7cf88d5c43a719c90483764f1, type: 3}
   grassContainer: {fileID: 627325610}
+  plane: {fileID: 0}
   gridWidth: 0
   gridHeight: 0
   worldSize: {x: 0, y: 0}
@@ -307,8 +308,8 @@ MonoBehaviour:
   walkableRegions:
   - terrainMask:
       serializedVersion: 2
-      m_Bits: 16
-    terrainPenalty: 100
+      m_Bits: 1024
+    terrainPenalty: 5
   - terrainMask:
       serializedVersion: 2
       m_Bits: 512
@@ -317,10 +318,6 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 2048
     terrainPenalty: 3
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 1024
-    terrainPenalty: 5
 --- !u!114 &1530961244
 MonoBehaviour:
   m_ObjectHideFlags: 0

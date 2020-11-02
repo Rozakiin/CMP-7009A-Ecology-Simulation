@@ -16,7 +16,6 @@ public class Simulation : MonoBehaviour
     public GameObject rabbitContainer;
     public GameObject grass;
     public GameObject grassContainer;
-    public GameObject plane; //used for spawning rabbit on mouseclick
 
     // GameObject Counters
     private int grassTileCount;
@@ -34,6 +33,8 @@ public class Simulation : MonoBehaviour
 
     private System.Random rnd;
     private int numberOfTurns;
+    private List<Edible> rabbitList;
+    private List<Edible> grassList;
 
     // Start is called before the first frame update
     void Awake()
@@ -53,6 +54,8 @@ public class Simulation : MonoBehaviour
         rightLimit = 0;
         downLimit = 0;
 
+        rabbitList = new List<Edible>();
+        grassList = new List<Edible>();
         rnd = new System.Random();
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
@@ -151,7 +154,7 @@ public class Simulation : MonoBehaviour
         rabbitClone.name = "RabbitClone" + rabbitCount;
     }
     
-    void CreateRabbit()
+    public void CreateRabbit()
     {
         int randWidth = rnd.Next(0, (int)gridWidth-1);
         int randHeight = rnd.Next(0, (int)gridHeight-1);
@@ -159,11 +162,13 @@ public class Simulation : MonoBehaviour
         
         GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
+        //rabbitClone.GetComponent<Rabbit>().scene = this;
+        rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + rabbitCount;
     }
 
-    void CreateGrass()
+    public void CreateGrass()
     {
         int randWidth = rnd.Next(0, (int)gridWidth-1);
         int randHeight = rnd.Next(0, (int)gridHeight-1);
@@ -171,8 +176,14 @@ public class Simulation : MonoBehaviour
 
         GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
         grassCount++;
+        //grassClone.GetComponent<Grass>().scene = this;
+        grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + grassCount;
+
+        // Grass grassCos = grassClone.GetComponent<Grass>();
+        // grassCos.scene = this;
+        // grassCos.name = "GRASS!";
     }
 
     void SetLimits()
@@ -221,6 +232,32 @@ public class Simulation : MonoBehaviour
     public int GetNumberOfTurns()
     {
         return numberOfTurns;
+    }
+
+    public List<Edible> GetGrassList()
+    {
+        return grassList;
+    }
+
+    public List<Edible> GetRabbitList()
+    {
+        return rabbitList;
+    }
+
+    public void DestroyObject(GameObject gameObject)
+    {
+        Destroy(gameObject);
+    }
+
+    public void RemoveFromList(Edible edible, List<Edible> edibleList)
+    {
+        for(int i=0; i<edibleList.Count; i++)
+        {
+            if(edibleList[i] == edible)
+            {
+                edibleList.RemoveAt(i);
+            }
+        }
     }
 }
 

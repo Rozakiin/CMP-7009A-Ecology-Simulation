@@ -8,7 +8,10 @@ public class Rabbit : Animal
     private float tileSize;                                                                 //The size of each tile on the map
     private float leftLimit, upLimit, rightLimit, downLimit;
     private int numberOfTurns;
-
+    private Edible closestGrass;
+    private Edible edibleObject;
+    private Renderer renderer;
+    private float scaleMult;
     private LineRenderer lineRenderer;
 
     protected override float maxLifeExpectancy   // overriding property
@@ -35,29 +38,49 @@ public class Rabbit : Animal
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
+        canBeEaten = true;
+        moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
         startXPos = transform.position.x;
         startZPos = transform.position.z;
-        moveSpeed = 25f;
-        GetLimits();
-        RandomizeDirection();
+        numberOfTurns = 0;
+        age = 1;
+        baseNutritionalValue = 5;
+        reproductiveUrge = 0f;
+        sightRadius = 5;
         tileSize = scene.GetTileSize();
         state = States.Wandering;
-        numberOfTurns = 0;
         eatingSpeed = 2f;
+
+        scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
+        transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
+
+        RandomizeDirection();
         CreateLineRenderer();
-        transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
+        GetLimits();
+        SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
 
     // Update is called once per frame
     void Update()
     {
+        DisableLineRenderer();
+        SetPosition();
         hunger += 1 * Time.deltaTime;
+        if (gender == Gender.Male)
+        {
+            reproductiveUrge += 0.3f * Time.deltaTime;
+            print(reproductiveUrge);
+        }
         if (state == States.Wandering)
         {
             WanderAround();
-
+            if(reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
             if (hunger >= 10)
             {
                 state = States.Hungry;
@@ -65,38 +88,49 @@ public class Rabbit : Animal
         }
         else if (state == States.Hungry)
         {
+            if(reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
             //WanderAround();
-            DisableLineRenderer();
-            target = FindClosestGrass();
-            DrawLine(transform.position, target.position);
+            //DisableLineRenderer();            
             
-            //if(food.distance < sightRadius
-            //{
-            //  go towards grass
-            //  if(food.distance < 1)
-            //  {
-            //      state = States.Eating;
-            //  }
-            //}
+            List<Edible> edibleList = scene.GetGrassList();
+            //GameObject grassObject = LookForConsumable(scene.grassContainer, scene.GetGrassList());
+
+            closestGrass = LookForConsumable("Grass");
+            edibleObject = closestGrass.GetComponent<Edible>();
+            float distanceToGrass = Vector3.Distance(position, closestGrass.transform.position);
+            target = closestGrass.transform;
+            DrawLine(transform.position, target.position);
+
+            if(distanceToGrass <= sightRadius)
+            {
+                state = States.Eating;
+            }
         }
         else if (state == States.Eating)
         {
-            hunger -= eatingSpeed * Time.deltaTime;
-            //grass.health--;
+            edibleObject.Die();
+
+            hunger -= 5;
+            state = States.Wandering;
+            scene.CreateGrass();            
             if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
             {
                 state = States.Wandering;
             }
-            //if(food.distance == -1 && hunger >= 10) //if the food dissapeared but the rabbit is still hungry
-            //{
-            //  state = States.Hungry;
-            //}
         }
         else if (state == States.Thirsty)
         {
             WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
+        }
+        else if(state == States.SexuallyActive)
+        {
+            Animal closestMate = LookForMate("FemaleRabbit");
+            DrawLine(position, closestMate.position);
         }
     }
 
