@@ -14,6 +14,7 @@ public class Fox : Animal
         {
         }
     }
+
     protected override float babyNumber   // overriding property
     {
         get
@@ -24,6 +25,7 @@ public class Fox : Animal
         {
         }
     }
+    
     // Start is called before the first frame update
     void Start()
     {

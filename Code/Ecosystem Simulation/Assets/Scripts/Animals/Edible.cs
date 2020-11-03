@@ -21,6 +21,7 @@ protected bool canBeEaten { get; set; }
     {
         
     }
+    
     public abstract int GetNutritionalValue();
 
     public void LowerNutritionalValue(int value)

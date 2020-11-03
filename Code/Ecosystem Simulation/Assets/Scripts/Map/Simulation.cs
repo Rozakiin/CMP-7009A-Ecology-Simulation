@@ -11,7 +11,7 @@ public class Simulation : MonoBehaviour
     public GameObject lightGrassTile;
     public GameObject waterTile;
     public GameObject tileContainer;
-    public GameObject waterContainer;//will
+    public GameObject waterContainer;
     public GameObject rabbit;
     public GameObject rabbitContainer;
     public GameObject grass;
@@ -150,6 +150,8 @@ public class Simulation : MonoBehaviour
     {
         GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
+        rabbitClone.GetComponent<Rabbit>().scene = this;
+        rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + rabbitCount;
     }
@@ -180,10 +182,6 @@ public class Simulation : MonoBehaviour
         grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + grassCount;
-
-        // Grass grassCos = grassClone.GetComponent<Grass>();
-        // grassCos.scene = this;
-        // grassCos.name = "GRASS!";
     }
 
     void SetLimits()
