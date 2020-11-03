@@ -24,6 +24,7 @@ public class Rabbit : Animal
         {
         }
     }
+
     protected override float babyNumber   // overriding property
     {
         get
@@ -76,18 +77,22 @@ public class Rabbit : Animal
         DisableLineRenderer();
         SetPosition();
         hunger += 1 * Time.deltaTime;
+
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
             //print(reproductiveUrge);
         }
+
         if (state == States.Wandering)
         {
             WanderAround();
+
             if(reproductiveUrge >= 5)
             {
                 state = States.SexuallyActive;
             }
+
             if (hunger >= 10)
             {
                 state = States.Hungry;
@@ -122,7 +127,8 @@ public class Rabbit : Animal
 
             hunger -= 5;
             state = States.Wandering;
-            scene.CreateGrass();            
+            scene.CreateGrass();
+
             if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
             {
                 state = States.Wandering;
@@ -143,11 +149,11 @@ public class Rabbit : Animal
 
     private void WanderAround()
     {
-        tileSize = scene.GetTileSize(); //temp 
         float distanceMoved;
         Move();
         currentXPos = transform.position.x;
         currentZPos = transform.position.z;
+
         if (currentDirection == Directions.Left || currentDirection == Directions.Right)
         {
             distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
@@ -156,6 +162,7 @@ public class Rabbit : Animal
         {
             distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
         }
+
         if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
         {                                                                                   //it means that it's time to randomize a new direction.
             currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
@@ -172,6 +179,7 @@ public class Rabbit : Animal
     //in that direction is allowed. CheckIfCanMove is called to check it. UnityEngine.Random used instead of the System
     //one to randomize numbers not tied to the system's clock. This way the numbers are unique to each object and prevent
     //the rabbits from moving in the same direction.
+    //bug if limits not set
     private void RandomizeDirection()
     {
         bool canMove = false;
@@ -199,6 +207,7 @@ public class Rabbit : Animal
     }
 
     //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
+    //bug if limits not set
     private bool CheckIfCanMove(Directions currentDirection)
     {
         if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
@@ -284,6 +293,7 @@ public class Rabbit : Animal
         float shortestDistance = -1;
         GameObject grassContainer = scene.grassContainer;
         Transform[] allChildren = grassContainer.GetComponentsInChildren<Transform>();
+
         foreach (Transform childGrass in allChildren)
         {
             distanceToGrass = Vector3.Distance(transform.position, childGrass.position);
@@ -293,8 +303,10 @@ public class Rabbit : Animal
                 closestGrass = childGrass;
             }
         }
+        
         return closestGrass;
     }
+
     private Transform FindClosestWater()
     {
         Transform closestWater = transform;
@@ -302,6 +314,7 @@ public class Rabbit : Animal
         float shortestDistance = -1;
         GameObject waterContainer = scene.waterContainer;
         Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
+
         foreach (Transform childWater in allWaterTile)
         {
             distanceToWater = Vector3.Distance(transform.position, childWater.position);
@@ -314,6 +327,7 @@ public class Rabbit : Animal
 
         return closestWater;
     }
+
     private void DisableLineRenderer()
     {
         lineRenderer.SetVertexCount(0);

@@ -118,15 +118,14 @@ public abstract class Animal : Edible
 
     protected virtual void Eat(Edible edibleObject, int value, List<Edible> edibleList)
     {
-        edibleObject.LowerNutritionalValue(value);
-        //scene.DestroyObject(edibleObject.gameObject);
-        //if (edibleObject != null)
-        //{
-        scene.RemoveFromList(edibleObject, edibleList);
-        scene.DestroyObject(edibleObject.gameObject);
+        if (edibleObject != null)
+        {
+            edibleObject.LowerNutritionalValue(value);
+            scene.RemoveFromList(edibleObject, edibleList);
+            scene.DestroyObject(edibleObject.gameObject);
             //Destroy(edibleObject.gameObject);
             print("Ate");
-        //}
+        }
         //edibleObject.gameObject.GetComponents<GameObject>();
     }
 
@@ -171,5 +170,4 @@ public abstract class Animal : Edible
     {
         return nutritionalValue;
     }
-
 }
