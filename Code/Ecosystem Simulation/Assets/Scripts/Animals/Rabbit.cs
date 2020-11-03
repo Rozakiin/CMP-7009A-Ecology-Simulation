@@ -8,7 +8,10 @@ public class Rabbit : Animal
     private float tileSize;                                                                 //The size of each tile on the map
     private float leftLimit, upLimit, rightLimit, downLimit;
     private int numberOfTurns;
-
+    private Edible closestGrass;
+    private Edible edibleObject;
+    private Renderer renderer;
+    private float scaleMult;
     private LineRenderer lineRenderer;
 
     protected override float maxLifeExpectancy   // overriding property
@@ -21,6 +24,7 @@ public class Rabbit : Animal
         {
         }
     }
+
     protected override float babyNumber   // overriding property
     {
         get
@@ -35,28 +39,59 @@ public class Rabbit : Animal
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
+        canBeEaten = true;
+        moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
-        startXPos = transform.position.x;
-        startZPos = transform.position.z;
-        moveSpeed = 25f;
-        GetLimits();
-        RandomizeDirection();
+        startXPos = position.x;
+        startZPos = position.z;
+        numberOfTurns = 0;
+        age = 1;
+        baseNutritionalValue = 5;
+        reproductiveUrge = 0f;
+        sightRadius = 5;
         tileSize = scene.GetTileSize();
         state = States.Wandering;
-        numberOfTurns = 0;
         eatingSpeed = 2f;
+
+        scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
+        transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
+
+        SetPosition();
         CreateLineRenderer();
-        transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
+        GetLimits();
+        RandomizeDirection();
+        SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
+
+    
+    void Awake()//Ran once the program starts
+    {
+        //scene = GetComponent<Simulation>(); // get reference to Simulation
+    }
 
     // Update is called once per frame
     void Update()
     {
+        DisableLineRenderer();
+        SetPosition();
         hunger += 1 * Time.deltaTime;
+
+        if (gender == Gender.Male)
+        {
+            reproductiveUrge += 0.3f * Time.deltaTime;
+            //print(reproductiveUrge);
+        }
+
         if (state == States.Wandering)
         {
             WanderAround();
+
+            if(reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
 
             if (hunger >= 10)
             {
@@ -65,38 +100,50 @@ public class Rabbit : Animal
         }
         else if (state == States.Hungry)
         {
+            if(reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
             //WanderAround();
-            DisableLineRenderer();
-            target = FindClosestGrass();
-            DrawLine(transform.position, target.position);
+            DisableLineRenderer();            
             
-            //if(food.distance < sightRadius
-            //{
-            //  go towards grass
-            //  if(food.distance < 1)
-            //  {
-            //      state = States.Eating;
-            //  }
-            //}
+            //List<Edible> edibleList = scene.GetGrassList();
+            //GameObject grassObject = LookForConsumable(scene.grassContainer, scene.GetGrassList());
+
+            closestGrass = LookForConsumable("Grass");
+            edibleObject = closestGrass.GetComponent<Edible>();
+            float distanceToGrass = Vector3.Distance(position, closestGrass.transform.position);
+            target = closestGrass.transform;
+            DrawLine(transform.position, target.position);
+
+            if(distanceToGrass <= sightRadius)
+            {
+                state = States.Eating;
+            }
         }
         else if (state == States.Eating)
         {
-            hunger -= eatingSpeed * Time.deltaTime;
-            //grass.health--;
+            edibleObject.Die();
+
+            hunger -= 5;
+            state = States.Wandering;
+            scene.CreateGrass();
+
             if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
             {
                 state = States.Wandering;
             }
-            //if(food.distance == -1 && hunger >= 10) //if the food dissapeared but the rabbit is still hungry
-            //{
-            //  state = States.Hungry;
-            //}
         }
         else if (state == States.Thirsty)
         {
-            WanderAround();
+            //WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
+        }
+        else if(state == States.SexuallyActive)
+        {
+            Animal closestMate = LookForMate("FemaleRabbit");
+            DrawLine(position, closestMate.position);
         }
     }
 
@@ -106,6 +153,7 @@ public class Rabbit : Animal
         Move();
         currentXPos = transform.position.x;
         currentZPos = transform.position.z;
+
         if (currentDirection == Directions.Left || currentDirection == Directions.Right)
         {
             distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
@@ -114,6 +162,7 @@ public class Rabbit : Animal
         {
             distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
         }
+
         if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
         {                                                                                   //it means that it's time to randomize a new direction.
             currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
@@ -130,6 +179,7 @@ public class Rabbit : Animal
     //in that direction is allowed. CheckIfCanMove is called to check it. UnityEngine.Random used instead of the System
     //one to randomize numbers not tied to the system's clock. This way the numbers are unique to each object and prevent
     //the rabbits from moving in the same direction.
+    //bug if limits not set
     private void RandomizeDirection()
     {
         bool canMove = false;
@@ -157,6 +207,7 @@ public class Rabbit : Animal
     }
 
     //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
+    //bug if limits not set
     private bool CheckIfCanMove(Directions currentDirection)
     {
         if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
@@ -242,6 +293,7 @@ public class Rabbit : Animal
         float shortestDistance = -1;
         GameObject grassContainer = scene.grassContainer;
         Transform[] allChildren = grassContainer.GetComponentsInChildren<Transform>();
+
         foreach (Transform childGrass in allChildren)
         {
             distanceToGrass = Vector3.Distance(transform.position, childGrass.position);
@@ -251,8 +303,10 @@ public class Rabbit : Animal
                 closestGrass = childGrass;
             }
         }
+        
         return closestGrass;
     }
+
     private Transform FindClosestWater()
     {
         Transform closestWater = transform;
@@ -260,6 +314,7 @@ public class Rabbit : Animal
         float shortestDistance = -1;
         GameObject waterContainer = scene.waterContainer;
         Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
+
         foreach (Transform childWater in allWaterTile)
         {
             distanceToWater = Vector3.Distance(transform.position, childWater.position);
@@ -272,6 +327,7 @@ public class Rabbit : Animal
 
         return closestWater;
     }
+
     private void DisableLineRenderer()
     {
         lineRenderer.SetVertexCount(0);

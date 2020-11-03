@@ -26,8 +26,6 @@ public class MapReader
             // The using statement also closes the StreamReader.
             using (StreamReader reader = new StreamReader(filePath)) 
             {
-                string column;
-                string row;
                 char[] charSeparators = {' ', '\n'}; // delimeters of space and newline
                 string[] words = reader.ReadToEnd().Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
 
@@ -47,8 +45,8 @@ public class MapReader
                 mapList.Reverse(); // reverse YList to match how it looks on the map since starts at bottom left in simulation
 
                 // Debugging
-                // row = words[0].Length.ToString(); // length of one row string
-                // column = words.Length.ToString(); // number of row strings in array
+                // string row = words[0].Length.ToString(); // length of one row string
+                // string column = words.Length.ToString(); // number of row strings in array
                 // Debug.Log("Row: "+row);
                 // Debug.Log("Column"+column);
                 // Debug.Log("Printing mapList");

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Animal : MonoBehaviour, Edible
+public abstract class Animal : Edible
 {
-    public Simulation scene;
-
     public Transform target;
 
     // possition and movement properties
@@ -21,15 +19,18 @@ public abstract class Animal : MonoBehaviour, Edible
     protected float sightRadius;
     protected float eatingSpeed;
     protected float pregnancyLength;
+    protected Gender gender;
     protected abstract float maxLifeExpectancy { get; set;}
     protected abstract float babyNumber { get; set;}
 
-    //Edible Interface
-    public int baseNutritionalValue { get; set; } = 10;
-    public bool canBeEaten { get; set; } = true;
     public int NutritionalValue()
     {
         return baseNutritionalValue * age;
+    }
+
+    protected enum Gender
+    {
+        Male, Female
     }
 
     protected enum Directions
@@ -57,9 +58,16 @@ public abstract class Animal : MonoBehaviour, Edible
     public static int diedFromAge;
     public static int diedFromEaten;
 
-    protected virtual void Awake()
+    public void Start()
     {
-        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>();
+        int rnd = UnityEngine.Random.Range(0, 2);
+        gender = (Gender)rnd;
+        if(gender == Gender.Female)
+        {
+            string type = this.GetType().ToString();
+            gameObject.tag = "Female" + type;
+        }
+        print(gender);
     }
 
     protected virtual void RandomMove()
@@ -73,22 +81,32 @@ public abstract class Animal : MonoBehaviour, Edible
 
     }
 
-    protected virtual void LookForFood()
+    protected Edible LookForConsumable(string searchedTag)
     {
-
+        //Edible edible = this;
+        GameObject closestConsumable = null;
+        float distanceToConsumable;
+        float shortestDistance = 1000000000;
+        GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
+        //Edible[] allChildren = targetContainer.GetComponentsInChildren<Grass>();
+        foreach (GameObject childConsumable in allChildren)
+        {
+            distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
+            if(shortestDistance == -1 || distanceToConsumable < shortestDistance)
+            {
+                shortestDistance = distanceToConsumable;
+                closestConsumable = childConsumable;
+            }
+        }
+        return closestConsumable.GetComponent<Edible>();
     }
 
-    protected virtual void LookForWater()
+    protected virtual Animal LookForMate(string searchedTag)
     {
-
+        return (Animal)LookForConsumable(searchedTag);
     }
 
-    protected virtual void LookForMate()
-    {
-
-    }
-
-    protected virtual void Mating()
+    protected virtual void Mate()
     {
 
     }
@@ -98,12 +116,20 @@ public abstract class Animal : MonoBehaviour, Edible
 
     }
 
-    protected virtual void Eating()
+    protected virtual void Eat(Edible edibleObject, int value, List<Edible> edibleList)
     {
-
+        if (edibleObject != null)
+        {
+            edibleObject.LowerNutritionalValue(value);
+            scene.RemoveFromList(edibleObject, edibleList);
+            scene.DestroyObject(edibleObject.gameObject);
+            //Destroy(edibleObject.gameObject);
+            print("Ate");
+        }
+        //edibleObject.gameObject.GetComponents<GameObject>();
     }
 
-    protected virtual void Drinking()
+    protected virtual void Drink()
     {
 
     }
@@ -133,5 +159,15 @@ public abstract class Animal : MonoBehaviour, Edible
                 break;
         }
         Destroy(gameObject);
+    }
+
+    public override void SetNutritionalValue()
+    {
+        nutritionalValue = baseNutritionalValue * age;
+    }
+
+    public override int GetNutritionalValue()
+    {
+        return nutritionalValue;
     }
 }

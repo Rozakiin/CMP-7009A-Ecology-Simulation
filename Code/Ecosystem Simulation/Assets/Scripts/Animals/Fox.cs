@@ -14,6 +14,7 @@ public class Fox : Animal
         {
         }
     }
+
     protected override float babyNumber   // overriding property
     {
         get
@@ -24,6 +25,7 @@ public class Fox : Animal
         {
         }
     }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -34,5 +36,10 @@ public class Fox : Animal
     void Update()
     {
         
+    }
+
+    public override int GetNutritionalValue()
+    {
+        return baseNutritionalValue * age;
     }
 }
