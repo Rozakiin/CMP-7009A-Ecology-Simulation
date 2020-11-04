@@ -18,6 +18,7 @@ public abstract class Animal : Edible
     protected int age;
     protected float reproductiveUrge;
     protected float sightRadius;
+    protected float touchRadius;
     protected float eatingSpeed;
     protected float pregnancyLength;
     protected Gender gender;
@@ -250,7 +251,12 @@ public abstract class Animal : Edible
                 closestConsumable = childConsumable;
             }
         }
-        return closestConsumable.GetComponent<Edible>();
+        if (closestConsumable != null)
+        {
+            return closestConsumable.GetComponent<Edible>();
+        }
+        Edible edible = null; 
+        return edible;
     }
 
 

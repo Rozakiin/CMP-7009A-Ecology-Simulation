@@ -7,7 +7,6 @@ public class Unit : MonoBehaviour
     Animal animal;
     Transform targetOld;
 
-    float speed = 20;
     float rotationSpeed = 10;
     Vector3[] path;
     int targetIndex;
@@ -23,7 +22,7 @@ public class Unit : MonoBehaviour
         //if animal has a target
         if(animal.target != null)
         {
-            if(targetOld == null)//if target not set set the target
+            if(targetOld == null)//if target not set, set the target
             {
                 targetOld = animal.target;
                 print("transform: "+transform.position.ToString());
@@ -33,6 +32,8 @@ public class Unit : MonoBehaviour
             if(animal.target.position != targetOld.position)// if the target position has changed or target not set
             {
                 targetOld = animal.target;
+                print("transform: "+transform.position.ToString());
+                print("animal target:"+animal.target.position.ToString());
                 PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
             }
         }
@@ -53,31 +54,35 @@ public class Unit : MonoBehaviour
     // follows the path
     IEnumerator FollowPath() 
     {
-        Vector3 currentWaypoint = path[0];
-        while (true) 
+        if(path.Length>0)//possible fix to index out of bounds error 
         {
-            //reached current waypoint
-            if (transform.position == currentWaypoint) 
+            Vector3 currentWaypoint = path[0];
+            while (true) 
             {
-                targetIndex ++;
-                if (targetIndex >= path.Length) // finished following path
+                //reached current waypoint
+                if (transform.position == currentWaypoint) 
                 {
-                    targetIndex = 0;//reset index for multiple runs
-                    path = new Vector3[0];
-                    yield break;//break out of coroutine
+                    targetIndex ++;
+                    if (targetIndex >= path.Length) // finished following path
+                    {
+                        targetIndex = 0;//reset index for multiple runs
+                        path = new Vector3[0];
+                        animal.target=null; //reset target so animal knows it has finished following path
+                        yield break;//break out of coroutine
+                    }
+                    currentWaypoint = path[targetIndex];// set current waypoint to the vector3 in the path at current index
                 }
-                currentWaypoint = path[targetIndex];// set current waypoint to the vector3 in the path at current index
+
+                //Rotate Towards Next Waypoint
+                Vector3 targetDir = currentWaypoint - transform.position;
+                float step = rotationSpeed * Time.deltaTime;
+                Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
+                transform.rotation = Quaternion.LookRotation(newDir);
+
+                //move towards next waypoint
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, animal.moveSpeed * Time.deltaTime);//go closer to target position
+                yield return null;//wait 1 frame before returning
             }
-
-            //Rotate Towards Next Waypoint
-            Vector3 targetDir = currentWaypoint - transform.position;
-            float step = rotationSpeed * Time.deltaTime;
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
-            transform.rotation = Quaternion.LookRotation(newDir);
-
-            //move towards next waypoint
-            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);//go closer to target position
-            yield return null;//wait 1 frame before returning
         }
     }
 

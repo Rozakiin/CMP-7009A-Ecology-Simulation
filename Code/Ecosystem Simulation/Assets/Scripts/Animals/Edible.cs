@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Edible : MonoBehaviour
 {
-protected bool canBeEaten { get; set; }
+    protected bool canBeEaten { get; set; }
     public int baseNutritionalValue { get; set; }
     public int nutritionalValue;
     public Vector3 position;
