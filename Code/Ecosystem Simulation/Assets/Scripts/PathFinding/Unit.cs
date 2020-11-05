@@ -5,7 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour 
 {
     Animal animal;
-    Transform targetOld;
+    Vector3 targetOld;
 
     float rotationSpeed = 10;
     Vector3[] path;
@@ -20,21 +20,14 @@ public class Unit : MonoBehaviour
     void Update()
     {
         //if animal has a target
-        if(animal.target != null)
+        if(animal.target != transform.position)
         {
-            if(targetOld == null)//if target not set, set the target
+            if(animal.target != targetOld)// if the target position has changed
             {
                 targetOld = animal.target;
                 print("transform: "+transform.position.ToString());
-                print("animal target:"+animal.target.position.ToString());
-                PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
-            }
-            if(animal.target.position != targetOld.position)// if the target position has changed or target not set
-            {
-                targetOld = animal.target;
-                print("transform: "+transform.position.ToString());
-                print("animal target:"+animal.target.position.ToString());
-                PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
+                print("animal target:"+animal.target.ToString());
+                PathRequestManager.RequestPath(transform.position, animal.target, OnPathFound);
             }
         }
     }
@@ -67,7 +60,7 @@ public class Unit : MonoBehaviour
                     {
                         targetIndex = 0;//reset index for multiple runs
                         path = new Vector3[0];
-                        animal.target=null; //reset target so animal knows it has finished following path
+                        animal.target = transform.position; //reset target to self so animal knows it has finished following path
                         yield break;//break out of coroutine
                     }
                     currentWaypoint = path[targetIndex];// set current waypoint to the vector3 in the path at current index

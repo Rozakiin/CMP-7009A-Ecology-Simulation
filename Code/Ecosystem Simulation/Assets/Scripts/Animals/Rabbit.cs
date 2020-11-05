@@ -111,11 +111,11 @@ public class Rabbit : Animal
                 if(distanceToGrass <= sightRadius)
                 {
                     edibleObject = closestGrass.GetComponent<Edible>();//set the edible object to the closest grass object
-                    target = closestGrass.transform;
-                    DrawLine(transform.position, target.position);
+                    target = closestGrass.transform.position;
+                    DrawLine(transform.position, target);
                 }
             }
-            //No grass nearby
+            //No grass
             WanderAround();
         }
         else if (state == States.Eating)
@@ -152,11 +152,11 @@ public class Rabbit : Animal
                 //Mate within sight radius
                 if(distanceToMate <= sightRadius)
                 {
-                    target = closestMate.transform;
-                    DrawLine(transform.position, target.position);
+                    target = closestMate.transform.position;
+                    DrawLine(transform.position, target);
                 }
             }
-            //No mate nearby
+            //No mate
             WanderAround();
         }
         else if(state == States.Mating)

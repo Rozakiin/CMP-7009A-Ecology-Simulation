@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class Animal : Edible
 {
-    public Transform target;
+    public Vector3 target;
 
     // possition and movement properties
     protected float startXPos, startZPos;                                                               //The starting x and z position
@@ -70,6 +70,7 @@ public abstract class Animal : Edible
 
     public void Start()
     {
+        target = transform.position;
         int rnd = UnityEngine.Random.Range(0, 2);
         gender = (Gender)rnd;
         if(gender == Gender.Female)
@@ -83,7 +84,7 @@ public abstract class Animal : Edible
 
     protected void WanderAround()
     {
-        if (target == null)
+        if (target == transform.position) //if target is self then no target(Vector3 can't be null)
         {
             bool isTargetWalkable = false;
             Vector3 targetWorldPoint;
@@ -98,12 +99,8 @@ public abstract class Animal : Edible
                 isTargetWalkable = CheckIfWalkable(targetWorldPoint);
                 if (isTargetWalkable)
                 {
-                    //set target position to transform of a new gameobject
-                    //bug - eventual memory overflow(new GameObject arent being deleted, should change target to be an object)
-                    GameObject targetObject = new GameObject();
-                    target = targetObject.transform;
-                    //set target position to the targetWorldPoint
-                    target.position = targetWorldPoint;
+                    //set target to the targetWorldPoint
+                    target = targetWorldPoint;
                 }
             }
         }
@@ -187,8 +184,7 @@ public abstract class Animal : Edible
         {
             return closestConsumable.GetComponent<Edible>();
         }
-        Edible edible = null; 
-        return edible;
+        return null;
     }
 
 
