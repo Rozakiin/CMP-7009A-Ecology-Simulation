@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Rabbit : Animal
 {
-    private Unit pathfindingUnit; // reference to the Animals pathfindingUnit object
-
     protected override float maxLifeExpectancy   // overriding property
     {
         get
@@ -63,7 +61,6 @@ public class Rabbit : Animal
     void Awake()//Ran once the program starts
     {
         //scene = GetComponent<Simulation>(); // get reference to Simulation
-        pathfindingUnit = GetComponent<Unit>();
     }
 
     // Update is called once per frame
@@ -144,7 +141,7 @@ public class Rabbit : Animal
         else if(state == States.SexuallyActive)
         {
             DisableLineRenderer();
-            closestMate = LookForMate("FemaleRabbit");
+            Animal closestMate = LookForMate("FemaleRabbit");
             if (closestMate != null)
             {
                 float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
