@@ -53,7 +53,6 @@ public class Rabbit : Animal
         SetPosition();
         CreateLineRenderer();
         GetLimits();
-        RandomizeDirection();
         SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
 
@@ -168,50 +167,5 @@ public class Rabbit : Animal
             reproductiveUrge = 0;
             state = States.Wandering;
         }
-    }
-
-    private void WanderAround()
-    {
-        if(target == null)
-        {
-            bool isTargetWalkable = false;
-            Vector3 targetWorldPoint;
-            //find walkable targetWorldPoint
-            while (!isTargetWalkable)
-            {
-                float randX = UnityEngine.Random.Range(-sightRadius, sightRadius);
-                float randZ = UnityEngine.Random.Range(-sightRadius, sightRadius);
-                // random point within the sight radius of the rabbit
-                targetWorldPoint = transform.position + Vector3.right * randX + Vector3.forward * randZ;
-                //check targetWorldPoint is walkable
-                isTargetWalkable = CheckIfWalkable(targetWorldPoint);
-                if (isTargetWalkable)
-                {
-                    //set target position to transform of a new gameobject
-                    //bug - eventual memory overflow(new GameObject arent being deleted, should change target to be an object)
-                    GameObject targetObject = new GameObject();
-                    target = targetObject.transform;
-                    //set target position to the targetWorldPoint
-                    target.position = targetWorldPoint;
-                }
-            }
-        }
-    }
-
-    //Method to check if a given position is a walkable tile(could be extended to check if the whole path is walkable?)
-    //Uses ray hits to check type of tile underneath
-    private bool CheckIfWalkable(Vector3 worldPoint)
-    {
-        Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) 
-        {
-            //If not hits a wall
-            if (hit.collider.gameObject.layer != 8)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

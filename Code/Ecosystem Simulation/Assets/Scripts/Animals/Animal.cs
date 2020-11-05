@@ -83,117 +83,47 @@ public abstract class Animal : Edible
 
     protected void WanderAround()
     {
-        float distanceMoved;
-        Move();
-        currentXPos = transform.position.x;
-        currentZPos = transform.position.z;
-
-        if (currentDirection == Directions.Left || currentDirection == Directions.Right)
+        if (target == null)
         {
-            distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
-        }
-        else
-        {
-            distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
-        }
-
-        if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
-        {                                                                                   //it means that it's time to randomize a new direction.
-            currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
-            currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
-            startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
-            startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
-            transform.position = new Vector3(startXPos, 0, startZPos);
-            RandomizeDirection();
-        }
-    }
-
-
-    //Randomize what direction the rabbit should move next. The number of is randomized from 0 up to directionsCounter,
-    //and the switch statement is used to determine the direction. canMove variable is used to determine if the movement
-    //in that direction is allowed. CheckIfCanMove is called to check it. UnityEngine.Random used instead of the System
-    //one to randomize numbers not tied to the system's clock. This way the numbers are unique to each object and prevent
-    //the rabbits from moving in the same direction.
-    //bug if limits not set
-    protected void RandomizeDirection()
-    {
-        bool canMove = false;
-        do
-        {
-            int directionsCounter = Directions.GetNames(typeof(Directions)).Length;
-            int rnd = UnityEngine.Random.Range(0, directionsCounter);
-            switch (rnd)
+            bool isTargetWalkable = false;
+            Vector3 targetWorldPoint;
+            //find walkable targetWorldPoint
+            while (!isTargetWalkable)
             {
-                case 0:
-                    currentDirection = Directions.Left;
-                    break;
-                case 1:
-                    currentDirection = Directions.Up;
-                    break;
-                case 2:
-                    currentDirection = Directions.Right;
-                    break;
-                case 3:
-                    currentDirection = Directions.Down;
-                    break;
+                float randX = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                float randZ = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                // random point within the sight radius of the rabbit
+                targetWorldPoint = transform.position + Vector3.right * randX + Vector3.forward * randZ;
+                //check targetWorldPoint is walkable
+                isTargetWalkable = CheckIfWalkable(targetWorldPoint);
+                if (isTargetWalkable)
+                {
+                    //set target position to transform of a new gameobject
+                    //bug - eventual memory overflow(new GameObject arent being deleted, should change target to be an object)
+                    GameObject targetObject = new GameObject();
+                    target = targetObject.transform;
+                    //set target position to the targetWorldPoint
+                    target.position = targetWorldPoint;
+                }
             }
-            canMove = CheckIfCanMove(currentDirection);
-        } while (canMove == false);
+        }
     }
 
-
-    //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
-    //bug if limits not set
-    protected bool CheckIfCanMove(Directions currentDirection)
+    //Method to check if a given position is a walkable tile(could be extended to check if the whole path is walkable?)
+    //Uses ray hits to check type of tile underneath
+    protected bool CheckIfWalkable(Vector3 worldPoint)
     {
-        if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
+        Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
         {
-            return false;
+            //If not hits a wall
+            if (hit.collider.gameObject.layer != 8)
+            {
+                return true;
+            }
         }
-        else if(currentXPos >= rightLimit && currentDirection == Directions.Right)      //Check if the rabbit want to go right despite being at the right edge of the map
-        {
-            return false;
-        }
-        else if(currentZPos <= downLimit && currentDirection == Directions.Down)        //Same but down
-        {
-            return false;
-        }
-        else if(currentZPos >= upLimit && currentDirection == Directions.Up)            //Same but up
-        {
-            return false;
-        }
-        return true;                                                                    //Otherwise return true, meaning the move is possible
-    }
-
-
-    //Calculate how much the rabbit has moved since the last frame. Used to check if it's time to randomize a new direction
-    protected float CalculateDistanceMoved(float startPos, float currentPos)
-    {
-        return System.Math.Abs(currentPos - startPos);                                  
-    }
-
-
-    //Move the rabbit according to the randomized direction. The movement is done by changing the position of the rabbit. The moveSpeed is multiplied by
-    //Time.deltaTime to ensure that the value is identical on all machines no matter how fast they are. The new vector is created by either subtracting
-    //or adding to the x or z value.
-    protected void Move()
-    {
-        if (currentDirection == Directions.Left)
-        {
-            transform.position += new Vector3(-moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Right)
-        {
-            transform.position += new Vector3(moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Up)
-        {
-            transform.position += new Vector3(0f, 0f, moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position += new Vector3(0f, 0f, -moveSpeed * Time.deltaTime);
-        }
+        return false;
     }
 
 
