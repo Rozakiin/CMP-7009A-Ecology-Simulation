@@ -109,21 +109,19 @@ public abstract class Animal : Edible
         }
     }
 
-    //Method to check if a given position is a walkable tile(could be extended to check if the whole path is walkable?)
-    //Uses ray hits to check type of tile underneath
+
+    //Method to check if a given position is a walkable node(could be extended to check if the whole path is walkable?)
+    //Uses ray hits to check if collided with anything
     protected bool CheckIfWalkable(Vector3 worldPoint)
     {
-        Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);
+        Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);//50 is just a high value
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            //If not hits a wall
-            if (hit.collider.gameObject.layer != 8)
-            {
-                return true;
-            }
+            Node targetNode = scene.GetComponent<PathFinderController>().NodeFromWorldPoint(worldPoint);//Gets the node closest to the world point
+            return targetNode.isWalkable;
         }
-        return false;
+        return false;// didn't hit so out of map area
     }
 
 
@@ -177,8 +175,12 @@ public abstract class Animal : Edible
             distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
             if(shortestDistance == -1 || distanceToConsumable < shortestDistance)
             {
-                shortestDistance = distanceToConsumable;
-                closestConsumable = childConsumable;
+                //if the child is on a walkable position
+                if (CheckIfWalkable(childConsumable.transform.position))
+                {
+                    shortestDistance = distanceToConsumable;
+                    closestConsumable = childConsumable;
+                }
             }
         }
         if (closestConsumable != null)
