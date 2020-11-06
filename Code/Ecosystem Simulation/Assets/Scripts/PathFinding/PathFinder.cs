@@ -5,15 +5,19 @@ using System; //for array reversal
 
 public class PathFinder : MonoBehaviour
 {
+    #region Properties
     PathRequestManager requestManager;
     PathFinderController grid;
-
+    #endregion
+    
+    #region Initialisation
     // Awake is called when program starts
     private void Awake()
     {
         grid = GetComponent<PathFinderController>();//Get a reference to PathFinderController
         requestManager = GetComponent<PathRequestManager>();//Get a reference to PathRequestManager
     }
+    #endregion
 
     //starts the FindPath co-routine
     public void StartFindPath(Vector3 startPosition, Vector3 targetPosition)

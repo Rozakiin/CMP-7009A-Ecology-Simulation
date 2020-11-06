@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Node : IHeapItem<Node>
 {
+    #region Properties
     public int gridX;// X position in Node Array
     public int gridY;// Y position in Node Array
 
@@ -19,6 +20,7 @@ public class Node : IHeapItem<Node>
     public int FCost { get { return gCost + hCost; } }//Total Cost of the Node
 
     protected int heapIndex;
+    #endregion
 
     public Node(bool _isWalkable, Vector3 _position, int _gridX, int _gridY, int _penalty)// Constructor for Node
     {

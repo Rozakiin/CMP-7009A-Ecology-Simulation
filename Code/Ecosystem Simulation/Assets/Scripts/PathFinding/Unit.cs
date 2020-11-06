@@ -4,30 +4,36 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour 
 {
-    Animal animal;
-    Vector3 targetOld;
+    #region Properties
+    private Animal animal;
+    private Vector3 targetOld;
+    private Vector3 target;
 
-    float rotationSpeed = 10;
-    Vector3[] path;
-    int targetIndex;
+    private float rotationSpeed = 10;
+    private Vector3[] path;
+    private int targetIndex;
+    #endregion
 
+    #region Initialisation
     void Awake()
     {
         //animal = FindObjectOfType<Animal>();
         animal = GetComponent<Animal>();
     }
+    #endregion
 
     void Update()
     {
+        target = animal.GetTarget();
         //if animal has a target
-        if(animal.target != transform.position)
+        if(target != transform.position)
         {
-            if(animal.target != targetOld)// if the target position has changed
+            if(target != targetOld)// if the target position has changed
             {
-                targetOld = animal.target;
+                targetOld = target;
                 print("transform: "+transform.position.ToString());
-                print("animal target:"+animal.target.ToString());
-                PathRequestManager.RequestPath(transform.position, animal.target, OnPathFound);
+                print("animal target:"+target.ToString());
+                PathRequestManager.RequestPath(transform.position, target, OnPathFound);
             }
         }
     }
@@ -60,7 +66,7 @@ public class Unit : MonoBehaviour
                     {
                         targetIndex = 0;//reset index for multiple runs
                         path = new Vector3[0];
-                        animal.target = transform.position; //reset target to self so animal knows it has finished following path
+                        animal.SetTarget(transform.position); //reset target to self so animal knows it has finished following path
                         yield break;//break out of coroutine
                     }
                     currentWaypoint = path[targetIndex];// set current waypoint to the vector3 in the path at current index
@@ -73,7 +79,7 @@ public class Unit : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(newDir);
 
                 //move towards next waypoint
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, animal.moveSpeed * Time.deltaTime);//go closer to target position
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, animal.GetMoveSpeed() * Time.deltaTime);//go closer to target position
                 yield return null;//wait 1 frame before returning
             }
         }

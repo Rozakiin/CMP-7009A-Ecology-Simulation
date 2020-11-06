@@ -4,17 +4,23 @@ using UnityEngine;
 
 public abstract class Edible : MonoBehaviour
 {
-    protected bool canBeEaten { get; set; }
-    public int baseNutritionalValue { get; set; }
-    public int nutritionalValue;
-    public Vector3 position;
+    #region Properties
+    [Header("Edible Properties")]
+    [SerializeField] public Vector3 position;
     public Simulation scene;
+    [SerializeField] protected bool canBeEaten { get; set; }
+    [SerializeField] protected int baseNutritionalValue { get; set; }
+    [SerializeField] protected int nutritionalValue;
 
+    #endregion
+
+    #region Initialisation
     // Start is called before the first frame update
     void Start()
     {
         
     }
+    #endregion
 
     // Update is called once per frame
     void Update()

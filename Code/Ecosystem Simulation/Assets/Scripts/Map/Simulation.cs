@@ -6,36 +6,49 @@ public class Simulation : MonoBehaviour
 {
     // To be used as main script for the sim
 
-    // GameObjects
-    public GameObject grassTile;
-    public GameObject lightGrassTile;
-    public GameObject waterTile;
-    public GameObject tileContainer;
-    public GameObject waterContainer;
-    public GameObject rabbit;
-    public GameObject rabbitContainer;
-    public GameObject grass;
-    public GameObject grassContainer;
+    #region GameObjects
+    [Header("GameObjects")]
+    [SerializeField] public GameObject grassTile;
+    [SerializeField] public GameObject lightGrassTile;
+    [SerializeField] public GameObject waterTile;
+    [SerializeField] public GameObject tileContainer;
+    [SerializeField] public GameObject waterContainer;
+    [SerializeField] public GameObject rabbit;
+    [SerializeField] public GameObject rabbitContainer;
+    [SerializeField] public GameObject grass;
+    [SerializeField] public GameObject grassContainer;
+    #endregion
 
-    // GameObject Counters
-    private int grassTileCount;
-    private int waterTileCount;
-    private int rabbitCount;
-    private int grassCount;
+    #region GameObject Counters
+    [Header("GameObject Counters")]
+    [SerializeField] private int grassTileCount;
+    [SerializeField] private int waterTileCount;
+    [SerializeField] private int rabbitCount;
+    [SerializeField] private int grassCount;
+    #endregion
 
-    // Grid Data
-    public int gridWidth;
-    public int gridHeight;
-    public Vector2 worldSize;
-    public Vector3 worldBottomLeft;
-    private float tileSize;
-    private float leftLimit, upLimit, rightLimit, downLimit;
+    #region Grid Data
+    [Header("Grid Data")]
+    [SerializeField] public int gridWidth;
+    [SerializeField] public int gridHeight;
+    [SerializeField] public Vector2 worldSize;
+    [SerializeField] public Vector3 worldBottomLeft;
+    [SerializeField] private float tileSize;
+    [SerializeField] private float leftLimit;
+    [SerializeField] private float upLimit;
+    [SerializeField] private float rightLimit;
+    [SerializeField] private float downLimit;
+    #endregion
 
-    private System.Random rnd;
-    private int numberOfTurns;
-    private List<Edible> rabbitList;
-    private List<Edible> grassList;
+    #region Other
+    [Header("Other")]
+    [SerializeField] private System.Random rnd;
+    [SerializeField] private int numberOfTurns;
+    [SerializeField] private List<Edible> rabbitList;
+    [SerializeField] private List<Edible> grassList;
+    #endregion
 
+    #region Initialisation
     // Start is called before the first frame update
     void Awake()
     {
@@ -59,7 +72,6 @@ public class Simulation : MonoBehaviour
         rnd = new System.Random();
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
-        SetLimits();
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit();
@@ -72,6 +84,7 @@ public class Simulation : MonoBehaviour
     {
 
     }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -87,12 +100,15 @@ public class Simulation : MonoBehaviour
         }
     }
 
+    #region Map Creation
     void CreateMap(string path)
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
         MapReader.ReadInMap(path, ref mapList);
         CreateTilesFromMapList(ref mapList);
+        SetLimits();
     }
+
 
     void CreateTilesFromMapList(ref List<List<MapReader.TerrainCost>> mapList)
     {
@@ -146,6 +162,16 @@ public class Simulation : MonoBehaviour
         }
     }
 
+    void SetLimits()
+    {
+        upLimit = (float)(gridHeight - 1) * tileSize;
+        leftLimit = 0;
+        rightLimit = (float)(gridWidth - 1) * tileSize;
+        downLimit = 0;
+    }
+    #endregion
+
+    #region Object Spawning
     void CreateRabbitAtPos(ref Vector3 position)
     {
         GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;
@@ -183,15 +209,9 @@ public class Simulation : MonoBehaviour
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + grassCount;
     }
+    #endregion
 
-    void SetLimits()
-    {
-        upLimit = (float)(gridHeight - 1) * tileSize;
-        leftLimit = 0;
-        rightLimit = (float)(gridWidth - 1) * tileSize;
-        downLimit = 0;
-    }
-
+    #region Getters
     public int GetGridWidth()
     {
         return gridWidth;
@@ -241,6 +261,7 @@ public class Simulation : MonoBehaviour
     {
         return rabbitList;
     }
+    #endregion
 
     public void DestroyObject(GameObject gameObject)
     {

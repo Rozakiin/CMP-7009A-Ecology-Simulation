@@ -25,12 +25,14 @@ public class Fox : Animal
         {
         }
     }
-    
+
+    #region Initialisation
     // Start is called before the first frame update
     void Start()
     {
         
     }
+    #endregion
 
     // Update is called once per frame
     void Update()

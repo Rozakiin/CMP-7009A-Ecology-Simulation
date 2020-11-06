@@ -26,7 +26,13 @@ public class Rabbit : Animal
         {
         }
     }
-    
+
+    #region Initialisation
+    void Awake()//Ran once the program starts
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>(); // get reference to Simulation
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,12 +61,7 @@ public class Rabbit : Animal
         GetLimits();
         SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
-
-    
-    void Awake()//Ran once the program starts
-    {
-        //scene = GetComponent<Simulation>(); // get reference to Simulation
-    }
+    #endregion
 
     // Update is called once per frame
     void Update()
