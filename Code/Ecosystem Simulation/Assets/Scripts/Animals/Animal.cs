@@ -5,35 +5,43 @@ using UnityEngine;
 
 public abstract class Animal : Edible
 {
-    public Transform target;
+    #region Properties
+    [Header("Animal Properties")]
+    [SerializeField] public Transform target;
 
-    // possition and movement properties
-    protected float startXPos, startZPos;                                                               //The starting x and z position
-    protected float currentXPos, currentZPos;                                                 //The current x and z position
-    public float moveSpeed;
+    [Header("Position and Movement Properties")]
+    [SerializeField] protected float startXPos;      //The starting x and z position
+    [SerializeField] protected float startZPos;
+    [SerializeField] protected float currentXPos;        //The current x and z position
+    [SerializeField] protected float currentZPos;                                                 
+    [SerializeField] protected float moveSpeed;
 
     // status properties (could be made into a struct?)
-    protected float hunger;
-    protected float thirst;
-    protected int age;
-    protected float reproductiveUrge;
-    protected float sightRadius;
-    protected float eatingSpeed;
-    protected float pregnancyLength;
-    protected Gender gender;
-    protected abstract float maxLifeExpectancy { get; set;}
-    protected abstract float babyNumber { get; set;}
+    [Header("Status Properties")]
+    [SerializeField] protected float hunger;
+    [SerializeField] protected float thirst;
+    [SerializeField] protected int age;
+    [SerializeField] protected float reproductiveUrge;
+    [SerializeField] protected float sightRadius;
+    [SerializeField] protected float eatingSpeed;
+    [SerializeField] protected float pregnancyLength;
+    [SerializeField] protected Gender gender;
+    [SerializeField] protected abstract float maxLifeExpectancy { get; set;}
+    [SerializeField] protected abstract float babyNumber { get; set;}
 
-    //scene data
-    protected float tileSize;                                                                 //The size of each tile on the map
-    protected float leftLimit, upLimit, rightLimit, downLimit;
-    protected int numberOfTurns;
+    [Header("Scene Data")]
+    [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
+    [SerializeField] protected float leftLimit;
+    [SerializeField] protected float upLimit;
+    [SerializeField] protected float rightLimit;
+    [SerializeField] protected float downLimit;
+    [SerializeField] protected int numberOfTurns;
 
-    //other
-    protected Edible edibleObject;
-    protected Renderer renderer;
-    protected float scaleMult;
-    protected LineRenderer lineRenderer;
+    [Header("Other")]
+    [SerializeField] protected Edible edibleObject;
+    [SerializeField] protected Renderer renderer;
+    [SerializeField] protected float scaleMult;
+    [SerializeField] protected LineRenderer lineRenderer;
 
     protected enum Gender
     {
@@ -44,13 +52,13 @@ public abstract class Animal : Edible
     {
         Left, Up, Right, Down
     }
-    protected Directions currentDirection;
+    [SerializeField] protected Directions currentDirection;
 
-    public enum States
+    protected enum States
     {
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
     }
-    public States state;
+    [SerializeField] protected States state;
 
     public enum DeathReason
     {
@@ -61,12 +69,13 @@ public abstract class Animal : Edible
     }
 
     // count death reason
-    public static int diedFromHunger;
-    public static int diedFromThirst;
-    public static int diedFromAge;
-    public static int diedFromEaten;
+    [SerializeField] public static int diedFromHunger;
+    [SerializeField] public static int diedFromThirst;
+    [SerializeField] public static int diedFromAge;
+    [SerializeField] public static int diedFromEaten;
+    #endregion
 
-
+    #region Initialisation
     public void Start()
     {
         int rnd = UnityEngine.Random.Range(0, 2);
@@ -78,7 +87,7 @@ public abstract class Animal : Edible
         }
         print(gender);
     }
-
+    #endregion
 
     protected void WanderAround()
     {
@@ -335,12 +344,20 @@ public abstract class Animal : Edible
                 diedFromEaten++;
                 break;
             default:
-                Debug.Log("Unkown death reason: " + reason.ToString());
+                Debug.Log("Unknown death reason: " + reason.ToString());
                 break;
         }
         Destroy(gameObject);
     }
 
+    public Transform GetTarget()
+    {
+        return target;
+    }
+    public void SetTarget(Transform _target)
+    {
+        target = _target;
+    }
 
     public override void SetNutritionalValue()
     {

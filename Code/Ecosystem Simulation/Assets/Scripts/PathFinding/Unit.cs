@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour 
 {
-    Animal animal;
-    Transform targetOld;
+    #region Properties
+    private Animal animal;
+    private Transform targetOld;
 
-    float speed = 20;
-    float rotationSpeed = 10;
-    Vector3[] path;
-    int targetIndex;
+    private float speed = 20;
+    private float rotationSpeed = 10;
+    private Vector3[] path;
+    private int targetIndex;
+    #endregion
 
+    #region Initialisation
     void Awake()
     {
         //animal = FindObjectOfType<Animal>();
         animal = GetComponent<Animal>();
     }
+    #endregion
 
     void Update()
     {

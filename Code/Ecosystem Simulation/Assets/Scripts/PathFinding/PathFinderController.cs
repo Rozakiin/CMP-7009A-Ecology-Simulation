@@ -1,27 +1,34 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class PathFinderController : MonoBehaviour
 {
-    public Simulation scene;
-    public bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
-    public LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
+    #region Properties
+    private Simulation scene;
+    [Header("Debugging")]
+    [SerializeField] private bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
+
+    [Header("Grid Data")]
     private Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
-    public float nodeRadius;//This stores how big each square on the graph will be
-    public float distanceBetweenNodes;//The distance that the squares will spawn from eachother.
-    public TerrainType[] walkableRegions;
-    LayerMask walkableMask;
-    Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
-    Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
+    private int gridSizeX, gridSizeY;//Size of the Grid in Array units.
+    public int MaxSize { get { return gridSizeX * gridSizeY; } }
 
-    float nodeDiameter;//Twice the amount of the radius (Set in the start function)
-    int gridSizeX, gridSizeY;//Size of the Grid in Array units.
+    [Header("Node Properties")]
+    [SerializeField] private float nodeRadius;//This stores how big each square on the graph will be
+    [SerializeField] private float distanceBetweenNodes;//The distance that the squares will spawn from each other.
+    private float nodeDiameter;//Twice the amount of the radius (Set in the start function)
+    private Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
 
-    public int MaxSize{ get{ return gridSizeX * gridSizeY; } }
+    [Header("LayerMask Data")]
+    [SerializeField] LayerMask walkableMask;
+    [SerializeField] private LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
+    [SerializeField] private TerrainType[] walkableRegions;
+    private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
+    #endregion
 
-
+    #region Initialisation
     void Awake()//Ran once the program starts
     {
         scene = GetComponent<Simulation>(); // get reference to Simulation
@@ -42,6 +49,7 @@ public class PathFinderController : MonoBehaviour
         
         CreateGrid();//Draw the grid
     }
+    #endregion
 
     void CreateGrid()
     {
