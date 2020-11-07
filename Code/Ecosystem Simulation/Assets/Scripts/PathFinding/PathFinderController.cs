@@ -24,8 +24,12 @@ public class PathFinderController : MonoBehaviour
     [Header("LayerMask Data")]
     [SerializeField] LayerMask walkableMask;
     [SerializeField] private LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
+    [SerializeField] private int unwalkableProximityPenalty = 10;//Penalty for going near to unwalkable nodes
+    private int penaltyMin = int.MaxValue;
+    private int penaltyMax = int.MinValue;
     [SerializeField] private TerrainType[] walkableRegions;
     private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
+
     #endregion
 
     #region Initialisation
@@ -68,14 +72,16 @@ public class PathFinderController : MonoBehaviour
 
                 int movementPenalty = 0;//penalty for walking over node
                 
-                if(isWalkable)
+                Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, walkableMask)) 
                 {
-                    Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 100, walkableMask)) 
-                    {
-                        walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
-                    }
+                    walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
+                }
+
+                if (!isWalkable)
+                {
+                    movementPenalty += unwalkableProximityPenalty;
                 }
 
                 nodeArray[x, y] = new Node(isWalkable, worldPoint, x, y, movementPenalty);//Create a new node in the array.
@@ -135,6 +141,16 @@ public class PathFinderController : MonoBehaviour
                 penaltiesVertical[x, y] = penaltiesVertical[x, y-1] - penaltiesHorizontal[x, indexToRemove] + penaltiesHorizontal[x, indexToAdd];//equal to previous - penalty at indexToRemove + penalty at indexToAdd
                 int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
                 nodeArray[x, y].penalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
+            
+                //update penalty min and max
+                if (blurredPenalty > penaltyMax)
+                {
+                    penaltyMax = blurredPenalty;
+                }
+                if (blurredPenalty < penaltyMin)
+                {
+                    penaltyMin = blurredPenalty;
+                }
             }
         }
     }
@@ -210,11 +226,8 @@ public class PathFinderController : MonoBehaviour
         {
             foreach (Node n in nodeArray)//Loop through every node in the grid
             {
-                if (n.isWalkable)//If the current node is a walkable
-                {
-                    Gizmos.color = Color.white;//node colour white
-                }
-                else
+                Gizmos.color = Color.Lerp(Color.white, Color.black, Mathf.InverseLerp(penaltyMin, penaltyMax, n.penalty));//pick color on gradient between white and black depending on where penalty lies between min and max
+                if (!n.isWalkable)//If the current node is not walkable
                 {
                     Gizmos.color = Color.red;//node colour red
                 }
