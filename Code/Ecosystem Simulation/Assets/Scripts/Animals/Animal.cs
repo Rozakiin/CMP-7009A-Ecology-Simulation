@@ -9,7 +9,7 @@ public abstract class Animal : Edible
 
     // possition and movement properties
     protected float startXPos, startZPos;                                                               //The starting x and z position
-    protected float currentXPos, currentZPos;                                                 //The current x and z position
+    protected float currentXPos, currentZPos;                                                           //The current x and z position
     public float moveSpeed;
 
     // status properties (could be made into a struct?)
@@ -20,9 +20,13 @@ public abstract class Animal : Edible
     protected float sightRadius;
     protected float eatingSpeed;
     protected float pregnancyLength;
+    public bool pregnant;
     protected Gender gender;
     protected abstract float maxLifeExpectancy { get; set;}
     protected abstract float babyNumber { get; set;}
+    protected float matingDuration;
+    protected float matingTimeStarted;
+    protected float timer;
 
     //scene data
     protected float tileSize;                                                                 //The size of each tile on the map
@@ -34,6 +38,7 @@ public abstract class Animal : Edible
     protected Renderer renderer;
     protected float scaleMult;
     protected LineRenderer lineRenderer;
+    protected float distanceToTarget;
 
     protected enum Gender
     {
@@ -48,7 +53,7 @@ public abstract class Animal : Edible
 
     public enum States
     {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
+        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant
     }
     public States state;
 
@@ -76,7 +81,10 @@ public abstract class Animal : Edible
             string type = this.GetType().ToString();
             gameObject.tag = "Female" + type;
         }
+        distanceToTarget = 1000000;
         print(gender);
+        pregnant = false;
+        timer = 0f;
     }
 
 
@@ -351,5 +359,15 @@ public abstract class Animal : Edible
     public override int GetNutritionalValue()
     {
         return nutritionalValue;
+    }
+
+    public void SetState(States state)
+    {
+        this.state = state;
+    }
+
+    public States GetState()
+    {
+        return state;
     }
 }

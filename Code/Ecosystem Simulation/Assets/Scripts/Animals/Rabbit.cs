@@ -45,6 +45,7 @@ public class Rabbit : Animal
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         eatingSpeed = 2f;
+        matingDuration = 3f;
 
         scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
         transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
@@ -68,33 +69,58 @@ public class Rabbit : Animal
         DisableLineRenderer();
         SetPosition();
         hunger += 1 * Time.deltaTime;
+        timer += 1 * Time.deltaTime;
 
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
             //print(reproductiveUrge);
         }
+        if(reproductiveUrge >= 5)
+        {
+            state = States.SexuallyActive;
+            if(distanceToTarget <= 3)
+            {
+                SetState(States.Mating);
+                if(GetState() != States.Mating)
+                {
+                    target.GetComponent<Animal>().SetState(States.Mating);
+                    matingTimeStarted = timer;
+                }
+            }
+        }
+        else if(hunger >= 5)
+        {
+            state = States.Hungry;
+            if(distanceToTarget <= sightRadius)
+            {
+                state = States.Eating;
+            }
+        }
+        else if(hunger <= 0)
+        {
+            state = States.Wandering;
+        }
 
         if (state == States.Wandering)
         {
-            WanderAround();
+            //WanderAround();
 
-            if(reproductiveUrge >= 5)
-            {
-                state = States.SexuallyActive;
-            }
-
-            if (hunger >= 10)
-            {
-                state = States.Hungry;
-            }
+            //if(reproductiveUrge >= 5)
+            //{
+            //    state = States.SexuallyActive;
+            //}
+            //else if (hunger >= 5)
+            //{
+            //    state = States.Hungry;
+            //}
         }
         else if (state == States.Hungry)
         {
-            if(reproductiveUrge >= 5)
-            {
-                state = States.SexuallyActive;
-            }
+            //if(reproductiveUrge >= 5)
+            //{
+            //    state = States.SexuallyActive;
+            //}
             //WanderAround();
             DisableLineRenderer();            
             
@@ -103,27 +129,34 @@ public class Rabbit : Animal
 
             Edible closestGrass = LookForConsumable("Grass");
             edibleObject = closestGrass.GetComponent<Edible>();
-            float distanceToGrass = Vector3.Distance(position, closestGrass.transform.position);
+            distanceToTarget = Vector3.Distance(position, closestGrass.transform.position);
             target = closestGrass.transform;
             DrawLine(transform.position, target.position);
 
-            if(distanceToGrass <= sightRadius)
-            {
-                state = States.Eating;
-            }
+            //if(distanceToTarget <= sightRadius)
+            //{
+            //    state = States.Eating;
+            //}
         }
         else if (state == States.Eating)
         {
-            edibleObject.Die();
-
-            hunger -= 5;
-            state = States.Wandering;
-            scene.CreateGrass();
-
-            if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
+            if (edibleObject != null)
             {
+                edibleObject.Die();
+                scene.CreateGrass();
                 state = States.Wandering;
+                print("Ate");
+                //hunger -= 5;
+                if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
+                {
+                    state = States.Wandering;
+                }
             }
+            else
+            {
+                state = States.Hungry;
+                distanceToTarget = 1000000;
+            }        
         }
         else if (state == States.Thirsty)
         {
@@ -133,8 +166,24 @@ public class Rabbit : Animal
         }
         else if(state == States.SexuallyActive)
         {
+            //print("sexually active");
             Animal closestMate = LookForMate("FemaleRabbit");
+            target = closestMate.transform;
+            distanceToTarget = Vector3.Distance(position, target.transform.position);
             DrawLine(position, closestMate.position);
+        }
+        else if(state == States.Mating)
+        {
+            print("Mating");
+            if (timer - matingTimeStarted >= matingDuration)
+            {
+                reproductiveUrge = 0;
+                SetState(States.Wandering);
+                if(gender == Gender.Female)
+                {
+                    pregnant = true;
+                }
+            }
         }
     }
 }
