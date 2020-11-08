@@ -15,11 +15,11 @@ public class Fox : Animal
         }
     }
 
-    protected override float maxBabyNumber   // overriding property
+    protected override float babyNumber   // overriding property
     {
         get
         {
-            return maxBabyNumber;
+            return babyNumber;
         }
         set
         {

@@ -16,11 +16,11 @@ public class Rabbit : Animal
         }
     }
 
-    protected override float maxBabyNumber   // overriding property
+    protected override float babyNumber   // overriding property
     {
         get
         {
-            return maxBabyNumber;
+            return babyNumber;
         }
         set
         {
@@ -32,8 +32,7 @@ public class Rabbit : Animal
     {
         base.Start();
         canBeEaten = true;
-        originalMoveSpeed = 25f;
-        moveSpeed = originalMoveSpeed;
+        moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
         startXPos = position.x;
@@ -47,12 +46,6 @@ public class Rabbit : Animal
         state = States.Wandering;
         eatingSpeed = 2f;
         matingDuration = 3f;
-<<<<<<< Updated upstream
-=======
-        pregnancyLength = 5f;
-        maxBabyNumber = 13;
-        birthDuration = 0.2f;
->>>>>>> Stashed changes
 
         scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
         transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
@@ -77,20 +70,6 @@ public class Rabbit : Animal
         SetPosition();
         hunger += 1 * Time.deltaTime;
         timer += 1 * Time.deltaTime;
-<<<<<<< Updated upstream
-=======
-        if (pregnant)
-        {
-            moveSpeed = 0.6f * originalMoveSpeed;
-            if(timer - pregnancyStartTime >= pregnancyLength)
-            {
-                state = States.GivingBirth;
-                birthStartTime = timer;
-                pregnant = false;
-                //GiveBirth();
-            }
-        }
->>>>>>> Stashed changes
 
         if (gender == Gender.Male)
         {
@@ -166,7 +145,6 @@ public class Rabbit : Animal
                 edibleObject.Die();
                 scene.CreateGrass();
                 state = States.Wandering;
-<<<<<<< Updated upstream
                 print("Ate");
                 //hunger -= 5;
                 if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
@@ -179,14 +157,6 @@ public class Rabbit : Animal
                 state = States.Hungry;
                 distanceToTarget = 1000000;
             }        
-=======
-            }
-            //If the grass has been eaten by someone else, go back to being hungry
-            else
-            {
-                state = States.Hungry;
-            }         
->>>>>>> Stashed changes
         }
         else if (state == States.Thirsty)
         {
@@ -196,7 +166,6 @@ public class Rabbit : Animal
         }
         else if(state == States.SexuallyActive)
         {
-<<<<<<< Updated upstream
             //print("sexually active");
             Animal closestMate = LookForMate("FemaleRabbit");
             target = closestMate.transform;
@@ -214,61 +183,6 @@ public class Rabbit : Animal
                 {
                     pregnant = true;
                 }
-=======
-            DisableLineRenderer();
-            closestMate = LookForMate("FemaleRabbit");
-            if (closestMate != null)
-            {
-                float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
-                // Mate within touching distance
-                if(distanceToMate <= touchRadius)
-                {
-                    state = States.Mating;
-                    mateStartTime = timer;
-                    Mate(closestMate);
-                }
-                //Mate within sight radius
-                if(distanceToMate <= sightRadius)
-                {
-                    target = closestMate.transform.position;
-                    DrawLine(transform.position, target);
-                }
-            }
-            //No mate
-            WanderAround();
-        }
-        else if(state == States.Mating)
-        {
-            //temp code to check pathfinding          
-            DisableLineRenderer();
-            print("Mating");
-            //If mating should end
-            if (timer - mateStartTime >= matingDuration)
-            {
-                if (gender == Gender.Female)
-                {
-                    pregnancyStartTime = timer;
-                    pregnant = true;
-                    numberOfBabies = 5;
-                    //numberOfBabies = (int)UnityEngine.Random.Range(1, maxBabyNumber);
-                }
-                reproductiveUrge = 0;
-                state = States.Wandering;
-            }
-        }
-        else if(state == States.GivingBirth)
-        {
-            if(timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
-            {
-                GiveBirth();
-                birthStartTime = timer;
-                babiesBorn++;
-                
-            }
-            if(babiesBorn >= numberOfBabies)
-            {
-                state = States.Wandering;
->>>>>>> Stashed changes
             }
         }
     }

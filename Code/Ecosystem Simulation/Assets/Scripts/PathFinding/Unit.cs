@@ -25,7 +25,6 @@ public class Unit : MonoBehaviour
         {
             if(targetOld == null)//if target not set set the target
             {
-<<<<<<< Updated upstream
                 targetOld = animal.target;
                 print("transform: "+transform.position.ToString());
                 print("animal target:"+animal.target.position.ToString());
@@ -35,12 +34,6 @@ public class Unit : MonoBehaviour
             {
                 targetOld = animal.target;
                 PathRequestManager.RequestPath(transform.position, animal.target.position, OnPathFound);
-=======
-                targetOld = target;
-                //print("transform: "+transform.position.ToString());
-                //print("animal target:"+target.ToString());
-                PathRequestManager.RequestPath(transform.position, target, OnPathFound);
->>>>>>> Stashed changes
             }
         }
     }

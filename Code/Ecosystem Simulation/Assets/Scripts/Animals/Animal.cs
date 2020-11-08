@@ -7,7 +7,6 @@ public abstract class Animal : Edible
 {
     public Transform target;
 
-<<<<<<< Updated upstream
     // possition and movement properties
     protected float startXPos, startZPos;                                                               //The starting x and z position
     protected float currentXPos, currentZPos;                                                           //The current x and z position
@@ -40,54 +39,6 @@ public abstract class Animal : Edible
     protected float scaleMult;
     protected LineRenderer lineRenderer;
     protected float distanceToTarget;
-=======
-    [Header("Position and Movement Properties")]
-    [SerializeField] protected float startXPos;      //The starting x and z position
-    [SerializeField] protected float startZPos;
-    [SerializeField] protected float currentXPos;        //The current x and z position
-    [SerializeField] protected float currentZPos;                                                 
-    [SerializeField] protected float moveSpeed;
-    [SerializeField] protected float originalMoveSpeed;
-
-    // status properties (could be made into a struct?)
-    [Header("Status Properties")]
-    [SerializeField] protected float hunger;
-    [SerializeField] protected float thirst;
-    [SerializeField] protected int age;
-    [SerializeField] protected float reproductiveUrge;
-    [SerializeField] protected float sightRadius;
-    [SerializeField] protected float touchRadius;
-    [SerializeField] protected float eatingSpeed;
-    [SerializeField] protected float pregnancyLength;
-    [SerializeField] protected bool pregnant;
-    [SerializeField] protected float pregnancyStartTime;
-    [SerializeField] protected Gender gender;
-    [SerializeField] protected float matingDuration;
-    [SerializeField] protected float mateStartTime;
-    [SerializeField] protected float birthStartTime;
-    [SerializeField] protected int numberOfBabies;  //How many the female is carrying right now
-    [SerializeField] protected int babiesBorn;      //How many she has given birth to
-    [SerializeField] protected float birthDuration;   //How long between babies being born
-    [SerializeField] protected Animal closestMate;
-    [SerializeField] protected abstract float maxLifeExpectancy { get; set;}
-    [SerializeField] protected abstract float maxBabyNumber { get; set;}
-
-    [Header("Scene Data")]
-    [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
-    [SerializeField] protected float leftLimit;
-    [SerializeField] protected float upLimit;
-    [SerializeField] protected float rightLimit;
-    [SerializeField] protected float downLimit;
-    [SerializeField] protected int numberOfTurns;
-
-
-    [Header("Other")]
-    [SerializeField] protected Edible edibleObject;
-    [SerializeField] protected Renderer renderer;
-    [SerializeField] protected float scaleMult;
-    [SerializeField] protected LineRenderer lineRenderer;
-    [SerializeField] protected float timer;
->>>>>>> Stashed changes
 
     protected enum Gender
     {
@@ -102,11 +53,7 @@ public abstract class Animal : Edible
 
     public enum States
     {
-<<<<<<< Updated upstream
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant
-=======
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, GivingBirth
->>>>>>> Stashed changes
     }
     public States state;
 
@@ -133,14 +80,8 @@ public abstract class Animal : Edible
         {
             string type = this.GetType().ToString();
             gameObject.tag = "Female" + type;
-            babiesBorn = 0;
         }
-<<<<<<< Updated upstream
         distanceToTarget = 1000000;
-=======
-        timer = 0;
-        pregnant = false;
->>>>>>> Stashed changes
         print(gender);
         pregnant = false;
         timer = 0f;
@@ -307,24 +248,7 @@ public abstract class Animal : Edible
         float distanceToConsumable;
         float shortestDistance = 1000000000;
         GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
-        //When looking for female mates, ignore the ones that have already been impregnated
-        if (searchedTag.Contains("Female"))
-        {
-            List<GameObject> bufferList = new List<GameObject>();
-            foreach (GameObject female in allChildren)
-            {
-                if (!female.GetComponent<Animal>().pregnant)
-                {
-                    bufferList.Add(female);
-                }
-            }
-            allChildren = null;
-            allChildren = new GameObject[bufferList.Count];
-            for(int i=0; i<bufferList.Count; i++)
-            {
-                allChildren[i] = bufferList[i];
-            }        
-        }
+        //Edible[] allChildren = targetContainer.GetComponentsInChildren<Grass>();
         foreach (GameObject childConsumable in allChildren)
         {
             distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
@@ -366,25 +290,15 @@ public abstract class Animal : Edible
     }
 
 
-    protected virtual void Mate(Animal femaleMate)
+    protected virtual void Mate()
     {
-        if (femaleMate.state != States.Mating)
-        {
-            femaleMate.state = States.Mating;
-        }
+
     }
 
 
     protected virtual void Flee()
     {
 
-    }
-
-    protected virtual void GiveBirth()
-    {
-        Vector3 position = transform.position;
-        scene.CreateRabbitAtPos(ref position);
-        //scene.CreateAnimal(this.gameObject);
     }
 
 
