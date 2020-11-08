@@ -36,6 +36,39 @@ public class Simulation : MonoBehaviour
     private List<Edible> rabbitList;
     private List<Edible> grassList;
 
+<<<<<<< Updated upstream
+=======
+    #region GameObject Counters
+    [Header("GameObject Counters")]
+    [SerializeField] private int grassTileCount;
+    [SerializeField] private int waterTileCount;
+    [SerializeField] private int rabbitCount;
+    [SerializeField] private int grassCount;
+    #endregion
+
+    #region Grid Data
+    [Header("Grid Data")]
+    [SerializeField] public int gridWidth;
+    [SerializeField] public int gridHeight;
+    [SerializeField] public Vector2 worldSize;
+    [SerializeField] public Vector3 worldBottomLeft;
+    [SerializeField] private float tileSize;
+    [SerializeField] private float leftLimit;
+    [SerializeField] private float upLimit;
+    [SerializeField] private float rightLimit;
+    [SerializeField] private float downLimit;
+    #endregion
+
+    #region Other
+    [Header("Other")]
+    [SerializeField] private Random rnd;
+    [SerializeField] private int numberOfTurns;
+    [SerializeField] private List<Edible> rabbitList;
+    [SerializeField] private List<Edible> grassList;
+    #endregion
+
+    #region Initialisation
+>>>>>>> Stashed changes
     // Start is called before the first frame update
     void Awake()
     {
@@ -56,13 +89,16 @@ public class Simulation : MonoBehaviour
 
         rabbitList = new List<Edible>();
         grassList = new List<Edible>();
-        rnd = new System.Random();
+        rnd = new Random();
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
         SetLimits();
         for (int i = 0; i < 5; i++)
         {
             CreateRabbit();
+        }
+        for (int i = 0; i < 30; i++)
+        {
             CreateGrass();
         }
     }
@@ -146,7 +182,21 @@ public class Simulation : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
     void CreateRabbitAtPos(ref Vector3 position)
+=======
+    void SetLimits()
+    {
+        upLimit = (float)(gridHeight - 1) * tileSize;
+        leftLimit = 0;
+        rightLimit = (float)(gridWidth - 1) * tileSize;
+        downLimit = 0;
+    }
+    #endregion
+
+    #region Object Spawning
+    public void CreateRabbitAtPos(ref Vector3 position)
+>>>>>>> Stashed changes
     {
         GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
@@ -158,8 +208,8 @@ public class Simulation : MonoBehaviour
     
     public void CreateRabbit()
     {
-        int randWidth = rnd.Next(0, (int)gridWidth-1);
-        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        int randWidth = Random.Range(0, (int)gridWidth-1);
+        int randHeight = Random.Range(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
         
         GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
@@ -170,10 +220,24 @@ public class Simulation : MonoBehaviour
         rabbitClone.name = "RabbitClone" + rabbitCount;
     }
 
+    public void CreateAnimal(GameObject animal)
+    {
+        int randWidth = Random.Range(0, (int)gridWidth - 1);
+        int randHeight = Random.Range(0, (int)gridHeight - 1);
+        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);//Get the world co ordinates of the rabbit from the bottom left of the graph
+
+        GameObject animalClone = Instantiate(animal, worldPoint, rabbit.transform.rotation);
+        rabbitCount++;
+        animalClone.GetComponent<Rabbit>().scene = this;
+        rabbitList.Add(animalClone.GetComponent<Rabbit>());
+        animalClone.transform.parent = rabbitContainer.transform;
+        animal.name = "RabbitClone" + rabbitCount;
+    }
+
     public void CreateGrass()
     {
-        int randWidth = rnd.Next(0, (int)gridWidth-1);
-        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        int randWidth = Random.Range(0, (int)gridWidth-1);
+        int randHeight = Random.Range(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
 
         GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
