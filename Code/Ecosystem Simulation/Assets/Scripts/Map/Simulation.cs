@@ -57,9 +57,9 @@ public class Simulation : MonoBehaviour
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
         SetLimits();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            CreateRabbit();
+            //CreateRabbit();
             CreateGrass();
         }
     }
@@ -67,7 +67,7 @@ public class Simulation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log(LayerMask.NameToLayer("Grass"));
     }
 
     // Update is called once per frame
@@ -165,11 +165,13 @@ public class Simulation : MonoBehaviour
 
     void CreateGrass()
     {
+
         int randWidth = rnd.Next(0, (int)gridWidth-1);
         int randHeight = rnd.Next(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
-
+        
         GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
+        grassClone.layer = LayerMask.NameToLayer("Grass");
         grassCount++;
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + grassCount;
