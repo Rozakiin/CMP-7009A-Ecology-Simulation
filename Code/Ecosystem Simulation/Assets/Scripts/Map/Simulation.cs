@@ -10,6 +10,8 @@ public class Simulation : MonoBehaviour
     public GameObject grassTile;
     public GameObject lightGrassTile;
     public GameObject waterTile;
+    public GameObject sandTile;
+    public GameObject rockTile;
     public GameObject tileContainer;
     public GameObject waterContainer;
     public GameObject rabbit;
@@ -125,16 +127,16 @@ public class Simulation : MonoBehaviour
                         tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
-                        //tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
-                        //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 10; //set layer to grass
+                        tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
-                        //tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
-                        //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone name += y + "" + x;
-                        //tileClone.layer = 11; //set layer to grass
+                        tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 11; //set layer to grass
                         break;
                     default:
                         tileClone = Instantiate(lightGrassTile, worldPoint, lightGrassTile.transform.rotation);
