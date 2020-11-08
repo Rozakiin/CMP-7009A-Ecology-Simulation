@@ -11,6 +11,8 @@ public class Simulation : MonoBehaviour
     [SerializeField] public GameObject grassTile;
     [SerializeField] public GameObject lightGrassTile;
     [SerializeField] public GameObject waterTile;
+    [SerializeField] public GameObject sandTile;
+    [SerializeField] public GameObject rockTile;
     [SerializeField] public GameObject tileContainer;
     [SerializeField] public GameObject waterContainer;
     [SerializeField] public GameObject rabbit;
@@ -72,7 +74,7 @@ public class Simulation : MonoBehaviour
         rnd = new System.Random();
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 15; i++)
         {
             CreateRabbit();
             CreateGrass();
@@ -141,16 +143,16 @@ public class Simulation : MonoBehaviour
                         tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
-                        //tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
-                        //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 10; //set layer to grass
+                        tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
-                        //tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
-                        //tileClone.transform.parent = tileContainer.transform;
-                        //tileClone name += y + "" + x;
-                        //tileClone.layer = 11; //set layer to grass
+                        tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
+                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.name += y + "" + x;
+                        tileClone.layer = 11; //set layer to grass
                         break;
                     default:
                         tileClone = Instantiate(lightGrassTile, worldPoint, lightGrassTile.transform.rotation);
