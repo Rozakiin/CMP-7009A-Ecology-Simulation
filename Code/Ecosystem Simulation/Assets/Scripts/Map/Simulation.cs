@@ -196,6 +196,9 @@ public class Simulation : MonoBehaviour
 
     #region Object Spawning
     public void CreateRabbitAtPos(ref Vector3 position)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     {
         GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;

@@ -46,9 +46,18 @@ public class Rabbit : Animal
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         eatingSpeed = 2f;
+<<<<<<< Updated upstream
         matingDuration = 3f;
 <<<<<<< Updated upstream
 =======
+        pregnancyLength = 5f;
+        maxBabyNumber = 13;
+        birthDuration = 0.2f;
+>>>>>>> Stashed changes
+=======
+        originalMoveSpeed = 25f;
+        moveSpeed = originalMoveSpeed;
+        matingDuration = 3f;
         pregnancyLength = 5f;
         maxBabyNumber = 13;
         birthDuration = 0.2f;
@@ -78,7 +87,10 @@ public class Rabbit : Animal
         hunger += 1 * Time.deltaTime;
         timer += 1 * Time.deltaTime;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
         if (pregnant)
         {
             moveSpeed = 0.6f * originalMoveSpeed;
@@ -87,9 +99,15 @@ public class Rabbit : Animal
                 state = States.GivingBirth;
                 birthStartTime = timer;
                 pregnant = false;
+<<<<<<< Updated upstream
                 //GiveBirth();
             }
         }
+>>>>>>> Stashed changes
+=======
+            }
+        }
+
 >>>>>>> Stashed changes
 
         if (gender == Gender.Male)
@@ -174,6 +192,7 @@ public class Rabbit : Animal
                     state = States.Wandering;
                 }
             }
+<<<<<<< Updated upstream
             else
             {
                 state = States.Hungry;
@@ -186,6 +205,18 @@ public class Rabbit : Animal
             {
                 state = States.Hungry;
             }         
+>>>>>>> Stashed changes
+=======
+            //If the grass has been eaten by someone else, go back to being hungry
+            else
+            {
+                state = States.Hungry;
+            }
+
+            if(hunger <= 0)
+            {
+                state = States.Wandering;
+            }          
 >>>>>>> Stashed changes
         }
         else if (state == States.Thirsty)
@@ -237,7 +268,7 @@ public class Rabbit : Animal
             //No mate
             WanderAround();
         }
-        else if(state == States.Mating)
+        else if (state == States.Mating)
         {
             //temp code to check pathfinding          
             DisableLineRenderer();
@@ -256,17 +287,31 @@ public class Rabbit : Animal
                 state = States.Wandering;
             }
         }
+<<<<<<< Updated upstream
         else if(state == States.GivingBirth)
         {
             if(timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
+=======
+        else if (state == States.GivingBirth)
+        {
+            if (timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
+>>>>>>> Stashed changes
             {
                 GiveBirth();
                 birthStartTime = timer;
                 babiesBorn++;
+<<<<<<< Updated upstream
                 
             }
             if(babiesBorn >= numberOfBabies)
             {
+                state = States.Wandering;
+>>>>>>> Stashed changes
+=======
+            }
+            if (babiesBorn >= numberOfBabies)
+            {
+                moveSpeed = originalMoveSpeed;
                 state = States.Wandering;
 >>>>>>> Stashed changes
             }

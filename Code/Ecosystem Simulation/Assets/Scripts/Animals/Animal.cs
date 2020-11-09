@@ -69,8 +69,13 @@ public abstract class Animal : Edible
     [SerializeField] protected int babiesBorn;      //How many she has given birth to
     [SerializeField] protected float birthDuration;   //How long between babies being born
     [SerializeField] protected Animal closestMate;
+<<<<<<< Updated upstream
     [SerializeField] protected abstract float maxLifeExpectancy { get; set;}
     [SerializeField] protected abstract float maxBabyNumber { get; set;}
+=======
+    [SerializeField] protected abstract float maxLifeExpectancy { get; set; }
+    [SerializeField] protected abstract float maxBabyNumber { get; set; }
+>>>>>>> Stashed changes
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -87,6 +92,9 @@ public abstract class Animal : Edible
     [SerializeField] protected float scaleMult;
     [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected float timer;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     protected enum Gender
@@ -103,9 +111,13 @@ public abstract class Animal : Edible
     public enum States
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant
 =======
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, GivingBirth
+>>>>>>> Stashed changes
+=======
+        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
 >>>>>>> Stashed changes
     }
     public States state;
@@ -136,12 +148,16 @@ public abstract class Animal : Edible
             babiesBorn = 0;
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         distanceToTarget = 1000000;
 =======
         timer = 0;
         pregnant = false;
 >>>>>>> Stashed changes
         print(gender);
+=======
+        print(gender); print(gender);
+>>>>>>> Stashed changes
         pregnant = false;
         timer = 0f;
     }
@@ -309,6 +325,26 @@ public abstract class Animal : Edible
         GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
         //When looking for female mates, ignore the ones that have already been impregnated
         if (searchedTag.Contains("Female"))
+<<<<<<< Updated upstream
+=======
+        {
+            List<GameObject> bufferList = new List<GameObject>();
+            foreach (GameObject female in allChildren)
+            {
+                if (!female.GetComponent<Animal>().pregnant)
+                {
+                    bufferList.Add(female);
+                }
+            }
+            allChildren = null;
+            allChildren = new GameObject[bufferList.Count];
+            for (int i = 0; i < bufferList.Count; i++)
+            {
+                allChildren[i] = bufferList[i];
+            }
+        }
+        foreach (GameObject childConsumable in allChildren)
+>>>>>>> Stashed changes
         {
             List<GameObject> bufferList = new List<GameObject>();
             foreach (GameObject female in allChildren)
@@ -368,12 +404,27 @@ public abstract class Animal : Edible
 
     protected virtual void Mate(Animal femaleMate)
     {
+<<<<<<< Updated upstream
         if (femaleMate.state != States.Mating)
         {
             femaleMate.state = States.Mating;
+=======
+        {
+
+            if (femaleMate.state != States.Mating)
+            {
+                femaleMate.state = States.Mating;
+            }
+>>>>>>> Stashed changes
         }
     }
 
+    protected virtual void GiveBirth()
+    {
+        Vector3 position = transform.position;
+        scene.CreateRabbitAtPos(ref position);
+        //scene.CreateAnimal(this.gameObject);
+    }
 
     protected virtual void Flee()
     {
