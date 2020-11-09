@@ -5,7 +5,7 @@ using System;
 
 public class PathRequestManager : MonoBehaviour 
 {
-
+    #region Properties
     Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();// Queue of path requests to be done
     PathRequest currentPathRequest;//current working path request
 
@@ -13,12 +13,15 @@ public class PathRequestManager : MonoBehaviour
     PathFinder pathFinder;
 
     bool isProcessingPath;//true if currently processing a paths
+    #endregion
 
+    #region Initialisation
     void Awake() 
     {
         instance = this;
         pathFinder = GetComponent<PathFinder>();
     }
+    #endregion
 
     public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback) 
     {

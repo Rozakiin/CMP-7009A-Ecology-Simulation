@@ -1,27 +1,38 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class PathFinderController : MonoBehaviour
 {
-    public Simulation scene;
-    public bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
-    public LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
+    #region Properties
+    private Simulation scene;
+    [Header("Debugging")]
+    [SerializeField] private bool displayGridGizmos; //used in debugging, shows walkable and non walkable nodes in scene
+
+    [Header("Grid Data")]
     private Vector2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
-    public float nodeRadius;//This stores how big each square on the graph will be
-    public float distanceBetweenNodes;//The distance that the squares will spawn from eachother.
-    public TerrainType[] walkableRegions;
-    LayerMask walkableMask;
-    Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
-    Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
+    private int gridSizeX, gridSizeY;//Size of the Grid in Array units.
+    public int MaxSize { get { return gridSizeX * gridSizeY; } }
 
-    float nodeDiameter;//Twice the amount of the radius (Set in the start function)
-    int gridSizeX, gridSizeY;//Size of the Grid in Array units.
+    [Header("Node Properties")]
+    [SerializeField] private float nodeRadius;//This stores how big each square on the graph will be
+    [SerializeField] private float distanceBetweenNodes;//The distance that the squares will spawn from each other.
+    private float nodeDiameter;//Twice the amount of the radius (Set in the start function)
+    private Node[,] nodeArray;//The array of nodes that the A Star algorithm uses.
 
-    public int MaxSize{ get{ return gridSizeX * gridSizeY; } }
+    [Header("LayerMask Data")]
+    [SerializeField] LayerMask walkableMask;
+    [SerializeField] private LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
+    [SerializeField] private int unwalkableProximityPenalty = 10;//Penalty for going near to unwalkable nodes
+    private int penaltyMin = int.MaxValue;
+    private int penaltyMax = int.MinValue;
+    [SerializeField] private TerrainType[] walkableRegions;
+    private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
 
+    #endregion
 
+    #region Initialisation
     void Awake()//Ran once the program starts
     {
         scene = GetComponent<Simulation>(); // get reference to Simulation
@@ -42,8 +53,10 @@ public class PathFinderController : MonoBehaviour
         
         CreateGrid();//Draw the grid
     }
+    #endregion
 
-    void CreateGrid()
+
+    private void CreateGrid()
     {
         nodeArray = new Node[gridSizeX, gridSizeY];//Declare the array of nodes.
         Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;//Get the real world position of the bottom left of the grid.
@@ -59,20 +72,89 @@ public class PathFinderController : MonoBehaviour
 
                 int movementPenalty = 0;//penalty for walking over node
                 
-                if(isWalkable)
+                Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, walkableMask)) 
                 {
-                    Ray ray = new Ray(worldPoint+Vector3.up*50, Vector3.down);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 100, walkableMask)) 
-                    {
-                        walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
-                    }
+                    walkableRegionsDictionary.TryGetValue(hit.collider.gameObject.layer, out movementPenalty);
+                }
+
+                if (!isWalkable)
+                {
+                    movementPenalty += unwalkableProximityPenalty;
                 }
 
                 nodeArray[x, y] = new Node(isWalkable, worldPoint, x, y, movementPenalty);//Create a new node in the array.
             }
         }
+
+        BlurMovementPenaltyMap(3);//blur the map with a kernel extent of 3 (5*5)
+
     }
+
+    //Blurs a map of the movement penalty for each node using a box blur,
+    //this is used to smooth the penalty weights for more natural pathfinding
+    private void BlurMovementPenaltyMap(int blurSize)
+    {
+        int kernelSize = blurSize * 2 + 1; //must be odd number
+        int kernelExtents = blurSize; // number of squares between centre and edge of kernel
+
+        int[,] penaltiesHorizontal = new int[gridSizeX,gridSizeY]; //temp array to store horizontal pass over the penalty map
+        int[,] penaltiesVertical = new int[gridSizeX, gridSizeY]; //temp array to store vertical pass over the penalty map
+
+        //horizontal pass
+        //fill the penaltiesHorizontal array with the sum of movement penalties stored in nodeArray covered by the kernel
+        for (int y = 0; y < gridSizeY; y++)
+        {
+            //loop through nodes in kernel and sum them up
+            for (int x = -kernelExtents; x <= kernelExtents; x++)
+            {
+                int sampleX = Mathf.Clamp(x, 0, kernelExtents); //clamp so take value from first node rather than out of bounds
+                penaltiesHorizontal[0, y] += nodeArray[sampleX, y].penalty;//add the node penalty value to penaltiesHorizonal
+            }
+
+            //loop over all remaining columns in the row
+            for (int x = 1; x < gridSizeX; x++)
+            {
+                int indexToRemove = Mathf.Clamp(x - kernelExtents - 1, 0, gridSizeX);//calc index of node that is no longer inside kernel after kernel moved along 1
+                int indexToAdd = Mathf.Clamp(x + kernelExtents, 0, gridSizeX-1);//calc index of node that is now inside kernel after kernel moved along 1
+                penaltiesHorizontal[x, y] = penaltiesHorizontal[x-1, y]-nodeArray[indexToRemove,y].penalty + nodeArray[indexToAdd,y].penalty;//equal to previous - penalty at indexToRemove + penalty at indexToAdd
+            }
+        }
+
+        //vertical pass
+        //fill the penaltiesVertical array with the sum of movement penalties stored in nodeArray covered by the kernel
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            //loop through nodes in kernel and sum them up
+            for (int y = -kernelExtents; y <= kernelExtents; y++)
+            {
+                int sampleY = Mathf.Clamp(y, 0, kernelExtents); //clamp so take value from first node rather than out of bounds
+                penaltiesVertical[x, 0] += penaltiesHorizontal[x, sampleY];//sample the penalty from the horizontal pass array
+            }
+
+            //loop over all remaining rows in the column
+            for (int y = 1; y < gridSizeY; y++)
+            {
+                int indexToRemove = Mathf.Clamp(y - kernelExtents - 1, 0, gridSizeY);//calc index of node that is no longer inside kernel after kernel moved along 1
+                int indexToAdd = Mathf.Clamp(y + kernelExtents, 0, gridSizeY - 1);//calc index of node that is now inside kernel after kernel moved along 1
+                penaltiesVertical[x, y] = penaltiesVertical[x, y-1] - penaltiesHorizontal[x, indexToRemove] + penaltiesHorizontal[x, indexToAdd];//equal to previous - penalty at indexToRemove + penalty at indexToAdd
+                int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
+                nodeArray[x, y].penalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
+            
+                //update penalty min and max
+                if (blurredPenalty > penaltyMax)
+                {
+                    penaltyMax = blurredPenalty;
+                }
+                if (blurredPenalty < penaltyMin)
+                {
+                    penaltyMin = blurredPenalty;
+                }
+            }
+        }
+    }
+
 
     //Function that gets the neighboring nodes of the given node.
     public List<Node> GetNeighboringNodes(Node _neighbourNode)
@@ -113,6 +195,7 @@ public class PathFinderController : MonoBehaviour
         return neighbourList;//Return the neighbours list.
     }
 
+
     //Gets the closest node to the given world position.
     public Node NodeFromWorldPoint(Vector3 _worldPos)
     {
@@ -133,6 +216,7 @@ public class PathFinderController : MonoBehaviour
         return nodeArray[x, y];// position of closest node in array
     }
 
+
     //Function that draws the wireframe, and the nodes
     private void OnDrawGizmos()
     {
@@ -142,11 +226,8 @@ public class PathFinderController : MonoBehaviour
         {
             foreach (Node n in nodeArray)//Loop through every node in the grid
             {
-                if (n.isWalkable)//If the current node is a walkable
-                {
-                    Gizmos.color = Color.white;//node colour white
-                }
-                else
+                Gizmos.color = Color.Lerp(Color.white, Color.black, Mathf.InverseLerp(penaltyMin, penaltyMax, n.penalty));//pick color on gradient between white and black depending on where penalty lies between min and max
+                if (!n.isWalkable)//If the current node is not walkable
                 {
                     Gizmos.color = Color.red;//node colour red
                 }

@@ -26,7 +26,13 @@ public class Rabbit : Animal
         {
         }
     }
-    
+
+    #region Initialisation
+    void Awake()//Ran once the program starts
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>(); // get reference to Simulation
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +47,8 @@ public class Rabbit : Animal
         age = 1;
         baseNutritionalValue = 5;
         reproductiveUrge = 0f;
-        sightRadius = 5;
+        sightRadius = 20;
+        touchRadius = 1;
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         eatingSpeed = 2f;
@@ -52,15 +59,9 @@ public class Rabbit : Animal
         SetPosition();
         CreateLineRenderer();
         GetLimits();
-        RandomizeDirection();
         SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
-
-    
-    void Awake()//Ran once the program starts
-    {
-        //scene = GetComponent<Simulation>(); // get reference to Simulation
-    }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -78,12 +79,12 @@ public class Rabbit : Animal
         if (state == States.Wandering)
         {
             WanderAround();
-
+            //Reproductive Urge stronger than Idle and Hunger
             if(reproductiveUrge >= 5)
             {
                 state = States.SexuallyActive;
             }
-
+            //Hunger stronger than Idle
             if (hunger >= 10)
             {
                 state = States.Hungry;
@@ -91,50 +92,81 @@ public class Rabbit : Animal
         }
         else if (state == States.Hungry)
         {
+            DisableLineRenderer();
+            //Reproductive Urge stronger than Hunger?
             if(reproductiveUrge >= 5)
             {
                 state = States.SexuallyActive;
             }
-            //WanderAround();
-            DisableLineRenderer();            
             
-            //List<Edible> edibleList = scene.GetGrassList();
-            //GameObject grassObject = LookForConsumable(scene.grassContainer, scene.GetGrassList());
-
-            Edible closestGrass = LookForConsumable("Grass");
-            edibleObject = closestGrass.GetComponent<Edible>();
-            float distanceToGrass = Vector3.Distance(position, closestGrass.transform.position);
-            target = closestGrass.transform;
-            DrawLine(transform.position, target.position);
-
-            if(distanceToGrass <= sightRadius)
+            Edible closestGrass = LookForConsumable("Grass");//Look for closest grass
+            if (closestGrass != null)
             {
-                state = States.Eating;
+                float distanceToGrass = Vector3.Distance(transform.position, closestGrass.transform.position);
+                // Grass within touching distance
+                if(distanceToGrass <= touchRadius)
+                {
+                    state = States.Eating;
+                }
+                //Grass within sight radius
+                if(distanceToGrass <= sightRadius)
+                {
+                    edibleObject = closestGrass.GetComponent<Edible>();//set the edible object to the closest grass object
+                    target = closestGrass.transform.position;
+                    DrawLine(transform.position, target);
+                }
             }
+            //No grass
+            WanderAround();
         }
         else if (state == States.Eating)
         {
-            edibleObject.Die();
-
-            hunger -= 5;
-            state = States.Wandering;
-            scene.CreateGrass();
-
-            if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
+            DisableLineRenderer();
+            print("Eating");
+            //Eat the object (method call instead?)
+            if(edibleObject != null)
             {
-                state = States.Wandering;
+                edibleObject.Die();
+                hunger -= 5;
+                scene.CreateGrass();
             }
+
+            state = States.Wandering;
         }
         else if (state == States.Thirsty)
         {
-            //WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
         }
         else if(state == States.SexuallyActive)
         {
+            DisableLineRenderer();
             Animal closestMate = LookForMate("FemaleRabbit");
-            DrawLine(position, closestMate.position);
+            if (closestMate != null)
+            {
+                float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
+                // Mate within touching distance
+                if(distanceToMate <= touchRadius)
+                {
+                    state = States.Mating;
+                }
+                //Mate within sight radius
+                if(distanceToMate <= sightRadius)
+                {
+                    target = closestMate.transform.position;
+                    DrawLine(transform.position, target);
+                }
+            }
+            //No mate
+            WanderAround();
+        }
+        else if(state == States.Mating)
+        {
+            //temp code to check pathfinding
+            DisableLineRenderer();
+            print("Mating");
+            reproductiveUrge = 0;
+            state = States.Wandering;
         }
     }
 }
