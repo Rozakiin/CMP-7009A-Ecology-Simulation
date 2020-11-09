@@ -26,14 +26,19 @@ public class Rabbit : Animal
         {
         }
     }
-    
+
+    #region Initialisation
+    void Awake()//Ran once the program starts
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>(); // get reference to Simulation
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
         canBeEaten = true;
-        originalMoveSpeed = 25f;
-        moveSpeed = originalMoveSpeed;
+        moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
         startXPos = position.x;
@@ -42,26 +47,17 @@ public class Rabbit : Animal
         age = 1;
         baseNutritionalValue = 5;
         reproductiveUrge = 0f;
-        sightRadius = 5;
+        sightRadius = 20;
+        touchRadius = 1;
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         eatingSpeed = 2f;
-<<<<<<< Updated upstream
-        matingDuration = 3f;
-<<<<<<< Updated upstream
-=======
-        pregnancyLength = 5f;
-        maxBabyNumber = 13;
-        birthDuration = 0.2f;
->>>>>>> Stashed changes
-=======
         originalMoveSpeed = 25f;
         moveSpeed = originalMoveSpeed;
         matingDuration = 3f;
         pregnancyLength = 5f;
         maxBabyNumber = 13;
         birthDuration = 0.2f;
->>>>>>> Stashed changes
 
         scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
         transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
@@ -69,15 +65,9 @@ public class Rabbit : Animal
         SetPosition();
         CreateLineRenderer();
         GetLimits();
-        RandomizeDirection();
         SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
-
-    
-    void Awake()//Ran once the program starts
-    {
-        //scene = GetComponent<Simulation>(); // get reference to Simulation
-    }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -86,180 +76,110 @@ public class Rabbit : Animal
         SetPosition();
         hunger += 1 * Time.deltaTime;
         timer += 1 * Time.deltaTime;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
         if (pregnant)
         {
             moveSpeed = 0.6f * originalMoveSpeed;
-            if(timer - pregnancyStartTime >= pregnancyLength)
+            if (timer - pregnancyStartTime >= pregnancyLength)
             {
                 state = States.GivingBirth;
                 birthStartTime = timer;
                 pregnant = false;
-<<<<<<< Updated upstream
-                //GiveBirth();
-            }
-        }
->>>>>>> Stashed changes
-=======
             }
         }
 
->>>>>>> Stashed changes
 
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
             //print(reproductiveUrge);
         }
-        if(reproductiveUrge >= 5)
-        {
-            state = States.SexuallyActive;
-            if(distanceToTarget <= 3)
-            {
-                SetState(States.Mating);
-                if(GetState() != States.Mating)
-                {
-                    target.GetComponent<Animal>().SetState(States.Mating);
-                    matingTimeStarted = timer;
-                }
-            }
-        }
-        else if(hunger >= 5)
-        {
-            state = States.Hungry;
-            if(distanceToTarget <= sightRadius)
-            {
-                state = States.Eating;
-            }
-        }
-        else if(hunger <= 0)
-        {
-            state = States.Wandering;
-        }
 
         if (state == States.Wandering)
         {
-            //WanderAround();
-
-            //if(reproductiveUrge >= 5)
-            //{
-            //    state = States.SexuallyActive;
-            //}
-            //else if (hunger >= 5)
-            //{
-            //    state = States.Hungry;
-            //}
+            WanderAround();
+            //Reproductive Urge stronger than Idle and Hunger
+            if (reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
+            //Hunger stronger than Idle
+            if (hunger >= 10)
+            {
+                state = States.Hungry;
+            }
         }
         else if (state == States.Hungry)
         {
-            //if(reproductiveUrge >= 5)
-            //{
-            //    state = States.SexuallyActive;
-            //}
-            //WanderAround();
-            DisableLineRenderer();            
-            
-            //List<Edible> edibleList = scene.GetGrassList();
-            //GameObject grassObject = LookForConsumable(scene.grassContainer, scene.GetGrassList());
+            DisableLineRenderer();
+            //Reproductive Urge stronger than Hunger?
+            if (reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
 
-            Edible closestGrass = LookForConsumable("Grass");
-            edibleObject = closestGrass.GetComponent<Edible>();
-            distanceToTarget = Vector3.Distance(position, closestGrass.transform.position);
-            target = closestGrass.transform;
-            DrawLine(transform.position, target.position);
-
-            //if(distanceToTarget <= sightRadius)
-            //{
-            //    state = States.Eating;
-            //}
+            Edible closestGrass = LookForConsumable("Grass");//Look for closest grass
+            if (closestGrass != null)
+            {
+                float distanceToGrass = Vector3.Distance(transform.position, closestGrass.transform.position);
+                // Grass within touching distance
+                if (distanceToGrass <= touchRadius)
+                {
+                    state = States.Eating;
+                }
+                //Grass within sight radius
+                if (distanceToGrass <= sightRadius)
+                {
+                    edibleObject = closestGrass.GetComponent<Edible>();//set the edible object to the closest grass object
+                    target = closestGrass.transform.position;
+                    DrawLine(transform.position, target);
+                }
+            }
+            //No grass
+            WanderAround();
         }
         else if (state == States.Eating)
         {
+            DisableLineRenderer();
+            print("Eating");
+            //Eat the object (method call instead?)
             if (edibleObject != null)
             {
                 edibleObject.Die();
+                hunger -= 5;
                 scene.CreateGrass();
-                state = States.Wandering;
-<<<<<<< Updated upstream
-                print("Ate");
-                //hunger -= 5;
-                if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
-                {
-                    state = States.Wandering;
-                }
             }
-<<<<<<< Updated upstream
-            else
-            {
-                state = States.Hungry;
-                distanceToTarget = 1000000;
-            }        
-=======
-            }
-            //If the grass has been eaten by someone else, go back to being hungry
-            else
-            {
-                state = States.Hungry;
-            }         
->>>>>>> Stashed changes
-=======
             //If the grass has been eaten by someone else, go back to being hungry
             else
             {
                 state = States.Hungry;
             }
 
-            if(hunger <= 0)
+            if (hunger <= 0)
             {
                 state = States.Wandering;
-            }          
->>>>>>> Stashed changes
+            }
         }
         else if (state == States.Thirsty)
         {
-            //WanderAround();
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
         }
-        else if(state == States.SexuallyActive)
+        else if (state == States.SexuallyActive)
         {
-<<<<<<< Updated upstream
-            //print("sexually active");
-            Animal closestMate = LookForMate("FemaleRabbit");
-            target = closestMate.transform;
-            distanceToTarget = Vector3.Distance(position, target.transform.position);
-            DrawLine(position, closestMate.position);
-        }
-        else if(state == States.Mating)
-        {
-            print("Mating");
-            if (timer - matingTimeStarted >= matingDuration)
-            {
-                reproductiveUrge = 0;
-                SetState(States.Wandering);
-                if(gender == Gender.Female)
-                {
-                    pregnant = true;
-                }
-=======
             DisableLineRenderer();
-            closestMate = LookForMate("FemaleRabbit");
+            Animal closestMate = LookForMate("FemaleRabbit");
             if (closestMate != null)
             {
                 float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
                 // Mate within touching distance
-                if(distanceToMate <= touchRadius)
+                if (distanceToMate <= touchRadius)
                 {
                     state = States.Mating;
                     mateStartTime = timer;
                     Mate(closestMate);
                 }
                 //Mate within sight radius
-                if(distanceToMate <= sightRadius)
+                if (distanceToMate <= sightRadius)
                 {
                     target = closestMate.transform.position;
                     DrawLine(transform.position, target);
@@ -287,33 +207,18 @@ public class Rabbit : Animal
                 state = States.Wandering;
             }
         }
-<<<<<<< Updated upstream
-        else if(state == States.GivingBirth)
-        {
-            if(timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
-=======
         else if (state == States.GivingBirth)
         {
             if (timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
->>>>>>> Stashed changes
             {
                 GiveBirth();
                 birthStartTime = timer;
                 babiesBorn++;
-<<<<<<< Updated upstream
-                
-            }
-            if(babiesBorn >= numberOfBabies)
-            {
-                state = States.Wandering;
->>>>>>> Stashed changes
-=======
             }
             if (babiesBorn >= numberOfBabies)
             {
                 moveSpeed = originalMoveSpeed;
                 state = States.Wandering;
->>>>>>> Stashed changes
             }
         }
     }

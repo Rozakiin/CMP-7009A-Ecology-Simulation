@@ -5,42 +5,10 @@ using UnityEngine;
 
 public abstract class Animal : Edible
 {
-    public Transform target;
+    #region Properties
+    [Header("Animal Properties")]
+    [SerializeField] protected Vector3 target;
 
-<<<<<<< Updated upstream
-    // possition and movement properties
-    protected float startXPos, startZPos;                                                               //The starting x and z position
-    protected float currentXPos, currentZPos;                                                           //The current x and z position
-    public float moveSpeed;
-
-    // status properties (could be made into a struct?)
-    protected float hunger;
-    protected float thirst;
-    protected int age;
-    protected float reproductiveUrge;
-    protected float sightRadius;
-    protected float eatingSpeed;
-    protected float pregnancyLength;
-    public bool pregnant;
-    protected Gender gender;
-    protected abstract float maxLifeExpectancy { get; set;}
-    protected abstract float babyNumber { get; set;}
-    protected float matingDuration;
-    protected float matingTimeStarted;
-    protected float timer;
-
-    //scene data
-    protected float tileSize;                                                                 //The size of each tile on the map
-    protected float leftLimit, upLimit, rightLimit, downLimit;
-    protected int numberOfTurns;
-
-    //other
-    protected Edible edibleObject;
-    protected Renderer renderer;
-    protected float scaleMult;
-    protected LineRenderer lineRenderer;
-    protected float distanceToTarget;
-=======
     [Header("Position and Movement Properties")]
     [SerializeField] protected float startXPos;      //The starting x and z position
     [SerializeField] protected float startZPos;
@@ -69,13 +37,8 @@ public abstract class Animal : Edible
     [SerializeField] protected int babiesBorn;      //How many she has given birth to
     [SerializeField] protected float birthDuration;   //How long between babies being born
     [SerializeField] protected Animal closestMate;
-<<<<<<< Updated upstream
-    [SerializeField] protected abstract float maxLifeExpectancy { get; set;}
-    [SerializeField] protected abstract float maxBabyNumber { get; set;}
-=======
     [SerializeField] protected abstract float maxLifeExpectancy { get; set; }
     [SerializeField] protected abstract float maxBabyNumber { get; set; }
->>>>>>> Stashed changes
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -85,17 +48,12 @@ public abstract class Animal : Edible
     [SerializeField] protected float downLimit;
     [SerializeField] protected int numberOfTurns;
 
-
     [Header("Other")]
     [SerializeField] protected Edible edibleObject;
     [SerializeField] protected Renderer renderer;
     [SerializeField] protected float scaleMult;
     [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected float timer;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
     protected enum Gender
     {
@@ -106,21 +64,13 @@ public abstract class Animal : Edible
     {
         Left, Up, Right, Down
     }
-    protected Directions currentDirection;
+    [SerializeField] protected Directions currentDirection;
 
-    public enum States
+    protected enum States
     {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant
-=======
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, GivingBirth
->>>>>>> Stashed changes
-=======
         Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
->>>>>>> Stashed changes
     }
-    public States state;
+    [SerializeField] protected States state;
 
     public enum DeathReason
     {
@@ -131,14 +81,16 @@ public abstract class Animal : Edible
     }
 
     // count death reason
-    public static int diedFromHunger;
-    public static int diedFromThirst;
-    public static int diedFromAge;
-    public static int diedFromEaten;
+    [SerializeField] public static int diedFromHunger;
+    [SerializeField] public static int diedFromThirst;
+    [SerializeField] public static int diedFromAge;
+    [SerializeField] public static int diedFromEaten;
+    #endregion
 
-
+    #region Initialisation
     public void Start()
     {
+        target = transform.position;
         int rnd = UnityEngine.Random.Range(0, 2);
         gender = (Gender)rnd;
         if(gender == Gender.Female)
@@ -147,135 +99,49 @@ public abstract class Animal : Edible
             gameObject.tag = "Female" + type;
             babiesBorn = 0;
         }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        distanceToTarget = 1000000;
-=======
-        timer = 0;
-        pregnant = false;
->>>>>>> Stashed changes
-        print(gender);
-=======
         print(gender); print(gender);
->>>>>>> Stashed changes
         pregnant = false;
         timer = 0f;
     }
-
+    #endregion
 
     protected void WanderAround()
     {
-        float distanceMoved;
-        Move();
-        currentXPos = transform.position.x;
-        currentZPos = transform.position.z;
-
-        if (currentDirection == Directions.Left || currentDirection == Directions.Right)
+        if (target == transform.position) //if target is self then no target(Vector3 can't be null)
         {
-            distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
-        }
-        else
-        {
-            distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
-        }
-
-        if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
-        {                                                                                   //it means that it's time to randomize a new direction.
-            currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
-            currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
-            startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
-            startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
-            transform.position = new Vector3(startXPos, 0, startZPos);
-            RandomizeDirection();
-        }
-    }
-
-
-    //Randomize what direction the rabbit should move next. The number of is randomized from 0 up to directionsCounter,
-    //and the switch statement is used to determine the direction. canMove variable is used to determine if the movement
-    //in that direction is allowed. CheckIfCanMove is called to check it. UnityEngine.Random used instead of the System
-    //one to randomize numbers not tied to the system's clock. This way the numbers are unique to each object and prevent
-    //the rabbits from moving in the same direction.
-    //bug if limits not set
-    protected void RandomizeDirection()
-    {
-        bool canMove = false;
-        do
-        {
-            int directionsCounter = Directions.GetNames(typeof(Directions)).Length;
-            int rnd = UnityEngine.Random.Range(0, directionsCounter);
-            switch (rnd)
+            bool isTargetWalkable = false;
+            Vector3 targetWorldPoint;
+            //find walkable targetWorldPoint
+            while (!isTargetWalkable)
             {
-                case 0:
-                    currentDirection = Directions.Left;
-                    break;
-                case 1:
-                    currentDirection = Directions.Up;
-                    break;
-                case 2:
-                    currentDirection = Directions.Right;
-                    break;
-                case 3:
-                    currentDirection = Directions.Down;
-                    break;
+                float randX = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                float randZ = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                // random point within the sight radius of the rabbit
+                targetWorldPoint = transform.position + Vector3.right * randX + Vector3.forward * randZ;
+                //check targetWorldPoint is walkable
+                isTargetWalkable = CheckIfWalkable(targetWorldPoint);
+                if (isTargetWalkable)
+                {
+                    //set target to the targetWorldPoint
+                    target = targetWorldPoint;
+                }
             }
-            canMove = CheckIfCanMove(currentDirection);
-        } while (canMove == false);
+        }
     }
 
 
-    //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
-    //bug if limits not set
-    protected bool CheckIfCanMove(Directions currentDirection)
+    //Method to check if a given position is a walkable node(could be extended to check if the whole path is walkable?)
+    //Uses ray hits to check if collided with anything
+    protected bool CheckIfWalkable(Vector3 worldPoint)
     {
-        if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
+        Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);//50 is just a high value
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
         {
-            return false;
+            Node targetNode = scene.GetComponent<PathFinderController>().NodeFromWorldPoint(worldPoint);//Gets the node closest to the world point
+            return targetNode.isWalkable;
         }
-        else if(currentXPos >= rightLimit && currentDirection == Directions.Right)      //Check if the rabbit want to go right despite being at the right edge of the map
-        {
-            return false;
-        }
-        else if(currentZPos <= downLimit && currentDirection == Directions.Down)        //Same but down
-        {
-            return false;
-        }
-        else if(currentZPos >= upLimit && currentDirection == Directions.Up)            //Same but up
-        {
-            return false;
-        }
-        return true;                                                                    //Otherwise return true, meaning the move is possible
-    }
-
-
-    //Calculate how much the rabbit has moved since the last frame. Used to check if it's time to randomize a new direction
-    protected float CalculateDistanceMoved(float startPos, float currentPos)
-    {
-        return System.Math.Abs(currentPos - startPos);                                  
-    }
-
-
-    //Move the rabbit according to the randomized direction. The movement is done by changing the position of the rabbit. The moveSpeed is multiplied by
-    //Time.deltaTime to ensure that the value is identical on all machines no matter how fast they are. The new vector is created by either subtracting
-    //or adding to the x or z value.
-    protected void Move()
-    {
-        if (currentDirection == Directions.Left)
-        {
-            transform.position += new Vector3(-moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Right)
-        {
-            transform.position += new Vector3(moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Up)
-        {
-            transform.position += new Vector3(0f, 0f, moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position += new Vector3(0f, 0f, -moveSpeed * Time.deltaTime);
-        }
+        return false;// didn't hit so out of map area
     }
 
 
@@ -325,8 +191,6 @@ public abstract class Animal : Edible
         GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
         //When looking for female mates, ignore the ones that have already been impregnated
         if (searchedTag.Contains("Female"))
-<<<<<<< Updated upstream
-=======
         {
             List<GameObject> bufferList = new List<GameObject>();
             foreach (GameObject female in allChildren)
@@ -344,33 +208,23 @@ public abstract class Animal : Edible
             }
         }
         foreach (GameObject childConsumable in allChildren)
->>>>>>> Stashed changes
-        {
-            List<GameObject> bufferList = new List<GameObject>();
-            foreach (GameObject female in allChildren)
-            {
-                if (!female.GetComponent<Animal>().pregnant)
-                {
-                    bufferList.Add(female);
-                }
-            }
-            allChildren = null;
-            allChildren = new GameObject[bufferList.Count];
-            for(int i=0; i<bufferList.Count; i++)
-            {
-                allChildren[i] = bufferList[i];
-            }        
-        }
-        foreach (GameObject childConsumable in allChildren)
         {
             distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
             if(shortestDistance == -1 || distanceToConsumable < shortestDistance)
             {
-                shortestDistance = distanceToConsumable;
-                closestConsumable = childConsumable;
+                //if the child is on a walkable position
+                if (CheckIfWalkable(childConsumable.transform.position))
+                {
+                    shortestDistance = distanceToConsumable;
+                    closestConsumable = childConsumable;
+                }
             }
         }
-        return closestConsumable.GetComponent<Edible>();
+        if (closestConsumable != null)
+        {
+            return closestConsumable.GetComponent<Edible>();
+        }
+        return null;
     }
 
 
@@ -404,18 +258,12 @@ public abstract class Animal : Edible
 
     protected virtual void Mate(Animal femaleMate)
     {
-<<<<<<< Updated upstream
-        if (femaleMate.state != States.Mating)
-        {
-            femaleMate.state = States.Mating;
-=======
         {
 
             if (femaleMate.state != States.Mating)
             {
                 femaleMate.state = States.Mating;
             }
->>>>>>> Stashed changes
         }
     }
 
@@ -429,13 +277,6 @@ public abstract class Animal : Edible
     protected virtual void Flee()
     {
 
-    }
-
-    protected virtual void GiveBirth()
-    {
-        Vector3 position = transform.position;
-        scene.CreateRabbitAtPos(ref position);
-        //scene.CreateAnimal(this.gameObject);
     }
 
 
@@ -480,12 +321,24 @@ public abstract class Animal : Edible
                 diedFromEaten++;
                 break;
             default:
-                Debug.Log("Unkown death reason: " + reason.ToString());
+                Debug.Log("Unknown death reason: " + reason.ToString());
                 break;
         }
         Destroy(gameObject);
     }
 
+    public Vector3 GetTarget()
+    {
+        return target;
+    }
+    public void SetTarget(Vector3 _target)
+    {
+        target = _target;
+    }
+    public float GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
 
     public override void SetNutritionalValue()
     {
@@ -496,15 +349,5 @@ public abstract class Animal : Edible
     public override int GetNutritionalValue()
     {
         return nutritionalValue;
-    }
-
-    public void SetState(States state)
-    {
-        this.state = state;
-    }
-
-    public States GetState()
-    {
-        return state;
     }
 }
