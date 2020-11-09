@@ -98,6 +98,15 @@ public class Rabbit : Animal
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
         }
+
+        if (hunger >= 100)
+        {
+            destroyGameObject(DeathReason.Hunger);
+        }
+        else if (thirst >= 100)
+        {
+            destroyGameObject(DeathReason.Thirst);
+        }
     }
 
     private void WanderAround()
