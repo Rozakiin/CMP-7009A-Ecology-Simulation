@@ -37,6 +37,7 @@ public class Rabbit : Animal
     {
         hunger = 0f;
         thirst = 0f;
+        maxLifeExpectancy = 0f;
         startXPos = transform.position.x;
         startZPos = transform.position.z;
         moveSpeed = 25f;
@@ -54,6 +55,8 @@ public class Rabbit : Animal
     void Update()
     {
         hunger += 1 * Time.deltaTime;
+        thirst += 1 * Time.deltaTime;
+        maxLifeExpectancy += 1 * Time.deltaTime;
         if (state == States.Wandering)
         {
             WanderAround();
@@ -106,6 +109,10 @@ public class Rabbit : Animal
         else if (thirst >= 100)
         {
             destroyGameObject(DeathReason.Thirst);
+        }
+        else if (maxLifeExpectancy >= 600)     // set up 600 Seconds for rabit's lifelong 
+        {
+            destroyGameObject(DeathReason.Age);
         }
     }
 
