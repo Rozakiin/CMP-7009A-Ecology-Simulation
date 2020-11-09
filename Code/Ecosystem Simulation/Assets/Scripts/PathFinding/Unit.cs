@@ -31,8 +31,7 @@ public class Unit : MonoBehaviour
             if(target != targetOld)// if the target position has changed
             {
                 targetOld = target;
-                print("transform: "+transform.position.ToString());
-                print("animal target:"+target.ToString());
+                print(animal.name + ": target: " + transform.position.ToString() + ", target: " + target.ToString());
                 PathRequestManager.RequestPath(transform.position, target, OnPathFound);
             }
         }
