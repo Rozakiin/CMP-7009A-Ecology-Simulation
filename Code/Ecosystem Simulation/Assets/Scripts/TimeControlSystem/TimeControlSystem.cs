@@ -7,37 +7,58 @@ public class TimeControlSystem : MonoBehaviour
 {
     public Text speedDisplay;
     public float fastForwardMultiplier;
+    bool pause;
+
     void Start()
     {
         speedDisplay.text = fastForwardMultiplier.ToString();
     }
     void Update()
     {
+        if (pause)
+        {
+            Time.timeScale = 0f;
+        }
         if (fastForwardMultiplier < 0)
         {
             fastForwardMultiplier = 0f;
         }
-        speedDisplay.text = string.Format("speed {0}:", Mathf.RoundToInt(fastForwardMultiplier).ToString());
+        speedDisplay.text = string.Format("speed {0}:", fastForwardMultiplier.ToString());
     }
     public void Play()
     {
-        fastForwardMultiplier = 1f;
+        pause = false;
         Time.timeScale = fastForwardMultiplier;
     }
     public void Pause()
     {
-        fastForwardMultiplier = 0f;
-        Time.timeScale = fastForwardMultiplier;
+        pause = true;
     }
     public void IncreaseSpeed()
     {
-        fastForwardMultiplier += 1;
-        Time.timeScale = fastForwardMultiplier;
+        if (fastForwardMultiplier < 1f)
+        {
+            fastForwardMultiplier += 0.2f;
+            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+        }
+        else
+        {
+            fastForwardMultiplier += 1f;
+            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+        }
     }
     public void DecreaseSpeed()
     {
-        fastForwardMultiplier -= 1;
-        Time.timeScale = fastForwardMultiplier;
+        if (fastForwardMultiplier <= 1f && fastForwardMultiplier>0.2f)
+        {
+            fastForwardMultiplier -= 0.2f;
+            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+        }
+        else if(fastForwardMultiplier > 1f)
+        {
+            fastForwardMultiplier -= 1f;
+            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+        }
     }
 
 }
