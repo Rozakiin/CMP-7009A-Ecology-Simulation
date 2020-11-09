@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3322016790845788315}
   - component: {fileID: 8323988240737244691}
   m_Layer: 0
-  m_Name: SandTIle
+  m_Name: SandTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
