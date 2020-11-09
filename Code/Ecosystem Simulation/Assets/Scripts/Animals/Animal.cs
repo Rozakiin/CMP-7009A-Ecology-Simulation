@@ -15,6 +15,7 @@ public abstract class Animal : Edible
     [SerializeField] protected float currentXPos;        //The current x and z position
     [SerializeField] protected float currentZPos;                                                 
     [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float originalMoveSpeed;
 
     // status properties (could be made into a struct?)
     [Header("Status Properties")]
@@ -26,9 +27,18 @@ public abstract class Animal : Edible
     [SerializeField] protected float touchRadius;
     [SerializeField] protected float eatingSpeed;
     [SerializeField] protected float pregnancyLength;
+    [SerializeField] protected bool pregnant;
+    [SerializeField] protected float pregnancyStartTime;
     [SerializeField] protected Gender gender;
-    [SerializeField] protected abstract float maxLifeExpectancy { get; set;}
-    [SerializeField] protected abstract float babyNumber { get; set;}
+    [SerializeField] protected float matingDuration;
+    [SerializeField] protected float mateStartTime;
+    [SerializeField] protected float birthStartTime;
+    [SerializeField] protected int numberOfBabies;  //How many the female is carrying right now
+    [SerializeField] protected int babiesBorn;      //How many she has given birth to
+    [SerializeField] protected float birthDuration;   //How long between babies being born
+    [SerializeField] protected Animal closestMate;
+    [SerializeField] protected abstract float maxLifeExpectancy { get; set; }
+    [SerializeField] protected abstract float maxBabyNumber { get; set; }
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -43,6 +53,7 @@ public abstract class Animal : Edible
     [SerializeField] protected Renderer renderer;
     [SerializeField] protected float scaleMult;
     [SerializeField] protected LineRenderer lineRenderer;
+    [SerializeField] protected float timer;
 
     protected enum Gender
     {
@@ -57,7 +68,7 @@ public abstract class Animal : Edible
 
     protected enum States
     {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
+        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
     }
     [SerializeField] protected States state;
 
@@ -86,8 +97,11 @@ public abstract class Animal : Edible
         {
             string type = this.GetType().ToString();
             gameObject.tag = "Female" + type;
+            babiesBorn = 0;
         }
-        print(gender);
+        print(gender); print(gender);
+        pregnant = false;
+        timer = 0f;
     }
     #endregion
 
@@ -175,7 +189,24 @@ public abstract class Animal : Edible
         float distanceToConsumable;
         float shortestDistance = 1000000000;
         GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
-        //Edible[] allChildren = targetContainer.GetComponentsInChildren<Grass>();
+        //When looking for female mates, ignore the ones that have already been impregnated
+        if (searchedTag.Contains("Female"))
+        {
+            List<GameObject> bufferList = new List<GameObject>();
+            foreach (GameObject female in allChildren)
+            {
+                if (!female.GetComponent<Animal>().pregnant)
+                {
+                    bufferList.Add(female);
+                }
+            }
+            allChildren = null;
+            allChildren = new GameObject[bufferList.Count];
+            for (int i = 0; i < bufferList.Count; i++)
+            {
+                allChildren[i] = bufferList[i];
+            }
+        }
         foreach (GameObject childConsumable in allChildren)
         {
             distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
@@ -225,11 +256,23 @@ public abstract class Animal : Edible
     }
 
 
-    protected virtual void Mate()
+    protected virtual void Mate(Animal femaleMate)
     {
+        {
 
+            if (femaleMate.state != States.Mating)
+            {
+                femaleMate.state = States.Mating;
+            }
+        }
     }
 
+    protected virtual void GiveBirth()
+    {
+        Vector3 position = transform.position;
+        scene.CreateRabbitAtPos(ref position);
+        //scene.CreateAnimal(this.gameObject);
+    }
 
     protected virtual void Flee()
     {

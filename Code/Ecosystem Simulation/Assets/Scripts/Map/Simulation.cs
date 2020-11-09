@@ -44,7 +44,7 @@ public class Simulation : MonoBehaviour
 
     #region Other
     [Header("Other")]
-    [SerializeField] private System.Random rnd;
+    [SerializeField] private Random rnd;
     [SerializeField] private int numberOfTurns;
     [SerializeField] private List<Edible> rabbitList;
     [SerializeField] private List<Edible> grassList;
@@ -71,12 +71,16 @@ public class Simulation : MonoBehaviour
 
         rabbitList = new List<Edible>();
         grassList = new List<Edible>();
-        rnd = new System.Random();
+        rnd = new Random();
 
         CreateMap("Assets/Scripts/Map/MapExample.txt");
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 15; i++)
         {
             CreateRabbit();
+            
+        }
+        for(int i=0; i<40; i++)
+        {
             CreateGrass();
         }
     }
@@ -173,12 +177,12 @@ public class Simulation : MonoBehaviour
     }
     #endregion
 
+
     #region Object Spawning
-    void CreateRabbitAtPos(ref Vector3 position)
+    public void CreateRabbitAtPos(ref Vector3 position)
     {
         GameObject rabbitClone = Instantiate(rabbit, position, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
-        rabbitClone.GetComponent<Rabbit>().scene = this;
         rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + rabbitCount;
@@ -186,13 +190,12 @@ public class Simulation : MonoBehaviour
     
     public void CreateRabbit()
     {
-        int randWidth = rnd.Next(0, (int)gridWidth-1);
-        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        int randWidth = Random.Range(0, (int)gridWidth-1);
+        int randHeight = Random.Range(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
         
         GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
         rabbitCount++;
-        rabbitClone.GetComponent<Rabbit>().scene = this;
         rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
         rabbitClone.name = "RabbitClone" + rabbitCount;
@@ -200,13 +203,12 @@ public class Simulation : MonoBehaviour
 
     public void CreateGrass()
     {
-        int randWidth = rnd.Next(0, (int)gridWidth-1);
-        int randHeight = rnd.Next(0, (int)gridHeight-1);
+        int randWidth = Random.Range(0, (int)gridWidth-1);
+        int randHeight = Random.Range(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
 
         GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
         grassCount++;
-        //grassClone.GetComponent<Grass>().scene = this;
         grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;
         grassClone.name = "GrassClone" + grassCount;

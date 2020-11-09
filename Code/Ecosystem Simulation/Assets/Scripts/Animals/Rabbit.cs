@@ -16,11 +16,11 @@ public class Rabbit : Animal
         }
     }
 
-    protected override float babyNumber   // overriding property
+    protected override float maxBabyNumber   // overriding property
     {
         get
         {
-            return babyNumber;
+            return maxBabyNumber;
         }
         set
         {
@@ -52,6 +52,12 @@ public class Rabbit : Animal
         tileSize = scene.GetTileSize();
         state = States.Wandering;
         eatingSpeed = 2f;
+        originalMoveSpeed = 25f;
+        moveSpeed = originalMoveSpeed;
+        matingDuration = 3f;
+        pregnancyLength = 5f;
+        maxBabyNumber = 13;
+        birthDuration = 0.2f;
 
         scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
         transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
@@ -69,6 +75,18 @@ public class Rabbit : Animal
         DisableLineRenderer();
         SetPosition();
         hunger += 1 * Time.deltaTime;
+        timer += 1 * Time.deltaTime;
+        if (pregnant)
+        {
+            moveSpeed = 0.6f * originalMoveSpeed;
+            if (timer - pregnancyStartTime >= pregnancyLength)
+            {
+                state = States.GivingBirth;
+                birthStartTime = timer;
+                pregnant = false;
+            }
+        }
+
 
         if (gender == Gender.Male)
         {
@@ -80,7 +98,7 @@ public class Rabbit : Animal
         {
             WanderAround();
             //Reproductive Urge stronger than Idle and Hunger
-            if(reproductiveUrge >= 5)
+            if (reproductiveUrge >= 5)
             {
                 state = States.SexuallyActive;
             }
@@ -94,22 +112,22 @@ public class Rabbit : Animal
         {
             DisableLineRenderer();
             //Reproductive Urge stronger than Hunger?
-            if(reproductiveUrge >= 5)
+            if (reproductiveUrge >= 5)
             {
                 state = States.SexuallyActive;
             }
-            
+
             Edible closestGrass = LookForConsumable("Grass");//Look for closest grass
             if (closestGrass != null)
             {
                 float distanceToGrass = Vector3.Distance(transform.position, closestGrass.transform.position);
                 // Grass within touching distance
-                if(distanceToGrass <= touchRadius)
+                if (distanceToGrass <= touchRadius)
                 {
                     state = States.Eating;
                 }
                 //Grass within sight radius
-                if(distanceToGrass <= sightRadius)
+                if (distanceToGrass <= sightRadius)
                 {
                     edibleObject = closestGrass.GetComponent<Edible>();//set the edible object to the closest grass object
                     target = closestGrass.transform.position;
@@ -124,21 +142,29 @@ public class Rabbit : Animal
             DisableLineRenderer();
             print("Eating");
             //Eat the object (method call instead?)
-            if(edibleObject != null)
+            if (edibleObject != null)
             {
                 edibleObject.Die();
                 hunger -= 5;
                 scene.CreateGrass();
             }
+            //If the grass has been eaten by someone else, go back to being hungry
+            else
+            {
+                state = States.Hungry;
+            }
 
-            state = States.Wandering;
+            if (hunger <= 0)
+            {
+                state = States.Wandering;
+            }
         }
         else if (state == States.Thirsty)
         {
             DisableLineRenderer();
             Transform closestWater = FindClosestWater();
         }
-        else if(state == States.SexuallyActive)
+        else if (state == States.SexuallyActive)
         {
             DisableLineRenderer();
             Animal closestMate = LookForMate("FemaleRabbit");
@@ -146,12 +172,14 @@ public class Rabbit : Animal
             {
                 float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
                 // Mate within touching distance
-                if(distanceToMate <= touchRadius)
+                if (distanceToMate <= touchRadius)
                 {
                     state = States.Mating;
+                    mateStartTime = timer;
+                    Mate(closestMate);
                 }
                 //Mate within sight radius
-                if(distanceToMate <= sightRadius)
+                if (distanceToMate <= sightRadius)
                 {
                     target = closestMate.transform.position;
                     DrawLine(transform.position, target);
@@ -160,13 +188,38 @@ public class Rabbit : Animal
             //No mate
             WanderAround();
         }
-        else if(state == States.Mating)
+        else if (state == States.Mating)
         {
-            //temp code to check pathfinding
+            //temp code to check pathfinding          
             DisableLineRenderer();
             print("Mating");
-            reproductiveUrge = 0;
-            state = States.Wandering;
+            //If mating should end
+            if (timer - mateStartTime >= matingDuration)
+            {
+                if (gender == Gender.Female)
+                {
+                    pregnancyStartTime = timer;
+                    pregnant = true;
+                    numberOfBabies = 5;
+                    //numberOfBabies = (int)UnityEngine.Random.Range(1, maxBabyNumber);
+                }
+                reproductiveUrge = 0;
+                state = States.Wandering;
+            }
+        }
+        else if (state == States.GivingBirth)
+        {
+            if (timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
+            {
+                GiveBirth();
+                birthStartTime = timer;
+                babiesBorn++;
+            }
+            if (babiesBorn >= numberOfBabies)
+            {
+                moveSpeed = originalMoveSpeed;
+                state = States.Wandering;
+            }
         }
     }
 }

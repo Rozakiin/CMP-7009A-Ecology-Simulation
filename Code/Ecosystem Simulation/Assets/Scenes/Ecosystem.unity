@@ -247,20 +247,32 @@ MonoBehaviour:
     type: 3}
   lightGrassTile: {fileID: 555318781069503079, guid: 299a86df992454149938ed63f6952a94,
     type: 3}
-  waterTile: {fileID: 555318781069503079, guid: 678d74006047cf942923e20e6ed43fd3,
+  waterTile: {fileID: 555318781069503079, guid: b7b2a3499d1741b43a0185fab8029be0,
     type: 3}
-  sandTile: {fileID: 555318781069503079, guid: 59a39efaa56784b418dfcf10b9c17810, type: 3}
-  rockTile: {fileID: 555318781069503079, guid: 2d261f1306e93714eb9507fb7edffec2, type: 3}
+  sandTile: {fileID: 555318781069503079, guid: 2b91a10238596c143b455ed976b72ef6, type: 3}
+  rockTile: {fileID: 555318781069503079, guid: 8d46f1a311e9ed84cb9d32c514f7c875, type: 3}
   tileContainer: {fileID: 1020543198}
   waterContainer: {fileID: 516237955}
   rabbit: {fileID: 1588090451174212, guid: c737dd230724d61469e1c672cf47ed9e, type: 3}
   rabbitContainer: {fileID: 1928260513}
   grass: {fileID: 2485608032364271217, guid: d483cda7cf88d5c43a719c90483764f1, type: 3}
   grassContainer: {fileID: 627325610}
+  grassTileCount: 0
+  waterTileCount: 0
+  rabbitCount: 0
+  grassCount: 0
   gridWidth: 0
   gridHeight: 0
   worldSize: {x: 0, y: 0}
   worldBottomLeft: {x: 0, y: 0, z: 0}
+  tileSize: 0
+  leftLimit: 0
+  upLimit: 0
+  rightLimit: 0
+  downLimit: 0
+  numberOfTurns: 0
+  rabbitList: []
+  grassList: []
 --- !u!4 &1530961241
 Transform:
   m_ObjectHideFlags: 0
@@ -437,13 +449,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050089014}
-  m_LocalRotation: {x: 0.4851549, y: -0, z: -0, w: 0.8744283}
-  m_LocalPosition: {x: 0, y: 113.4, z: -104.4}
+  m_LocalRotation: {x: 0.4628454, y: -0, z: -0, w: 0.886439}
+  m_LocalPosition: {x: 0, y: 97.6, z: -105.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 58.045002, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 55.142002, y: 0, z: 0}
 --- !u!1 &2128244789
 GameObject:
   m_ObjectHideFlags: 0
