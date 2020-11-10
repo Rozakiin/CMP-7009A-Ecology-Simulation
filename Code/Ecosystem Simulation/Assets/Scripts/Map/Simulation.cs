@@ -88,7 +88,7 @@ public class Simulation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log(LayerMask.NameToLayer("Grass"));
     }
     #endregion
 
@@ -206,8 +206,9 @@ public class Simulation : MonoBehaviour
         int randWidth = Random.Range(0, (int)gridWidth-1);
         int randHeight = Random.Range(0, (int)gridHeight-1);
         Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
-
+        
         GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
+        grassClone.layer = LayerMask.NameToLayer("Grass");
         grassCount++;
         grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;
