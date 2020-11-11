@@ -99,7 +99,7 @@ public abstract class Animal : Edible
             gameObject.tag = "Female" + type;
             babiesBorn = 0;
         }
-        print(gender); print(gender);
+        print(gender);
         pregnant = false;
         timer = 0f;
     }
