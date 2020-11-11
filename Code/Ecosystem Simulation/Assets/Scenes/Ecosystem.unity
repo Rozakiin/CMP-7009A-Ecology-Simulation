@@ -1217,13 +1217,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 2027776177}
   m_HandleRect: {fileID: 2104658610}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0
+  m_MinValue: 1
+  m_MaxValue: 50
+  m_WholeNumbers: 1
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -287506225155014301, guid: da6900d68d9224b4380a6d87d5d77c62,
+          type: 3}
+        m_MethodName: SetRabbitSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &844166054
 GameObject:
   m_ObjectHideFlags: 0
