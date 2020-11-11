@@ -363,13 +363,16 @@ public abstract class Animal : Edible
     {
         return target;
     }
+
+
     public void SetTarget(Vector3 _target)
     {
         target = _target;
     }
-    public float GetMoveSpeed()
+
+    public virtual void SetGlobalMoveSpeedBase(float speed)
     {
-        return moveSpeed;
+        MoveSpeed = speed;
     }
 
     public override void SetNutritionalValue()
