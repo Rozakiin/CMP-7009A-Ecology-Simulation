@@ -1,48 +1,76 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Animal : MonoBehaviour, Edible
+public abstract class Animal : Edible
 {
-    public Simulation scene;
+    #region Properties
+    [Header("Animal Properties")]
+    [SerializeField] protected Vector3 target;
 
-    public Transform target;
-
-    // possition and movement properties
-    protected float startXPos, startZPos;                                                               //The starting x and z position
-    protected float currentXPos, currentZPos;                                                 //The current x and z position
-    public float moveSpeed;
+    [Header("Position and Movement Properties")]
+    [SerializeField] protected float startXPos;      //The starting x and z position
+    [SerializeField] protected float startZPos;
+    [SerializeField] protected float currentXPos;        //The current x and z position
+    [SerializeField] protected float currentZPos;                                                 
+    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float originalMoveSpeed;
 
     // status properties (could be made into a struct?)
-    protected float hunger;
-    protected float thirst;
-    protected float age;
-    protected float reproductiveUrge;
-    protected float sightRadius;
-    protected float eatingSpeed;
-    protected float pregnancyLength;
-    protected abstract float maxLifeExpectancy { get; set;}
-    protected abstract float babyNumber { get; set;}
+    [Header("Status Properties")]
+    [SerializeField] protected float hunger;
+    [SerializeField] protected float thirst;
+    [SerializeField] protected float age;
+    [SerializeField] protected float reproductiveUrge;
+    [SerializeField] protected float sightRadius;
+    [SerializeField] protected float touchRadius;
+    [SerializeField] protected float eatingSpeed;
+    [SerializeField] protected float pregnancyLength;
+    [SerializeField] protected bool pregnant;
+    [SerializeField] protected float pregnancyStartTime;
+    [SerializeField] protected Gender gender;
+    [SerializeField] protected float matingDuration;
+    [SerializeField] protected float mateStartTime;
+    [SerializeField] protected float birthStartTime;
+    [SerializeField] protected int numberOfBabies;  //How many the female is carrying right now
+    [SerializeField] protected int babiesBorn;      //How many she has given birth to
+    [SerializeField] protected float birthDuration;   //How long between babies being born
+    [SerializeField] protected Animal closestMate;
+    [SerializeField] protected abstract float maxLifeExpectancy { get; set; }
+    [SerializeField] protected abstract float maxBabyNumber { get; set; }
 
-    //Edible Interface
-    public int baseNutritionalValue { get; set; } = 10;
-    public bool canBeEaten { get; set; } = true;
-    public int NutritionalValue()
+    [Header("Scene Data")]
+    [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
+    [SerializeField] protected float leftLimit;
+    [SerializeField] protected float upLimit;
+    [SerializeField] protected float rightLimit;
+    [SerializeField] protected float downLimit;
+    [SerializeField] protected int numberOfTurns;
+
+    [Header("Other")]
+    [SerializeField] protected Edible edibleObject;
+    [SerializeField] protected Renderer renderer;
+    [SerializeField] protected float scaleMult;
+    [SerializeField] protected LineRenderer lineRenderer;
+    [SerializeField] protected float timer;
+
+    protected enum Gender
     {
-        return baseNutritionalValue * (int)age;
+        Male, Female
     }
 
     protected enum Directions
     {
         Left, Up, Right, Down
     }
-    protected Directions currentDirection;
+    [SerializeField] protected Directions currentDirection;
 
     protected enum States
     {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead
+        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
     }
-    protected States state;
+    [SerializeField] protected States state;
 
     public enum DeathReason
     {
@@ -51,46 +79,199 @@ public abstract class Animal : MonoBehaviour, Edible
         Age,
         Eaten
     }
+
     // count death reason
-    public static int diedFromHunger;
-    public static int diedFromThirst;
-    public static int diedFromAge;
-    public static int diedFromEaten;
+    [SerializeField] public static int diedFromHunger;
+    [SerializeField] public static int diedFromThirst;
+    [SerializeField] public static int diedFromAge;
+    [SerializeField] public static int diedFromEaten;
+    #endregion
 
-    protected virtual void Awake()
+    #region Initialisation
+    public void Start()
     {
-        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>();
+        target = transform.position;
+        int rnd = UnityEngine.Random.Range(0, 2);
+        gender = (Gender)rnd;
+        if(gender == Gender.Female)
+        {
+            string type = this.GetType().ToString();
+            gameObject.tag = "Female" + type;
+            babiesBorn = 0;
+        }
+        print(gender); print(gender);
+        pregnant = false;
+        timer = 0f;
+    }
+    #endregion
+
+    protected void WanderAround()
+    {
+        if (target == transform.position) //if target is self then no target(Vector3 can't be null)
+        {
+            bool isTargetWalkable = false;
+            Vector3 targetWorldPoint;
+            //find walkable targetWorldPoint
+            while (!isTargetWalkable)
+            {
+                float randX = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                float randZ = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                // random point within the sight radius of the rabbit
+                targetWorldPoint = transform.position + Vector3.right * randX + Vector3.forward * randZ;
+                //check targetWorldPoint is walkable
+                isTargetWalkable = CheckIfWalkable(targetWorldPoint);
+                if (isTargetWalkable)
+                {
+                    //set target to the targetWorldPoint
+                    target = targetWorldPoint;
+                }
+            }
+        }
     }
 
-    protected virtual void RandomMove()
-    {
 
+    //Method to check if a given position is a walkable node(could be extended to check if the whole path is walkable?)
+    //Uses ray hits to check if collided with anything
+    protected bool CheckIfWalkable(Vector3 worldPoint)
+    {
+        Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);//50 is just a high value
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            Node targetNode = scene.GetComponent<PathFinderController>().NodeFromWorldPoint(worldPoint);//Gets the node closest to the world point
+            return targetNode.isWalkable;
+        }
+        return false;// didn't hit so out of map area
     }
 
-    //create path to somewhere coordinate (x,y)
-    protected virtual void MoveToward(GameObject target)
-    {
 
+    //Call scene's functions to acquire the limits of the map. Used to determine where the rabbit's movements should be blocked.
+    protected void GetLimits()
+    {
+        leftLimit = scene.GetLeftLimit();
+        upLimit = scene.GetUpLimit();
+        rightLimit = scene.GetRightLimit();
+        downLimit = scene.GetDownLimit();
     }
 
-    protected virtual void LookForFood()
-    {
 
+    protected void CreateLineRenderer()
+    {
+        //For creating line renderer object
+        lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
+        lineRenderer.startColor = Color.black;
+        lineRenderer.endColor = Color.black;
+        lineRenderer.startWidth = 1f;
+        lineRenderer.endWidth = 1f;
+        lineRenderer.positionCount = 2;
+        lineRenderer.useWorldSpace = true;
     }
 
-    protected virtual void LookForWater()
-    {
 
+    protected void DisableLineRenderer()
+    {
+        lineRenderer.SetVertexCount(0);
     }
 
-    protected virtual void LookForMate()
-    {
 
+    protected void DrawLine(Vector3 position1, Vector3 position2)
+    {
+        lineRenderer.SetVertexCount(2);
+        lineRenderer.SetPosition(0, position1);
+        lineRenderer.SetPosition(1, position2);
     }
 
-    protected virtual void Mating()
-    {
 
+    protected Edible LookForConsumable(string searchedTag)
+    {
+        //Edible edible = this;
+        GameObject closestConsumable = null;
+        float distanceToConsumable;
+        float shortestDistance = 1000000000;
+        GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
+        //When looking for female mates, ignore the ones that have already been impregnated
+        if (searchedTag.Contains("Female"))
+        {
+            List<GameObject> bufferList = new List<GameObject>();
+            foreach (GameObject female in allChildren)
+            {
+                if (!female.GetComponent<Animal>().pregnant)
+                {
+                    bufferList.Add(female);
+                }
+            }
+            allChildren = null;
+            allChildren = new GameObject[bufferList.Count];
+            for (int i = 0; i < bufferList.Count; i++)
+            {
+                allChildren[i] = bufferList[i];
+            }
+        }
+        foreach (GameObject childConsumable in allChildren)
+        {
+            distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
+            if(shortestDistance == -1 || distanceToConsumable < shortestDistance)
+            {
+                //if the child is on a walkable position
+                if (CheckIfWalkable(childConsumable.transform.position))
+                {
+                    shortestDistance = distanceToConsumable;
+                    closestConsumable = childConsumable;
+                }
+            }
+        }
+        if (closestConsumable != null)
+        {
+            return closestConsumable.GetComponent<Edible>();
+        }
+        return null;
+    }
+
+
+    protected virtual Animal LookForMate(string searchedTag)
+    {
+        return (Animal)LookForConsumable(searchedTag);
+    }
+
+
+    protected Transform FindClosestWater()
+    {
+        Transform closestWater = transform;
+        float distanceToWater;
+        float shortestDistance = -1;
+        GameObject waterContainer = scene.waterContainer;
+        Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
+
+        foreach (Transform childWater in allWaterTile)
+        {
+            distanceToWater = Vector3.Distance(transform.position, childWater.position);
+            if (shortestDistance == -1 || distanceToWater < shortestDistance)
+            {
+                shortestDistance = distanceToWater;
+                closestWater = childWater;
+            }
+        }
+
+        return closestWater;
+    }
+
+
+    protected virtual void Mate(Animal femaleMate)
+    {
+        {
+
+            if (femaleMate.state != States.Mating)
+            {
+                femaleMate.state = States.Mating;
+            }
+        }
+    }
+
+    protected virtual void GiveBirth()
+    {
+        Vector3 position = transform.position;
+        scene.CreateRabbitAtPos(ref position);
+        //scene.CreateAnimal(this.gameObject);
     }
 
     protected virtual void Flee()
@@ -98,15 +279,26 @@ public abstract class Animal : MonoBehaviour, Edible
 
     }
 
-    protected virtual void Eating()
+
+    protected virtual void Eat(Edible edibleObject, int value, List<Edible> edibleList)
+    {
+        if (edibleObject != null)
+        {
+            edibleObject.LowerNutritionalValue(value);
+            scene.RemoveFromList(edibleObject, edibleList);
+            scene.DestroyObject(edibleObject.gameObject);
+            //Destroy(edibleObject.gameObject);
+            print("Ate");
+        }
+        //edibleObject.gameObject.GetComponents<GameObject>();
+    }
+
+
+    protected virtual void Drink()
     {
 
     }
 
-    protected virtual void Drinking()
-    {
-
-    }
 
     public void destroyGameObject(DeathReason reason)
     {
@@ -129,9 +321,33 @@ public abstract class Animal : MonoBehaviour, Edible
                 diedFromEaten++;
                 break;
             default:
-                Debug.Log("Unkown death reason: " + reason.ToString());
+                Debug.Log("Unknown death reason: " + reason.ToString());
                 break;
         }
         Destroy(gameObject);
+    }
+
+    public Vector3 GetTarget()
+    {
+        return target;
+    }
+    public void SetTarget(Vector3 _target)
+    {
+        target = _target;
+    }
+    public float GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
+    public override void SetNutritionalValue()
+    {
+        nutritionalValue = baseNutritionalValue * (int)age;
+    }
+
+
+    public override int GetNutritionalValue()
+    {
+        return nutritionalValue;
     }
 }

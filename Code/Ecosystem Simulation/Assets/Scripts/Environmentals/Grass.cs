@@ -1,38 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grass : MonoBehaviour, Edible
+public class Grass : Edible
 {
-    public Simulation scene;
-    private int currentHeight; // current growth height of the grass
-    private static int maxHeight = 4; // max height to be shared by all grass
-    //private static int baseEnergy = 20; // base energy to be shared by all grass
-    private float xPos, zPos; // x and z position
-    private float leftLimit, upLimit, rightLimit, downLimit; // limits of where the grass can be
+    #region Properties
+    [Header("Grass Properties")]
+    [SerializeField] private int currentHeight; // current growth height of the grass
+    [SerializeField] private static int maxHeight = 4; // max height to be shared by all grass
+    #endregion
 
-    //Edible Interface
-    public int baseNutritionalValue { get; set; } = 20;
-    public bool canBeEaten { get; set; } = true;
-    public int NutritionalValue()
-    {
-        return baseNutritionalValue * currentHeight;
-    }
-
-    // Energy is a property that multiplies baseEnergy with grass height
-    // to give the energy when eaten
-/*    public int Energy
-    {
-        get
-        {
-            return baseEnergy * currentHeight;
-        }
-        set
-        {
-            baseEnergy = value / currentHeight;
-        }
-    }*/
-
+    #region Initialisation
     void Awake()
     {
         scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>();
@@ -41,12 +20,10 @@ public class Grass : MonoBehaviour, Edible
     // Start is called before the first frame update
     void Start()
     {
-        xPos = transform.position.x;
-        zPos = transform.position.z;
-        GetLimits();
         transform.localScale = new Vector3(10f, 10f, 10f);
         currentHeight = 0;
     }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -54,17 +31,14 @@ public class Grass : MonoBehaviour, Edible
         
     }
 
-    private void GetLimits()
+    public override int GetNutritionalValue()
     {
-        leftLimit = scene.GetLeftLimit();
-        upLimit = scene.GetUpLimit();
-        rightLimit = scene.GetRightLimit();
-        downLimit = scene.GetDownLimit();
+        return nutritionalValue;
     }
 
-    // Setter for Max Height of grass
-    void SetMaxHeight(int height)
+    public override void SetNutritionalValue()
     {
-        maxHeight = height;
+        nutritionalValue = baseNutritionalValue * currentHeight;
+        //throw new System.NotImplementedException();
     }
 }

@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class Rabbit : Animal
 {
-    private float tileSize;                                                                 //The size of each tile on the map
-    private float leftLimit, upLimit, rightLimit, downLimit;
-    private int numberOfTurns;
-
-    private LineRenderer lineRenderer;
-
     protected override float maxLifeExpectancy   // overriding property
     {
         get
@@ -21,85 +15,85 @@ public class Rabbit : Animal
         {
         }
     }
-    protected override float babyNumber   // overriding property
+
+    protected override float maxBabyNumber   // overriding property
     {
         get
         {
-            return babyNumber;
+            return maxBabyNumber;
         }
         set
         {
         }
     }
-    
+
+    #region Initialisation
+    void Awake()//Ran once the program starts
+    {
+        scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>(); // get reference to Simulation
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
+        canBeEaten = true;
+        moveSpeed = 25f;
         hunger = 0f;
         thirst = 0f;
+        startXPos = position.x;
+        startZPos = position.z;
+        numberOfTurns = 0;
         age = 0f;
-        startXPos = transform.position.x;
-        startZPos = transform.position.z;
-        moveSpeed = 25f;
-        GetLimits();
-        RandomizeDirection();
+        baseNutritionalValue = 5;
+        reproductiveUrge = 0f;
+        sightRadius = 20;
+        touchRadius = 1;
         tileSize = scene.GetTileSize();
         state = States.Wandering;
-        numberOfTurns = 0;
         eatingSpeed = 2f;
+        originalMoveSpeed = 25f;
+        moveSpeed = originalMoveSpeed;
+        matingDuration = 3f;
+        pregnancyLength = 5f;
+        maxBabyNumber = 13;
+        birthDuration = 0.2f;
+
+        scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
+        transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
+
+        SetPosition();
         CreateLineRenderer();
-        transform.localScale = new Vector3(3f, 3f, 3f);                                     //transform.localScale is used for making the rabbit bigger -
+        GetLimits();
+        SetNutritionalValue();
     }                                                                                       //the standard one is quite small and barely visible
+    #endregion
 
     // Update is called once per frame
     void Update()
     {
+        DisableLineRenderer();
+        SetPosition();
         hunger += 1 * Time.deltaTime;
         thirst += 1 * Time.deltaTime;
         age += 1 * Time.deltaTime;
-        if (state == States.Wandering)
+        timer += 1 * Time.deltaTime;
+        if (pregnant)
         {
-            WanderAround();
+            moveSpeed = 0.6f * originalMoveSpeed;
+            if (timer - pregnancyStartTime >= pregnancyLength)
+            {
+                state = States.GivingBirth;
+                birthStartTime = timer;
+                pregnant = false;
+            }
+        }
 
-            if (hunger >= 10)
-            {
-                state = States.Hungry;
-            }
-        }
-        else if (state == States.Hungry)
+
+        if (gender == Gender.Male)
         {
-            //WanderAround();
-            DisableLineRenderer();
-            target = FindClosestGrass();
-            DrawLine(transform.position, target.position);
-            
-            //if(food.distance < sightRadius
-            //{
-            //  go towards grass
-            //  if(food.distance < 1)
-            //  {
-            //      state = States.Eating;
-            //  }
-            //}
-        }
-        else if (state == States.Eating)
-        {
-            hunger -= eatingSpeed * Time.deltaTime;
-            //grass.health--;
-            if (hunger <= 0)                         //if the rabbit is sated he goes back to wandering around
-            {
-                state = States.Wandering;
-            }
-            //if(food.distance == -1 && hunger >= 10) //if the food dissapeared but the rabbit is still hungry
-            //{
-            //  state = States.Hungry;
-            //}
-        }
-        else if (state == States.Thirsty)
-        {
-            WanderAround();
-            DisableLineRenderer();
-            Transform closestWater = FindClosestWater();
+            reproductiveUrge += 0.3f * Time.deltaTime;
+            //print(reproductiveUrge);
         }
 
         if (hunger >= 100)
@@ -114,182 +108,133 @@ public class Rabbit : Animal
         {
             destroyGameObject(DeathReason.Age);
         }
-    }
 
-    private void WanderAround()
-    {
-        float distanceMoved;
-        Move();
-        currentXPos = transform.position.x;
-        currentZPos = transform.position.z;
-        if (currentDirection == Directions.Left || currentDirection == Directions.Right)
+        if (state == States.Wandering)
         {
-            distanceMoved = CalculateDistanceMoved(startXPos, currentXPos);
-        }
-        else
-        {
-            distanceMoved = CalculateDistanceMoved(startZPos, currentZPos);
-        }
-        if (distanceMoved >= tileSize)                                                      //If the distance moved is bigger than the size of the tile
-        {                                                                                   //it means that it's time to randomize a new direction.
-            currentXPos = (int)Math.Round(currentXPos);                                     //With the float being inaccurate each movement is slightly off,
-            currentZPos = (int)Math.Round(currentZPos);                                     //Rounding to the closest value solves that problem.
-            startXPos = currentXPos;                                                             //Rabbit's current position becomes its starting position, which
-            startZPos = currentZPos;                                                             //allows for calculating the distance travelled.
-            transform.position = new Vector3(startXPos, 0, startZPos);
-            RandomizeDirection();
-        }
-    }
-
-    //Randomize what direction the rabbit should move next. The number of is randomized from 0 up to directionsCounter,
-    //and the switch statement is used to determine the direction. canMove variable is used to determine if the movement
-    //in that direction is allowed. CheckIfCanMove is called to check it. UnityEngine.Random used instead of the System
-    //one to randomize numbers not tied to the system's clock. This way the numbers are unique to each object and prevent
-    //the rabbits from moving in the same direction.
-    private void RandomizeDirection()
-    {
-        bool canMove = false;
-        do
-        {
-            int directionsCounter = Directions.GetNames(typeof(Directions)).Length;
-            int rnd = UnityEngine.Random.Range(0, directionsCounter);
-            switch (rnd)
+            WanderAround();
+            //Reproductive Urge stronger than Idle and Hunger
+            if (reproductiveUrge >= 5)
             {
-                case 0:
-                    currentDirection = Directions.Left;
-                    break;
-                case 1:
-                    currentDirection = Directions.Up;
-                    break;
-                case 2:
-                    currentDirection = Directions.Right;
-                    break;
-                case 3:
-                    currentDirection = Directions.Down;
-                    break;
+                state = States.SexuallyActive;
             }
-            canMove = CheckIfCanMove(currentDirection);
-        } while (canMove == false);
-    }
-
-    //Check if the rabbit can move in the randomized direction. Takes currentDirection of the Directions type as a parameter, which is the randomized direction.
-    private bool CheckIfCanMove(Directions currentDirection)
-    {
-        if(currentXPos <= leftLimit && currentDirection == Directions.Left)             //Check if the rabbit wants to go left despite being at the left edge of the map
-        {
-            return false;
-        }
-        else if(currentXPos >= rightLimit && currentDirection == Directions.Right)      //Check if the rabbit want to go right despite being at the right edge of the map
-        {
-            return false;
-        }
-        else if(currentZPos <= downLimit && currentDirection == Directions.Down)        //Same but down
-        {
-            return false;
-        }
-        else if(currentZPos >= upLimit && currentDirection == Directions.Up)            //Same but up
-        {
-            return false;
-        }
-        return true;                                                                    //Otherwise return true, meaning the move is possible
-    }
-
-    //Calculate how much the rabbit has moved since the last frame. Used to check if it's time to randomize a new direction
-    private float CalculateDistanceMoved(float startPos, float currentPos)
-    {
-        return System.Math.Abs(currentPos - startPos);                                  
-    }
-
-    //Move the rabbit according to the randomized direction. The movement is done by changing the position of the rabbit. The moveSpeed is multiplied by
-    //Time.deltaTime to ensure that the value is identical on all machines no matter how fast they are. The new vector is created by either subtracting
-    //or adding to the x or z value.
-    private void Move()
-    {
-        if (currentDirection == Directions.Left)
-        {
-            transform.position += new Vector3(-moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Right)
-        {
-            transform.position += new Vector3(moveSpeed * Time.deltaTime, 0f, 0f);
-        }
-        else if (currentDirection == Directions.Up)
-        {
-            transform.position += new Vector3(0f, 0f, moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position += new Vector3(0f, 0f, -moveSpeed * Time.deltaTime);
-        }
-    }
-
-    //Call scene's functions to acquire the limits of the map. Used to determine where the rabbit's movements should be blocked.
-    private void GetLimits()
-    {
-        leftLimit = scene.GetLeftLimit();
-        upLimit = scene.GetUpLimit();
-        rightLimit = scene.GetRightLimit();
-        downLimit = scene.GetDownLimit();
-    }
-
-    private void CreateLineRenderer()
-    {
-        //For creating line renderer object
-        lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
-        lineRenderer.startColor = Color.black;
-        lineRenderer.endColor = Color.black;
-        lineRenderer.startWidth = 1f;
-        lineRenderer.endWidth = 1f;
-        lineRenderer.positionCount = 2;
-        lineRenderer.useWorldSpace = true;
-    }
-
-    private void DrawLine(Vector3 position1, Vector3 position2)
-    {
-        lineRenderer.SetVertexCount(2);
-        lineRenderer.SetPosition(0, position1);
-        lineRenderer.SetPosition(1, position2);
-    }
-
-    private Transform FindClosestGrass()
-    {
-        Transform closestGrass = transform;
-        float distanceToGrass;
-        float shortestDistance = -1;
-        GameObject grassContainer = scene.grassContainer;
-        Transform[] allChildren = grassContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform childGrass in allChildren)
-        {
-            distanceToGrass = Vector3.Distance(transform.position, childGrass.position);
-            if (shortestDistance == -1 || distanceToGrass < shortestDistance)
+            //Hunger stronger than Idle
+            if (hunger >= 10)
             {
-                shortestDistance = distanceToGrass;
-                closestGrass = childGrass;
+                state = States.Hungry;
             }
         }
-        return closestGrass;
-    }
-    private Transform FindClosestWater()
-    {
-        Transform closestWater = transform;
-        float distanceToWater;
-        float shortestDistance = -1;
-        GameObject waterContainer = scene.waterContainer;
-        Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform childWater in allWaterTile)
+        else if (state == States.Hungry)
         {
-            distanceToWater = Vector3.Distance(transform.position, childWater.position);
-            if (shortestDistance == -1 || distanceToWater < shortestDistance)
+            DisableLineRenderer();
+            //Reproductive Urge stronger than Hunger?
+            if (reproductiveUrge >= 5)
             {
-                shortestDistance = distanceToWater;
-                closestWater = childWater;
+                state = States.SexuallyActive;
+            }
+
+            Edible closestGrass = LookForConsumable("Grass");//Look for closest grass
+            if (closestGrass != null)
+            {
+                float distanceToGrass = Vector3.Distance(transform.position, closestGrass.transform.position);
+                // Grass within touching distance
+                if (distanceToGrass <= touchRadius)
+                {
+                    state = States.Eating;
+                }
+                //Grass within sight radius
+                if (distanceToGrass <= sightRadius)
+                {
+                    edibleObject = closestGrass.GetComponent<Edible>();//set the edible object to the closest grass object
+                    target = closestGrass.transform.position;
+                    DrawLine(transform.position, target);
+                }
+            }
+            //No grass
+            WanderAround();
+        }
+        else if (state == States.Eating)
+        {
+            DisableLineRenderer();
+            print("Eating");
+            //Eat the object (method call instead?)
+            if (edibleObject != null)
+            {
+                edibleObject.Die();
+                hunger -= 5;
+                scene.CreateGrass();
+            }
+            //If the grass has been eaten by someone else, go back to being hungry
+            else
+            {
+                state = States.Hungry;
+            }
+
+            if (hunger <= 0)
+            {
+                state = States.Wandering;
             }
         }
-
-        return closestWater;
-    }
-    private void DisableLineRenderer()
-    {
-        lineRenderer.SetVertexCount(0);
+        else if (state == States.Thirsty)
+        {
+            DisableLineRenderer();
+            Transform closestWater = FindClosestWater();
+        }
+        else if (state == States.SexuallyActive)
+        {
+            DisableLineRenderer();
+            Animal closestMate = LookForMate("FemaleRabbit");
+            if (closestMate != null)
+            {
+                float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
+                // Mate within touching distance
+                if (distanceToMate <= touchRadius)
+                {
+                    state = States.Mating;
+                    mateStartTime = timer;
+                    Mate(closestMate);
+                }
+                //Mate within sight radius
+                if (distanceToMate <= sightRadius)
+                {
+                    target = closestMate.transform.position;
+                    DrawLine(transform.position, target);
+                }
+            }
+            //No mate
+            WanderAround();
+        }
+        else if (state == States.Mating)
+        {
+            //temp code to check pathfinding          
+            DisableLineRenderer();
+            print("Mating");
+            //If mating should end
+            if (timer - mateStartTime >= matingDuration)
+            {
+                if (gender == Gender.Female)
+                {
+                    pregnancyStartTime = timer;
+                    pregnant = true;
+                    numberOfBabies = 5;
+                    //numberOfBabies = (int)UnityEngine.Random.Range(1, maxBabyNumber);
+                }
+                reproductiveUrge = 0;
+                state = States.Wandering;
+            }
+        }
+        else if (state == States.GivingBirth)
+        {
+            if (timer - birthStartTime >= birthDuration && babiesBorn < numberOfBabies)
+            {
+                GiveBirth();
+                birthStartTime = timer;
+                babiesBorn++;
+            }
+            if (babiesBorn >= numberOfBabies)
+            {
+                moveSpeed = originalMoveSpeed;
+                state = States.Wandering;
+            }
+        }
     }
 }
