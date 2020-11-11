@@ -39,4 +39,9 @@ public class UIController : MonoBehaviour
             rabbit.transform.localScale = new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier);
         }
     }
+
+    public void SetRabbitSpeed(float speed)
+    {
+        new Rabbit().SetGlobalMoveSpeedBase(speed);
+    }
 }
