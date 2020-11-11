@@ -16,7 +16,7 @@ public abstract class Animal : MonoBehaviour, Edible
     // status properties (could be made into a struct?)
     protected float hunger;
     protected float thirst;
-    protected int age;
+    protected float age;
     protected float reproductiveUrge;
     protected float sightRadius;
     protected float eatingSpeed;
@@ -29,7 +29,7 @@ public abstract class Animal : MonoBehaviour, Edible
     public bool canBeEaten { get; set; } = true;
     public int NutritionalValue()
     {
-        return baseNutritionalValue * age;
+        return baseNutritionalValue * (int)age;
     }
 
     protected enum Directions
