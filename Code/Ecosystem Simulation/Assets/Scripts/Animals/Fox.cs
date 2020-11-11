@@ -4,31 +4,22 @@ using UnityEngine;
 
 public class Fox : Animal
 {
-	protected override float maxLifeExpectancy   // overriding property
+    private static float moveSpeedBase;
+    public override float MoveSpeed
     {
-        get
-        {
-            return maxLifeExpectancy;
-        }
-        set
-        {
-        }
+        get { return moveSpeedBase*moveMultiplier; }
+        protected set { moveSpeedBase = value; }
     }
 
-    protected override float maxBabyNumber   // overriding property
+    protected override int LitterSizeMax   // overriding property
     {
-        get
-        {
-            return maxBabyNumber;
-        }
-        set
-        {
-        }
+        get { return LitterSizeMax; }
+        set {}
     }
 
     #region Initialisation
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         
     }
