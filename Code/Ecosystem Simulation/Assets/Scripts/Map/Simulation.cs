@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -203,11 +203,24 @@ public class Simulation : MonoBehaviour
 
     public void CreateGrass()
     {
-        int randWidth = Random.Range(0, (int)gridWidth-1);
-        int randHeight = Random.Range(0, (int)gridHeight-1);
-        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
-
-        GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
+        Transform[] allGrassTile = tileContainer.GetComponentsInChildren<Transform>();      // get all of grass tile components in grasstile container
+        int size = allGrassTile.Length;                                                     // size is the number of grass tile in the map
+        int randomNum = rnd.Next(0, size);
+        Transform allGrassTileChild = (Transform)allGrassTile.GetValue(randomNum);          //GetValue is index integer number
+        Transform[] allGrassChild = grassContainer.GetComponentsInChildren<Transform>();    // get all of grass components in grass container
+        foreach(Transform grassChild in allGrassChild)                                      // for loop to check existing grass to avoid spawn same place
+        {
+            if (grassChild.position != allGrassTileChild.position)
+            {
+                continue;
+            }
+            else
+            {
+                CreateGrass();
+                break;
+            }
+        }
+        GameObject grassClone = Instantiate(grass, allGrassTileChild.position, grass.transform.rotation) as GameObject;
         grassCount++;
         grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;
