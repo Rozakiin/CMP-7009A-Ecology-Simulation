@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +14,9 @@ public class Simulation : MonoBehaviour
     [SerializeField] public GameObject sandTile;
     [SerializeField] public GameObject rockTile;
     [SerializeField] public GameObject tileContainer;
+    [SerializeField] public GameObject grassTileContainer;
+    [SerializeField] public GameObject rockTileContainer;
+    [SerializeField] public GameObject sandTileContainer;
     [SerializeField] public GameObject waterContainer;
     [SerializeField] public GameObject rabbit;
     [SerializeField] public GameObject rabbitContainer;
@@ -142,19 +145,19 @@ public class Simulation : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Grass:
                         tileClone = Instantiate(grassTile, worldPoint, grassTile.transform.rotation);  //Place the grass tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = grassTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
                         tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = sandTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
                         tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = rockTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 11; //set layer to grass
                         break;
@@ -203,9 +206,9 @@ public class Simulation : MonoBehaviour
 
     public void CreateGrass()
     {
-        Transform[] allGrassTile = tileContainer.GetComponentsInChildren<Transform>();      // get all of grass tile components in grasstile container
+        Transform[] allGrassTile = grassTileContainer.GetComponentsInChildren<Transform>();      // get all of grass tile components in grasstile container
         int size = allGrassTile.Length;                                                     // size is the number of grass tile in the map
-        int randomNum = rnd.Next(0, size);
+        int randomNum = Random.Range(0, size);
         Transform allGrassTileChild = (Transform)allGrassTile.GetValue(randomNum);          //GetValue is index integer number
         Transform[] allGrassChild = grassContainer.GetComponentsInChildren<Transform>();    // get all of grass components in grass container
         foreach(Transform grassChild in allGrassChild)                                      // for loop to check existing grass to avoid spawn same place
