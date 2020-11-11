@@ -311,13 +311,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d791cc414ddd0d42840ab70ffa7c369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: {fileID: 0}
   displayGridGizmos: 0
+  nodeRadius: 1
+  distanceBetweenNodes: 0.5
+  walkableMask:
+    serializedVersion: 2
+    m_Bits: 0
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 256
-  nodeRadius: 1
-  distanceBetweenNodes: 0.5
+  unwalkableProximityPenalty: 10
   walkableRegions:
   - terrainMask:
       serializedVersion: 2
