@@ -21,7 +21,7 @@ public abstract class Animal : Edible
     [Header("Status Properties")]
     [SerializeField] protected float hunger;
     [SerializeField] protected float thirst;
-    [SerializeField] protected int age;
+    [SerializeField] protected float age;
     [SerializeField] protected float reproductiveUrge;
     [SerializeField] protected float sightRadius;
     [SerializeField] protected float touchRadius;
@@ -342,7 +342,7 @@ public abstract class Animal : Edible
 
     public override void SetNutritionalValue()
     {
-        nutritionalValue = baseNutritionalValue * age;
+        nutritionalValue = baseNutritionalValue * (int)age;
     }
 
 
