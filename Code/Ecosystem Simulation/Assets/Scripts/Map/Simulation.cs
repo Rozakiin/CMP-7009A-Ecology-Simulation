@@ -207,11 +207,10 @@ public class Simulation : MonoBehaviour
     public void CreateGrass()
     {
         Transform[] allGrassTile = grassTileContainer.GetComponentsInChildren<Transform>();      // get all of grass tile components in grasstile container
-        int size = allGrassTile.Length;                                                     // size is the number of grass tile in the map
-        int randomNum = Random.Range(0, size);
-        Transform allGrassTileChild = (Transform)allGrassTile.GetValue(randomNum);          //GetValue is index integer number
-        Transform[] allGrassChild = grassContainer.GetComponentsInChildren<Transform>();    // get all of grass components in grass container
-        foreach(Transform grassChild in allGrassChild)                                      // for loop to check existing grass to avoid spawn same place
+        int randomNum = Random.Range(0, allGrassTile.Length);                                // get random number from 0 to number of grass tile in the map
+        Transform allGrassTileChild = (Transform)allGrassTile.GetValue(randomNum);          // GetValue is index integer number
+        Transform[] allGrass = grassContainer.GetComponentsInChildren<Transform>();    // get all of grass components in grass container
+        foreach(Transform grassChild in allGrass)                                      // for loop to check existing grass to avoid spawn same place
         {
             if (grassChild.position != allGrassTileChild.position)
             {
