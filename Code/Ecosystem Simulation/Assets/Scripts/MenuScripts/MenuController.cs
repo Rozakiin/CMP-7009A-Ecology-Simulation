@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,14 +12,15 @@ namespace SpeedTutorMainMenuSystem
     {
         public enum MenuNumber
         {
-            Main = 1,
-            NewGame = 7,
-            LoadGame = 8,
-            Options = 2,
-            Graphics = 3,
-            Sound = 4,
-            Gameplay = 5,
-            Controls = 6,
+            Main,
+            NewGame,
+            LoadGame,
+            Options,
+            Graphics,
+            Sound,
+            Gameplay,
+            Controls,
+            InitialProperties,
         }
         #region Default Values
         [Header("Default Menu Values")]
@@ -87,7 +88,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame)
+                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame || menuNumber == MenuNumber.InitialProperties)
                 {
                     GoBackToMainMenu();
                     ClickSound();
@@ -115,59 +116,52 @@ namespace SpeedTutorMainMenuSystem
         #region Menu Mouse Clicks
         public void MouseClick(string buttonType)
         {
-            if (buttonType == "Controls")
+            switch (buttonType)
             {
-                gameplayMenu.SetActive(false);
-                controlsMenu.SetActive(true);
-                menuNumber = MenuNumber.Controls;
-            }
-
-            if (buttonType == "Graphics")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                graphicsMenu.SetActive(true);
-                menuNumber = MenuNumber.Graphics;
-            }
-
-            if (buttonType == "Sound")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                soundMenu.SetActive(true);
-                menuNumber = MenuNumber.Sound;
-            }
-
-            if (buttonType == "Gameplay")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                gameplayMenu.SetActive(true);
-                menuNumber = MenuNumber.Gameplay;
-            }
-
-            if (buttonType == "Exit")
-            {
-                Debug.Log("YES QUIT!");
-                Application.Quit();
-            }
-
-            if (buttonType == "Options")
-            {
-                menuDefaultCanvas.SetActive(false);
-                GeneralSettingsCanvas.SetActive(true);
-                menuNumber = MenuNumber.Options;
-            }
-
-            if (buttonType == "LoadGame")
-            {
-                menuDefaultCanvas.SetActive(false);
-                loadGameDialog.SetActive(true);
-                menuNumber = MenuNumber.LoadGame;
-            }
-
-            if (buttonType == "NewGame")
-            {
-                menuDefaultCanvas.SetActive(false);
-                newGameDialog.SetActive(true);
-                menuNumber = MenuNumber.NewGame;
+                case "Controls":
+                    gameplayMenu.SetActive(false);
+                    controlsMenu.SetActive(true);
+                    menuNumber = MenuNumber.Controls;
+                    break;
+                case "Graphics":
+                    GeneralSettingsCanvas.SetActive(false);
+                    graphicsMenu.SetActive(true);
+                    menuNumber = MenuNumber.Graphics;
+                    break;
+                case "Sound":
+                    GeneralSettingsCanvas.SetActive(false);
+                    soundMenu.SetActive(true);
+                    menuNumber = MenuNumber.Sound;
+                    break;
+                case "Gameplay":
+                    GeneralSettingsCanvas.SetActive(false);
+                    gameplayMenu.SetActive(true);
+                    menuNumber = MenuNumber.Gameplay;
+                    break;
+                case "Exit":
+                    Debug.Log("YES QUIT!");
+                    Application.Quit();
+                    break;
+                case "Options":
+                    menuDefaultCanvas.SetActive(false);
+                    GeneralSettingsCanvas.SetActive(true);
+                    menuNumber = MenuNumber.Options;
+                    break;
+                case "LoadGame":
+                    menuDefaultCanvas.SetActive(false);
+                    loadGameDialog.SetActive(true);
+                    menuNumber = MenuNumber.LoadGame;
+                    break;
+                case "NewGame":
+                    menuDefaultCanvas.SetActive(false);
+                    newGameDialog.SetActive(true);
+                    menuNumber = MenuNumber.NewGame;
+                    break;
+                case "InitialProperties":
+                    break;
+                default:
+                    Debug.Log("Button clicked with no known case.");
+                    break;
             }
         }
         #endregion
