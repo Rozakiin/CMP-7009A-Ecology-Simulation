@@ -137,6 +137,13 @@ public abstract class Animal : Edible
     }
     #endregion
 
+    #region Global Setters
+    public virtual void SetGlobalBaseMoveSpeed(float speed)
+    {
+        MoveSpeed = speed;
+    }
+    #endregion
+
     protected void WanderAround()
     {
         if (target == transform.position) //if target is self then no target(Vector3 can't be null)
@@ -290,12 +297,9 @@ public abstract class Animal : Edible
 
     protected virtual void Mate(Animal femaleMate)
     {
+        if (femaleMate.state != States.Mating)
         {
-
-            if (femaleMate.state != States.Mating)
-            {
-                femaleMate.state = States.Mating;
-            }
+            femaleMate.state = States.Mating;
         }
     }
 
@@ -368,11 +372,6 @@ public abstract class Animal : Edible
     public void SetTarget(Vector3 _target)
     {
         target = _target;
-    }
-
-    public virtual void SetGlobalMoveSpeedBase(float speed)
-    {
-        MoveSpeed = speed;
     }
 
     public override void SetNutritionalValue()

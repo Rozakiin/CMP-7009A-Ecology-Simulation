@@ -42,6 +42,6 @@ public class UIController : MonoBehaviour
 
     public void SetRabbitSpeed(float speed)
     {
-        new Rabbit().SetGlobalMoveSpeedBase(speed);
+        new Rabbit().SetGlobalBaseMoveSpeed(speed);
     }
 }
