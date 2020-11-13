@@ -47,6 +47,19 @@ public class Rabbit : Animal
         protected set { pregnancyLengthBase = value; }
     }
 
+    private static float scaleFemaleBase = 3.7f;
+    protected override float ScaleFemale
+    {
+        get { return scaleFemaleBase * scaleMultiplier; }
+        set { scaleFemaleBase = value; }
+    }
+
+    private static float scaleMaleBase = 2.7f;
+    protected override float ScaleMale
+    {
+        get { return scaleMaleBase * scaleMultiplier; }
+        set { scaleMaleBase = value; }
+    }
     #endregion
 
     #region Initialisation
@@ -71,8 +84,6 @@ public class Rabbit : Animal
         birthDuration = 0.2f;
         PregnancyLength = 5f;
         LitterSizeMax = 13;
-        ScaleFemale = 3.7f;
-        ScaleMale = 2.7f;
 
         transform.localScale = new Vector3(Scale, Scale, Scale);        // changes scale depending on gender
 
@@ -88,6 +99,8 @@ public class Rabbit : Animal
     // Update is called once per frame
     void Update()
     {
+        transform.localScale = new Vector3(Scale, Scale, Scale);        // changes scale depending on gender
+
         DisableLineRenderer();
         SetPosition();
         hunger += 1 * Time.deltaTime;
