@@ -30,18 +30,38 @@ public class UIController : MonoBehaviour
         
     }
 
-    // gets all rabbits and sets their scale to scaleMultiplier (called by slider)
-    public void SetRabbitSize(float scaleMultiplier)
+    public void SetRabbitSizeMale(float scale)
     {
-        Rabbit[] rabbitList = GameObject.FindObjectsOfType<Rabbit>();
-        foreach (Rabbit rabbit in rabbitList)
-        {
-            rabbit.transform.localScale = new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier);
-        }
+        new Rabbit().SetGlobalBaseMaleScale(scale);
+    }
+
+    public void SetRabbitSizeFemale(float scale)
+    {
+        new Rabbit().SetGlobalBaseFemaleScale(scale);
     }
 
     public void SetRabbitSpeed(float speed)
     {
         new Rabbit().SetGlobalBaseMoveSpeed(speed);
+    }
+
+    public void SetRabbitMaxHunger(float hunger)
+    {
+        new Rabbit().SetGlobalMaxHunger(hunger);
+    }
+
+    public void SetRabbitMaxThirst(float thirst)
+    {
+        new Rabbit().SetGlobalMaxThirst(thirst);
+    }
+
+    public void SetRabbitMaxAge(float age)
+    {
+        new Rabbit().SetGlobalMaxThirst((int)age);
+    }
+
+    public void SetRabbitPregnancyLength(float length)
+    {
+        new Rabbit().SetGlobalBasePregnancyLength(length);
     }
 }
