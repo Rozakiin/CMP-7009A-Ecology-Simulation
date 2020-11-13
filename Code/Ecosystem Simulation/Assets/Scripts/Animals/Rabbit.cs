@@ -71,9 +71,10 @@ public class Rabbit : Animal
         birthDuration = 0.2f;
         PregnancyLength = 5f;
         LitterSizeMax = 13;
+        ScaleFemale = 3.7f;
+        ScaleMale = 2.7f;
 
-        scaleMult = (gender == Gender.Female ? 3.7f : 2.7f);                        //transform.localScale is used for making the rabbit bigger -
-        transform.localScale = new Vector3(scaleMult, scaleMult, scaleMult);        //the standard one is quite small and barely 
+        transform.localScale = new Vector3(Scale, Scale, Scale);        // changes scale depending on gender
 
         state = States.Wandering;
 
@@ -106,7 +107,6 @@ public class Rabbit : Animal
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
-            //print(reproductiveUrge);
         }
 
         if (state == States.Wandering)

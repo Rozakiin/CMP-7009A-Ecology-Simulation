@@ -78,9 +78,32 @@ public abstract class Animal : Edible
     [Header("Other")]
     [SerializeField] protected Edible edibleObject;
     [SerializeField] protected Renderer renderer;
-    [SerializeField] protected float scaleMult;
     [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected float timer;
+
+    [Header("Scale")]
+    //Scale
+    private static float scaleFemaleBase;
+    protected virtual float ScaleFemale
+    {
+        get { return scaleFemaleBase * scaleMultiplier; }
+        set { scaleFemaleBase = value; }
+    }
+
+    private static float scaleMaleBase;
+    protected virtual float ScaleMale
+    {
+        get { return scaleMaleBase * scaleMultiplier; }
+        set { scaleMaleBase = value; }
+    }
+
+    [SerializeField] protected float scaleMultiplier;
+    public virtual float Scale
+    {
+        get { return gender == Gender.Female ? ScaleFemale : ScaleMale; }
+    }
+
+
 
     protected enum Gender
     {
@@ -131,6 +154,7 @@ public abstract class Animal : Edible
         timer = 0f;
         moveMultiplier = 1f;
         pregnancyLengthModifier = 1f;
+        scaleMultiplier = 1f;
         reproductiveUrge = 0f;
         thirst = 0f;
         hunger = 0f;
@@ -138,9 +162,39 @@ public abstract class Animal : Edible
     #endregion
 
     #region Global Setters
-    public virtual void SetGlobalBaseMoveSpeed(float speed)
+    public virtual void SetGlobalBaseMoveSpeed(float _speed)
     {
-        MoveSpeed = speed;
+        MoveSpeed = _speed;
+    }
+
+    public virtual void SetGlobalMaxHunger(float _hungerMax)
+    {
+        HungerMax = _hungerMax;
+    }
+
+    public virtual void SetGlobalMaxThirst(float _thirstMax)
+    {
+        ThirstMax = _thirstMax;
+    }
+
+    public virtual void SetGlobalMaxAge(int _ageMax)
+    {
+        AgeMax = _ageMax;
+    }
+
+    public virtual void SetGlobalBasePregnancyLength(float _pregnancyLength)
+    {
+        PregnancyLength = _pregnancyLength;
+    }
+
+    public virtual void SetGlobalBaseFemaleScale(float _scale)
+    {
+        ScaleFemale = _scale;
+    }
+
+    public virtual void SetGlobalBaseMaleScale(float _scale)
+    {
+        ScaleMale = _scale;
     }
     #endregion
 
