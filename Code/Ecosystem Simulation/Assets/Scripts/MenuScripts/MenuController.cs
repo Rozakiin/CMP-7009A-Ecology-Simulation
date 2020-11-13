@@ -7,8 +7,20 @@ using UnityEngine.EventSystems;
 
 namespace SpeedTutorMainMenuSystem
 {
+    
     public class MenuController : MonoBehaviour
     {
+        public enum MenuNumber
+        {
+            Main = 1,
+            NewGame = 7,
+            LoadGame = 8,
+            Options = 2,
+            Graphics = 3,
+            Sound = 4,
+            Gameplay = 5,
+            Controls = 6,
+        }
         #region Default Values
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
@@ -20,7 +32,7 @@ namespace SpeedTutorMainMenuSystem
         public string _newGameButtonLevel;
         private string levelToLoad;
 
-        private int menuNumber;
+        private MenuNumber menuNumber;
         #endregion
 
         #region Menu Dialogs
@@ -58,7 +70,7 @@ namespace SpeedTutorMainMenuSystem
         #region Initialisation - Button Selection & Menu Order
         private void Start()
         {
-            menuNumber = 1;
+            menuNumber = MenuNumber.Main;
         }
         #endregion
 
@@ -74,19 +86,19 @@ namespace SpeedTutorMainMenuSystem
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (menuNumber == 2 || menuNumber == 7 || menuNumber == 8)
+                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame)
                 {
                     GoBackToMainMenu();
                     ClickSound();
                 }
 
-                else if (menuNumber == 3 || menuNumber == 4 || menuNumber == 5)
+                else if (menuNumber == MenuNumber.Graphics || menuNumber == MenuNumber.Sound || menuNumber == MenuNumber.Gameplay)
                 {
                     GoBackToOptionsMenu();
                     ClickSound();
                 }
 
-                else if (menuNumber == 6) //CONTROLS MENU
+                else if (menuNumber == MenuNumber.Controls) //CONTROLS MENU
                 {
                     GoBackToGameplayMenu();
                     ClickSound();
@@ -106,28 +118,28 @@ namespace SpeedTutorMainMenuSystem
             {
                 gameplayMenu.SetActive(false);
                 controlsMenu.SetActive(true);
-                menuNumber = 6;
+                menuNumber = MenuNumber.Controls;
             }
 
             if (buttonType == "Graphics")
             {
                 GeneralSettingsCanvas.SetActive(false);
                 graphicsMenu.SetActive(true);
-                menuNumber = 3;
+                menuNumber = MenuNumber.Graphics;
             }
 
             if (buttonType == "Sound")
             {
                 GeneralSettingsCanvas.SetActive(false);
                 soundMenu.SetActive(true);
-                menuNumber = 4;
+                menuNumber = MenuNumber.Sound;
             }
 
             if (buttonType == "Gameplay")
             {
                 GeneralSettingsCanvas.SetActive(false);
                 gameplayMenu.SetActive(true);
-                menuNumber = 5;
+                menuNumber = MenuNumber.Gameplay;
             }
 
             if (buttonType == "Exit")
@@ -140,21 +152,21 @@ namespace SpeedTutorMainMenuSystem
             {
                 menuDefaultCanvas.SetActive(false);
                 GeneralSettingsCanvas.SetActive(true);
-                menuNumber = 2;
+                menuNumber = MenuNumber.Options;
             }
 
             if (buttonType == "LoadGame")
             {
                 menuDefaultCanvas.SetActive(false);
                 loadGameDialog.SetActive(true);
-                menuNumber = 8;
+                menuNumber = MenuNumber.LoadGame;
             }
 
             if (buttonType == "NewGame")
             {
                 menuDefaultCanvas.SetActive(false);
                 newGameDialog.SetActive(true);
-                menuNumber = 7;
+                menuNumber = MenuNumber.NewGame;
             }
         }
         #endregion
@@ -297,7 +309,7 @@ namespace SpeedTutorMainMenuSystem
             BrightnessApply();
             VolumeApply();
 
-            menuNumber = 2;
+            menuNumber = MenuNumber.Options;
         }
 
         public void GoBackToMainMenu()
@@ -310,14 +322,14 @@ namespace SpeedTutorMainMenuSystem
             graphicsMenu.SetActive(false);
             soundMenu.SetActive(false);
             gameplayMenu.SetActive(false);
-            menuNumber = 1;
+            menuNumber = MenuNumber.Main;
         }
 
         public void GoBackToGameplayMenu()
         {
             controlsMenu.SetActive(false);
             gameplayMenu.SetActive(true);
-            menuNumber = 5;
+            menuNumber = MenuNumber.Gameplay;
         }
 
         public void ClickQuitOptions()
