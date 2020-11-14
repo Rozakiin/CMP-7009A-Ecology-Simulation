@@ -110,7 +110,7 @@ public class Simulation : MonoBehaviour
     void CreateMap(string path)
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
-        MapReader.ReadInMap(path, ref mapList);
+        MapReader.ReadInMapFromFile(path, ref mapList);
         CreateTilesFromMapList(ref mapList);
         SetLimits();
     }
