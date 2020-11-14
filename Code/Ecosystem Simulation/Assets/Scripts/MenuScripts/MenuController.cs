@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using SFB;
 
 namespace SpeedTutorMainMenuSystem
 {
@@ -22,6 +23,7 @@ namespace SpeedTutorMainMenuSystem
             Controls,
             InitialProperties,
         }
+        string fileContents;
         #region Default Values
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
@@ -166,6 +168,7 @@ namespace SpeedTutorMainMenuSystem
                     menuDefaultCanvas.SetActive(false);
                     loadGameDialog.SetActive(true);
                     menuNumber = MenuNumber.LoadGame;
+                    LoadMap();
                     break;
                 case "NewGame":
                     menuDefaultCanvas.SetActive(false);
@@ -185,6 +188,32 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
 
+        #region Loading Map From File
+        public void LoadMap()
+        {
+            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
+            if (paths.Length > 0)
+            {
+                StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
+            }
+        }
+
+        private IEnumerator OutputRoutine(string url)
+        {
+            var loader = new WWW(url);
+            yield return loader;
+            fileContents = loader.text;
+            Debug.Log(fileContents);
+        }
+
+        // attempts to load the given file into the MapReader
+        private bool MapFileValid()
+        {
+            return MapReader.ReadInMapFromString(fileContents);
+        }
+        #endregion
+
+        #region Options
         public void VolumeSlider(float volume)
         {
             AudioListener.volume = volume;
@@ -236,6 +265,7 @@ namespace SpeedTutorMainMenuSystem
 
             StartCoroutine(ConfirmationBox());
         }
+        #endregion
 
         public void InitialPropertiesApply()
         {
@@ -320,12 +350,17 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                if (PlayerPrefs.HasKey("SavedLevel"))
+                if (fileContents != null)
                 {
-                    Debug.Log("I WANT TO LOAD THE SAVED GAME");
-                    //LOAD LAST SAVED SCENE
-                    levelToLoad = PlayerPrefs.GetString("SavedLevel");
-                    SceneManager.LoadScene(levelToLoad);
+                    //if the file is valid open the initial properties menu
+                    if (MapFileValid())
+                    {
+                        //set playerpref map to filecontents TODO
+                        Debug.Log("I WANT TO LOAD THE MAP");
+                        loadGameDialog.SetActive(false);
+                        initialPropertiesMenu.SetActive(true);
+                        menuNumber = MenuNumber.InitialProperties;
+                    }
                 }
 
                 else
