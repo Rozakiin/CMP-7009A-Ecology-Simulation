@@ -18,7 +18,7 @@ public class MapReader
 
     // Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
     // This is stored in mapList which is a List of lists passed by reference.
-    public static void ReadInMapFromFile(string filePath, ref List<List<TerrainCost>> mapList)
+    public static bool ReadInMapFromFile(string filePath, ref List<List<TerrainCost>> mapList)
     {
         try 
         {
@@ -43,7 +43,7 @@ public class MapReader
                 }
 
                 mapList.Reverse(); // reverse YList to match how it looks on the map since starts at bottom left in simulation
-
+                return true;
                 // Debugging
                 // string row = words[0].Length.ToString(); // length of one row string
                 // string column = words.Length.ToString(); // number of row strings in array
@@ -65,15 +65,15 @@ public class MapReader
             Debug.Log("The file could not be read:");
             Debug.Log(e.Message);
         }
+        return false;
     }
 
-    // Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
+    // Reads in from string a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
     // This is stored in mapList which is a List of lists passed by reference.
-    public static bool ReadInMapFromString(string map)
+    public static bool ReadInMapFromString(string map, ref List<List<TerrainCost>> mapList)
     {
         try
         {
-            List<List<TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
             char[] charSeparators = { ' ', '\n' }; // delimeters of space and newline
             string[] words = map.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
 

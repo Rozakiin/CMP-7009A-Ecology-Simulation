@@ -209,7 +209,8 @@ namespace SpeedTutorMainMenuSystem
         // attempts to load the given file into the MapReader
         private bool MapFileValid()
         {
-            return MapReader.ReadInMapFromString(fileContents);
+            List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
+            return MapReader.ReadInMapFromString(fileContents, ref mapList);
         }
         #endregion
 
@@ -350,19 +351,16 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                if (fileContents != null)
+                //if the file is valid open the initial properties menu
+                if (MapFileValid())
                 {
-                    //if the file is valid open the initial properties menu
-                    if (MapFileValid())
-                    {
-                        //set playerpref map to filecontents TODO
-                        Debug.Log("I WANT TO LOAD THE MAP");
-                        loadGameDialog.SetActive(false);
-                        initialPropertiesMenu.SetActive(true);
-                        menuNumber = MenuNumber.InitialProperties;
-                    }
+                    Simulation.SetMapString(fileContents); //set the map string in Simualtion to filecontents
+                    Debug.Log("I WANT TO LOAD THE MAP");
+                    loadGameDialog.SetActive(false);
+                    initialPropertiesMenu.SetActive(true);
+                    ResetButton("InitialProperties");
+                    menuNumber = MenuNumber.InitialProperties;
                 }
-
                 else
                 {
                     Debug.Log("Load Game Dialog");

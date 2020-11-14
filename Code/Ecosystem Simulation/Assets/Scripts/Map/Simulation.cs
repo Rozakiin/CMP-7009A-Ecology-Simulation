@@ -48,6 +48,7 @@ public class Simulation : MonoBehaviour
     [SerializeField] private int numberOfTurns;
     [SerializeField] private List<Edible> rabbitList;
     [SerializeField] private List<Edible> grassList;
+    private static string mapString;
     #endregion
 
     #region Initialisation
@@ -73,7 +74,7 @@ public class Simulation : MonoBehaviour
         grassList = new List<Edible>();
         rnd = new Random();
 
-        CreateMap("Assets/Scripts/Map/MapExample.txt");
+        CreateMap();
         for (int i = 0; i < 15; i++)
         {
             CreateRabbit();
@@ -107,12 +108,26 @@ public class Simulation : MonoBehaviour
     }
 
     #region Map Creation
-    void CreateMap(string path)
+    void CreateMap()
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
-        MapReader.ReadInMapFromFile(path, ref mapList);
-        CreateTilesFromMapList(ref mapList);
+        if (mapString != null)
+        {
+            MapReader.ReadInMapFromString(mapString, ref mapList);
+            CreateTilesFromMapList(ref mapList);
+        }
+        else
+        {
+            MapReader.ReadInMapFromFile("Assets/Scripts/Map/MapExample.txt", ref mapList);
+            CreateTilesFromMapList(ref mapList);
+        }
         SetLimits();
+    }
+
+
+    public static void SetMapString(string _mapstring)
+    {
+        mapString = _mapstring;
     }
 
 
