@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class Rabbit : Animal
 {
+    #region Defaults
+    public class DefaultValues
+    {
+        public static readonly float moveSpeed = 25f;
+        public static readonly float scaleMale = 2.7f;
+        public static readonly float scaleFemale = 3.7f;
+
+    }
+    #endregion
+
     #region Properties
     [Header("Rabbit Properties")]
     private static float moveSpeedBase = 25f;
