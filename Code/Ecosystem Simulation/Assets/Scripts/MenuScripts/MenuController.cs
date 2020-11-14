@@ -67,12 +67,27 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Slider volumeSlider;
         [Space(10)]
         [SerializeField] private Toggle invertYToggle;
+        [Space(10)]
+        [Header("Initial Properties Sliders")]
+        [SerializeField] private Text rabbitSizeMaleText;
+        [SerializeField] private Slider rabbitSizeMaleSlider;
+        [SerializeField] private Text rabbitSizeFemaleText;
+        [SerializeField] private Slider rabbitSizeFemaleSlider;
+
+        #endregion
+        #region Initial properties objects
+        private Rabbit rabbit;
+        private Fox fox;
+        private Grass grass;
         #endregion
 
         #region Initialisation - Button Selection & Menu Order
         private void Start()
         {
             menuNumber = MenuNumber.Main;
+            rabbit = gameObject.AddComponent(typeof(Rabbit)) as Rabbit;
+            fox = gameObject.AddComponent(typeof(Fox)) as Fox;
+            grass = gameObject.AddComponent(typeof(Grass)) as Grass;
         }
         #endregion
 
@@ -154,10 +169,14 @@ namespace SpeedTutorMainMenuSystem
                     break;
                 case "NewGame":
                     menuDefaultCanvas.SetActive(false);
-                    newGameDialog.SetActive(true);
+                    ResetButton("InitialProperties");
+                    initialPropertiesMenu.SetActive(true);
                     menuNumber = MenuNumber.NewGame;
                     break;
                 case "InitialProperties":
+                    initialPropertiesMenu.SetActive(false);
+                    newGameDialog.SetActive(true);
+                    menuNumber = MenuNumber.InitialProperties;
                     break;
                 default:
                     Debug.Log("Button clicked with no known case.");
@@ -218,34 +237,67 @@ namespace SpeedTutorMainMenuSystem
             StartCoroutine(ConfirmationBox());
         }
 
-        #region ResetButton
-        public void ResetButton(string GraphicsMenu)
+        public void InitialPropertiesApply()
         {
-            if (GraphicsMenu == "Brightness")
+            Debug.Log("Apply Initial Properties");
+            StartCoroutine(ConfirmationBox());
+        }
+
+        public void InitialPropertiesUpdate(string propertyToUpdate)
+        {
+            switch (propertyToUpdate)
             {
-                brightnessEffect.brightness = defaultBrightness;
-                brightnessSlider.value = defaultBrightness;
-                brightnessText.text = defaultBrightness.ToString("0.0");
-                BrightnessApply();
+                case "RabbitSizeMale":
+                    rabbitSizeMaleText.text = rabbitSizeMaleSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaleScale(rabbitSizeMaleSlider.value);
+                    break;
+                case "RabbitSizeFemale":
+                    rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
+                    rabbit.SetGlobalBaseFemaleScale(rabbitSizeFemaleSlider.value);
+                    break;
+                default:
+                    Debug.Log("Attempted to update unknown property in switch.");
+                    break;
             }
+        }
 
-            if (GraphicsMenu == "Audio")
+        #region ResetButton
+        public void ResetButton(string menuToReset)
+        {
+            switch (menuToReset)
             {
-                AudioListener.volume = defaultVolume;
-                volumeSlider.value = defaultVolume;
-                volumeText.text = defaultVolume.ToString("0.0");
-                VolumeApply();
-            }
+                case "Brightness":
+                    brightnessEffect.brightness = defaultBrightness;
+                    brightnessSlider.value = defaultBrightness;
+                    brightnessText.text = defaultBrightness.ToString("0.0");
+                    BrightnessApply();
+                    break;
+                case "Audio":
+                    AudioListener.volume = defaultVolume;
+                    volumeSlider.value = defaultVolume;
+                    volumeText.text = defaultVolume.ToString("0.0");
+                    VolumeApply();
+                    break;
+                case "Graphics":
+                    controllerSenText.text = defaultSen.ToString("0");
+                    controllerSenSlider.value = defaultSen;
+                    controlSenFloat = defaultSen;
 
-            if (GraphicsMenu == "Graphics")
-            {
-                controllerSenText.text = defaultSen.ToString("0");
-                controllerSenSlider.value = defaultSen;
-                controlSenFloat = defaultSen;
+                    invertYToggle.isOn = false;
+                    GameplayApply();
+                    break;
+                case "InitialProperties":
+                    rabbitSizeMaleText.text = Rabbit.DefaultValues.scaleMale.ToString();
+                    rabbitSizeMaleSlider.value = Rabbit.DefaultValues.scaleMale;
 
-                invertYToggle.isOn = false;
+                    rabbitSizeFemaleText.text = Rabbit.DefaultValues.scaleFemale.ToString();
+                    rabbitSizeFemaleSlider.value = Rabbit.DefaultValues.scaleFemale;
 
-                GameplayApply();
+                    InitialPropertiesApply();
+                    break;
+                default:
+                    Debug.Log("menu to reset doesn't exist in switch statement.");
+                    break;
             }
         }
         #endregion
@@ -317,6 +369,7 @@ namespace SpeedTutorMainMenuSystem
             graphicsMenu.SetActive(false);
             soundMenu.SetActive(false);
             gameplayMenu.SetActive(false);
+            initialPropertiesMenu.SetActive(false);
             menuNumber = MenuNumber.Main;
         }
 
