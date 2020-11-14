@@ -9,13 +9,19 @@ public class UIController : MonoBehaviour
 {
     #region Properties
     [Header("Properties")]
-    [SerializeField] private Simulation scene;
+    private Simulation scene;
+    private Rabbit rabbit;
+    private Fox fox;
+    private Grass grass;
     #endregion
 
     #region Initialisation
     void Awake()
     {
         scene = GameObject.FindWithTag("GameController").GetComponent<Simulation>(); // get reference to Simulation
+        rabbit = gameObject.AddComponent<Rabbit>() as Rabbit;
+        fox = gameObject.AddComponent<Fox>() as Fox;
+        grass = gameObject.AddComponent<Grass>() as Grass;
     }
 
     // Start is called before the first frame update
@@ -32,36 +38,36 @@ public class UIController : MonoBehaviour
 
     public void SetRabbitSizeMale(float scale)
     {
-        new Rabbit().SetGlobalBaseMaleScale(scale);
+        rabbit.SetGlobalBaseMaleScale(scale);
     }
 
     public void SetRabbitSizeFemale(float scale)
     {
-        new Rabbit().SetGlobalBaseFemaleScale(scale);
+        rabbit.SetGlobalBaseFemaleScale(scale);
     }
 
     public void SetRabbitSpeed(float speed)
     {
-        new Rabbit().SetGlobalBaseMoveSpeed(speed);
+        rabbit.SetGlobalBaseMoveSpeed(speed);
     }
 
     public void SetRabbitMaxHunger(float hunger)
     {
-        new Rabbit().SetGlobalMaxHunger(hunger);
+        rabbit.SetGlobalMaxHunger(hunger);
     }
 
     public void SetRabbitMaxThirst(float thirst)
     {
-        new Rabbit().SetGlobalMaxThirst(thirst);
+        rabbit.SetGlobalMaxThirst(thirst);
     }
 
     public void SetRabbitMaxAge(float age)
     {
-        new Rabbit().SetGlobalMaxThirst((int)age);
+        rabbit.SetGlobalMaxThirst((int)age);
     }
 
     public void SetRabbitPregnancyLength(float length)
     {
-        new Rabbit().SetGlobalBasePregnancyLength(length);
+        rabbit.SetGlobalBasePregnancyLength(length);
     }
 }
