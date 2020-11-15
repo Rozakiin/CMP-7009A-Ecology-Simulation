@@ -23,9 +23,9 @@ public class PathRequestManager : MonoBehaviour
     }
     #endregion
 
-    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback) 
+    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Unit requester, Action<Vector3[], bool> callback) 
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, requester, callback);
         instance.pathRequestQueue.Enqueue(newRequest);//add to queue
         instance.TryToProcessNext();//attempt to process next in queue
     }
@@ -44,7 +44,10 @@ public class PathRequestManager : MonoBehaviour
     //called by pathfinding script once finished finding the path
     public void FinishedProcessingPath(Vector3[] path, bool isSuccess) 
     {
-        currentPathRequest.callback(path, isSuccess);
+        if (currentPathRequest.requester != null)
+        {
+            currentPathRequest.callback(path, isSuccess);
+        }
         isProcessingPath = false;
         TryToProcessNext();
     }
@@ -54,13 +57,15 @@ public class PathRequestManager : MonoBehaviour
     {
         public Vector3 pathStart;
         public Vector3 pathEnd;
+        public Unit requester;
         public Action<Vector3[], bool> callback;
 
         //constructor
-        public PathRequest(Vector3 _start, Vector3 _end, Action<Vector3[], bool> _callback) 
+        public PathRequest(Vector3 _start, Vector3 _end, Unit _requester, Action<Vector3[], bool> _callback) 
         {
             pathStart = _start;
             pathEnd = _end;
+            requester = _requester;
             callback = _callback;
         }
     }

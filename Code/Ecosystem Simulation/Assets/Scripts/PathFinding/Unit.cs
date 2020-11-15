@@ -32,7 +32,7 @@ public class Unit : MonoBehaviour
             {
                 targetOld = target;
                 print(animal.name + ": target: " + transform.position.ToString() + ", target: " + target.ToString());
-                PathRequestManager.RequestPath(transform.position, target, OnPathFound);
+                PathRequestManager.RequestPath(transform.position, target, this, OnPathFound);
             }
         }
     }
