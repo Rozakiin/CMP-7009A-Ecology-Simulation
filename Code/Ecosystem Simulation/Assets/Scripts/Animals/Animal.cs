@@ -327,6 +327,24 @@ public abstract class Animal : Edible
         Destroy(gameObject);
     }
 
+    public float RandomGaussian(float sigma, float mu)                  //Get a random number with a Gaussian distribution
+    {
+        float x1, x2, w, y1; //, y2;
+        System.Random random = new System.Random();
+        do
+        {
+            x1 = 2f * (float)random.NextDouble() - 1f;
+            x2 = 2f * (float)random.NextDouble() - 1f;
+            w = x1 * x1 + x2 * x2;
+        } while (w >= 1f);
+
+        w = Mathf.Sqrt((-2f * Mathf.Log(w)) / w);
+        y1 = x1 * w;
+        // y2 = x2 * w;
+        return (y1 * sigma) + mu;                                       // returns a random number
+    }
+
+
     public Vector3 GetTarget()
     {
         return target;
