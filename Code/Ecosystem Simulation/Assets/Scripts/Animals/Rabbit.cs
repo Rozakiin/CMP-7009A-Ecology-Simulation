@@ -11,34 +11,37 @@ public class Rabbit : Animal
         public static readonly float moveSpeed = 25f;
         public static readonly float scaleMale = 2.7f;
         public static readonly float scaleFemale = 3.7f;
-
+        public static readonly float hungerMax = 100f;
+        public static readonly float thirstMax = 100f;
+        public static readonly int ageMax = 600;
+        public static readonly float pregnancyLength = 10f;
     }
     #endregion
 
     #region Properties
     [Header("Rabbit Properties")]
-    private static float moveSpeedBase = 25f;
+    private static float moveSpeedBase = DefaultValues.moveSpeed;
     public override float MoveSpeed
     {
         get { return moveSpeedBase * moveMultiplier; }
         protected set { moveSpeedBase = value; }
     }
 
-    private static float hungerMax;
+    private static float hungerMax = DefaultValues.hungerMax;
     public override float HungerMax
     {
         get { return hungerMax; }
         protected set { hungerMax = value; }
     }
 
-    private static float thirstMax;
+    private static float thirstMax = DefaultValues.thirstMax;
     public override float ThirstMax
     {
         get { return thirstMax; }
         protected set { thirstMax = value; }
     }
 
-    private static int ageMax;
+    private static int ageMax = DefaultValues.ageMax;
     public override int AgeMax
     {
         get { return ageMax; }
@@ -50,21 +53,22 @@ public class Rabbit : Animal
         get { return LitterSizeMax; }
         set {}
     }
-    private static float pregnancyLengthBase;
+
+    private static float pregnancyLengthBase = DefaultValues.pregnancyLength;
     public override float PregnancyLength
     {
         get { return pregnancyLengthBase * pregnancyLengthModifier; }
         protected set { pregnancyLengthBase = value; }
     }
 
-    private static float scaleFemaleBase = 3.7f;
+    private static float scaleFemaleBase = DefaultValues.scaleFemale;
     protected override float ScaleFemale
     {
         get { return scaleFemaleBase * scaleMultiplier; }
         set { scaleFemaleBase = value; }
     }
 
-    private static float scaleMaleBase = 2.7f;
+    private static float scaleMaleBase = DefaultValues.scaleMale;
     protected override float ScaleMale
     {
         get { return scaleMaleBase * scaleMultiplier; }
@@ -92,7 +96,6 @@ public class Rabbit : Animal
         eatingSpeed = 2f;
         matingDuration = 3f;
         birthDuration = 0.2f;
-        PregnancyLength = 5f;
         LitterSizeMax = 13;
 
         transform.localScale = new Vector3(Scale, Scale, Scale);        // changes scale depending on gender
