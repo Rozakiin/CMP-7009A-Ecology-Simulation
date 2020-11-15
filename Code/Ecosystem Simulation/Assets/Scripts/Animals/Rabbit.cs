@@ -88,7 +88,7 @@ public class Rabbit : Animal
         base.Start();
         canBeEaten = true;
         numberOfTurns = 0;
-        age = 1;
+        age = 0f;
         baseNutritionalValue = 5;
         sightRadius = 20;
         touchRadius = 1;
@@ -117,6 +117,8 @@ public class Rabbit : Animal
         DisableLineRenderer();
         SetPosition();
         hunger += 1 * Time.deltaTime;
+        thirst += 1 * Time.deltaTime;
+        age += 1 * Time.deltaTime;
         timer += 1 * Time.deltaTime;
         if (pregnant)
         {
@@ -133,6 +135,19 @@ public class Rabbit : Animal
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
+        }
+
+        if (hunger >= 100)
+        {
+            destroyGameObject(DeathReason.Hunger);
+        }
+        else if (thirst >= 100)
+        {
+            destroyGameObject(DeathReason.Thirst);
+        }
+        else if (age >= 600)     // set up 600 Seconds for rabit's lifelong 
+        {
+            destroyGameObject(DeathReason.Age);
         }
 
         if (state == States.Wandering)

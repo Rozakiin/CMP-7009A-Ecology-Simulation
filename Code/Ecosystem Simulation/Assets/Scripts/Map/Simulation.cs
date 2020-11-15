@@ -14,6 +14,9 @@ public class Simulation : MonoBehaviour
     [SerializeField] public GameObject sandTile;
     [SerializeField] public GameObject rockTile;
     [SerializeField] public GameObject tileContainer;
+    [SerializeField] public GameObject grassTileContainer;
+    [SerializeField] public GameObject rockTileContainer;
+    [SerializeField] public GameObject sandTileContainer;
     [SerializeField] public GameObject waterContainer;
     [SerializeField] public GameObject rabbit;
     [SerializeField] public GameObject rabbitContainer;
@@ -157,19 +160,19 @@ public class Simulation : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Grass:
                         tileClone = Instantiate(grassTile, worldPoint, grassTile.transform.rotation);  //Place the grass tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = grassTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
                         tileClone = Instantiate(sandTile, worldPoint, sandTile.transform.rotation);  //Place the sand tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = sandTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
                         tileClone = Instantiate(rockTile, worldPoint, rockTile.transform.rotation);  //Place the rock tile
-                        tileClone.transform.parent = tileContainer.transform;
+                        tileClone.transform.parent = rockTileContainer.transform;
                         tileClone.name += y + "" + x;
                         tileClone.layer = 11; //set layer to grass
                         break;
@@ -218,12 +221,23 @@ public class Simulation : MonoBehaviour
 
     public void CreateGrass()
     {
-        int randWidth = Random.Range(0, (int)gridWidth-1);
-        int randHeight = Random.Range(0, (int)gridHeight-1);
-        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
-        
-        GameObject grassClone = Instantiate(grass, worldPoint, grass.transform.rotation) as GameObject;
-        grassClone.layer = LayerMask.NameToLayer("Grass");
+        Transform[] allGrassTile = grassTileContainer.GetComponentsInChildren<Transform>();      // get all of grass tile components in grasstile container
+        int randomNum = Random.Range(0, allGrassTile.Length);                                // get random number from 0 to number of grass tile in the map
+        Transform allGrassTileChild = (Transform)allGrassTile.GetValue(randomNum);          // GetValue is index integer number
+        Transform[] allGrass = grassContainer.GetComponentsInChildren<Transform>();    // get all of grass components in grass container
+        foreach(Transform grassChild in allGrass)                                      // for loop to check existing grass to avoid spawn same place
+        {
+            if (grassChild.position != allGrassTileChild.position)
+            {
+                continue;
+            }
+            else
+            {
+                CreateGrass();
+                break;
+            }
+        }
+        GameObject grassClone = Instantiate(grass, allGrassTileChild.position, grass.transform.rotation) as GameObject;
         grassCount++;
         grassList.Add(grassClone.GetComponent<Grass>());
         grassClone.transform.parent = grassContainer.transform;

@@ -90,6 +90,6 @@ public class Fox : Animal
 
     public override int GetNutritionalValue()
     {
-        return baseNutritionalValue * age;
+        return baseNutritionalValue * (int)age;
     }
 }
