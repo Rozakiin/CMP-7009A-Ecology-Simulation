@@ -10,35 +10,62 @@ public abstract class Animal : Edible
     [SerializeField] protected Vector3 target;
 
     [Header("Position and Movement Properties")]
-    [SerializeField] protected float startXPos;      //The starting x and z position
-    [SerializeField] protected float startZPos;
-    [SerializeField] protected float currentXPos;        //The current x and z position
-    [SerializeField] protected float currentZPos;                                                 
-    [SerializeField] protected float moveSpeed;
-    [SerializeField] protected float originalMoveSpeed;
+    private static float moveSpeedBase;
+    [SerializeField] protected float moveMultiplier; 
+    public virtual float MoveSpeed 
+    {
+        get { return moveSpeedBase*moveMultiplier; }
+        protected set { moveSpeedBase = value; }
+    }
 
-    // status properties (could be made into a struct?)
     [Header("Status Properties")]
     [SerializeField] protected float hunger;
-    [SerializeField] protected float thirst;
-    [SerializeField] protected float age;
-    [SerializeField] protected float reproductiveUrge;
-    [SerializeField] protected float sightRadius;
-    [SerializeField] protected float touchRadius;
     [SerializeField] protected float eatingSpeed;
-    [SerializeField] protected float pregnancyLength;
-    [SerializeField] protected bool pregnant;
-    [SerializeField] protected float pregnancyStartTime;
+    private static float hungerMax;
+    public virtual float HungerMax
+    {
+        get { return hungerMax; }
+        protected set { hungerMax = value; }
+    }
+
+    [SerializeField] protected float thirst;
+    private static float thirstMax;
+    public virtual float ThirstMax
+    {
+        get { return thirstMax; }
+        protected set { thirstMax = value; }
+    }
+
+    [SerializeField] protected float age;
+    private static int ageMax;
+    public virtual int AgeMax
+    {
+        get { return ageMax; }
+        protected set { ageMax = value; }
+    }
+
     [SerializeField] protected Gender gender;
+    [SerializeField] protected Animal closestMate;
+    [SerializeField] protected bool pregnant;
     [SerializeField] protected float matingDuration;
     [SerializeField] protected float mateStartTime;
+    [SerializeField] protected float birthDuration;   //How long between babies being born
     [SerializeField] protected float birthStartTime;
     [SerializeField] protected int numberOfBabies;  //How many the female is carrying right now
     [SerializeField] protected int babiesBorn;      //How many she has given birth to
-    [SerializeField] protected float birthDuration;   //How long between babies being born
-    [SerializeField] protected Animal closestMate;
-    [SerializeField] protected abstract float maxLifeExpectancy { get; set; }
-    [SerializeField] protected abstract float maxBabyNumber { get; set; }
+    [SerializeField] protected abstract int LitterSizeMax { get; set; }
+    [SerializeField] protected float reproductiveUrge;
+    [SerializeField] protected float pregnancyStartTime;
+    private static float pregnancyLengthBase;
+    protected float pregnancyLengthModifier;
+    public virtual float PregnancyLength
+    {
+        get { return pregnancyLengthBase * pregnancyLengthModifier; }
+        protected set { pregnancyLengthBase = value; }
+    }
+
+    [SerializeField] protected float sightRadius;
+    [SerializeField] protected float touchRadius;
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -51,9 +78,32 @@ public abstract class Animal : Edible
     [Header("Other")]
     [SerializeField] protected Edible edibleObject;
     [SerializeField] protected Renderer renderer;
-    [SerializeField] protected float scaleMult;
     [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected float timer;
+
+    [Header("Scale")]
+    //Scale
+    private static float scaleFemaleBase;
+    protected virtual float ScaleFemale
+    {
+        get { return scaleFemaleBase * scaleMultiplier; }
+        set { scaleFemaleBase = value; }
+    }
+
+    private static float scaleMaleBase;
+    protected virtual float ScaleMale
+    {
+        get { return scaleMaleBase * scaleMultiplier; }
+        set { scaleMaleBase = value; }
+    }
+
+    [SerializeField] protected float scaleMultiplier;
+    public virtual float Scale
+    {
+        get { return gender == Gender.Female ? ScaleFemale : ScaleMale; }
+    }
+
+
 
     protected enum Gender
     {
@@ -99,9 +149,52 @@ public abstract class Animal : Edible
             gameObject.tag = "Female" + type;
             babiesBorn = 0;
         }
-        print(gender); print(gender);
+        print(gender);
         pregnant = false;
         timer = 0f;
+        moveMultiplier = 1f;
+        pregnancyLengthModifier = 1f;
+        scaleMultiplier = 1f;
+        reproductiveUrge = 0f;
+        thirst = 0f;
+        hunger = 0f;
+    }
+    #endregion
+
+    #region Global Setters
+    public virtual void SetGlobalBaseMoveSpeed(float _speed)
+    {
+        MoveSpeed = _speed;
+    }
+
+    public virtual void SetGlobalMaxHunger(float _hungerMax)
+    {
+        HungerMax = _hungerMax;
+    }
+
+    public virtual void SetGlobalMaxThirst(float _thirstMax)
+    {
+        ThirstMax = _thirstMax;
+    }
+
+    public virtual void SetGlobalMaxAge(int _ageMax)
+    {
+        AgeMax = _ageMax;
+    }
+
+    public virtual void SetGlobalBasePregnancyLength(float _pregnancyLength)
+    {
+        PregnancyLength = _pregnancyLength;
+    }
+
+    public virtual void SetGlobalBaseFemaleScale(float _scale)
+    {
+        ScaleFemale = _scale;
+    }
+
+    public virtual void SetGlobalBaseMaleScale(float _scale)
+    {
+        ScaleMale = _scale;
     }
     #endregion
 
@@ -258,12 +351,9 @@ public abstract class Animal : Edible
 
     protected virtual void Mate(Animal femaleMate)
     {
+        if (femaleMate.state != States.Mating)
         {
-
-            if (femaleMate.state != States.Mating)
-            {
-                femaleMate.state = States.Mating;
-            }
+            femaleMate.state = States.Mating;
         }
     }
 
@@ -349,13 +439,11 @@ public abstract class Animal : Edible
     {
         return target;
     }
+
+
     public void SetTarget(Vector3 _target)
     {
         target = _target;
-    }
-    public float GetMoveSpeed()
-    {
-        return moveSpeed;
     }
 
     public override void SetNutritionalValue()

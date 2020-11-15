@@ -78,7 +78,7 @@ public class Unit : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(newDir);
 
                 //move towards next waypoint
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, animal.GetMoveSpeed() * Time.deltaTime);//go closer to target position
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, animal.MoveSpeed * Time.deltaTime);//go closer to target position
                 yield return null;//wait 1 frame before returning
             }
         }

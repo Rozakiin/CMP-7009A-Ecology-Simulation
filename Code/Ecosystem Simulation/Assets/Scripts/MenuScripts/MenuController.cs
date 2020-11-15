@@ -4,11 +4,26 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using SFB;
 
 namespace SpeedTutorMainMenuSystem
 {
+    
     public class MenuController : MonoBehaviour
     {
+        public enum MenuNumber
+        {
+            Main,
+            NewGame,
+            LoadGame,
+            Options,
+            Graphics,
+            Sound,
+            Gameplay,
+            Controls,
+            InitialProperties,
+        }
+        string fileContents;
         #region Default Values
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
@@ -20,7 +35,7 @@ namespace SpeedTutorMainMenuSystem
         public string _newGameButtonLevel;
         private string levelToLoad;
 
-        private int menuNumber;
+        private MenuNumber menuNumber;
         #endregion
 
         #region Menu Dialogs
@@ -32,6 +47,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private GameObject gameplayMenu;
         [SerializeField] private GameObject controlsMenu;
         [SerializeField] private GameObject confirmationMenu;
+        [SerializeField] private GameObject initialPropertiesMenu;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -53,12 +69,27 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Slider volumeSlider;
         [Space(10)]
         [SerializeField] private Toggle invertYToggle;
+        [Space(10)]
+        [Header("Initial Properties Sliders")]
+        [SerializeField] private Text rabbitSizeMaleText;
+        [SerializeField] private Slider rabbitSizeMaleSlider;
+        [SerializeField] private Text rabbitSizeFemaleText;
+        [SerializeField] private Slider rabbitSizeFemaleSlider;
+
+        #endregion
+        #region Initial properties objects
+        private Rabbit rabbit;
+        private Fox fox;
+        private Grass grass;
         #endregion
 
         #region Initialisation - Button Selection & Menu Order
         private void Start()
         {
-            menuNumber = 1;
+            menuNumber = MenuNumber.Main;
+            rabbit = gameObject.AddComponent(typeof(Rabbit)) as Rabbit;
+            fox = gameObject.AddComponent(typeof(Fox)) as Fox;
+            grass = gameObject.AddComponent(typeof(Grass)) as Grass;
         }
         #endregion
 
@@ -74,19 +105,19 @@ namespace SpeedTutorMainMenuSystem
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (menuNumber == 2 || menuNumber == 7 || menuNumber == 8)
+                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame || menuNumber == MenuNumber.InitialProperties)
                 {
                     GoBackToMainMenu();
                     ClickSound();
                 }
 
-                else if (menuNumber == 3 || menuNumber == 4 || menuNumber == 5)
+                else if (menuNumber == MenuNumber.Graphics || menuNumber == MenuNumber.Sound || menuNumber == MenuNumber.Gameplay)
                 {
                     GoBackToOptionsMenu();
                     ClickSound();
                 }
 
-                else if (menuNumber == 6) //CONTROLS MENU
+                else if (menuNumber == MenuNumber.Controls) //CONTROLS MENU
                 {
                     GoBackToGameplayMenu();
                     ClickSound();
@@ -102,63 +133,88 @@ namespace SpeedTutorMainMenuSystem
         #region Menu Mouse Clicks
         public void MouseClick(string buttonType)
         {
-            if (buttonType == "Controls")
+            switch (buttonType)
             {
-                gameplayMenu.SetActive(false);
-                controlsMenu.SetActive(true);
-                menuNumber = 6;
-            }
-
-            if (buttonType == "Graphics")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                graphicsMenu.SetActive(true);
-                menuNumber = 3;
-            }
-
-            if (buttonType == "Sound")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                soundMenu.SetActive(true);
-                menuNumber = 4;
-            }
-
-            if (buttonType == "Gameplay")
-            {
-                GeneralSettingsCanvas.SetActive(false);
-                gameplayMenu.SetActive(true);
-                menuNumber = 5;
-            }
-
-            if (buttonType == "Exit")
-            {
-                Debug.Log("YES QUIT!");
-                Application.Quit();
-            }
-
-            if (buttonType == "Options")
-            {
-                menuDefaultCanvas.SetActive(false);
-                GeneralSettingsCanvas.SetActive(true);
-                menuNumber = 2;
-            }
-
-            if (buttonType == "LoadGame")
-            {
-                menuDefaultCanvas.SetActive(false);
-                loadGameDialog.SetActive(true);
-                menuNumber = 8;
-            }
-
-            if (buttonType == "NewGame")
-            {
-                menuDefaultCanvas.SetActive(false);
-                newGameDialog.SetActive(true);
-                menuNumber = 7;
+                case "Controls":
+                    gameplayMenu.SetActive(false);
+                    controlsMenu.SetActive(true);
+                    menuNumber = MenuNumber.Controls;
+                    break;
+                case "Graphics":
+                    GeneralSettingsCanvas.SetActive(false);
+                    graphicsMenu.SetActive(true);
+                    menuNumber = MenuNumber.Graphics;
+                    break;
+                case "Sound":
+                    GeneralSettingsCanvas.SetActive(false);
+                    soundMenu.SetActive(true);
+                    menuNumber = MenuNumber.Sound;
+                    break;
+                case "Gameplay":
+                    GeneralSettingsCanvas.SetActive(false);
+                    gameplayMenu.SetActive(true);
+                    menuNumber = MenuNumber.Gameplay;
+                    break;
+                case "Exit":
+                    Debug.Log("YES QUIT!");
+                    Application.Quit();
+                    break;
+                case "Options":
+                    menuDefaultCanvas.SetActive(false);
+                    GeneralSettingsCanvas.SetActive(true);
+                    menuNumber = MenuNumber.Options;
+                    break;
+                case "LoadGame":
+                    menuDefaultCanvas.SetActive(false);
+                    loadGameDialog.SetActive(true);
+                    menuNumber = MenuNumber.LoadGame;
+                    LoadMap();
+                    break;
+                case "NewGame":
+                    menuDefaultCanvas.SetActive(false);
+                    ResetButton("InitialProperties");
+                    initialPropertiesMenu.SetActive(true);
+                    menuNumber = MenuNumber.NewGame;
+                    break;
+                case "InitialProperties":
+                    initialPropertiesMenu.SetActive(false);
+                    newGameDialog.SetActive(true);
+                    menuNumber = MenuNumber.InitialProperties;
+                    break;
+                default:
+                    Debug.Log("Button clicked with no known case.");
+                    break;
             }
         }
         #endregion
 
+        #region Loading Map From File
+        public void LoadMap()
+        {
+            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
+            if (paths.Length > 0)
+            {
+                StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
+            }
+        }
+
+        private IEnumerator OutputRoutine(string url)
+        {
+            var loader = new WWW(url);
+            yield return loader;
+            fileContents = loader.text;
+            Debug.Log(fileContents);
+        }
+
+        // attempts to load the given file into the MapReader
+        private bool MapFileValid()
+        {
+            List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
+            return MapReader.ReadInMapFromString(fileContents, ref mapList);
+        }
+        #endregion
+
+        #region Options
         public void VolumeSlider(float volume)
         {
             AudioListener.volume = volume;
@@ -210,35 +266,69 @@ namespace SpeedTutorMainMenuSystem
 
             StartCoroutine(ConfirmationBox());
         }
+        #endregion
+
+        public void InitialPropertiesApply()
+        {
+            Debug.Log("Apply Initial Properties");
+            StartCoroutine(ConfirmationBox());
+        }
+
+        public void InitialPropertiesUpdate(string propertyToUpdate)
+        {
+            switch (propertyToUpdate)
+            {
+                case "RabbitSizeMale":
+                    rabbitSizeMaleText.text = rabbitSizeMaleSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaleScale(rabbitSizeMaleSlider.value);
+                    break;
+                case "RabbitSizeFemale":
+                    rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
+                    rabbit.SetGlobalBaseFemaleScale(rabbitSizeFemaleSlider.value);
+                    break;
+                default:
+                    Debug.Log("Attempted to update unknown property in switch.");
+                    break;
+            }
+        }
 
         #region ResetButton
-        public void ResetButton(string GraphicsMenu)
+        public void ResetButton(string menuToReset)
         {
-            if (GraphicsMenu == "Brightness")
+            switch (menuToReset)
             {
-                brightnessEffect.brightness = defaultBrightness;
-                brightnessSlider.value = defaultBrightness;
-                brightnessText.text = defaultBrightness.ToString("0.0");
-                BrightnessApply();
-            }
+                case "Brightness":
+                    brightnessEffect.brightness = defaultBrightness;
+                    brightnessSlider.value = defaultBrightness;
+                    brightnessText.text = defaultBrightness.ToString("0.0");
+                    BrightnessApply();
+                    break;
+                case "Audio":
+                    AudioListener.volume = defaultVolume;
+                    volumeSlider.value = defaultVolume;
+                    volumeText.text = defaultVolume.ToString("0.0");
+                    VolumeApply();
+                    break;
+                case "Graphics":
+                    controllerSenText.text = defaultSen.ToString("0");
+                    controllerSenSlider.value = defaultSen;
+                    controlSenFloat = defaultSen;
 
-            if (GraphicsMenu == "Audio")
-            {
-                AudioListener.volume = defaultVolume;
-                volumeSlider.value = defaultVolume;
-                volumeText.text = defaultVolume.ToString("0.0");
-                VolumeApply();
-            }
+                    invertYToggle.isOn = false;
+                    GameplayApply();
+                    break;
+                case "InitialProperties":
+                    rabbitSizeMaleText.text = Rabbit.DefaultValues.scaleMale.ToString();
+                    rabbitSizeMaleSlider.value = Rabbit.DefaultValues.scaleMale;
 
-            if (GraphicsMenu == "Graphics")
-            {
-                controllerSenText.text = defaultSen.ToString("0");
-                controllerSenSlider.value = defaultSen;
-                controlSenFloat = defaultSen;
+                    rabbitSizeFemaleText.text = Rabbit.DefaultValues.scaleFemale.ToString();
+                    rabbitSizeFemaleSlider.value = Rabbit.DefaultValues.scaleFemale;
 
-                invertYToggle.isOn = false;
-
-                GameplayApply();
+                    InitialPropertiesApply();
+                    break;
+                default:
+                    Debug.Log("menu to reset doesn't exist in switch statement.");
+                    break;
             }
         }
         #endregion
@@ -261,14 +351,16 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                if (PlayerPrefs.HasKey("SavedLevel"))
+                //if the file is valid open the initial properties menu
+                if (MapFileValid())
                 {
-                    Debug.Log("I WANT TO LOAD THE SAVED GAME");
-                    //LOAD LAST SAVED SCENE
-                    levelToLoad = PlayerPrefs.GetString("SavedLevel");
-                    SceneManager.LoadScene(levelToLoad);
+                    Simulation.SetMapString(fileContents); //set the map string in Simualtion to filecontents
+                    Debug.Log("I WANT TO LOAD THE MAP");
+                    loadGameDialog.SetActive(false);
+                    initialPropertiesMenu.SetActive(true);
+                    ResetButton("InitialProperties");
+                    menuNumber = MenuNumber.InitialProperties;
                 }
-
                 else
                 {
                     Debug.Log("Load Game Dialog");
@@ -297,7 +389,7 @@ namespace SpeedTutorMainMenuSystem
             BrightnessApply();
             VolumeApply();
 
-            menuNumber = 2;
+            menuNumber = MenuNumber.Options;
         }
 
         public void GoBackToMainMenu()
@@ -310,14 +402,15 @@ namespace SpeedTutorMainMenuSystem
             graphicsMenu.SetActive(false);
             soundMenu.SetActive(false);
             gameplayMenu.SetActive(false);
-            menuNumber = 1;
+            initialPropertiesMenu.SetActive(false);
+            menuNumber = MenuNumber.Main;
         }
 
         public void GoBackToGameplayMenu()
         {
             controlsMenu.SetActive(false);
             gameplayMenu.SetActive(true);
-            menuNumber = 5;
+            menuNumber = MenuNumber.Gameplay;
         }
 
         public void ClickQuitOptions()
