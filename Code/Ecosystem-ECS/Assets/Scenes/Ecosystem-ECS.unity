@@ -150,16 +150,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassTile: {fileID: 0}
-  lightGrassTile: {fileID: 0}
-  waterTile: {fileID: 0}
-  sandTile: {fileID: 0}
-  rockTile: {fileID: 0}
-  rabbit: {fileID: 0}
+  grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
+    type: 3}
+  lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
+    type: 3}
+  waterTile: {fileID: 3742396586432582926, guid: 673326a1eede18341aaf073836f8e8a4,
+    type: 3}
+  sandTile: {fileID: 1084157945163860904, guid: 5c8daab8d59a11a45af5d3126dfd793f,
+    type: 3}
+  rockTile: {fileID: 791125575439614700, guid: dd11c682782c1ad4ca327762d0bd9fea, type: 3}
+  rabbit: {fileID: 8401487155666583363, guid: 55972e5130a2f294e9760b2d60b812f2, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   numberOfRabbitsToSpawn: 20
   numberOfFoxesToSpawn: 10
   numberOfGrassToSpawn: 100
+  mapPath: Assets/Scripts/MonoBehaviourTools/Map/MapExample.txt
+  mapString: 
+  gridWidth: 0
+  gridHeight: 0
+  worldSize: {x: 0, y: 0}
+  worldBottomLeft: {x: 0, y: 0, z: 0}
+  tileSize: 0
+  leftLimit: 0
+  upLimit: 0
+  rightLimit: 0
+  downLimit: 0
 --- !u!4 &508030574
 Transform:
   m_ObjectHideFlags: 0
@@ -168,7 +183,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508030572}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.806724, y: -2.865447, z: -4.8077784}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
