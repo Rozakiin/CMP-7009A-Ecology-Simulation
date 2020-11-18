@@ -48,6 +48,7 @@ public class SimulationManager : MonoBehaviour
         if (CreateMap())
         {
             CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
+            CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
         }
         else
         {
