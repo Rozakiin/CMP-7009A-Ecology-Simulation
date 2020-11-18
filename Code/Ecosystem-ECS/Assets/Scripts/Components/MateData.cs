@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
+[GenerateAuthoringComponent]
 public struct MateData : IComponentData
 {
     // Add fields to your component here. Remember that:

@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
+[GenerateAuthoringComponent]
 public struct VisionData : IComponentData
 {
     // Add fields to your component here. Remember that:

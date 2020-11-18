@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
+[GenerateAuthoringComponent]
 public struct SizeData : IComponentData
 {
     // Add fields to your component here. Remember that:
