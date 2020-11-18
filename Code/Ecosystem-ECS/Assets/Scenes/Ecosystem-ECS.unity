@@ -150,8 +150,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfRabbitsToSpawn: 10
+  grassTile: {fileID: 0}
+  lightGrassTile: {fileID: 0}
+  waterTile: {fileID: 0}
+  sandTile: {fileID: 0}
+  rockTile: {fileID: 0}
+  rabbit: {fileID: 0}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
+  numberOfRabbitsToSpawn: 20
+  numberOfFoxesToSpawn: 10
+  numberOfGrassToSpawn: 100
 --- !u!4 &508030574
 Transform:
   m_ObjectHideFlags: 0

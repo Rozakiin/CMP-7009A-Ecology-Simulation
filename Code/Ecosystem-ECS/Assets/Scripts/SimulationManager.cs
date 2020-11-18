@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,8 +7,20 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
-    public int numberOfRabbitsToSpawn = 0;
-    public GameObject grass;
+    #region GameObjects
+    [Header("GameObjects")]
+    [SerializeField] public GameObject grassTile;
+    [SerializeField] public GameObject lightGrassTile;
+    [SerializeField] public GameObject waterTile;
+    [SerializeField] public GameObject sandTile;
+    [SerializeField] public GameObject rockTile;
+    [SerializeField] public GameObject rabbit;
+    [SerializeField] public GameObject grass;
+    #endregion
+
+    [SerializeField] public int numberOfRabbitsToSpawn = 0;
+    [SerializeField] public int numberOfFoxesToSpawn = 0;
+    [SerializeField] public int numberOfGrassToSpawn = 0;
 
     // Start is called before the first frame update
     void Start()
