@@ -96,7 +96,7 @@ public class MapReader
         catch (Exception e)
         {
             // Let the user know what went wrong.
-            Debug.Log("The file could not be read:");
+            Debug.Log("The String could not be read:");
             Debug.Log(e.Message);
         }
         return false;
