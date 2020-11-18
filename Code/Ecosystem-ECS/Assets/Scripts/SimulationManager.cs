@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -123,65 +123,61 @@ public class SimulationManager : MonoBehaviour
             for (int x = 0; x < gridWidth; x++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * tileSize + tileSize / 2) + Vector3.forward * (y * tileSize + tileSize / 2);//Get the world co ordinates of the tile from the bottom left of the graph
-                Entity instance;
+                Entity prototypeTile;
 
                 switch (mapList[y][x])
                 {
                     case MapReader.TerrainCost.Water:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        instance = entityManager.Instantiate(entityWaterTile);
+                        prototypeTile = entityManager.Instantiate(entityWaterTile);
 
                         // Place the instantiated entity in position on the map
                         //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
+                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        instance = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(entityGrassTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        instance = entityManager.Instantiate(entitySandTile);
+                        prototypeTile = entityManager.Instantiate(entitySandTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        instance = entityManager.Instantiate(entityRockTile);
+                        prototypeTile = entityManager.Instantiate(entityRockTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 11; //set layer to grass
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        instance = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(entityGrassTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         //entityManager.SetSharedComponentData<RenderMesh>(entity, new RenderMesh
                         //{
                         //    mesh = theMesh,
@@ -205,13 +201,13 @@ public class SimulationManager : MonoBehaviour
     {
         // Create entity prefab from the game object hierarchy once
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
-        var entity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
+        var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
 
 
         for (int i = 0; i < quantity; i++)
         {
             // Efficiently instantiate a bunch of entities from the already converted entity prefab
-            var instance = entityManager.Instantiate(entity);
+            var prototypeEntity = entityManager.Instantiate(convertedEntity);
 
             // Calc random point on map
             int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
@@ -221,19 +217,8 @@ public class SimulationManager : MonoBehaviour
 
             // Place the instantiated entity in a random point on the map
             //Set Component Data for the entity
-            entityManager.SetComponentData(instance, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
+            entityManager.SetComponentData(prototypeEntity, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
         }
-
-
-        //        int randWidth = Random.Range(0, (int)gridWidth-1);
-        //        int randHeight = Random.Range(0, (int)gridHeight-1);
-        //        Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize/2) + Vector3.forward * (randHeight * tileSize + tileSize/2);//Get the world co ordinates of the rabbit from the bottom left of the graph
-
-        //        GameObject rabbitClone = Instantiate(rabbit, worldPoint, rabbit.transform.rotation) as GameObject;
-        //        rabbitCount++;
-        //        rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
-        //        rabbitClone.transform.parent = rabbitContainer.transform;
-        //        rabbitClone.name = "RabbitClone" + rabbitCount;
     }
     #endregion
 
