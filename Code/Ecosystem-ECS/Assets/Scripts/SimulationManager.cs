@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
+    EntityManager entityManager;
+    public static SimulationManager Instance;
+
     #region GameObjects
     [Header("GameObjects")]
     [SerializeField] public GameObject grassTile;
@@ -45,6 +48,8 @@ public class SimulationManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         // Only continue if no errors creating the map
         if (CreateMap())
         {
@@ -201,7 +206,6 @@ public class SimulationManager : MonoBehaviour
         // Create entity prefab from the game object hierarchy once
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
 
         for (int i = 0; i < quantity; i++)
