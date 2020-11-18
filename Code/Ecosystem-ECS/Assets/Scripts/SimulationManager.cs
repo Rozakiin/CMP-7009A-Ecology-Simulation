@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -16,6 +16,7 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] public GameObject rockTile;
     [SerializeField] public GameObject rabbit;
     [SerializeField] public GameObject grass;
+    public GameObject collisionPlaneForMap;
     #endregion
 
     #region Numbers for Entity Spawning 
@@ -83,7 +84,13 @@ public class SimulationManager : MonoBehaviour
             //    return false;
         }
 
-        SetLimits();
+        // Create a GameObject the size of the map with collider for ray hits
+        collisionPlaneForMap = new GameObject();
+        collisionPlaneForMap.transform.position = transform.position;
+        collisionPlaneForMap.AddComponent<BoxCollider>();
+        BoxCollider collider = collisionPlaneForMap.GetComponent<BoxCollider>();
+        collider.size = new Vector3(worldSize.x,0,worldSize.y);
+
         return true;
     }
 
@@ -184,15 +191,6 @@ public class SimulationManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void SetLimits()
-    {
-        //TODO
-        //upLimit = (float)(gridHeight - 1) * tileSize;
-        //leftLimit = 0;
-        //rightLimit = (float)(gridWidth - 1) * tileSize;
-        //downLimit = 0;
     }
     #endregion
 
