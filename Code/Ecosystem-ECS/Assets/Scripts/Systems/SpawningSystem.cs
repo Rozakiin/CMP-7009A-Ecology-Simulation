@@ -22,14 +22,29 @@ public class SpawningSystem : ComponentSystem
         // Translation and Rotation components. Change it to process the component
         // types you want.
 
-        // Every 1 sec spawn rabbit
-        spawnTimer -= Time.DeltaTime;
-        if (spawnTimer <= 0f)
-        {
-            spawnTimer = 2f;
+        SpawnRabbitAtPosOnClick();
 
-            
+    }
+
+    private void SpawnRabbitAtPosOnClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                CreateRabbitAtPos(targetPosition);
+            }
         }
-        
+    }
+    private void CreateRabbitAtPos(in Vector3 position)
+    {
+        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
+        var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(SimulationManager.Instance.rabbit, settings);
+        Entity prototypeRabbit = EntityManager.Instantiate(entityRabbit);
+        EntityManager.SetComponentData(prototypeRabbit, new Translation { Value = position }); // set position data (called translation in ECS)
     }
 }
