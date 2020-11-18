@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5146567009790820024}
   - component: {fileID: 2784768553265918292}
   - component: {fileID: 8879954590033049564}
+  - component: {fileID: -7793115465998429735}
   m_Layer: 0
   m_Name: SandTile
   m_TagString: Untagged
@@ -94,3 +95,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &-7793115465998429735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084157945163860904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def12e8c4daf82a4fa9f7578cdbc7776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 2
+  terrainPenalty: 5
