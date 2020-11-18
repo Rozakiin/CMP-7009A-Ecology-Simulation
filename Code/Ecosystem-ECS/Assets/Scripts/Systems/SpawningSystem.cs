@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class SpawningSystem : ComponentSystem
 {
-    private float spawnTimer;
     protected override void OnUpdate()
     {
         // Assign values to local variables captured in your job here, so that it has
