@@ -24,4 +24,5 @@ public struct ThirstData : IComponentData
     public float thirst;
     public float thirstMax;
     public float drinkingSpeed;
+    public Entity entityToDrink;
 }
