@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -96,6 +96,7 @@ public class SimulationManager : MonoBehaviour
         BoxCollider collider = collisionPlaneForMap.GetComponent<BoxCollider>();
         collider.size = new Vector3(worldSize.x,0,worldSize.y);
 
+        SetLimits();
         return true;
     }
 
@@ -192,6 +193,14 @@ public class SimulationManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void SetLimits()
+    {
+        leftLimit = worldSize.x / 2;
+        rightLimit = -worldSize.x / 2;
+        upLimit = worldSize.y / 2;
+        downLimit = -worldSize.y / 2;
     }
     #endregion
 
