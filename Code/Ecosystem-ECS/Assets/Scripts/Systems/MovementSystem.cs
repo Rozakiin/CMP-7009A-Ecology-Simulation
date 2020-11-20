@@ -25,7 +25,7 @@ public class MovementSystem : SystemBase
         Entities.ForEach((
             ref Translation translation,
             ref Rotation rotation,
-            ref TargetData targetData,
+            in TargetData targetData,
             in MovementData movementData
             ) => {
                 // Implement the work to perform for each entity here.
@@ -37,10 +37,13 @@ public class MovementSystem : SystemBase
                 // For example,
 
                 //if the target has changed
-                if (!targetData.currentTarget.Equals(targetData.oldTarget))
+                if (!targetData.atTarget)
                 {
                     //+=new float3(0, 0, 1) * movementData.MoveSpeed * deltaTime
-                    translation.Value = targetData.currentTarget;// teleport :D
+                    float3 moveDir = math.normalize(targetData.currentTarget - translation.Value);
+                    translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
+
+                    //translation.Value = targetData.currentTarget;// teleport :D
                 }
 
 
