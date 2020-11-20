@@ -66,6 +66,7 @@ public abstract class Animal : Edible
 
     [SerializeField] protected float sightRadius;
     [SerializeField] protected float touchRadius;
+    [SerializeField] protected float waitRadius;
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -118,7 +119,7 @@ public abstract class Animal : Edible
 
     protected enum States
     {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
+        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth, Waiting
     }
     [SerializeField] protected States state;
 
@@ -156,6 +157,7 @@ public abstract class Animal : Edible
         pregnancyLengthModifier = 1f;
         scaleMultiplier = 1f;
         reproductiveUrge = 0f;
+        waitRadius = 15f;
         thirst = 0f;
         hunger = 0f;
     }
@@ -303,7 +305,7 @@ public abstract class Animal : Edible
         foreach (GameObject childConsumable in allChildren)
         {
             distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
-            if(shortestDistance == -1 || distanceToConsumable < shortestDistance)
+            if(shortestDistance == 1000000 || distanceToConsumable < shortestDistance)
             {
                 //if the child is on a walkable position
                 if (CheckIfWalkable(childConsumable.transform.position))
@@ -331,14 +333,14 @@ public abstract class Animal : Edible
     {
         Transform closestWater = transform;
         float distanceToWater;
-        float shortestDistance = -1;
+        float shortestDistance = 1000000;
         GameObject waterContainer = scene.waterContainer;
         Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
 
         foreach (Transform childWater in allWaterTile)
         {
             distanceToWater = Vector3.Distance(transform.position, childWater.position);
-            if (shortestDistance == -1 || distanceToWater < shortestDistance)
+            if (shortestDistance == 1000000 || distanceToWater < shortestDistance)
             {
                 shortestDistance = distanceToWater;
                 closestWater = childWater;
@@ -354,6 +356,14 @@ public abstract class Animal : Edible
         if (femaleMate.state != States.Mating)
         {
             femaleMate.state = States.Mating;
+        }
+    }
+
+    protected virtual void Wait(Animal targetAnimal)
+    {
+        if(targetAnimal.state != States.Waiting)
+        {
+            targetAnimal.state = States.Waiting;
         }
     }
 

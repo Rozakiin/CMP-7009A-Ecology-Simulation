@@ -120,6 +120,7 @@ public class Rabbit : Animal
         thirst += 1 * Time.deltaTime;
         age += 1 * Time.deltaTime;
         timer += 1 * Time.deltaTime;
+        CheckIfAlive();
         if (pregnant)
         {
             moveMultiplier = 0.6f;
@@ -131,44 +132,37 @@ public class Rabbit : Animal
             }
         }
 
-
         if (gender == Gender.Male)
         {
             reproductiveUrge += 0.3f * Time.deltaTime;
-        }
-
-        if (hunger >= 100)
-        {
-            destroyGameObject(DeathReason.Hunger);
-        }
-        else if (thirst >= 100)
-        {
-            destroyGameObject(DeathReason.Thirst);
-        }
-        else if (age >= 600)     // set up 600 Seconds for rabit's lifelong 
-        {
-            destroyGameObject(DeathReason.Age);
-        }
+        }    
 
         if (state == States.Wandering)
         {
             WanderAround();
-            //Reproductive Urge stronger than Idle and Hunger
-            if (reproductiveUrge >= 5)
-            {
-                state = States.SexuallyActive;
-            }
+
             //Hunger stronger than Idle
             if (hunger >= 10)
             {
                 state = States.Hungry;
             }
+            //Thirst stronger than hunger
+            if(thirst >= 10)
+            {
+                state = States.Thirsty;
+            }
+            //Reproductive Urge stronger than Idle and Hunger
+            if (reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
+                     
         }
         else if (state == States.Hungry)
         {
             DisableLineRenderer();
             //Reproductive Urge stronger than Hunger?
-            if (reproductiveUrge >= 5)
+            if (reproductiveUrge >= 20)
             {
                 state = States.SexuallyActive;
             }
@@ -218,7 +212,61 @@ public class Rabbit : Animal
         else if (state == States.Thirsty)
         {
             DisableLineRenderer();
+            if (reproductiveUrge >= 5)
+            {
+                state = States.SexuallyActive;
+            }
             Transform closestWater = FindClosestWater();
+            float distanceToWater = Vector3.Distance(transform.position, closestWater.position);
+            // Water within touching distance
+            if (distanceToWater <= touchRadius + tileSize * 2)
+            {
+                state = States.Drinking;
+            }
+            //Water within sight radius
+            else if (distanceToWater <= sightRadius)
+            {
+                target = closestWater.position;
+                DrawLine(transform.position, target);
+            }
+
+            /*if (distanceToWater <= touchRadius + tileSize * 1.2)
+            {
+                float posX = transform.position.x;
+                float posZ = transform.position.z;
+                if(transform.position.x < closestWater.position.x)
+                {
+                    transform.position = new Vector3(posX + MoveSpeed * Time.deltaTime, 0.0f, 0.0f);
+                }
+                else if(transform.position.x > closestWater.position.x)
+                {
+                    transform.position = new Vector3(posX -MoveSpeed * Time.deltaTime, 0.0f, 0.0f);
+                }
+
+                if(transform.position.z < closestWater.position.z)
+                {
+                    transform.position = new Vector3(0.0f, 0.0f, posZ + MoveSpeed * Time.deltaTime);
+                }
+                else if(transform.position.z > closestWater.position.z)
+                {
+                    transform.position = new Vector3(0.0f, 0.0f, posZ -MoveSpeed * Time.deltaTime);
+                }
+            }*/
+            
+            
+            WanderAround();
+        }
+        else if(state == States.Drinking)
+        {
+            DisableLineRenderer();
+            print("Drinking");
+            //Drink water (method call instead?)
+            thirst -= 20 * Time.deltaTime;
+            if(thirst <= 0)
+            {
+                thirst = 0;
+                state = States.Wandering;
+            }           
         }
         else if (state == States.SexuallyActive)
         {
@@ -228,11 +276,16 @@ public class Rabbit : Animal
             {
                 float distanceToMate = Vector3.Distance(transform.position, closestMate.transform.position);
                 // Mate within touching distance
+                
                 if (distanceToMate <= touchRadius)
                 {
                     state = States.Mating;
                     mateStartTime = timer;
                     Mate(closestMate);
+                }
+                else if(distanceToMate <= waitRadius)
+                {
+                    Wait(closestMate);
                 }
                 //Mate within sight radius
                 if (distanceToMate <= sightRadius)
@@ -276,6 +329,23 @@ public class Rabbit : Animal
                 moveMultiplier = 1f;
                 state = States.Wandering;
             }
+        }
+        else if(state == States.Waiting) { }
+    }
+
+    private void CheckIfAlive()
+    {
+        if (hunger >= 100)
+        {
+            destroyGameObject(DeathReason.Hunger);
+        }
+        else if (thirst >= 100)
+        {
+            destroyGameObject(DeathReason.Thirst);
+        }
+        else if (age >= 600)     // set up 600 Seconds for rabit's lifelong 
+        {
+            destroyGameObject(DeathReason.Age);
         }
     }
 }
