@@ -33,15 +33,15 @@ public class SimulationManager : MonoBehaviour
     [Header("Map Data")]
     [SerializeField] public string mapPath;
     public string mapString;
-    [SerializeField] public int gridWidth;
-    [SerializeField] public int gridHeight;
-    [SerializeField] public Vector2 worldSize;
-    [SerializeField] public Vector3 worldBottomLeft;
-    [SerializeField] public float tileSize;
-    [SerializeField] public float leftLimit;
-    [SerializeField] public float upLimit;
-    [SerializeField] public float rightLimit;
-    [SerializeField] public float downLimit;
+    public static int gridWidth;
+    public static int gridHeight;
+    public static Vector2 worldSize;
+    public static Vector3 worldBottomLeft;
+    public static float tileSize;
+    public static float leftLimit;
+    public static float upLimit;
+    public static float rightLimit;
+    public static float downLimit;
     #endregion
 
     #region Initialisation
