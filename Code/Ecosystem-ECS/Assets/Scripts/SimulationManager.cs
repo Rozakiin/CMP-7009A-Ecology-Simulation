@@ -136,6 +136,7 @@ public class SimulationManager : MonoBehaviour
                         //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
+                        entityManager.SetName(prototypeTile, "WaterTile "+y + "," + x);
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
@@ -146,6 +147,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 9; //set layer to grass
@@ -157,6 +159,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 10; //set layer to grass
@@ -168,6 +171,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
 
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 11; //set layer to grass
@@ -227,6 +231,7 @@ public class SimulationManager : MonoBehaviour
             // Place the instantiated entity in a random point on the map
             //Set Component Data for the entity
             entityManager.SetComponentData(prototypeEntity, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
+            entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
         }
     }
     #endregion
