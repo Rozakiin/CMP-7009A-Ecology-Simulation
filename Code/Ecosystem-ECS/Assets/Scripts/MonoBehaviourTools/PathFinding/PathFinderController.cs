@@ -42,7 +42,7 @@ public class PathFinderController : MonoBehaviour
 
     void Start()
     {
-        gridWorldSize = SimulationManager.Instance.worldSize;
+        gridWorldSize = SimulationManager.worldSize;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
 
