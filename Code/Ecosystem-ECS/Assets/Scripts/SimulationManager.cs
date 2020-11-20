@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -232,6 +232,11 @@ public class SimulationManager : MonoBehaviour
             //Set Component Data for the entity
             entityManager.SetComponentData(prototypeEntity, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
             entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
+            //if has target data component set target to self
+            if (entityManager.HasComponent<TargetData>(prototypeEntity))
+            {
+                entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint});
+            }
         }
     }
     #endregion
