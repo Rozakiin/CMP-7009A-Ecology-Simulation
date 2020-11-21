@@ -88,9 +88,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8401487155666674465}
+  - component: {fileID: 8938199291469164372}
   - component: {fileID: -6504437005261823738}
   - component: {fileID: -9147605867028636769}
-  - component: {fileID: 8938199291469164372}
   - component: {fileID: -224445953965005878}
   - component: {fileID: 2407081619555887592}
   - component: {fileID: -6426143068931531581}
@@ -125,6 +125,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8938199291469164372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
 --- !u!114 &-6504437005261823738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,21 +165,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 10
-  moveSpeedBase: 25
+  moveSpeedBase: 5
   moveMultiplier: 1
---- !u!114 &8938199291469164372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0
 --- !u!114 &-224445953965005878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,8 +180,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hunger: 0
-  hungerMax: 0
-  eatingSpeed: 0
+  hungryThreshold: 10
+  hungerMax: 100
+  hungerIncrease: 1
+  eatingSpeed: 2
   entityToEat: {fileID: 0}
 --- !u!114 &2407081619555887592
 MonoBehaviour:
@@ -196,8 +198,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thirst: 0
-  thirstMax: 0
-  drinkingSpeed: 0
+  thirstyThreshold: 10
+  thirstMax: 100
+  thirstIncrease: 0.5
+  drinkingSpeed: 5
   entityToDrink: {fileID: 0}
 --- !u!114 &-6426143068931531581
 MonoBehaviour:
@@ -214,7 +218,9 @@ MonoBehaviour:
   matingDuration: 0
   mateStartTime: 0
   reproductiveUrge: 0
-  closestMate: {fileID: 0}
+  reproductiveUrgeIncrease: 0.2
+  matingThreshold: 50
+  entityToMate: {fileID: 0}
 --- !u!114 &-8698036066575867697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +285,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   previousState: 0
+  deathReason: 0
+  beenEaten: 0
 --- !u!114 &1699504912102838281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sightRadius: 20
-  touchRadius: 5
+  touchRadius: 1
 --- !u!114 &7939048878264072187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,6 +335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   age: 0
+  ageIncrease: 0.1
   ageMax: 100
 --- !u!114 &-4389454804139432221
 MonoBehaviour:
