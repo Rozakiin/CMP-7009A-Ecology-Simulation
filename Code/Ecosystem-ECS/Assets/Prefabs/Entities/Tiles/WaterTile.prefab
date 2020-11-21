@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1891905505569140722}
   - component: {fileID: 5179128099209406842}
   - component: {fileID: 2731655536980175981}
+  - component: {fileID: 9137307576216217085}
   m_Layer: 0
   m_Name: WaterTile
   m_TagString: Untagged
@@ -109,3 +110,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainType: 0
   terrainPenalty: 100
+--- !u!114 &9137307576216217085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3742396586432582926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae98ffe3db4f5246a8f76f24d258e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: 10
+  canBeDrunk: 1
