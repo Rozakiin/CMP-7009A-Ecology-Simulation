@@ -49,6 +49,6 @@ public class MovementSystem : SystemBase
 
 
 
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }
