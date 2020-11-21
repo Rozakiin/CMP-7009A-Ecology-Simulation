@@ -26,4 +26,13 @@ public struct StateData : IComponentData
     }
     public States state;
     public States previousState;
+    public enum DeathReason
+    {
+        Eaten,
+        Hunger,
+        Thirst,
+        Age,
+    }
+    public DeathReason deathReason;
+    public bool beenEaten;
 }
