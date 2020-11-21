@@ -22,7 +22,9 @@ public struct HungerData : IComponentData
     //   authoring the data in the Editor.
 
     public float hunger;
+    public float hungryThreshold;
     public float hungerMax;
+    public float hungerIncrease;
     public float eatingSpeed;
     public Entity entityToEat;
 }

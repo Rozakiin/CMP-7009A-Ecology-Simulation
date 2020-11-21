@@ -24,5 +24,7 @@ public struct MateData : IComponentData
     public float matingDuration;
     public float mateStartTime;
     public float reproductiveUrge;
-    public Entity closestMate;
+    public float reproductiveUrgeIncrease;
+    public float matingThreshold;
+    public Entity entityToMate;
 }

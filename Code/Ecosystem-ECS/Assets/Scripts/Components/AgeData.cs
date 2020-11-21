@@ -22,5 +22,6 @@ public struct AgeData : IComponentData
     //   authoring the data in the Editor.
 
     public float age;
+    public float ageIncrease;
     public float ageMax;
 }

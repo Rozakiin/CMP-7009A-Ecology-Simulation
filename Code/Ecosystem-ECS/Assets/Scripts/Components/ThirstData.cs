@@ -22,7 +22,9 @@ public struct ThirstData : IComponentData
     //   authoring the data in the Editor.
 
     public float thirst;
+    public float thirstyThreshold;
     public float thirstMax;
+    public float thirstIncrease;
     public float drinkingSpeed;
     public Entity entityToDrink;
 }
