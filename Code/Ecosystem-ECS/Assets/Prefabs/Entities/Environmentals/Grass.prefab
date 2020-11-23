@@ -124,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeEaten: 1
   nutritionalValue: 5
+  foodType: 1
 --- !u!114 &-6082851943645634421
 MonoBehaviour:
   m_ObjectHideFlags: 0
