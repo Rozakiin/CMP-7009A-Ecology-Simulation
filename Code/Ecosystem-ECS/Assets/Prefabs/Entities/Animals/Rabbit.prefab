@@ -101,7 +101,6 @@ GameObject:
   - component: {fileID: 1699504912102838281}
   - component: {fileID: -5808282956051259984}
   - component: {fileID: 7939048878264072187}
-  - component: {fileID: -4389454804139432221}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -152,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeEaten: 1
   nutritionalValue: 10
+  foodType: 4
 --- !u!114 &-9147605867028636769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 10
-  moveSpeedBase: 5
+  moveSpeedBase: 10
   moveMultiplier: 1
 --- !u!114 &-224445953965005878
 MonoBehaviour:
@@ -185,6 +185,7 @@ MonoBehaviour:
   hungerIncrease: 1
   eatingSpeed: 2
   entityToEat: {fileID: 0}
+  diet: 3
 --- !u!114 &2407081619555887592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,19 +338,6 @@ MonoBehaviour:
   age: 0
   ageIncrease: 0.1
   ageMax: 100
---- !u!114 &-4389454804139432221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e41e9248585fb2e4aa8528abeb80da73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  diet: 1
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0
