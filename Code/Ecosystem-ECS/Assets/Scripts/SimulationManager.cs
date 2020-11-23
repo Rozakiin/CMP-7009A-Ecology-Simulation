@@ -66,7 +66,7 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     #region Map Creation Methods
@@ -116,7 +116,6 @@ public class SimulationManager : MonoBehaviour
         var entityWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
         var entitySandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
         var entityRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
 
         for (int y = 0; y < gridHeight; y++)
@@ -197,14 +196,21 @@ public class SimulationManager : MonoBehaviour
                 }
             }
         }
+
+        entityManager.DestroyEntity(entityGrassTile);
+        entityManager.DestroyEntity(entityWaterTile);
+        entityManager.DestroyEntity(entitySandTile);
+        entityManager.DestroyEntity(entityRockTile);
+
+
     }
 
     private void SetLimits()
     {
-        leftLimit = worldSize.x / 2;
-        rightLimit = -worldSize.x / 2;
-        upLimit = worldSize.y / 2;
+        leftLimit = -worldSize.x / 2;
+        rightLimit = worldSize.x / 2;
         downLimit = -worldSize.y / 2;
+        upLimit = worldSize.y / 2;
     }
     #endregion
 
@@ -238,6 +244,8 @@ public class SimulationManager : MonoBehaviour
                 entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint});
             }
         }
+        entityManager.DestroyEntity(convertedEntity);
+
     }
     #endregion
 
