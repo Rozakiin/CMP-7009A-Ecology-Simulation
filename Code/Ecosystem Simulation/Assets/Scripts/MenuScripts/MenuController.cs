@@ -47,7 +47,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private GameObject gameplayMenu;
         [SerializeField] private GameObject controlsMenu;
         [SerializeField] private GameObject confirmationMenu;
-        [SerializeField] private GameObject initialPropertiesMenu;
+        [SerializeField] private GameObject initialPropertiesCanvas;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -69,12 +69,49 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Slider volumeSlider;
         [Space(10)]
         [SerializeField] private Toggle invertYToggle;
-        [Space(10)]
         [Header("Initial Properties Sliders")]
         [SerializeField] private Text rabbitSizeMaleText;
         [SerializeField] private Slider rabbitSizeMaleSlider;
+        [Space(5)]
         [SerializeField] private Text rabbitSizeFemaleText;
         [SerializeField] private Slider rabbitSizeFemaleSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitSpeedText;
+        [SerializeField] private Slider rabbitSpeedSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitHungerText;
+        [SerializeField] private Slider rabbitHungerSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitThirstText;
+        [SerializeField] private Slider rabbitThirstSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitAgeText;
+        [SerializeField] private Slider rabbitAgeSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitTouchRadiusText;
+        [SerializeField] private Slider rabbitTouchRadiusSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitSightRadiusText;
+        [SerializeField] private Slider rabbitSightRadiusSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitPregnancyLengthText;
+        [SerializeField] private Slider rabbitPregnancyLengthSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitMatingDurationText;
+        [SerializeField] private Slider rabbitMatingDurationSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitBirthDurationText;
+        [SerializeField] private Slider rabbitBirthDurationSlider;
+        [Space(10)]
+        [SerializeField] private Text rabbitLitterSizeMinText;
+        [SerializeField] private Slider rabbitLitterSizeMinSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitLitterSizeMaxText;
+        [SerializeField] private Slider rabbitLitterSizeMaxSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitLitterSizeAveText;
+        [SerializeField] private Slider rabbitLitterSizeAveSlider;
+        [Space(10)]
 
         #endregion
         #region Initial properties objects
@@ -173,11 +210,11 @@ namespace SpeedTutorMainMenuSystem
                 case "NewGame":
                     menuDefaultCanvas.SetActive(false);
                     ResetButton("InitialProperties");
-                    initialPropertiesMenu.SetActive(true);
+                    initialPropertiesCanvas.SetActive(true);
                     menuNumber = MenuNumber.NewGame;
                     break;
                 case "InitialProperties":
-                    initialPropertiesMenu.SetActive(false);
+                    initialPropertiesCanvas.SetActive(false);
                     newGameDialog.SetActive(true);
                     menuNumber = MenuNumber.InitialProperties;
                     break;
@@ -277,14 +314,62 @@ namespace SpeedTutorMainMenuSystem
         public void InitialPropertiesUpdate(string propertyToUpdate)
         {
             switch (propertyToUpdate)
-            {
+            {                
+                case "RabbitSizeFemale":
+                    rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
+                    rabbit.SetGlobalBaseFemaleScale(rabbitSizeFemaleSlider.value);
+                    break;
                 case "RabbitSizeMale":
                     rabbitSizeMaleText.text = rabbitSizeMaleSlider.value.ToString();
                     rabbit.SetGlobalBaseMaleScale(rabbitSizeMaleSlider.value);
                     break;
-                case "RabbitSizeFemale":
-                    rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
-                    rabbit.SetGlobalBaseFemaleScale(rabbitSizeFemaleSlider.value);
+                case "RabbitSpeed":
+                    rabbitSpeedText.text = rabbitSpeedSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaleScale(rabbitSpeedSlider.value);
+                    break;
+                case "RabbitHunger":
+                    rabbitHungerText.text = rabbitHungerSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaxHunger(rabbitHungerSlider.value);
+                    break;
+                case "RabbitThirst":
+                    rabbitThirstText.text = rabbitThirstSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaxThirst(rabbitThirstSlider.value);
+                    break;
+                case "RabbitAge":
+                    rabbitAgeText.text = rabbitAgeSlider.value.ToString();
+                    rabbit.SetGlobalBaseMaxAge(rabbitAgeSlider.value);
+                    break;
+                case "RabbitTouchRadius":
+                    rabbitTouchRadiusText.text = rabbitTouchRadiusSlider.value.ToString();
+                    rabbit.SetGlobalBaseTouchRadius(rabbitTouchRadiusSlider.value);
+                    break;
+                case "RabbitSightRadius":
+                    rabbitSightRadiusText.text = rabbitSightRadiusSlider.value.ToString();
+                    rabbit.SetGlobalBaseSightRadius(rabbitSightRadiusSlider.value);
+                    break;
+                case "RabbitPregnancyLength":
+                    rabbitPregnancyLengthText.text = rabbitPregnancyLengthSlider.value.ToString();
+                    rabbit.SetGlobalBasePregnancyLength(rabbitPregnancyLengthSlider.value);
+                    break;
+                case "RabbitMatingDuration":
+                    rabbitMatingDurationText.text = rabbitMatingDurationSlider.value.ToString();
+                    rabbit.SetGlobalBaseMatingDuration(rabbitMatingDurationSlider.value);
+                    break;
+                case "RabbitBirthDuration":
+                    rabbitBirthDurationText.text = rabbitBirthDurationSlider.value.ToString();
+                    rabbit.SetGlobalBaseBirthDuration(rabbitBirthDurationSlider.value);
+                    break;
+                case "RabbitLitterMin":
+                    rabbitLitterSizeMinText.text = rabbitLitterSizeMinSlider.value.ToString();
+                    rabbit.SetGlobalBaseLitterSizeMin((int)rabbitLitterSizeMinSlider.value);
+                    break;
+                case "RabbitLitterMax":
+                    rabbitLitterSizeMaxText.text = rabbitLitterSizeMaxSlider.value.ToString();
+                    rabbit.SetGlobalBaseLitterSizeMax((int)rabbitLitterSizeMaxSlider.value);
+                    break;
+                case "RabbitLitterAve":
+                    rabbitLitterSizeAveText.text = rabbitLitterSizeAveSlider.value.ToString();
+                    rabbit.SetGlobalBaseLitterSizeAve((int)rabbitLitterSizeAveSlider.value);
                     break;
                 default:
                     Debug.Log("Attempted to update unknown property in switch.");
@@ -324,6 +409,42 @@ namespace SpeedTutorMainMenuSystem
                     rabbitSizeFemaleText.text = Rabbit.DefaultValues.scaleFemale.ToString();
                     rabbitSizeFemaleSlider.value = Rabbit.DefaultValues.scaleFemale;
 
+                    rabbitSpeedText.text = Rabbit.DefaultValues.moveSpeed.ToString();
+                    rabbitSpeedSlider.value = Rabbit.DefaultValues.moveSpeed;
+
+                    rabbitHungerText.text = Rabbit.DefaultValues.hungerMax.ToString();
+                    rabbitHungerSlider.value = Rabbit.DefaultValues.hungerMax;
+
+                    rabbitThirstText.text = Rabbit.DefaultValues.thirstMax.ToString();
+                    rabbitThirstSlider.value = Rabbit.DefaultValues.thirstMax;
+
+                    rabbitAgeText.text = Rabbit.DefaultValues.ageMax.ToString();
+                    rabbitAgeSlider.value = Rabbit.DefaultValues.ageMax;
+
+                    rabbitTouchRadiusText.text = Rabbit.DefaultValues.touchRadius.ToString();
+                    rabbitTouchRadiusSlider.value = Rabbit.DefaultValues.touchRadius;
+
+                    rabbitSightRadiusText.text = Rabbit.DefaultValues.sightRadius.ToString();
+                    rabbitSightRadiusSlider.value = Rabbit.DefaultValues.sightRadius;
+
+                    rabbitPregnancyLengthText.text = Rabbit.DefaultValues.pregnancyLength.ToString();
+                    rabbitPregnancyLengthSlider.value = Rabbit.DefaultValues.pregnancyLength;
+
+                    rabbitMatingDurationText.text = Rabbit.DefaultValues.matingDuration.ToString();
+                    rabbitMatingDurationSlider.value = Rabbit.DefaultValues.matingDuration;
+
+                    rabbitBirthDurationText.text = Rabbit.DefaultValues.birthDuration.ToString();
+                    rabbitBirthDurationSlider.value = Rabbit.DefaultValues.birthDuration;
+
+                    rabbitLitterSizeMinText.text = Rabbit.DefaultValues.litterSizeMin.ToString();
+                    rabbitLitterSizeMinSlider.value = Rabbit.DefaultValues.litterSizeMin;
+
+                    rabbitLitterSizeMaxText.text = Rabbit.DefaultValues.litterSizeMax.ToString();
+                    rabbitLitterSizeMaxSlider.value = Rabbit.DefaultValues.litterSizeMax;
+
+                    rabbitLitterSizeAveText.text = Rabbit.DefaultValues.litterSizeAve.ToString();
+                    rabbitLitterSizeAveSlider.value = Rabbit.DefaultValues.litterSizeAve;
+
                     InitialPropertiesApply();
                     break;
                 default:
@@ -357,7 +478,7 @@ namespace SpeedTutorMainMenuSystem
                     Simulation.SetMapString(fileContents); //set the map string in Simualtion to filecontents
                     Debug.Log("I WANT TO LOAD THE MAP");
                     loadGameDialog.SetActive(false);
-                    initialPropertiesMenu.SetActive(true);
+                    initialPropertiesCanvas.SetActive(true);
                     ResetButton("InitialProperties");
                     menuNumber = MenuNumber.InitialProperties;
                 }
@@ -402,7 +523,7 @@ namespace SpeedTutorMainMenuSystem
             graphicsMenu.SetActive(false);
             soundMenu.SetActive(false);
             gameplayMenu.SetActive(false);
-            initialPropertiesMenu.SetActive(false);
+            initialPropertiesCanvas.SetActive(false);
             menuNumber = MenuNumber.Main;
         }
 

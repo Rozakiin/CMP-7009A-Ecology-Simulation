@@ -3825,7 +3825,7 @@ MonoBehaviour:
   gameplayMenu: {fileID: 1439258321415800}
   controlsMenu: {fileID: 1607287232231484}
   confirmationMenu: {fileID: 1706612065132982}
-  initialPropertiesMenu: {fileID: 0}
+  initialPropertiesCanvas: {fileID: 8834961339577121779}
   noSaveDialog: {fileID: 1207111332628262}
   newGameDialog: {fileID: 1889607586039040}
   loadGameDialog: {fileID: 1443681062563508}
@@ -3838,10 +3838,34 @@ MonoBehaviour:
   volumeText: {fileID: 114662438807354912}
   volumeSlider: {fileID: 114272391833239024}
   invertYToggle: {fileID: 114897183776236306}
-  rabbitSizeMaleText: {fileID: 0}
-  rabbitSizeMaleSlider: {fileID: 0}
-  rabbitSizeFemaleText: {fileID: 0}
-  rabbitSizeFemaleSlider: {fileID: 0}
+  rabbitSizeMaleText: {fileID: 6858037330774512999}
+  rabbitSizeMaleSlider: {fileID: 4986845167027729466}
+  rabbitSizeFemaleText: {fileID: 8479136821925507909}
+  rabbitSizeFemaleSlider: {fileID: 5639817712506345711}
+  rabbitSpeedText: {fileID: 7947557334685432405}
+  rabbitSpeedSlider: {fileID: 93121389991971183}
+  rabbitHungerText: {fileID: 5618011361900052438}
+  rabbitHungerSlider: {fileID: 6784177703847625525}
+  rabbitThirstText: {fileID: 5618011361900052438}
+  rabbitThirstSlider: {fileID: 1583701169930584400}
+  rabbitAgeText: {fileID: 6412123629564495868}
+  rabbitAgeSlider: {fileID: 2665903124697164210}
+  rabbitTouchRadiusText: {fileID: 5549322739032382426}
+  rabbitTouchRadiusSlider: {fileID: 4780837772265897233}
+  rabbitSightRadiusText: {fileID: 5335202097837423875}
+  rabbitSightRadiusSlider: {fileID: 5305799309691236930}
+  rabbitPregnancyLengthText: {fileID: 3532794229838012628}
+  rabbitPregnancyLengthSlider: {fileID: 2692234488432257645}
+  rabbitMatingDurationText: {fileID: 8139021261911617931}
+  rabbitMatingDurationSlider: {fileID: 3287337621360028430}
+  rabbitBirthDurationText: {fileID: 169664403595815023}
+  rabbitBirthDurationSlider: {fileID: 1943533376706670522}
+  rabbitLitterSizeMinText: {fileID: 4591832951111595234}
+  rabbitLitterSizeMinSlider: {fileID: 6220205225781729622}
+  rabbitLitterSizeMaxText: {fileID: 6263951894684250140}
+  rabbitLitterSizeMaxSlider: {fileID: 5219427104662686722}
+  rabbitLitterSizeAveText: {fileID: 4208003644002793524}
+  rabbitLitterSizeAveSlider: {fileID: 7396539244169310378}
 --- !u!1 &1439258321415800
 GameObject:
   m_ObjectHideFlags: 0
@@ -9120,7 +9144,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitHunger
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &51349666755193120
@@ -9550,7 +9574,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitBirthDuration
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &570116146914007516
@@ -10099,7 +10123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8976998688881168030
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10381,7 +10405,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitAge
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1110579924643916783
@@ -10633,7 +10657,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitMatingDuration
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1186797354651761015
@@ -11028,7 +11052,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitLitterMin
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1686127714948324701
@@ -12338,7 +12362,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 1
   m_MaxValue: 20
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12693,7 +12717,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitLitterAve
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &3609904966874855994
@@ -13038,7 +13062,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 1
   m_MaxValue: 20
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13225,7 +13249,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitLitterMax
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4290645172465392168
@@ -13513,7 +13537,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitTouchRadius
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4338779350536814327
@@ -13801,7 +13825,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitThirst
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4374718194992938509
@@ -16217,7 +16241,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeMale
+          m_StringArgument: RabbitSightRadius
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &7601677978325545297
@@ -17354,7 +17378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7981283236179193003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17597,7 +17621,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 1
   m_MaxValue: 50
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17610,7 +17634,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitSpeed
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &8936363148964416231
@@ -17784,7 +17808,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitSizeFemale
+          m_StringArgument: RabbitPregnancyLength
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &8987330565243780348

@@ -9,12 +9,19 @@ public class Rabbit : Animal
     public class DefaultValues
     {
         public static readonly float moveSpeed = 25f;
-        public static readonly float scaleMale = 2.7f;
-        public static readonly float scaleFemale = 3.7f;
+        public static readonly float scaleMale = 2f;
+        public static readonly float scaleFemale = 3f;
         public static readonly float hungerMax = 100f;
         public static readonly float thirstMax = 100f;
-        public static readonly int ageMax = 600;
+        public static readonly float ageMax = 600f;
         public static readonly float pregnancyLength = 10f;
+        public static readonly float touchRadius = 1f;
+        public static readonly float sightRadius = 20f;
+        public static readonly float matingDuration = 5f;
+        public static readonly float birthDuration = 10f;
+        public static readonly int litterSizeMin = 1;
+        public static readonly int litterSizeMax = 13;
+        public static readonly int litterSizeAve = 7;
     }
     #endregion
 
@@ -41,17 +48,46 @@ public class Rabbit : Animal
         protected set { thirstMax = value; }
     }
 
-    private static int ageMax = DefaultValues.ageMax;
-    public override int AgeMax
+    private static float ageMax = DefaultValues.ageMax;
+    public override float AgeMax
     {
         get { return ageMax; }
         protected set { ageMax = value; }
     }
 
-    protected override int LitterSizeMax
+    private static float matingDuration = DefaultValues.matingDuration;
+    public override float MatingDuration
     {
-        get { return LitterSizeMax; }
-        set {}
+        get { return matingDuration; }
+        protected set { matingDuration = value; }
+    }
+
+    private static float birthDuration = DefaultValues.birthDuration;
+    public override float BirthDuration
+    {
+        get { return birthDuration; }
+        protected set { birthDuration = value; }
+    }
+
+    private static int litterSizeMin = DefaultValues.litterSizeMin;
+    public override int LitterSizeMin
+    {
+        get { return litterSizeMin; }
+        protected set { litterSizeMin = value; }
+    }
+
+    private static int litterSizeMax = DefaultValues.litterSizeMax;
+    public override int LitterSizeMax
+    {
+        get { return litterSizeMax; }
+        protected set { litterSizeMax = value; }
+    }
+
+    private static int litterSizeAve = DefaultValues.litterSizeAve;
+    public override int LitterSizeAve
+    {
+        get { return litterSizeAve; }
+        protected set { litterSizeAve = value; }
     }
 
     private static float pregnancyLengthBase = DefaultValues.pregnancyLength;
@@ -74,6 +110,21 @@ public class Rabbit : Animal
         get { return scaleMaleBase * scaleMultiplier; }
         set { scaleMaleBase = value; }
     }
+
+    private static float sightRadius = DefaultValues.sightRadius;
+    public override float SightRadius
+    {
+        get { return sightRadius; }
+        protected set { sightRadius = value; }
+    }
+
+    private static float touchRadius = DefaultValues.touchRadius;
+    public override float TouchRadius
+    {
+        get { return touchRadius; }
+        protected set { touchRadius = value; }
+    }
+
     #endregion
 
     #region Initialisation
