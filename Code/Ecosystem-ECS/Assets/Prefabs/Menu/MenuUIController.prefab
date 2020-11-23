@@ -3846,7 +3846,7 @@ MonoBehaviour:
   rabbitSpeedSlider: {fileID: 93121389991971183}
   rabbitHungerText: {fileID: 5618011361900052438}
   rabbitHungerSlider: {fileID: 6784177703847625525}
-  rabbitThirstText: {fileID: 5618011361900052438}
+  rabbitThirstText: {fileID: 3924442619824553156}
   rabbitThirstSlider: {fileID: 1583701169930584400}
   rabbitAgeText: {fileID: 6412123629564495868}
   rabbitAgeSlider: {fileID: 2665903124697164210}
@@ -9875,7 +9875,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 5
 --- !u!1 &802234052347379187
 GameObject:
   m_ObjectHideFlags: 0

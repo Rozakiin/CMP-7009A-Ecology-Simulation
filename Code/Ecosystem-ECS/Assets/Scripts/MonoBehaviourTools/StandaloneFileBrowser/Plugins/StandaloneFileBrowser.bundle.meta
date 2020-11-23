@@ -1,16 +1,13 @@
 fileFormatVersion: 2
-guid: 045437204e6727042a8b53c13b222b7d
+guid: 110fdfb459db4fc448a2ccd37e200fa4
 folderAsset: yes
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
-  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
-  isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -23,6 +20,16 @@ PluginImporter:
       enabled: 1
       settings:
         DefaultValueInitialized: true
+  - first:
+      Standalone: OSXIntel
+    second:
+      enabled: 1
+      settings: {}
+  - first:
+      Standalone: OSXIntel64
+    second:
+      enabled: 1
+      settings: {}
   - first:
       Standalone: OSXUniversal
     second:

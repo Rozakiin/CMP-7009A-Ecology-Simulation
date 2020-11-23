@@ -31,8 +31,8 @@ public class SimulationManager : MonoBehaviour
 
     #region Map Data 
     [Header("Map Data")]
-    [SerializeField] public string mapPath;
-    public string mapString;
+    public static string mapPath = "Assets/Scripts/MonoBehaviourTools/Map/MapExample.txt";
+    public static string mapString;
     public static int gridWidth;
     public static int gridHeight;
     public static Vector2 worldSize;
@@ -74,19 +74,23 @@ public class SimulationManager : MonoBehaviour
     private bool CreateMap()
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
-        if (mapPath != "")
+        if (mapPath != null)
         {
             if (MapReader.ReadInMapFromFile(mapPath, ref mapList))
                 CreateEntityTilesFromMapList(in mapList);
             else
                 return false;
         }
+        else if (mapString != null)
+        {
+            if (MapReader.ReadInMapFromString(mapString, ref mapList))
+                CreateEntityTilesFromMapList(in mapList);
+            else
+                return false;
+        }
         else
         {
-            //if (MapReader.ReadInMapFromString(mapString, ref mapList))
-            //    CreateEntityTilesFromMapList(in mapList);
-            //else
-            //    return false;
+            return false;
         }
 
         // Create a GameObject the size of the map with collider for ray hits
