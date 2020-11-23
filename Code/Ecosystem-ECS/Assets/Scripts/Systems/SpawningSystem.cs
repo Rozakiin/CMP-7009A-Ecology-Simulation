@@ -44,6 +44,9 @@ public class SpawningSystem : ComponentSystem
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(SimulationManager.Instance.rabbit, settings);
         Entity prototypeRabbit = EntityManager.Instantiate(entityRabbit);
+        EntityManager.SetName(prototypeRabbit, "ClickRabbit" + prototypeRabbit.Index);
         EntityManager.SetComponentData(prototypeRabbit, new Translation { Value = position }); // set position data (called translation in ECS)
+        EntityManager.SetComponentData(prototypeRabbit, new TargetData { currentTarget = position, oldTarget = position, atTarget = true }); // set target data
+        EntityManager.DestroyEntity(entityRabbit);
     }
 }
