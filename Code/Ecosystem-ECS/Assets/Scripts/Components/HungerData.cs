@@ -27,4 +27,12 @@ public struct HungerData : IComponentData
     public float hungerIncrease;
     public float eatingSpeed;
     public Entity entityToEat;
+
+    public enum Diet
+    {
+        Carnivore = EdibleData.FoodType.Meat,
+        Herbivore = EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
+        Omnivore = EdibleData.FoodType.Meat | EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
+    }
+    public Diet diet;
 }
