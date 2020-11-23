@@ -37,8 +37,8 @@ public abstract class Animal : Edible
     }
 
     [SerializeField] protected float age;
-    private static int ageMax;
-    public virtual int AgeMax
+    private static float ageMax;
+    public virtual float AgeMax
     {
         get { return ageMax; }
         protected set { ageMax = value; }
@@ -47,13 +47,16 @@ public abstract class Animal : Edible
     [SerializeField] protected Gender gender;
     [SerializeField] protected Animal closestMate;
     [SerializeField] protected bool pregnant;
-    [SerializeField] protected float matingDuration;
+    [SerializeField] public abstract float MatingDuration { get; protected set; }
     [SerializeField] protected float mateStartTime;
-    [SerializeField] protected float birthDuration;   //How long between babies being born
+    [SerializeField] public abstract float BirthDuration { get; protected set; }   //How long between babies being born
     [SerializeField] protected float birthStartTime;
     [SerializeField] protected int numberOfBabies;  //How many the female is carrying right now
     [SerializeField] protected int babiesBorn;      //How many she has given birth to
-    [SerializeField] protected abstract int LitterSizeMax { get; set; }
+    [SerializeField] public abstract int LitterSizeMin { get; protected set; }
+    [SerializeField] public abstract int LitterSizeMax { get; protected set; }
+    [SerializeField] public abstract int LitterSizeAve { get; protected set; }
+
     [SerializeField] protected float reproductiveUrge;
     [SerializeField] protected float pregnancyStartTime;
     private static float pregnancyLengthBase;
@@ -64,8 +67,8 @@ public abstract class Animal : Edible
         protected set { pregnancyLengthBase = value; }
     }
 
-    [SerializeField] protected float sightRadius;
-    [SerializeField] protected float touchRadius;
+    [SerializeField] public abstract float SightRadius { get; protected set; }
+    [SerializeField] public abstract float TouchRadius { get; protected set; }
 
     [Header("Scene Data")]
     [SerializeField] protected float tileSize;                                                                 //The size of each tile on the map
@@ -167,19 +170,54 @@ public abstract class Animal : Edible
         MoveSpeed = _speed;
     }
 
-    public virtual void SetGlobalMaxHunger(float _hungerMax)
+    public virtual void SetGlobalBaseMaxHunger(float _hungerMax)
     {
         HungerMax = _hungerMax;
     }
 
-    public virtual void SetGlobalMaxThirst(float _thirstMax)
+    public virtual void SetGlobalBaseMaxThirst(float _thirstMax)
     {
         ThirstMax = _thirstMax;
     }
 
-    public virtual void SetGlobalMaxAge(int _ageMax)
+    public virtual void SetGlobalBaseMaxAge(float _ageMax)
     {
         AgeMax = _ageMax;
+    }
+
+    public virtual void SetGlobalBaseTouchRadius(float _touchRadius)
+    {
+        TouchRadius = _touchRadius;
+    }
+
+    public virtual void SetGlobalBaseSightRadius(float _sightRadius)
+    {
+        SightRadius = _sightRadius;
+    }
+
+    public virtual void SetGlobalBaseMatingDuration(float _matingDuration)
+    {
+        MatingDuration = _matingDuration;
+    }
+
+    public virtual void SetGlobalBaseBirthDuration(float _birthDuration)
+    {
+        BirthDuration = _birthDuration;
+    }
+
+    public virtual void SetGlobalBaseLitterSizeMin(int _litterSizeMin)
+    {
+        LitterSizeMin = _litterSizeMin;
+    }
+
+    public virtual void SetGlobalBaseLitterSizeMax(int _litterSizeMax)
+    {
+        LitterSizeMax = _litterSizeMax;
+    }
+
+    public virtual void SetGlobalBaseLitterSizeAve(int _litterSizeAve)
+    {
+        LitterSizeAve = _litterSizeAve;
     }
 
     public virtual void SetGlobalBasePregnancyLength(float _pregnancyLength)
@@ -207,8 +245,8 @@ public abstract class Animal : Edible
             //find walkable targetWorldPoint
             while (!isTargetWalkable)
             {
-                float randX = UnityEngine.Random.Range(-sightRadius, sightRadius);
-                float randZ = UnityEngine.Random.Range(-sightRadius, sightRadius);
+                float randX = UnityEngine.Random.Range(-SightRadius, SightRadius);
+                float randZ = UnityEngine.Random.Range(-SightRadius, SightRadius);
                 // random point within the sight radius of the rabbit
                 targetWorldPoint = transform.position + Vector3.right * randX + Vector3.forward * randZ;
                 //check targetWorldPoint is walkable

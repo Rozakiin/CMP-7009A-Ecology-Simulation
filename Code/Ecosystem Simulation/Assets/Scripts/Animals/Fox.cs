@@ -12,8 +12,9 @@ public class Fox : Animal
         public static readonly float scaleFemale = 3f;
         public static readonly float hungerMax = 100f;
         public static readonly float thirstMax = 100f;
-        public static readonly int ageMax = 800;
+        public static readonly float ageMax = 800f;
         public static readonly float pregnancyLength = 20f;
+        public static readonly int litterSizeMax;
     }
     #endregion
 
@@ -39,17 +40,18 @@ public class Fox : Animal
         protected set { thirstMax = value; }
     }
 
-    private static int ageMax = DefaultValues.ageMax;
-    public override int AgeMax
+    private static float ageMax = DefaultValues.ageMax;
+    public override float AgeMax
     {
         get { return ageMax; }
         protected set { ageMax = value; }
     }
 
-    protected override int LitterSizeMax
+    private static int litterSizeMax = DefaultValues.litterSizeMax;
+    public override int LitterSizeMax
     {
-        get { return LitterSizeMax; }
-        set { }
+        get { return litterSizeMax; }
+        protected set { litterSizeMax = value; }
     }
 
     private static float pregnancyLengthBase = DefaultValues.pregnancyLength;
@@ -72,6 +74,13 @@ public class Fox : Animal
         get { return scaleMaleBase * scaleMultiplier; }
         set { scaleMaleBase = value; }
     }
+
+    public override float MatingDuration { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    public override float BirthDuration { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    public override int LitterSizeMin { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    public override int LitterSizeAve { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    public override float SightRadius { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
+    public override float TouchRadius { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
     #endregion
 
     #region Initialisation
