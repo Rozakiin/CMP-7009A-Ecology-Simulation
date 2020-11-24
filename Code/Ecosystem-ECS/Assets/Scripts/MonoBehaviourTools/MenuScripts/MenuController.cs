@@ -403,47 +403,47 @@ namespace SpeedTutorMainMenuSystem
                     GameplayApply();
                     break;
                 case "InitialProperties":
-                    //rabbitSizeMaleText.text = Rabbit.DefaultValues.scaleMale.ToString();
-                    //rabbitSizeMaleSlider.value = Rabbit.DefaultValues.scaleMale;
+                    rabbitSizeMaleText.text = RabbitDefaults.scaleMale.ToString();
+                    rabbitSizeMaleSlider.value = RabbitDefaults.scaleMale;
 
-                    //rabbitSizeFemaleText.text = Rabbit.DefaultValues.scaleFemale.ToString();
-                    //rabbitSizeFemaleSlider.value = Rabbit.DefaultValues.scaleFemale;
+                    rabbitSizeFemaleText.text = RabbitDefaults.scaleFemale.ToString();
+                    rabbitSizeFemaleSlider.value = RabbitDefaults.scaleFemale;
 
-                    //rabbitSpeedText.text = Rabbit.DefaultValues.moveSpeed.ToString();
-                    //rabbitSpeedSlider.value = Rabbit.DefaultValues.moveSpeed;
+                    rabbitSpeedText.text = RabbitDefaults.moveSpeed.ToString();
+                    rabbitSpeedSlider.value = RabbitDefaults.moveSpeed;
 
-                    //rabbitHungerText.text = Rabbit.DefaultValues.hungerMax.ToString();
-                    //rabbitHungerSlider.value = Rabbit.DefaultValues.hungerMax;
+                    rabbitHungerText.text = RabbitDefaults.hungerMax.ToString();
+                    rabbitHungerSlider.value = RabbitDefaults.hungerMax;
 
-                    //rabbitThirstText.text = Rabbit.DefaultValues.thirstMax.ToString();
-                    //rabbitThirstSlider.value = Rabbit.DefaultValues.thirstMax;
+                    rabbitThirstText.text = RabbitDefaults.thirstMax.ToString();
+                    rabbitThirstSlider.value = RabbitDefaults.thirstMax;
 
-                    //rabbitAgeText.text = Rabbit.DefaultValues.ageMax.ToString();
-                    //rabbitAgeSlider.value = Rabbit.DefaultValues.ageMax;
+                    rabbitAgeText.text = RabbitDefaults.ageMax.ToString();
+                    rabbitAgeSlider.value = RabbitDefaults.ageMax;
 
-                    //rabbitTouchRadiusText.text = Rabbit.DefaultValues.touchRadius.ToString();
-                    //rabbitTouchRadiusSlider.value = Rabbit.DefaultValues.touchRadius;
+                    rabbitTouchRadiusText.text = RabbitDefaults.touchRadius.ToString();
+                    rabbitTouchRadiusSlider.value = RabbitDefaults.touchRadius;
 
-                    //rabbitSightRadiusText.text = Rabbit.DefaultValues.sightRadius.ToString();
-                    //rabbitSightRadiusSlider.value = Rabbit.DefaultValues.sightRadius;
+                    rabbitSightRadiusText.text = RabbitDefaults.sightRadius.ToString();
+                    rabbitSightRadiusSlider.value = RabbitDefaults.sightRadius;
 
-                    //rabbitPregnancyLengthText.text = Rabbit.DefaultValues.pregnancyLength.ToString();
-                    //rabbitPregnancyLengthSlider.value = Rabbit.DefaultValues.pregnancyLength;
+                    rabbitPregnancyLengthText.text = RabbitDefaults.pregnancyLength.ToString();
+                    rabbitPregnancyLengthSlider.value = RabbitDefaults.pregnancyLength;
 
-                    //rabbitMatingDurationText.text = Rabbit.DefaultValues.matingDuration.ToString();
-                    //rabbitMatingDurationSlider.value = Rabbit.DefaultValues.matingDuration;
+                    rabbitMatingDurationText.text = RabbitDefaults.matingDuration.ToString();
+                    rabbitMatingDurationSlider.value = RabbitDefaults.matingDuration;
 
-                    //rabbitBirthDurationText.text = Rabbit.DefaultValues.birthDuration.ToString();
-                    //rabbitBirthDurationSlider.value = Rabbit.DefaultValues.birthDuration;
+                    rabbitBirthDurationText.text = RabbitDefaults.birthDuration.ToString();
+                    rabbitBirthDurationSlider.value = RabbitDefaults.birthDuration;
 
-                    //rabbitLitterSizeMinText.text = Rabbit.DefaultValues.litterSizeMin.ToString();
-                    //rabbitLitterSizeMinSlider.value = Rabbit.DefaultValues.litterSizeMin;
+                    rabbitLitterSizeMinText.text = RabbitDefaults.litterSizeMin.ToString();
+                    rabbitLitterSizeMinSlider.value = RabbitDefaults.litterSizeMin;
 
-                    //rabbitLitterSizeMaxText.text = Rabbit.DefaultValues.litterSizeMax.ToString();
-                    //rabbitLitterSizeMaxSlider.value = Rabbit.DefaultValues.litterSizeMax;
+                    rabbitLitterSizeMaxText.text = RabbitDefaults.litterSizeMax.ToString();
+                    rabbitLitterSizeMaxSlider.value = RabbitDefaults.litterSizeMax;
 
-                    //rabbitLitterSizeAveText.text = Rabbit.DefaultValues.litterSizeAve.ToString();
-                    //rabbitLitterSizeAveSlider.value = Rabbit.DefaultValues.litterSizeAve;
+                    rabbitLitterSizeAveText.text = RabbitDefaults.litterSizeAve.ToString();
+                    rabbitLitterSizeAveSlider.value = RabbitDefaults.litterSizeAve;
 
                     InitialPropertiesApply();
                     break;
