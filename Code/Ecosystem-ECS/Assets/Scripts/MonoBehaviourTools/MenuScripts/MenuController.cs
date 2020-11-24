@@ -317,62 +317,62 @@ namespace SpeedTutorMainMenuSystem
             {                
                 case "RabbitSizeFemale":
                     rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
-                    //rabbit.SetGlobalBaseFemaleScale(rabbitSizeFemaleSlider.value);
+                    RabbitDefaults.scaleFemale = rabbitSizeFemaleSlider.value;
                     break;
                 case "RabbitSizeMale":
                     rabbitSizeMaleText.text = rabbitSizeMaleSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMaleScale(rabbitSizeMaleSlider.value);
+                    RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
                     break;
                 case "RabbitSpeed":
                     rabbitSpeedText.text = rabbitSpeedSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMaleScale(rabbitSpeedSlider.value);
+                    RabbitDefaults.moveSpeed = rabbitSpeedSlider.value;
                     break;
-                case "RabbitHunger":
+                case "RabbitHungerMax":
                     rabbitHungerText.text = rabbitHungerSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMaxHunger(rabbitHungerSlider.value);
+                    RabbitDefaults.hungerMax = rabbitHungerSlider.value;
                     break;
-                case "RabbitThirst":
+                case "RabbitThirstMax":
                     rabbitThirstText.text = rabbitThirstSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMaxThirst(rabbitThirstSlider.value);
+                    RabbitDefaults.thirstMax = rabbitThirstSlider.value;
                     break;
-                case "RabbitAge":
+                case "RabbitAgeMax":
                     rabbitAgeText.text = rabbitAgeSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMaxAge(rabbitAgeSlider.value);
+                    RabbitDefaults.ageMax = rabbitAgeSlider.value;
                     break;
                 case "RabbitTouchRadius":
                     rabbitTouchRadiusText.text = rabbitTouchRadiusSlider.value.ToString();
-                    //rabbit.SetGlobalBaseTouchRadius(rabbitTouchRadiusSlider.value);
+                    RabbitDefaults.touchRadius = rabbitTouchRadiusSlider.value;
                     break;
                 case "RabbitSightRadius":
                     rabbitSightRadiusText.text = rabbitSightRadiusSlider.value.ToString();
-                    //rabbit.SetGlobalBaseSightRadius(rabbitSightRadiusSlider.value);
+                    RabbitDefaults.sightRadius = rabbitSightRadiusSlider.value;
                     break;
                 case "RabbitPregnancyLength":
                     rabbitPregnancyLengthText.text = rabbitPregnancyLengthSlider.value.ToString();
-                    //rabbit.SetGlobalBasePregnancyLength(rabbitPregnancyLengthSlider.value);
+                    RabbitDefaults.pregnancyLength = rabbitPregnancyLengthSlider.value;
                     break;
                 case "RabbitMatingDuration":
                     rabbitMatingDurationText.text = rabbitMatingDurationSlider.value.ToString();
-                    //rabbit.SetGlobalBaseMatingDuration(rabbitMatingDurationSlider.value);
+                    RabbitDefaults.matingDuration = rabbitMatingDurationSlider.value;
                     break;
                 case "RabbitBirthDuration":
                     rabbitBirthDurationText.text = rabbitBirthDurationSlider.value.ToString();
-                    //rabbit.SetGlobalBaseBirthDuration(rabbitBirthDurationSlider.value);
+                    RabbitDefaults.birthDuration = rabbitBirthDurationSlider.value;
                     break;
                 case "RabbitLitterMin":
                     rabbitLitterSizeMinText.text = rabbitLitterSizeMinSlider.value.ToString();
-                    //rabbit.SetGlobalBaseLitterSizeMin((int)rabbitLitterSizeMinSlider.value);
+                    RabbitDefaults.litterSizeMin = (int)rabbitLitterSizeMinSlider.value;
                     break;
                 case "RabbitLitterMax":
                     rabbitLitterSizeMaxText.text = rabbitLitterSizeMaxSlider.value.ToString();
-                    //rabbit.SetGlobalBaseLitterSizeMax((int)rabbitLitterSizeMaxSlider.value);
+                    RabbitDefaults.litterSizeMax = (int)rabbitLitterSizeMaxSlider.value;
                     break;
                 case "RabbitLitterAve":
                     rabbitLitterSizeAveText.text = rabbitLitterSizeAveSlider.value.ToString();
-                    //rabbit.SetGlobalBaseLitterSizeAve((int)rabbitLitterSizeAveSlider.value);
+                    RabbitDefaults.litterSizeAve = (int)rabbitLitterSizeAveSlider.value;
                     break;
                 default:
-                    Debug.Log("Attempted to update unknown property in switch.");
+                    Debug.LogWarning("Attempted to update unknown property in switch: " + propertyToUpdate);
                     break;
             }
         }

@@ -9058,7 +9058,7 @@ GameObject:
   - component: {fileID: 769297724813135513}
   - component: {fileID: 6784177703847625525}
   m_Layer: 0
-  m_Name: RabbitHungerMainSlider
+  m_Name: RabbitHungerMaxMainSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9144,7 +9144,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitHunger
+          m_StringArgument: RabbitHungerMax
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &51349666755193120
@@ -9962,7 +9962,7 @@ GameObject:
   - component: {fileID: 1374945562627655763}
   - component: {fileID: 9160261096819015286}
   m_Layer: 0
-  m_Name: RabbitHungerTitle
+  m_Name: RabbitHungerMaxTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10319,7 +10319,7 @@ GameObject:
   - component: {fileID: 2388193764818017370}
   - component: {fileID: 2665903124697164210}
   m_Layer: 0
-  m_Name: RabbitAgeMainSlider
+  m_Name: RabbitAgeMaxMainSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10405,7 +10405,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitAge
+          m_StringArgument: RabbitAgeMax
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1110579924643916783
@@ -11065,7 +11065,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6021512290677614509}
   m_Layer: 0
-  m_Name: RabbitThirstSlider
+  m_Name: RabbitThirstMaxSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11687,7 +11687,7 @@ GameObject:
   - component: {fileID: 6149624536249092696}
   - component: {fileID: 6412123629564495868}
   m_Layer: 0
-  m_Name: RabbitAgeSliderText
+  m_Name: RabbitAgeMaxSliderText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13739,7 +13739,7 @@ GameObject:
   - component: {fileID: 1485121197991131839}
   - component: {fileID: 1583701169930584400}
   m_Layer: 0
-  m_Name: RabbitThirstMainSlider
+  m_Name: RabbitThirstMaxMainSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13825,7 +13825,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: RabbitThirst
+          m_StringArgument: RabbitThirstMax
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4374718194992938509
@@ -14240,7 +14240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6696618857573383639}
   m_Layer: 0
-  m_Name: RabbitAgeSlider
+  m_Name: RabbitAgeMaxSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14723,7 +14723,7 @@ GameObject:
   - component: {fileID: 8595738924148199775}
   - component: {fileID: 8394118411279143538}
   m_Layer: 0
-  m_Name: RabbitThirstTitle
+  m_Name: RabbitThirstMaxTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15700,7 +15700,7 @@ GameObject:
   - component: {fileID: 4205203541575807657}
   - component: {fileID: 2038324337244939528}
   m_Layer: 0
-  m_Name: RabbitAgeTitle
+  m_Name: RabbitAgeMaxTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16957,7 +16957,7 @@ GameObject:
   - component: {fileID: 7679173263862149866}
   - component: {fileID: 5618011361900052438}
   m_Layer: 0
-  m_Name: RabbitHungerSliderText
+  m_Name: RabbitHungerMaxSliderText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17109,7 +17109,7 @@ GameObject:
   - component: {fileID: 6620307516028749777}
   - component: {fileID: 3924442619824553156}
   m_Layer: 0
-  m_Name: RabbitThirstSliderText
+  m_Name: RabbitThirstMaxSliderText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17259,7 +17259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7009011816256330541}
   m_Layer: 0
-  m_Name: RabbitHungerSlider
+  m_Name: RabbitHungerMaxSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
