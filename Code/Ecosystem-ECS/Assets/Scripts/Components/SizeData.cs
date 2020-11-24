@@ -22,4 +22,9 @@ public struct SizeData : IComponentData
     //   authoring the data in the Editor.
 
     public float3 size;
+    public float3 sizeMultiplier;
+    public float3 Size
+    {
+        get { return size * sizeMultiplier; }
+    }
 }

@@ -25,8 +25,18 @@ public struct PregnancyData : IComponentData
     public float birthDuration;   //How long between babies being born
     public float birthStartTime;
     public int babiesBorn;      //How many she has given birth to
-    public int litterSize;  //How many the female is carrying right now
+    public int litterSizeMin;
     public int litterSizeMax;
+    public int litterSizeAve;
+    //How many the female is carrying right now
+    public int currentLitterSize;
+    //TODO use gausian distribution to calc LitterSize
+    public int LitterSize
+    {
+        get { return litterSizeAve; }
+    }  
+
+
     public float pregnancyStartTime;
     public float pregnancyLengthBase;
     public float pregnancyLengthModifier;
