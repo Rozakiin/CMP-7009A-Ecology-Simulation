@@ -262,7 +262,8 @@ public class SimulationManager : MonoBehaviour
                 entityManager.SetComponentData(prototypeEntity, new AgeData { age = RabbitDefaults.age, ageIncrease = RabbitDefaults.ageIncrease, ageMax = RabbitDefaults.ageMax });
 
                 //randomise gender of rabbit - equal distribution
-                GenderData.Gender randGender = UnityEngine.Random.Range(0, 1) > 0.5f ? GenderData.Gender.Female : GenderData.Gender.Male;
+                GenderData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = GenderData.Gender.Female : randGender = GenderData.Gender.Male;
+                Debug.Log(randGender);
                 //set gender differing components
                 entityManager.SetComponentData(prototypeEntity, new GenderData { gender = randGender });
                 if (randGender == GenderData.Gender.Female) 
