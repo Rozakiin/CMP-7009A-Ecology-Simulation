@@ -115,18 +115,13 @@ namespace SpeedTutorMainMenuSystem
 
         #endregion
         #region Initial properties objects
-        //private Rabbit rabbit;
-        //private Fox fox;
-        //private Grass grass;
+
         #endregion
 
         #region Initialisation - Button Selection & Menu Order
         private void Start()
         {
             menuNumber = MenuNumber.Main;
-            //rabbit = gameObject.AddComponent(typeof(Rabbit)) as Rabbit;
-            //fox = gameObject.AddComponent(typeof(Fox)) as Fox;
-            //grass = gameObject.AddComponent(typeof(Grass)) as Grass;
         }
         #endregion
 
