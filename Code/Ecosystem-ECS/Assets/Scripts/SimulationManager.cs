@@ -174,6 +174,7 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         entityManager.SetName(prototypeTile, "WaterTile "+y + "," + x);
+
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
