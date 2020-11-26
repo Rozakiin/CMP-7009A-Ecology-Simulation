@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    #region UI Canvas'
+    [SerializeField] private GameObject uiDefaultCanvas;
+    #endregion
+
     #region Slider Linking
     [Header("Properties Sliders")]
     [SerializeField] private Text rabbitSizeMaleText;
@@ -98,6 +102,7 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        uiDefaultCanvas.SetActive(true);
     }
     #endregion
     // Update is called once per frame

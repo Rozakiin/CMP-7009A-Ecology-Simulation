@@ -1367,7 +1367,7 @@ GameObject:
   - component: {fileID: 2911846406615655013}
   - component: {fileID: 2476012478927398142}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UIDefaultCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1577,6 +1577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f558d7cb3eeaa4cb4c25b97e40b914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiDefaultCanvas: {fileID: 6875578591821961268}
   rabbitSizeMaleText: {fileID: 4895736446488741062}
   rabbitSizeMaleSlider: {fileID: 6542920699767792623}
   rabbitSizeFemaleText: {fileID: 8368805973124295712}
