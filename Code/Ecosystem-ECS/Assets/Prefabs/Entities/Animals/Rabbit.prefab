@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBeEaten: 1
-  nutritionalValue: 10
+  nutritionalValueBase: 10
+  nutritionalValueMultiplier: 1
   foodType: 4
 --- !u!114 &-9147605867028636769
 MonoBehaviour:
@@ -246,10 +247,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4edad15b2ca3644a29ab0afee6b4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size:
-    x: 1
-    y: 1
-    z: 1
+  size: 1
+  sizeMultiplier: 1
 --- !u!114 &-3378324085052062256
 MonoBehaviour:
   m_ObjectHideFlags: 0
