@@ -10,6 +10,19 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     public static SimulationManager Instance;
 
+    // declare All of archetype I don't think we need to SerializeField this field
+    #region
+    public static EntityArchetype GrassTileArchitype { get; private set; }
+    public static EntityArchetype WaterTileArchitype { get; private set; }
+    public static EntityArchetype RockTileArchitype { get; private set; }
+    public static EntityArchetype SandTileArchitype { get; private set; }
+    public static EntityArchetype MaleRabbitArchitype { get; private set; }
+    public static EntityArchetype FemaleRabbitArchitype { get; private set; }
+    public static EntityArchetype GrassArchitype { get; private set; }
+    public static EntityArchetype FoxArchitype { get; private set; }   //I am not sure do we need Female Fox, just Fox if we need, I can add later
+    #endregion
+
+
     #region GameObjects
     [Header("GameObjects")]
     [SerializeField] public GameObject grassTile;
@@ -110,6 +123,31 @@ public class SimulationManager : MonoBehaviour
         worldSize.y = gridHeight * tileSize;
         worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
+
+        //Create architype of Grass tile, water tile, rock tile, sand tiles
+        GrassTileArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(TerrainTypeData)
+            );
+        WaterTileArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(DrinkableData),
+            typeof(TerrainTypeData)
+            );
+        RockTileArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(TerrainTypeData)
+            );
+        SandTileArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(TerrainTypeData)
+            );
+
+
         // Create entity prefabs from the game objects hierarchy once
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
@@ -201,8 +239,6 @@ public class SimulationManager : MonoBehaviour
         entityManager.DestroyEntity(entityWaterTile);
         entityManager.DestroyEntity(entitySandTile);
         entityManager.DestroyEntity(entityRockTile);
-
-
     }
 
     private void SetLimits()
@@ -221,6 +257,59 @@ public class SimulationManager : MonoBehaviour
         // Create entity prefab from the game object hierarchy once
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
+
+
+        //  Create architype of Fox MaleRabbit Female Rabbit Grass
+        MaleRabbitArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),                   // not sure which entity need to rigibody
+            typeof(EdibleData),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(MateData),
+            typeof(GenderData),
+            typeof(SizeData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(DietData)
+            );
+        FemaleRabbitArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(PregnancyData),
+            typeof(EdibleData),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(GenderData),
+            typeof(SizeData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(DietData)
+            );
+        GrassArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(EdibleData)
+            );
+        FoxArchitype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Collider),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(SizeData),
+            typeof(DietData)
+            );
+
 
 
         for (int i = 0; i < quantity; i++)

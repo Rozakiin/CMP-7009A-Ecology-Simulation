@@ -36,6 +36,7 @@ public class SpawningSystem : ComponentSystem
             {
                 Vector3 targetPosition = hit.point;
                 CreateRabbitAtPos(targetPosition);
+                SimulationManager.Instance.numberOfRabbitsToSpawn += 1; // just count rabbit number
             }
         }
     }

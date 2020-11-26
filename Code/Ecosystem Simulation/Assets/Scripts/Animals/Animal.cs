@@ -64,7 +64,7 @@ public abstract class Animal : Edible
         protected set { pregnancyLengthBase = value; }
     }
 
-    [SerializeField] protected float sightRadius;
+    [SerializeField] public float sightRadius;
     [SerializeField] protected float touchRadius;
 
     [Header("Scene Data")]

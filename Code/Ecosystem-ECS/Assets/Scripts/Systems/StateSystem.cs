@@ -42,7 +42,7 @@ public class StateSystem : SystemBase
             in GenderData genderData,
             in VisionData visionData,
             in Translation translation
-            )=> {
+            ) => {
                 // Implement the work to perform for each entity here.
                 // You should only access data that is local or that is a
                 // field on this job. Note that the 'rotation' parameter is
@@ -185,6 +185,15 @@ public class StateSystem : SystemBase
                     case StateData.States.GivingBirth:
                         break;
                     case StateData.States.Fleeing:
+                        if (hungerData.entityPredator != Entity.Null)
+                        {
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[hungerData.entityPredator].Value);
+                            if (euclidian <= visionData.sightRadius)
+                            {
+                                stateData.previousState = stateData.state;
+                                stateData.state = StateData.States.Fleeing;
+                            }
+                        }
                         break;
                     case StateData.States.Dead:
                         //entitycommandbuffer

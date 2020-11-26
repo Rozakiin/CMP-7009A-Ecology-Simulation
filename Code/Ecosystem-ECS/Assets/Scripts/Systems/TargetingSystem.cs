@@ -105,7 +105,7 @@ public class TargetingSystem : SystemBase
                         if (WorldPointIsWalkable(targetPosition, leftLimit, rightLimit, downLimit, upLimit))
                         {
                             targetData.currentTarget = targetPosition;
-                            targetData.atTarget = false;
+                            targetData.atTarget = false; 
                         }
                         break;
                     case StateData.States.Hungry:

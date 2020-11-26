@@ -27,6 +27,7 @@ public struct HungerData : IComponentData
     public float hungerIncrease;
     public float eatingSpeed;
     public Entity entityToEat;
+    public Entity entityPredator;
 
     public enum Diet
     {
