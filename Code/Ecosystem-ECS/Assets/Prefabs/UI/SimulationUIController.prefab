@@ -1433,7 +1433,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1584,6 +1584,28 @@ MonoBehaviour:
   rabbitSizeFemaleSlider: {fileID: 9139183475184834771}
   rabbitSpeedText: {fileID: 7784577540187564386}
   rabbitSpeedSlider: {fileID: 4780905244379813101}
+  rabbitHungerText: {fileID: 0}
+  rabbitHungerSlider: {fileID: 0}
+  rabbitThirstText: {fileID: 0}
+  rabbitThirstSlider: {fileID: 0}
+  rabbitAgeText: {fileID: 0}
+  rabbitAgeSlider: {fileID: 0}
+  rabbitTouchRadiusText: {fileID: 0}
+  rabbitTouchRadiusSlider: {fileID: 0}
+  rabbitSightRadiusText: {fileID: 0}
+  rabbitSightRadiusSlider: {fileID: 0}
+  rabbitPregnancyLengthText: {fileID: 0}
+  rabbitPregnancyLengthSlider: {fileID: 0}
+  rabbitMatingDurationText: {fileID: 0}
+  rabbitMatingDurationSlider: {fileID: 0}
+  rabbitBirthDurationText: {fileID: 0}
+  rabbitBirthDurationSlider: {fileID: 0}
+  rabbitLitterSizeMinText: {fileID: 0}
+  rabbitLitterSizeMinSlider: {fileID: 0}
+  rabbitLitterSizeMaxText: {fileID: 0}
+  rabbitLitterSizeMaxSlider: {fileID: 0}
+  rabbitLitterSizeAveText: {fileID: 0}
+  rabbitLitterSizeAveSlider: {fileID: 0}
 --- !u!1 &7802746099894597822
 GameObject:
   m_ObjectHideFlags: 0
