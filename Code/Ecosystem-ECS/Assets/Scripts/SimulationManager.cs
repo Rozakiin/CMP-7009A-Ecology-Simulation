@@ -252,6 +252,7 @@ public class SimulationManager : MonoBehaviour
             //FIXME
             if (gameObject.name.Contains("Rabbit"))
             {
+                entityManager.AddComponent<isRabbitTag>(prototypeEntity);
                 entityManager.SetComponentData(prototypeEntity, new EdibleData { canBeEaten = RabbitDefaults.canBeEaten, nutritionalValueBase = RabbitDefaults.nutritionalValue, nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier, foodType = RabbitDefaults.foodType });
                 entityManager.SetComponentData(prototypeEntity, new MovementData { rotationSpeed = RabbitDefaults.rotationSpeed, moveSpeedBase = RabbitDefaults.moveSpeed, moveMultiplier = RabbitDefaults.moveMultiplier });
                 entityManager.SetComponentData(prototypeEntity, new HungerData { hunger = RabbitDefaults.hunger, hungryThreshold = RabbitDefaults.hungryThreshold, hungerMax = RabbitDefaults.hungerMax, hungerIncrease = RabbitDefaults.hungerIncrease, eatingSpeed = RabbitDefaults.eatingSpeed, entityToEat = RabbitDefaults.entityToEat, diet = RabbitDefaults.diet });
