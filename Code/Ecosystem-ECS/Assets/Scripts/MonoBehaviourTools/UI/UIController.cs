@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Entities;
+using Unity.Jobs;
+using Unity.Mathematics;
+using Unity.Transforms;
 
 public class UIController : MonoBehaviour
 {
@@ -118,14 +124,17 @@ public class UIController : MonoBehaviour
             case "RabbitSizeFemale":
                 rabbitSizeFemaleText.text = rabbitSizeFemaleSlider.value.ToString();
                 RabbitDefaults.scaleFemale = rabbitSizeFemaleSlider.value;
+                UIUpdateSystem.Instance.somethingChangedFlag = true; // could be improved by having UIUpdateSystem check if value changed rather than needing flag, but this works
                 break;
             case "RabbitSizeMale":
                 rabbitSizeMaleText.text = rabbitSizeMaleSlider.value.ToString();
                 RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
+                UIUpdateSystem.Instance.somethingChangedFlag = true; // could be improved by having UIUpdateSystem check if value changed rather than needing flag, but this works
                 break;
             case "RabbitSpeed":
                 rabbitSpeedText.text = rabbitSpeedSlider.value.ToString();
                 RabbitDefaults.moveSpeed = rabbitSpeedSlider.value;
+                UIUpdateSystem.Instance.somethingChangedFlag = true; // could be improved by having UIUpdateSystem check if value changed rather than needing flag, but this works
                 break;
             case "RabbitHungerMax":
                 rabbitHungerText.text = rabbitHungerSlider.value.ToString();
