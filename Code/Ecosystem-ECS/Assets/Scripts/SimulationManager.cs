@@ -66,7 +66,7 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        SpawnRabbitAtPosOnClick();
     }
 
     #region Map Creation Methods
@@ -246,6 +246,32 @@ public class SimulationManager : MonoBehaviour
         }
         entityManager.DestroyEntity(convertedEntity);
 
+    }
+
+    private void SpawnRabbitAtPosOnClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Debug.Log(targetPosition.ToString());
+                CreateRabbitAtPos(targetPosition);
+            }
+        }
+    }
+    private void CreateRabbitAtPos(in Vector3 position)
+    {
+        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
+        var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
+        Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
+        entityManager.SetName(prototypeRabbit, "ClickRabbit" + prototypeRabbit.Index);
+        entityManager.SetComponentData(prototypeRabbit, new Translation { Value = position }); // set position data (called translation in ECS)
+        entityManager.SetComponentData(prototypeRabbit, new TargetData { currentTarget = position, oldTarget = position, atTarget = true }); // set target data
+        entityManager.DestroyEntity(entityRabbit);
     }
     #endregion
 
