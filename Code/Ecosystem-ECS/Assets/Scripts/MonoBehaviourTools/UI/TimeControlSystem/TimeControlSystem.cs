@@ -6,40 +6,35 @@ using UnityEngine.UI;
 public class TimeControlSystem : MonoBehaviour
 {
     public Text speedDisplay;
-    public float fastForwardMultiplier;
-    bool pause;
+    public float fastforwardSpeed;
+    private bool pause;
     public Button PlayButton;
     public Button PauseButton;
+    public Button FastButton;
     public Button SlowButton;
-    public Button DownButton;
     void Start()
     {
-        speedDisplay.text = fastForwardMultiplier.ToString();
-        Button PlayButton1 = PlayButton.GetComponent<Button>();
-        PlayButton1.onClick.AddListener(Play);
-        Button PauseButton1 = PauseButton.GetComponent<Button>();
-        PauseButton1.onClick.AddListener(Pause);
-        Button SlowButton1 = SlowButton.GetComponent<Button>();
-        SlowButton1.onClick.AddListener(IncreaseSpeed);
-        Button DownButton1 = DownButton.GetComponent<Button>();
-        DownButton1.onClick.AddListener(DecreaseSpeed);
+        speedDisplay.text = fastforwardSpeed.ToString();
+        PlayButton.onClick.AddListener(Play);
+        PauseButton.onClick.AddListener(Pause);
+        FastButton.onClick.AddListener(IncreaseSpeed);
+        SlowButton.onClick.AddListener(DecreaseSpeed);
+        //start playing at start
+        pause = false;
     }
     void Update()
     {
-        if (pause)
+        Time.timeScale = pause ? 0f : fastforwardSpeed;
+
+        if (fastforwardSpeed < 0 || fastforwardSpeed > 100)
         {
-            Time.timeScale = 0f;
+            fastforwardSpeed = 0f;
         }
-        if (fastForwardMultiplier < 0 || fastForwardMultiplier>100)
-        {
-            fastForwardMultiplier = 0f;
-        }
-        speedDisplay.text = string.Format("speed {0}:", fastForwardMultiplier.ToString());
+        speedDisplay.text = string.Format("speed {0}:", fastforwardSpeed.ToString());
     }
     public void Play()
     {
         pause = false;
-        Time.timeScale = fastForwardMultiplier;
     }
     public void Pause()
     {
@@ -47,28 +42,24 @@ public class TimeControlSystem : MonoBehaviour
     }
     public void IncreaseSpeed()
     {
-        if (fastForwardMultiplier < 1f)
+        if (fastforwardSpeed < 1f)
         {
-            fastForwardMultiplier += 0.2f;
-            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+            fastforwardSpeed += 0.2f;
         }
         else
         {
-            fastForwardMultiplier += 1f;
-            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+            fastforwardSpeed += 1f;
         }
     }
     public void DecreaseSpeed()
     {
-        if (fastForwardMultiplier <= 1f && fastForwardMultiplier > 0.2f)
+        if (fastforwardSpeed <= 1f && fastforwardSpeed > 0.2f)
         {
-            fastForwardMultiplier -= 0.2f;
-            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+            fastforwardSpeed -= 0.2f;
         }
-        else if (fastForwardMultiplier > 1f)
+        else if (fastforwardSpeed > 1f)
         {
-            fastForwardMultiplier -= 1f;
-            Time.timeScale = pause ? 0f : fastForwardMultiplier;
+            fastforwardSpeed -= 1f;
         }
     }
 
