@@ -10,6 +10,19 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     public static SimulationManager Instance;
 
+
+    #region Archetypes
+    // declare All of archetypes
+    public static EntityArchetype GrassTileArchetype { get; private set; }
+    public static EntityArchetype WaterTileArchetype { get; private set; }
+    public static EntityArchetype RockTileArchetype { get; private set; }
+    public static EntityArchetype SandTileArchetype { get; private set; }
+    public static EntityArchetype MaleRabbitArchetype { get; private set; }
+    public static EntityArchetype FemaleRabbitArchetype { get; private set; }
+    public static EntityArchetype GrassArchetype { get; private set; }
+    public static EntityArchetype FoxArchetype { get; private set; }   //I am not sure do we need Female Fox, just Fox if we need, I can add later
+    #endregion
+
     #region GameObjects
     [Header("GameObjects")]
     [SerializeField] public GameObject grassTile;
@@ -50,6 +63,9 @@ public class SimulationManager : MonoBehaviour
     {
         Instance = this;
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+        CreateArchetypes();
+
         // Only continue if no errors creating the map
         if (CreateMap())
         {
@@ -60,6 +76,98 @@ public class SimulationManager : MonoBehaviour
         {
             Debug.Log("Error Loading Map");
         }
+    }
+
+    private void CreateArchetypes()
+    {
+        //Create archetype of Grass tile, water tile, rock tile, sand tile
+        GrassTileArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(TerrainTypeData)
+            );
+
+        WaterTileArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(TerrainTypeData),
+            typeof(DrinkableData)
+            );
+
+        RockTileArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(TerrainTypeData)
+            );
+
+        SandTileArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(TerrainTypeData)
+            );
+
+        //  Create architype of Fox MaleRabbit Female Rabbit Grass
+        MaleRabbitArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(EdibleData),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(MateData),
+            typeof(GenderData),
+            typeof(SizeData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(DietData)
+            );
+
+        FemaleRabbitArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(PregnancyData),
+            typeof(EdibleData),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(GenderData),
+            typeof(SizeData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(DietData)
+            );
+
+        FoxArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(MovementData),
+            typeof(HungerData),
+            typeof(ThirstData),
+            typeof(StateData),
+            typeof(TargetData),
+            typeof(VisionData),
+            typeof(AgeData),
+            typeof(SizeData),
+            typeof(DietData)
+            );
+
+        GrassArchetype = entityManager.CreateArchetype(
+            typeof(Translation),
+            typeof(Rotation),
+            typeof(NonUniformScale),
+            typeof(EdibleData)
+            );
     }
     #endregion
 
