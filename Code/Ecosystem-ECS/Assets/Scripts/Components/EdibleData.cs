@@ -22,7 +22,12 @@ public struct EdibleData : IComponentData
     //   authoring the data in the Editor.
 
     public bool canBeEaten;
-    public int nutritionalValue;
+    public float nutritionalValueBase;
+    public float nutritionalValueMultiplier;
+    public float NutritionalValue
+    {
+        get { return nutritionalValueBase * nutritionalValueMultiplier; }
+    }
     //Not ideal groupings but will work when only one type of predator
     //Allows FoodTypes to be OR bitwise to have multiple preferences
     [Flags]

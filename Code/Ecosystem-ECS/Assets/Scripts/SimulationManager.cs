@@ -44,8 +44,8 @@ public class SimulationManager : MonoBehaviour
 
     #region Map Data 
     [Header("Map Data")]
-    [SerializeField] public string mapPath;
-    public string mapString;
+    public static string mapPath = "Assets/Scripts/MonoBehaviourTools/Map/MapExample.txt";
+    public static string mapString;
     public static int gridWidth;
     public static int gridHeight;
     public static Vector2 worldSize;
@@ -125,8 +125,7 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
-            typeof(DietData)
+            typeof(AgeData)
             );
 
         FemaleRabbitArchetype = entityManager.CreateArchetype(
@@ -143,8 +142,7 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
-            typeof(DietData)
+            typeof(AgeData)
             );
 
         FoxArchetype = entityManager.CreateArchetype(
@@ -158,8 +156,7 @@ public class SimulationManager : MonoBehaviour
             typeof(TargetData),
             typeof(VisionData),
             typeof(AgeData),
-            typeof(SizeData),
-            typeof(DietData)
+            typeof(SizeData)
             );
 
         GrassArchetype = entityManager.CreateArchetype(
@@ -182,19 +179,23 @@ public class SimulationManager : MonoBehaviour
     private bool CreateMap()
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
-        if (mapPath != "")
+        if (mapPath != null)
         {
             if (MapReader.ReadInMapFromFile(mapPath, ref mapList))
                 CreateEntityTilesFromMapList(in mapList);
             else
                 return false;
         }
+        else if (mapString != null)
+        {
+            if (MapReader.ReadInMapFromString(mapString, ref mapList))
+                CreateEntityTilesFromMapList(in mapList);
+            else
+                return false;
+        }
         else
         {
-            //if (MapReader.ReadInMapFromString(mapString, ref mapList))
-            //    CreateEntityTilesFromMapList(in mapList);
-            //else
-            //    return false;
+            return false;
         }
 
         // Create a GameObject the size of the map with collider for ray hits
@@ -340,7 +341,7 @@ public class SimulationManager : MonoBehaviour
             int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
             int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
             // Get the world co ordinates from the bottom left of the graph
-            Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2); 
+            Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
 
             // Place the instantiated entity in a random point on the map
             //Set Component Data for the entity
@@ -349,8 +350,36 @@ public class SimulationManager : MonoBehaviour
             //if has target data component set target to self
             if (entityManager.HasComponent<TargetData>(prototypeEntity))
             {
-                entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint});
+                entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint });
             }
+
+            //set default variables based on gameObject name - not great solution but works for now
+            //FIXME
+            if (gameObject.name.Contains("Rabbit"))
+            {
+                entityManager.AddComponent<isRabbitTag>(prototypeEntity);
+                entityManager.SetComponentData(prototypeEntity, new EdibleData { canBeEaten = RabbitDefaults.canBeEaten, nutritionalValueBase = RabbitDefaults.nutritionalValue, nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier, foodType = RabbitDefaults.foodType });
+                entityManager.SetComponentData(prototypeEntity, new MovementData { rotationSpeed = RabbitDefaults.rotationSpeed, moveSpeedBase = RabbitDefaults.moveSpeed, moveMultiplier = RabbitDefaults.moveMultiplier });
+                entityManager.SetComponentData(prototypeEntity, new HungerData { hunger = RabbitDefaults.hunger, hungryThreshold = RabbitDefaults.hungryThreshold, hungerMax = RabbitDefaults.hungerMax, hungerIncrease = RabbitDefaults.hungerIncrease, eatingSpeed = RabbitDefaults.eatingSpeed, entityToEat = RabbitDefaults.entityToEat, diet = RabbitDefaults.diet });
+                entityManager.SetComponentData(prototypeEntity, new ThirstData { thirst = RabbitDefaults.thirst, thirstyThreshold = RabbitDefaults.thirstyThreshold, thirstMax = RabbitDefaults.thirstMax, thirstIncrease = RabbitDefaults.thirstIncrease, drinkingSpeed = RabbitDefaults.drinkingSpeed, entityToDrink = RabbitDefaults.entityToDrink });
+                entityManager.SetComponentData(prototypeEntity, new MateData { matingDuration = RabbitDefaults.matingDuration, mateStartTime = RabbitDefaults.mateStartTime, reproductiveUrge = RabbitDefaults.reproductiveUrge, reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease, matingThreshold = RabbitDefaults.matingThreshold, entityToMate = RabbitDefaults.entityToMate });
+                entityManager.SetComponentData(prototypeEntity, new StateData { state = RabbitDefaults.state, previousState = RabbitDefaults.previousState, deathReason = RabbitDefaults.deathReason, beenEaten = RabbitDefaults.beenEaten });
+                entityManager.SetComponentData(prototypeEntity, new VisionData { sightRadius = RabbitDefaults.sightRadius, touchRadius = RabbitDefaults.touchRadius });
+                entityManager.SetComponentData(prototypeEntity, new AgeData { age = RabbitDefaults.age, ageIncrease = RabbitDefaults.ageIncrease, ageMax = RabbitDefaults.ageMax });
+
+                //randomise gender of rabbit - equal distribution
+                GenderData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = GenderData.Gender.Female : randGender = GenderData.Gender.Male;
+                Debug.Log(randGender);
+                //set gender differing components
+                entityManager.SetComponentData(prototypeEntity, new GenderData { gender = randGender });
+                if (randGender == GenderData.Gender.Female) 
+                {
+                    entityManager.AddComponent<PregnancyData>(prototypeEntity);
+                    entityManager.SetComponentData(prototypeEntity, new PregnancyData { pregnant = RabbitDefaults.pregnant, birthDuration = RabbitDefaults.birthDuration, babiesBorn = RabbitDefaults.babiesBorn, birthStartTime = RabbitDefaults.birthStartTime, currentLitterSize = RabbitDefaults.currentLitterSize, litterSizeMin = RabbitDefaults.litterSizeMin, litterSizeMax = RabbitDefaults.litterSizeMax, litterSizeAve = RabbitDefaults.litterSizeAve, pregnancyLengthBase = RabbitDefaults.pregnancyLength, pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier, pregnancyStartTime = RabbitDefaults.pregnancyStartTime });
+                }
+                entityManager.SetComponentData(prototypeEntity, new SizeData { size = (randGender == GenderData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), sizeMultiplier = RabbitDefaults.sizeMultiplier });
+            }
+
         }
         entityManager.DestroyEntity(convertedEntity);
 

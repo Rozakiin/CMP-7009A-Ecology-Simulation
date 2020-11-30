@@ -43,7 +43,7 @@ public class HungerSystem : SystemBase
             {
                 if (HasComponent<EdibleData>(hungerData.entityToEat))
                 {
-                    hungerData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[hungerData.entityToEat].nutritionalValue * hungerData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
+                    hungerData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[hungerData.entityToEat].NutritionalValue * hungerData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
                     //TODO set beenEaten to true in entityToEat - need to use entitybuffersystem
                     //    if (entityManager.HasComponent<StateData>(hungerData.entityToEat))
                     //    {

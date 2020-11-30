@@ -4,8 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-[GenerateAuthoringComponent]
-public struct DietData : IComponentData
+public struct isRabbitTag : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -21,9 +20,5 @@ public struct DietData : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
     
-    public enum Diet
-    {
-        Carnivore, Herbivore, Omnivore,
-    }
-    public Diet diet;
+    
 }

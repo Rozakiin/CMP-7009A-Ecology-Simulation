@@ -49,17 +49,17 @@ public class UIController : MonoBehaviour
 
     public void SetRabbitMaxHunger(float hunger)
     {
-        new Rabbit().SetGlobalMaxHunger(hunger);
+        new Rabbit().SetGlobalBaseMaxHunger(hunger);
     }
 
     public void SetRabbitMaxThirst(float thirst)
     {
-        new Rabbit().SetGlobalMaxThirst(thirst);
+        new Rabbit().SetGlobalBaseMaxThirst(thirst);
     }
 
     public void SetRabbitMaxAge(float age)
     {
-        new Rabbit().SetGlobalMaxThirst((int)age);
+        new Rabbit().SetGlobalBaseMaxThirst((int)age);
     }
 
     public void SetRabbitPregnancyLength(float length)

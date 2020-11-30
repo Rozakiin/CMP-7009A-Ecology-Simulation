@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 2407081619555887592}
   - component: {fileID: -6426143068931531581}
   - component: {fileID: -8698036066575867697}
-  - component: {fileID: 208235631107998594}
   - component: {fileID: -7479947182873029247}
   - component: {fileID: -3378324085052062256}
   - component: {fileID: 1699504912102838281}
@@ -150,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBeEaten: 1
-  nutritionalValue: 10
+  nutritionalValueBase: 10
+  nutritionalValueMultiplier: 1
   foodType: 4
 --- !u!114 &-9147605867028636769
 MonoBehaviour:
@@ -235,27 +235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gender: 0
---- !u!114 &208235631107998594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63f99589a5e4e5b4c96fb9075e31233b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pregnant: 0
-  birthDuration: 0
-  birthStartTime: 0
-  babiesBorn: 0
-  litterSize: 0
-  litterSizeMax: 0
-  pregnancyStartTime: 0
-  pregnancyLengthBase: 0
-  pregnancyLengthModifier: 0
 --- !u!114 &-7479947182873029247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,10 +247,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4edad15b2ca3644a29ab0afee6b4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size:
-    x: 1
-    y: 1
-    z: 1
+  size: 1
+  sizeMultiplier: 1
 --- !u!114 &-3378324085052062256
 MonoBehaviour:
   m_ObjectHideFlags: 0

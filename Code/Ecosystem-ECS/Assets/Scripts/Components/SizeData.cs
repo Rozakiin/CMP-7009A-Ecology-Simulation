@@ -21,5 +21,10 @@ public struct SizeData : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public float3 size;
+    public float size;
+    public float sizeMultiplier;
+    public float Size
+    {
+        get { return size * sizeMultiplier; }
+    }
 }
