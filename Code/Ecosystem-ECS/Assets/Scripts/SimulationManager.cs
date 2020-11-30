@@ -125,8 +125,7 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
-            typeof(DietData)
+            typeof(AgeData)
             );
 
         FemaleRabbitArchetype = entityManager.CreateArchetype(
@@ -143,8 +142,7 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
-            typeof(DietData)
+            typeof(AgeData)
             );
 
         FoxArchetype = entityManager.CreateArchetype(
@@ -158,8 +156,7 @@ public class SimulationManager : MonoBehaviour
             typeof(TargetData),
             typeof(VisionData),
             typeof(AgeData),
-            typeof(SizeData),
-            typeof(DietData)
+            typeof(SizeData)
             );
 
         GrassArchetype = entityManager.CreateArchetype(
