@@ -13,7 +13,10 @@ using Unity.Transforms;
 public class UIController : MonoBehaviour
 {
     #region UI Canvas'
-    [SerializeField] private GameObject uiDefaultCanvas;
+    [SerializeField] private GameObject uiSliderCanvas;
+    [SerializeField] private GameObject uiTimeCanvas;
+    [SerializeField] private GameObject uiTurnCanvas;
+
     #endregion
 
     #region Slider Linking
@@ -108,7 +111,10 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiDefaultCanvas.SetActive(true);
+        uiSliderCanvas.SetActive(true);
+        uiTimeCanvas.SetActive(true);
+        uiTurnCanvas.SetActive(true);
+
     }
     #endregion
     // Update is called once per frame
