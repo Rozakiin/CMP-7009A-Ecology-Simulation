@@ -22,6 +22,7 @@ namespace SpeedTutorMainMenuSystem
             Gameplay,
             Controls,
             InitialProperties,
+            GenerateMap,
         }
         string fileContents;
         #region Default Values
@@ -48,6 +49,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private GameObject controlsMenu;
         [SerializeField] private GameObject confirmationMenu;
         [SerializeField] private GameObject initialPropertiesCanvas;
+        [SerializeField] private GameObject generateMapCanvas;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -69,6 +71,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Slider volumeSlider;
         [Space(10)]
         [SerializeField] private Toggle invertYToggle;
+
         [Header("Initial Properties Sliders")]
         [SerializeField] private Text rabbitSizeMaleText;
         [SerializeField] private Slider rabbitSizeMaleSlider;
@@ -111,11 +114,6 @@ namespace SpeedTutorMainMenuSystem
         [Space(5)]
         [SerializeField] private Text rabbitLitterSizeAveText;
         [SerializeField] private Slider rabbitLitterSizeAveSlider;
-        
-
-        #endregion
-        #region Initial properties objects
-
         #endregion
 
         #region Initialisation - Button Selection & Menu Order
@@ -137,7 +135,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame || menuNumber == MenuNumber.InitialProperties)
+                if (menuNumber == MenuNumber.Options || menuNumber == MenuNumber.NewGame || menuNumber == MenuNumber.LoadGame || menuNumber == MenuNumber.InitialProperties || menuNumber == MenuNumber.GenerateMap)
                 {
                     GoBackToMainMenu();
                     ClickSound();
@@ -212,6 +210,11 @@ namespace SpeedTutorMainMenuSystem
                     initialPropertiesCanvas.SetActive(false);
                     newGameDialog.SetActive(true);
                     menuNumber = MenuNumber.InitialProperties;
+                    break;
+                case "GenerateMap":
+                    menuDefaultCanvas.SetActive(false);
+                    generateMapCanvas.SetActive(true);
+                    menuNumber = MenuNumber.GenerateMap;
                     break;
                 default:
                     Debug.Log("Button clicked with no known case.");
@@ -520,6 +523,7 @@ namespace SpeedTutorMainMenuSystem
             soundMenu.SetActive(false);
             gameplayMenu.SetActive(false);
             initialPropertiesCanvas.SetActive(false);
+            generateMapCanvas.SetActive(false);
             menuNumber = MenuNumber.Main;
         }
 
