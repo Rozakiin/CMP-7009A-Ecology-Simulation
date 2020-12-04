@@ -22,6 +22,7 @@ public class Simulation : MonoBehaviour
     [SerializeField] public GameObject rabbitContainer;
     [SerializeField] public GameObject grass;
     [SerializeField] public GameObject grassContainer;
+    [SerializeField] public GameObject floatingText;
     #endregion
 
     #region GameObject Counters
@@ -203,7 +204,7 @@ public class Simulation : MonoBehaviour
         rabbitCount++;
         rabbitList.Add(rabbitClone.GetComponent<Rabbit>());
         rabbitClone.transform.parent = rabbitContainer.transform;
-        rabbitClone.name = "RabbitClone" + rabbitCount;
+        rabbitClone.name = "Rabbit " + rabbitCount;
     }
     
     public void CreateRabbit()

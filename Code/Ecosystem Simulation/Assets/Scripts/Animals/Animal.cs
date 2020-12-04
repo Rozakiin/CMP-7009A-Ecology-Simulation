@@ -160,6 +160,7 @@ public abstract class Animal : Edible
         waitRadius = 15f;
         thirst = 0f;
         hunger = 0f;
+        ShowName();
     }
     #endregion
 
@@ -444,6 +445,19 @@ public abstract class Animal : Edible
         return (y1 * sigma) + mu;                                       // returns a random number
     }
 
+    private void ShowName()
+    {
+        if (scene.floatingText)
+        {         
+            GameObject text = Instantiate(scene.floatingText, transform.position, transform.rotation, transform);
+            scene.floatingText.transform.rotation = Camera.main.transform.rotation;
+            text.GetComponent<TextMesh>().text = transform.name;
+            float animalHeight = GetComponent<Collider>().bounds.size.y;
+            text.transform.localPosition += new Vector3(0, animalHeight, 0);
+            
+
+        }
+    }
 
     public Vector3 GetTarget()
     {

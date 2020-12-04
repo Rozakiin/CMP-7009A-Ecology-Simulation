@@ -8,8 +8,20 @@ MonoImporter:
       type: 3}
   - lightGrassTile: {fileID: 555318781069503079, guid: 299a86df992454149938ed63f6952a94,
       type: 3}
+  - waterTile: {instanceID: 0}
+  - sandTile: {instanceID: 0}
+  - rockTile: {instanceID: 0}
+  - tileContainer: {instanceID: 0}
+  - grassTileContainer: {instanceID: 0}
+  - rockTileContainer: {instanceID: 0}
+  - sandTileContainer: {instanceID: 0}
+  - waterContainer: {instanceID: 0}
   - rabbit: {fileID: 100042, guid: 0962bdca27eaca34aaa15f7fdf608faf, type: 3}
+  - rabbitContainer: {instanceID: 0}
   - grass: {fileID: 2485608032364271217, guid: d483cda7cf88d5c43a719c90483764f1, type: 3}
+  - grassContainer: {instanceID: 0}
+  - floatingText: {fileID: 853303171555018208, guid: b87e3efae015c6a4caa3480a1fea59b4,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

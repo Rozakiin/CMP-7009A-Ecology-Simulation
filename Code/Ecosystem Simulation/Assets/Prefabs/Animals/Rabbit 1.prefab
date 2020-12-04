@@ -703,6 +703,7 @@ GameObject:
   - component: {fileID: 95674028643950644}
   - component: {fileID: 2659639742938045100}
   - component: {fileID: -3186424140928691517}
+  - component: {fileID: -8303029850321131687}
   m_Layer: 0
   m_Name: Rabbit 1
   m_TagString: Rabbit
@@ -758,11 +759,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5eb80fb7b0bc540ad91dd46f7f0897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nutritionalValue: 0
   position: {x: 0, y: 0, z: 0}
   scene: {fileID: 0}
-  target: {fileID: 0}
-  moveSpeed: 0
+  nutritionalValue: 0
+  target: {x: 0, y: 0, z: 0}
+  moveMultiplier: 0
+  hunger: 0
+  eatingSpeed: 0
+  thirst: 0
+  age: 0
+  gender: 0
+  closestMate: {fileID: 0}
+  pregnant: 0
+  mateStartTime: 0
+  birthStartTime: 0
+  numberOfBabies: 0
+  babiesBorn: 0
+  reproductiveUrge: 0
+  pregnancyStartTime: 0
+  tileSize: 0
+  leftLimit: 0
+  upLimit: 0
+  rightLimit: 0
+  downLimit: 0
+  numberOfTurns: 0
+  edibleObject: {fileID: 0}
+  renderer: {fileID: 0}
+  lineRenderer: {fileID: 0}
+  timer: 0
+  scaleMultiplier: 0
+  currentDirection: 0
+  state: 0
 --- !u!114 &-3186424140928691517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,6 +802,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb377645c13033c4fb2566329a3a730c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-8303029850321131687
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588090451174212}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1593323770353162
 GameObject:
   m_ObjectHideFlags: 0
