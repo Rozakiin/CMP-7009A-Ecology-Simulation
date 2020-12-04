@@ -26,8 +26,8 @@ public class MovementSystem : SystemBase
             ref Translation translation,
             ref Rotation rotation,
             in TargetData targetData,
-            in MovementData movementData
-            ) => {
+            in MovementData movementData) => 
+        {
                 // Implement the work to perform for each entity here.
                 // You should only access data that is local or that is a
                 // field on this job. Note that the 'rotation' parameter is
@@ -37,18 +37,16 @@ public class MovementSystem : SystemBase
                 // For example,
 
                 //if the target has changed
-                if (!targetData.atTarget)
-                {
-                    //+=new float3(0, 0, 1) * movementData.MoveSpeed * deltaTime
-                    float3 moveDir = math.normalize(targetData.currentTarget - translation.Value);
-                    translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
+                //if (!targetData.atTarget)
+                //{
+                //    float3 moveDir = math.normalizesafe(targetData.currentTarget - translation.Value);
 
-                    //translation.Value = targetData.currentTarget;// teleport :D
-                }
-
-
-
-
+                //    //rotate towards the targetPosition
+                //    float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)
+                //    rotation.Value = quaternion.LookRotationSafe(moveDir, math.up());
+                //    //move towards the targetPosition
+                //    translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
+                //}
         }).ScheduleParallel();
     }
 }
