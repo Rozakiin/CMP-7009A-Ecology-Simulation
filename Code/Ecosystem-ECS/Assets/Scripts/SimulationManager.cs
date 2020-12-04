@@ -1,15 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
     EntityManager entityManager;
+    GameObjectConversionSettings settings;
     public static SimulationManager Instance;
-
 
     #region Archetypes
     // declare All of archetypes
@@ -48,7 +49,7 @@ public class SimulationManager : MonoBehaviour
     public static string mapString;
     public static int gridWidth;
     public static int gridHeight;
-    public static Vector2 worldSize;
+    public static float2 worldSize;
     public static Vector3 worldBottomLeft;
     public static float tileSize;
     public static float leftLimit;
@@ -63,6 +64,7 @@ public class SimulationManager : MonoBehaviour
     {
         Instance = this;
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         CreateArchetypes();
 
@@ -198,11 +200,11 @@ public class SimulationManager : MonoBehaviour
             return false;
         }
 
-        // Create a GameObject the size of the map with collider for ray hits
+        // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
         collisionPlaneForMap = new GameObject();
         collisionPlaneForMap.transform.position = transform.position;
-        collisionPlaneForMap.AddComponent<BoxCollider>();
-        BoxCollider collider = collisionPlaneForMap.GetComponent<BoxCollider>();
+        collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
+        UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
         collider.size = new Vector3(worldSize.x,0,worldSize.y);
 
         SetLimits();
@@ -220,7 +222,6 @@ public class SimulationManager : MonoBehaviour
         worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
         // Create entity prefabs from the game objects hierarchy once
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
         var entityWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
         var entitySandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
@@ -245,6 +246,7 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         entityManager.SetName(prototypeTile, "WaterTile "+y + "," + x);
+
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
@@ -328,7 +330,6 @@ public class SimulationManager : MonoBehaviour
     private void CreateEntitiesFromGameObject(GameObject gameObject, int quantity)
     {
         // Create entity prefab from the game object hierarchy once
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
 
 
@@ -369,7 +370,7 @@ public class SimulationManager : MonoBehaviour
 
                 //randomise gender of rabbit - equal distribution
                 GenderData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = GenderData.Gender.Female : randGender = GenderData.Gender.Male;
-                Debug.Log(randGender);
+                //Debug.Log(randGender);
                 //set gender differing components
                 entityManager.SetComponentData(prototypeEntity, new GenderData { gender = randGender });
                 if (randGender == GenderData.Gender.Female) 
@@ -390,9 +391,8 @@ public class SimulationManager : MonoBehaviour
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
             {
                 Vector3 targetPosition = hit.point;
                 Debug.Log(targetPosition.ToString());
@@ -402,7 +402,6 @@ public class SimulationManager : MonoBehaviour
     }
     private void CreateRabbitAtPos(in Vector3 position)
     {
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
         Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
         entityManager.SetName(prototypeRabbit, "ClickRabbit" + prototypeRabbit.Index);
