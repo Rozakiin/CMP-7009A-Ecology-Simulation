@@ -131,6 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 508030574}
   - component: {fileID: 508030573}
+  - component: {fileID: 508030575}
   m_Layer: 0
   m_Name: SimulationManager
   m_TagString: GameController
@@ -162,9 +163,9 @@ MonoBehaviour:
   rabbit: {fileID: 8401487155666583363, guid: 55972e5130a2f294e9760b2d60b812f2, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 100
-  numberOfFoxesToSpawn: 10
-  numberOfGrassToSpawn: 1
+  numberOfRabbitsToSpawn: 20
+  numberOfFoxesToSpawn: 1
+  numberOfGrassToSpawn: 20
 --- !u!4 &508030574
 Transform:
   m_ObjectHideFlags: 0
@@ -179,6 +180,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &508030575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508030572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 973c00c589726004db585fff81093531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayGridGizmos: 1
+  gridWorldSize:
+    x: 0
+    y: 0
+  gridSizeX: 0
+  gridSizeY: 0
+  gridNodeRadius: 1
+  distanceBetweenGridNodes: 0
+  unwalkableProximityPenalty: 10
 --- !u!1 &788710890
 GameObject:
   m_ObjectHideFlags: 0
