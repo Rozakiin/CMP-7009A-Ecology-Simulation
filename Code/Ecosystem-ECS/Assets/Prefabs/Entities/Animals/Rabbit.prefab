@@ -100,6 +100,8 @@ GameObject:
   - component: {fileID: 1699504912102838281}
   - component: {fileID: -5808282956051259984}
   - component: {fileID: 7939048878264072187}
+  - component: {fileID: -114518658351010783}
+  - component: {fileID: 1804554870596230297}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -164,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d888542d94f0704bb82df48ca8a0f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 10
+  rotationSpeed: 1
   moveSpeedBase: 10
   moveMultiplier: 1
 --- !u!114 &-224445953965005878
@@ -180,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hunger: 0
-  hungryThreshold: 10
+  hungryThreshold: 20
   hungerMax: 100
   hungerIncrease: 1
   eatingSpeed: 2
@@ -315,6 +317,31 @@ MonoBehaviour:
   age: 0
   ageIncrease: 0.1
   ageMax: 100
+--- !u!114 &-114518658351010783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc7f99494b274a478d0db79068f4b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1804554870596230297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5367f22afb6ca43ba5d634aa811140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathIndex: -1
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0
