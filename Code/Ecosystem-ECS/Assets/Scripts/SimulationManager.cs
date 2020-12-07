@@ -1,13 +1,15 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
     EntityManager entityManager;
+    GameObjectConversionSettings settings;
     public static SimulationManager Instance;
 
     #region Archetypes
@@ -47,7 +49,7 @@ public class SimulationManager : MonoBehaviour
     public static string mapString;
     public static int gridWidth;
     public static int gridHeight;
-    public static Vector2 worldSize;
+    public static float2 worldSize;
     public static Vector3 worldBottomLeft;
     public static float tileSize;
     public static float leftLimit;
@@ -62,6 +64,7 @@ public class SimulationManager : MonoBehaviour
     {
         Instance = this;
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         CreateArchetypes();
 
@@ -116,15 +119,11 @@ public class SimulationManager : MonoBehaviour
             typeof(NonUniformScale),
             typeof(EdibleData),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
-            typeof(MateData),
-            typeof(GenderData),
+            typeof(ReproductiveData),
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -133,17 +132,13 @@ public class SimulationManager : MonoBehaviour
             typeof(Translation),
             typeof(Rotation),
             typeof(NonUniformScale),
-            typeof(PregnancyData),
+            typeof(ReproductiveData),
             typeof(EdibleData),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
-            typeof(GenderData),
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -153,12 +148,9 @@ public class SimulationManager : MonoBehaviour
             typeof(Rotation),
             typeof(NonUniformScale),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(SizeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
@@ -203,11 +195,11 @@ public class SimulationManager : MonoBehaviour
             return false;
         }
 
-        // Create a GameObject the size of the map with collider for ray hits
+        // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
         collisionPlaneForMap = new GameObject();
         collisionPlaneForMap.transform.position = transform.position;
-        collisionPlaneForMap.AddComponent<BoxCollider>();
-        BoxCollider collider = collisionPlaneForMap.GetComponent<BoxCollider>();
+        collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
+        UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
         collider.size = new Vector3(worldSize.x,0,worldSize.y);
 
         SetLimits();
@@ -225,7 +217,6 @@ public class SimulationManager : MonoBehaviour
         worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
         // Create entity prefabs from the game objects hierarchy once
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
         var entityWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
         var entitySandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
@@ -250,6 +241,7 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         entityManager.SetName(prototypeTile, "WaterTile "+y + "," + x);
+
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
@@ -333,7 +325,6 @@ public class SimulationManager : MonoBehaviour
     private void CreateEntitiesFromGameObject(GameObject gameObject, int quantity)
     {
         // Create entity prefab from the game object hierarchy once
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
 
         for (int i = 0; i < quantity; i++)
@@ -354,7 +345,13 @@ public class SimulationManager : MonoBehaviour
             //if has target data component set target to self
             if (entityManager.HasComponent<TargetData>(prototypeEntity))
             {
-                entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint });
+                entityManager.SetComponentData(prototypeEntity,
+                    new TargetData {
+                        atTarget = true,
+                        currentTarget = worldPoint,
+                        oldTarget = worldPoint 
+                    }
+                );
             }
 
             //set default variables based on gameObject name - not great solution but works for now
@@ -383,39 +380,6 @@ public class SimulationManager : MonoBehaviour
                     }
                 );
                 entityManager.SetComponentData(prototypeEntity, 
-                    new HungerData { 
-                        hunger = RabbitDefaults.hunger, 
-                        hungryThreshold = RabbitDefaults.hungryThreshold, 
-                        hungerMax = RabbitDefaults.hungerMax, 
-                        hungerIncrease = RabbitDefaults.hungerIncrease,
-                        pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
-                        eatingSpeed = RabbitDefaults.eatingSpeed, 
-                        entityToEat = RabbitDefaults.entityToEat, 
-                        diet = RabbitDefaults.diet 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new ThirstData { 
-                        thirst = RabbitDefaults.thirst, 
-                        thirstyThreshold = RabbitDefaults.thirstyThreshold, 
-                        thirstMax = RabbitDefaults.thirstMax, 
-                        thirstIncrease = RabbitDefaults.thirstIncrease, 
-                        drinkingSpeed = RabbitDefaults.drinkingSpeed, 
-                        entityToDrink = RabbitDefaults.entityToDrink 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new MateData { 
-                        matingDuration = RabbitDefaults.matingDuration, 
-                        mateStartTime = RabbitDefaults.mateStartTime, 
-                        reproductiveUrge = RabbitDefaults.reproductiveUrge, 
-                        reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease,
-                        defaultRepoductiveIncrease = RabbitDefaults.defaultReproductiveIncrease,
-                        matingThreshold = RabbitDefaults.matingThreshold, 
-                        entityToMate = RabbitDefaults.entityToMate 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
                     new StateData { 
                         state = RabbitDefaults.state, 
                         previousState = RabbitDefaults.previousState, 
@@ -430,16 +394,6 @@ public class SimulationManager : MonoBehaviour
                     }
                 );
                 entityManager.SetComponentData(prototypeEntity, 
-                    new AgeData { 
-                        age = RabbitDefaults.age, 
-                        ageIncrease = RabbitDefaults.ageIncrease, 
-                        ageMax = RabbitDefaults.ageMax,
-                        adultEntryTimer = RabbitDefaults.adultEntryTimer,
-                        oldEntryTimer = RabbitDefaults.oldEntryTimer
-                    }
-                );
-                
-                entityManager.SetComponentData(prototypeEntity, 
                     new BasicNeedsData { 
                     hunger = RabbitDefaults.hunger, 
                     hungryThreshold = RabbitDefaults.hungryThreshold, 
@@ -451,7 +405,7 @@ public class SimulationManager : MonoBehaviour
                     oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
                     eatingSpeed = RabbitDefaults.eatingSpeed, 
                     entityToEat = RabbitDefaults.entityToEat, 
-                    diet = (BasicNeedsData.Diet)RabbitDefaults.diet,
+                    diet = RabbitDefaults.diet,
                     thirst = RabbitDefaults.thirst,
                     thirstyThreshold = RabbitDefaults.thirstyThreshold,
                     thirstMax = RabbitDefaults.thirstMax,
@@ -463,13 +417,8 @@ public class SimulationManager : MonoBehaviour
 
                 //randomise gender of rabbit - equal distribution
                 BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
-                Debug.Log(randGender);
                 //set gender differing components
-                /*entityManager.SetComponentData(prototypeEntity, 
-                    new GenderData { 
-                        gender = randGender 
-                    }
-                );*/
+
                 entityManager.SetComponentData(prototypeEntity,
                     new BioStatsData
                     {
@@ -482,29 +431,33 @@ public class SimulationManager : MonoBehaviour
                         gender = randGender
                     }
                 );
-                if (randGender == BioStatsData.Gender.Female) 
-                {
-                    entityManager.AddComponent<PregnancyData>(prototypeEntity);
-                    entityManager.SetComponentData(prototypeEntity,
-                        new PregnancyData { 
-                            pregnant = RabbitDefaults.pregnant, 
-                            birthDuration = RabbitDefaults.birthDuration, 
-                            babiesBorn = RabbitDefaults.babiesBorn, 
-                            birthStartTime = RabbitDefaults.birthStartTime, 
-                            currentLitterSize = RabbitDefaults.currentLitterSize, 
-                            litterSizeMin = RabbitDefaults.litterSizeMin, 
-                            litterSizeMax = RabbitDefaults.litterSizeMax, 
-                            litterSizeAve = RabbitDefaults.litterSizeAve, 
-                            pregnancyLengthBase = RabbitDefaults.pregnancyLength, 
+                //set reproductive data differing on gender
+                entityManager.SetComponentData(prototypeEntity,
+                        new ReproductiveData
+                        {
+                            matingDuration = RabbitDefaults.matingDuration,
+                            mateStartTime = RabbitDefaults.mateStartTime,
+                            reproductiveUrge = RabbitDefaults.reproductiveUrge,
+                            reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                            defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                            matingThreshold = RabbitDefaults.matingThreshold,
+                            entityToMate = RabbitDefaults.entityToMate,
+
+                            pregnant = RabbitDefaults.pregnant,
+                            birthDuration = RabbitDefaults.birthDuration,
+                            babiesBorn = RabbitDefaults.babiesBorn,
+                            birthStartTime = RabbitDefaults.birthStartTime,
+                            currentLitterSize = RabbitDefaults.currentLitterSize,
+                            litterSizeMin = RabbitDefaults.litterSizeMin,
+                            litterSizeMax = RabbitDefaults.litterSizeMax,
+                            litterSizeAve = RabbitDefaults.litterSizeAve,
+                            pregnancyLengthBase = RabbitDefaults.pregnancyLength,
                             pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime                           
+                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime
                         }
                     );
-                }
-                else
-                {
-                    //entityManager.AddComponent<MatingSystem>(MateData.)
-                }
+
+                //set size differing on gender
                 entityManager.SetComponentData(prototypeEntity, 
                     new SizeData { 
                         size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
@@ -527,9 +480,8 @@ public class SimulationManager : MonoBehaviour
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
             {
                 Vector3 targetPosition = hit.point;
                 Debug.Log(targetPosition.ToString());
@@ -539,7 +491,6 @@ public class SimulationManager : MonoBehaviour
     }
     private void CreateRabbitAtPos(in Vector3 position)
     {
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
         Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
         entityManager.SetName(prototypeRabbit, "ClickRabbit" + prototypeRabbit.Index);

@@ -38,14 +38,14 @@ public static class RabbitDefaults
     public static float oldHungerIncrease = 0.5f;
     public static float eatingSpeed = 1f;
     public static Entity entityToEat = Entity.Null;
-    public static HungerData.Diet diet = HungerData.Diet.Herbivore;
+    public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Herbivore;
 
     //Mate
     public static float mateStartTime = 0f;
     public static float matingDuration = 5f;
     public static float reproductiveUrge = 0f;
-    public static float defaultReproductiveIncrease = 0.3f;
-    public static float reproductiveUrgeIncrease = defaultReproductiveIncrease;
+    public static float reproductiveUrgeIncreaseMale = 0.3f;
+    public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 50f;
     public static Entity entityToMate = Entity.Null;
 

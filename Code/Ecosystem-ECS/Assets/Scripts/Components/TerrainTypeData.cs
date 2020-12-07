@@ -28,4 +28,5 @@ public struct TerrainTypeData : IComponentData
     }
     public TerrainType terrainType;
     public int terrainPenalty;
+    public bool isWalkable;
 }
