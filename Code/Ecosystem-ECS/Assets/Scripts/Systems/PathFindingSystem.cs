@@ -312,7 +312,7 @@ public class PathFindingSystem : SystemBase
         GridNode[,] grid = GridSetup.Instance.grid;
         int2 gridSize = GridSetup.Instance.gridSize;
         int gridMaxSize = GridSetup.Instance.GridMaxSize;
-        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.TempJob);
+        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
 
         for (int x = 0; x < gridSize.x; x++)
         {
