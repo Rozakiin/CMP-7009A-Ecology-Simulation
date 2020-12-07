@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Physics;
@@ -17,8 +17,8 @@ public class GridSetup : MonoBehaviour
 
     [Header("Grid Data")]
     public float2 gridWorldSize;//A vector2 to store the width and height of the graph in world units.
-    public int gridSizeX, gridSizeY;//Size of the Grid in Array units.
-    public int GridMaxSize { get { return gridSizeX * gridSizeY; } }
+    public int2 gridSize;//Size of the Grid in Array units.
+    public int GridMaxSize { get { return gridSize.x * gridSize.y; } }
 
     [Header("Node Properties")]
     [SerializeField] private float gridNodeRadius;//This stores how big each square on the graph will be
@@ -56,13 +56,13 @@ public class GridSetup : MonoBehaviour
     {
         yield return new WaitForEndOfFrame(); // wait till the end of frame so tile entities have been made
         gridWorldSize = SimulationManager.worldSize;
-        gridSizeX = (int)math.round(gridWorldSize.x / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
-        gridSizeY = (int)math.round(gridWorldSize.y / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
-        grid = new GridNode[gridSizeX, gridSizeY]; // create array of grid nodes
+        gridSize.x = (int)math.round(gridWorldSize.x / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
+        gridSize.y = (int)math.round(gridWorldSize.y / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
+        grid = new GridNode[gridSize.x, gridSize.y]; // create array of grid nodes
 
-        for (int x = 0; x < gridSizeX; x++)
+        for (int x = 0; x < gridSize.x; x++)
         {
-            for (int y = 0; y < gridSizeY; y++)
+            for (int y = 0; y < gridSize.y; y++)
             {
                 float3 worldPoint = SimulationManager.worldBottomLeft + Vector3.right * (x * gridNodeDiameter + gridNodeRadius) + Vector3.forward * (y * gridNodeDiameter + gridNodeRadius);//Get the world co ordinates of the node from the bottom left of the graph
 
@@ -141,12 +141,12 @@ public class GridSetup : MonoBehaviour
         int kernelSize = blurSize * 2 + 1; //must be odd number
         int kernelExtents = blurSize; // number of squares between centre and edge of kernel
 
-        int[,] penaltiesHorizontal = new int[gridSizeX, gridSizeY]; //temp array to store horizontal pass over the penalty map
-        int[,] penaltiesVertical = new int[gridSizeX, gridSizeY]; //temp array to store vertical pass over the penalty map
+        int[,] penaltiesHorizontal = new int[gridSize.x, gridSize.y]; //temp array to store horizontal pass over the penalty map
+        int[,] penaltiesVertical = new int[gridSize.x, gridSize.y]; //temp array to store vertical pass over the penalty map
 
         //horizontal pass
         //fill the penaltiesHorizontal array with the sum of movement penalties stored in nodeArray covered by the kernel
-        for (int y = 0; y < gridSizeY; y++)
+        for (int y = 0; y < gridSize.y; y++)
         {
             //loop through nodes in kernel and sum them up
             for (int x = -kernelExtents; x <= kernelExtents; x++)
@@ -156,17 +156,17 @@ public class GridSetup : MonoBehaviour
             }
 
             //loop over all remaining columns in the row
-            for (int x = 1; x < gridSizeX; x++)
+            for (int x = 1; x < gridSize.x; x++)
             {
-                int indexToRemove = Mathf.Clamp(x - kernelExtents - 1, 0, gridSizeX);//calc index of node that is no longer inside kernel after kernel moved along 1
-                int indexToAdd = Mathf.Clamp(x + kernelExtents, 0, gridSizeX - 1);//calc index of node that is now inside kernel after kernel moved along 1
+                int indexToRemove = Mathf.Clamp(x - kernelExtents - 1, 0, gridSize.x);//calc index of node that is no longer inside kernel after kernel moved along 1
+                int indexToAdd = Mathf.Clamp(x + kernelExtents, 0, gridSize.x - 1);//calc index of node that is now inside kernel after kernel moved along 1
                 penaltiesHorizontal[x, y] = penaltiesHorizontal[x - 1, y] - grid[indexToRemove, y].movementPenalty + grid[indexToAdd, y].movementPenalty;//equal to previous - penalty at indexToRemove + penalty at indexToAdd
             }
         }
 
         //vertical pass
         //fill the penaltiesVertical array with the sum of movement penalties stored in nodeArray covered by the kernel
-        for (int x = 0; x < gridSizeX; x++)
+        for (int x = 0; x < gridSize.x; x++)
         {
             //loop through nodes in kernel and sum them up
             for (int y = -kernelExtents; y <= kernelExtents; y++)
@@ -176,10 +176,10 @@ public class GridSetup : MonoBehaviour
             }
 
             //loop over all remaining rows in the column
-            for (int y = 1; y < gridSizeY; y++)
+            for (int y = 1; y < gridSize.y; y++)
             {
-                int indexToRemove = Mathf.Clamp(y - kernelExtents - 1, 0, gridSizeY);//calc index of node that is no longer inside kernel after kernel moved along 1
-                int indexToAdd = Mathf.Clamp(y + kernelExtents, 0, gridSizeY - 1);//calc index of node that is now inside kernel after kernel moved along 1
+                int indexToRemove = Mathf.Clamp(y - kernelExtents - 1, 0, gridSize.y);//calc index of node that is no longer inside kernel after kernel moved along 1
+                int indexToAdd = Mathf.Clamp(y + kernelExtents, 0, gridSize.y - 1);//calc index of node that is now inside kernel after kernel moved along 1
                 penaltiesVertical[x, y] = penaltiesVertical[x, y - 1] - penaltiesHorizontal[x, indexToRemove] + penaltiesHorizontal[x, indexToAdd];//equal to previous - penalty at indexToRemove + penalty at indexToAdd
                 int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
                 grid[x, y].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
@@ -208,28 +208,28 @@ public class GridSetup : MonoBehaviour
         //Check the right side of the current node.
         checkX = _neighbourNode.x + 1;
         checkY = _neighbourNode.y;
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)//If the XPosition and YPosition is in range of the array
+        if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)//If the XPosition and YPosition is in range of the array
         {
             neighbourList.Add(grid[checkX, checkY]);//Add the grid to the available neighbors list
         }
         //Check the Left side of the current node.
         checkX = _neighbourNode.x - 1;
         checkY = _neighbourNode.y;
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)//If the XPosition and YPosition is in range of the array
+        if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)//If the XPosition and YPosition is in range of the array
         {
             neighbourList.Add(grid[checkX, checkY]);//Add the grid to the available neighbors list
         }
         //Check the Top side of the current node.
         checkX = _neighbourNode.x;
         checkY = _neighbourNode.y + 1;
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)//If the XPosition and YPosition is in range of the array
+        if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)//If the XPosition and YPosition is in range of the array
         {
             neighbourList.Add(grid[checkX, checkY]);//Add the grid to the available neighbors list
         }
         //Check the Bottom side of the current node.
         checkX = _neighbourNode.x;
         checkY = _neighbourNode.y - 1;
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)//If the XPosition and YPosition is in range of the array
+        if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)//If the XPosition and YPosition is in range of the array
         {
             neighbourList.Add(grid[checkX, checkY]);//Add the grid to the available neighbors list
         }
@@ -249,8 +249,8 @@ public class GridSetup : MonoBehaviour
         percentY = Mathf.Clamp01(percentY);// clamped between 0 and 1
 
         // calc x,y position in the node array for the world position
-        int x = Mathf.FloorToInt(Mathf.Min(gridSizeX * percentX, gridSizeX - 1));
-        int y = Mathf.FloorToInt(Mathf.Min(gridSizeY * percentY, gridSizeY - 1));
+        int x = Mathf.FloorToInt(Mathf.Min(gridSize.x * percentX, gridSize.x - 1));
+        int y = Mathf.FloorToInt(Mathf.Min(gridSize.y * percentY, gridSize.y - 1));
 
         return grid[x, y];// position of closest node in array
     }

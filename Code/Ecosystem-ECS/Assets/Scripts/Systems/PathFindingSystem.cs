@@ -27,7 +27,7 @@ public class PathFindingSystem : SystemBase
         NativeArray<PathNode> pathNodeArray = CreatePathNodeArray();
 
         float2 gridWorldSize = GridSetup.Instance.gridWorldSize;
-        int2 gridSize = new int2(GridSetup.Instance.gridSizeX, GridSetup.Instance.gridSizeY);
+        int2 gridSize = GridSetup.Instance.gridSize;
 
         // goes through each entity requesting a path and finds a path
         Entities.ForEach((
@@ -302,20 +302,19 @@ public class PathFindingSystem : SystemBase
     private NativeArray<PathNode> CreatePathNodeArray()
     {
         GridNode[,] grid = GridSetup.Instance.grid;
-        int gridSizeX = GridSetup.Instance.gridSizeX;
-        int gridSizeY = GridSetup.Instance.gridSizeY;
-        int gridSize = GridSetup.Instance.GridMaxSize;
-        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize, Allocator.TempJob);
+        int2 gridSize = GridSetup.Instance.gridSize;
+        int gridMaxSize = GridSetup.Instance.GridMaxSize;
+        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.TempJob);
 
-        for (int x = 0; x < gridSizeX; x++)
+        for (int x = 0; x < gridSize.x; x++)
         {
-            for (int y = 0; y < gridSizeY; y++)
+            for (int y = 0; y < gridSize.y; y++)
             {
                 PathNode pathNode = new PathNode
                 {
                     x = x,
                     y = y,
-                    index = CalculateIndex(x, y, gridSizeX),
+                    index = CalculateIndex(x, y, gridSize.x),
 
                     gCost = int.MaxValue,
 
