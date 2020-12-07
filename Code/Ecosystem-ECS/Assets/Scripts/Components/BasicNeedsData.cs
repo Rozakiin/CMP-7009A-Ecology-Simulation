@@ -5,7 +5,7 @@ using Unity.Mathematics;
 
 [Serializable]
 [GenerateAuthoringComponent]
-public struct HungerData : IComponentData
+public struct BasicNeedsData : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -21,11 +21,23 @@ public struct HungerData : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
+    //Thirst
+    public float thirst;
+    public float thirstyThreshold;
+    public float thirstMax;
+    public float thirstIncrease;
+    public float drinkingSpeed;
+    public Entity entityToDrink;
+
+    //Hunger
     public float hunger;
     public float hungryThreshold;
     public float hungerMax;
     public float hungerIncrease;
     public float pregnancyHungerIncrease;
+    public float youngHungerIncrease;
+    public float adultHungerIncrease;
+    public float oldHungerIncrease;
     public float eatingSpeed;
     public Entity entityToEat;
 

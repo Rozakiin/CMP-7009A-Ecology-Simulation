@@ -24,4 +24,7 @@ public struct AgeData : IComponentData
     public float age;
     public float ageIncrease;
     public float ageMax;
+
+    public float adultEntryTimer;
+    public float oldEntryTimer; 
 }
