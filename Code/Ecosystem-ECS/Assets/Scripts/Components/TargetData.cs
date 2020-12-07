@@ -24,4 +24,7 @@ public struct TargetData : IComponentData
     public float3 currentTarget;
     public float3 oldTarget;
     public bool atTarget;
+
+    public float sightRadius;
+    public float touchRadius;
 }

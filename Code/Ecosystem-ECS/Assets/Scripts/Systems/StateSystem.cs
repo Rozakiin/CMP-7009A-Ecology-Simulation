@@ -30,7 +30,7 @@ public class StateSystem : SystemBase
             ref MovementData movementData,
             in ReproductiveData reproductiveData,
             in BioStatsData bioStatsData,
-            in VisionData visionData,
+            in TargetData targetData,
             in Translation translation
             )=> {
 
@@ -103,7 +103,7 @@ public class StateSystem : SystemBase
                         if (basicNeedsData.entityToEat != Entity.Null)
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
-                            if (euclidian <= visionData.touchRadius)
+                            if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Eating;
@@ -131,7 +131,7 @@ public class StateSystem : SystemBase
                         if (basicNeedsData.entityToDrink != Entity.Null)
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
-                            if (euclidian <= visionData.touchRadius)
+                            if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Drinking;
@@ -154,7 +154,7 @@ public class StateSystem : SystemBase
                         if (reproductiveData.entityToMate != Entity.Null)
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
-                            if (euclidian <= visionData.touchRadius)
+                            if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Mating;
