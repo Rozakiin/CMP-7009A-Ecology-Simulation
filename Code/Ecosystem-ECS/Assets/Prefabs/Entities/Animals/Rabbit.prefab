@@ -100,6 +100,8 @@ GameObject:
   - component: {fileID: 1699504912102838281}
   - component: {fileID: -5808282956051259984}
   - component: {fileID: 7939048878264072187}
+  - component: {fileID: -5089060519100572234}
+  - component: {fileID: -4092187666830348072}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -167,6 +169,11 @@ MonoBehaviour:
   rotationSpeed: 10
   moveSpeedBase: 10
   moveMultiplier: 1
+  pregnancyMoveMultiplier: 0
+  originalMoveMultiplier: 0
+  youngMoveMultiplier: 0
+  adultMoveMultiplier: 0
+  oldMoveMultiplier: 0
 --- !u!114 &-224445953965005878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +190,7 @@ MonoBehaviour:
   hungryThreshold: 10
   hungerMax: 100
   hungerIncrease: 1
+  pregnancyHungerIncrease: 0
   eatingSpeed: 2
   entityToEat: {fileID: 0}
   diet: 3
@@ -315,6 +323,56 @@ MonoBehaviour:
   age: 0
   ageIncrease: 0.1
   ageMax: 100
+  adultEntryTimer: 0
+  oldEntryTimer: 0
+--- !u!114 &-5089060519100572234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1a2d81b5aa3e74e96e03eab5a2aeec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thirst: 0
+  thirstyThreshold: 0
+  thirstMax: 0
+  thirstIncrease: 0
+  drinkingSpeed: 0
+  entityToDrink: {fileID: 0}
+  hunger: 0
+  hungryThreshold: 0
+  hungerMax: 0
+  hungerIncrease: 0
+  pregnancyHungerIncrease: 0
+  youngHungerIncrease: 0
+  adultHungerIncrease: 0
+  oldHungerIncrease: 0
+  eatingSpeed: 0
+  entityToEat: {fileID: 0}
+  diet: 0
+--- !u!114 &-4092187666830348072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a28cc594aa3b2442a872af38b1fecbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  age: 0
+  ageIncrease: 0
+  ageMax: 0
+  ageGroup: 0
+  adultEntryTimer: 0
+  oldEntryTimer: 0
+  gender: 0
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0

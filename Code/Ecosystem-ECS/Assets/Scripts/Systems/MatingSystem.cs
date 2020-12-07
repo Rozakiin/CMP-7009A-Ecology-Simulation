@@ -23,7 +23,7 @@ public class MatingSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((ref MateData mateData, in StateData stateData) => {
+        Entities.ForEach((ref MateData mateData, in StateData stateData, in BioStatsData bioStatsData) => {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
             // field on this job. Note that the 'rotation' parameter is
@@ -33,8 +33,21 @@ public class MatingSystem : SystemBase
             // For example,
             //     translation.Value += math.mul(rotation.Value, new float3(0, 0, 1)) * deltaTime;
 
+            //Disable urge increase for females and males that are not adults
+            if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult && bioStatsData.gender == BioStatsData.Gender.Male)
+            {
+                mateData.reproductiveUrgeIncrease = mateData.defaultRepoductiveIncrease;
+            }
+            else
+            {
+                mateData.reproductiveUrgeIncrease = 0f;
+            }
+
             // Increase reproductive urge
             mateData.reproductiveUrge += mateData.reproductiveUrgeIncrease * deltaTime;
+
+            
+
 
             //If the entityToMate exists and entity is mating
             if (mateData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
