@@ -86,13 +86,12 @@ public class TargetingSystem : SystemBase
             ref BasicNeedsData basicNeedsData,
             in PathFollowData pathFollowData,
             in Translation translation,
-            in StateData stateData,
-            in VisionData visionData
+            in StateData stateData
             ) =>
         {
             //if physically at target
             //float euclidian = math.distance(translation.Value, targetData.currentTarget);
-            //if (euclidian <= visionData.touchRadius)
+            //if (euclidian <= targetData.touchRadius)
             //{
             //    targetData.atTarget = true;
             //    targetData.oldTarget = targetData.currentTarget;
@@ -113,7 +112,7 @@ public class TargetingSystem : SystemBase
                 switch (stateData.state)
                 {
                     case StateData.States.Wandering:
-                        targetPosition = FindRandomWalkableTargetInVision(currentPosition, visionData.sightRadius, seed, worldSize, gridSize, grid);
+                        targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                         if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid)) {
                             ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
                             ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
@@ -137,7 +136,7 @@ public class TargetingSystem : SystemBase
                             {
                                 //Debug.Log($"{entity.Index}:{i}:{edibleEntityArray[i].Index}");
                                 // is in sight?
-                                if (math.distance(currentPosition, edibleEntityTranslationArray[i].Value) <= visionData.sightRadius)
+                                if (math.distance(currentPosition, edibleEntityTranslationArray[i].Value) <= targetData.sightRadius)
                                 {
                                     // is walkable?
                                     if (IsWorldPointWalkableFromGridNativeArray(edibleEntityTranslationArray[i].Value, worldSize, gridSize, grid))
@@ -176,7 +175,7 @@ public class TargetingSystem : SystemBase
                         else 
                         {
                             // find randomTarget
-                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, visionData.sightRadius, seed, worldSize, gridSize, grid);
+                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
                                 ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
@@ -196,7 +195,7 @@ public class TargetingSystem : SystemBase
                             if (waterEntityDrinkableDataArray[i].canBeDrunk)
                             {
                                 // is in sight?
-                                if (math.distance(currentPosition, waterEntityTranslationArray[i].Value) <= visionData.sightRadius)
+                                if (math.distance(currentPosition, waterEntityTranslationArray[i].Value) <= targetData.sightRadius)
                                 {
                                     // is walkable?
                                     if (IsWorldPointWalkableFromGridNativeArray(waterEntityTranslationArray[i].Value, worldSize, gridSize, grid))
@@ -235,7 +234,7 @@ public class TargetingSystem : SystemBase
                         else
                         {
                             // find randomTarget
-                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, visionData.sightRadius, seed, worldSize, gridSize, grid);
+                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
                                 ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
@@ -252,7 +251,7 @@ public class TargetingSystem : SystemBase
                         for (int i = 0; i != mateEntityArray.Length; i++)
                         {
                             // is in sight?
-                            if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) <= visionData.sightRadius)
+                            if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) <= targetData.sightRadius)
                             {
                                 //is female
                                 if (mateEntityBioStatsDataArray[i].gender == BioStatsData.Gender.Female)

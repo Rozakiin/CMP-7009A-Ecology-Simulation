@@ -123,7 +123,7 @@ public class SimulationManager : MonoBehaviour
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
-            typeof(VisionData),
+            typeof(PathFollowData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -138,7 +138,7 @@ public class SimulationManager : MonoBehaviour
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
-            typeof(VisionData),
+            typeof(PathFollowData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -150,7 +150,7 @@ public class SimulationManager : MonoBehaviour
             typeof(MovementData),
             typeof(StateData),
             typeof(TargetData),
-            typeof(VisionData),
+            typeof(PathFollowData),
             typeof(SizeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
@@ -349,7 +349,10 @@ public class SimulationManager : MonoBehaviour
                     new TargetData {
                         atTarget = true,
                         currentTarget = worldPoint,
-                        oldTarget = worldPoint 
+                        oldTarget = worldPoint,
+
+                        sightRadius = 0.1f,
+                        touchRadius = 0.1f
                     }
                 );
             }
@@ -387,10 +390,21 @@ public class SimulationManager : MonoBehaviour
                         beenEaten = RabbitDefaults.beenEaten 
                     }
                 );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new VisionData { 
+                entityManager.SetComponentData(prototypeEntity,
+                    new TargetData
+                    {
+                        atTarget = true,
+                        currentTarget = worldPoint,
+                        oldTarget = worldPoint,
+                     
                         sightRadius = RabbitDefaults.sightRadius, 
                         touchRadius = RabbitDefaults.touchRadius 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity,
+                    new PathFollowData
+                    {
+                        pathIndex = -1
                     }
                 );
                 entityManager.SetComponentData(prototypeEntity, 

@@ -94,12 +94,11 @@ GameObject:
   - component: {fileID: -7479947182873029247}
   - component: {fileID: -3378324085052062256}
   - component: {fileID: 1699504912102838281}
-  - component: {fileID: -5808282956051259984}
   - component: {fileID: -5089060519100572234}
   - component: {fileID: -4092187666830348072}
-  - component: {fileID: -114518658351010783}
-  - component: {fileID: 1804554870596230297}
   - component: {fileID: 8782963010654111548}
+  - component: {fileID: 6327829983723291044}
+  - component: {fileID: -114518658351010783}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -227,20 +226,8 @@ MonoBehaviour:
     y: 0
     z: 0
   atTarget: 1
---- !u!114 &-5808282956051259984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f738b82abccd72438b462340af06eb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sightRadius: 20
-  touchRadius: 1
+  sightRadius: 0
+  touchRadius: 0
 --- !u!114 &-5089060519100572234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,31 +276,6 @@ MonoBehaviour:
   adultEntryTimer: 0
   oldEntryTimer: 0
   gender: 0
---- !u!114 &-114518658351010783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc7f99494b274a478d0db79068f4b07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1804554870596230297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5367f22afb6ca43ba5d634aa811140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathIndex: -1
 --- !u!114 &8782963010654111548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +306,31 @@ MonoBehaviour:
   pregnancyStartTime: 0
   pregnancyLengthBase: 0
   pregnancyLengthModifier: 0
+--- !u!114 &6327829983723291044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5367f22afb6ca43ba5d634aa811140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathIndex: 0
+--- !u!114 &-114518658351010783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc7f99494b274a478d0db79068f4b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0
