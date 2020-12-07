@@ -9,8 +9,11 @@ public static class RabbitDefaults
 {
     //Age
     public static float age = 0f;
-    public static float ageIncrease = 0.2f;
+    public static float ageIncrease = 1f;
     public static float ageMax = 600f;
+    public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
+    public static float adultEntryTimer = 10f;
+    public static float oldEntryTimer = 60f;
 
     //Drinkable
 
@@ -29,6 +32,10 @@ public static class RabbitDefaults
     public static float hungerMax = 100f;
     public static float hungryThreshold = 20f;
     public static float hungerIncrease = 0.5f;
+    public static float pregnancyHungerIncrease = 0.7f;
+    public static float youngHungerIncrease = 0.3f;
+    public static float adultHungerIncrease = 1f;
+    public static float oldHungerIncrease = 0.5f;
     public static float eatingSpeed = 1f;
     public static Entity entityToEat = Entity.Null;
     public static HungerData.Diet diet = HungerData.Diet.Herbivore;
@@ -45,6 +52,11 @@ public static class RabbitDefaults
     public static float moveSpeed = 25f;
     public static float rotationSpeed = 10f;
     public static float moveMultiplier = 1f;
+    public static float pregnancyMoveMultiplier = 0.5f;
+    public static float originalMoveMultiplier = 1f;
+    public static float youngMoveMultiplier = 0.4f;
+    public static float adultMoveMultiplier = 1f;
+    public static float oldMoveMultiplier = 0.4f;
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
@@ -53,7 +65,7 @@ public static class RabbitDefaults
     public static float birthStartTime = 0f;
     public static int currentLitterSize = 0;
     public static float pregnancyLengthModifier = 1f;
-    public static float pregnancyLength = 10f;
+    public static float pregnancyLength = 10f; 
     public static float birthDuration = 10f;
     public static int litterSizeMin = 1;
     public static int litterSizeMax = 13;

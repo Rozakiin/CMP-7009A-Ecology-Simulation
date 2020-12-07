@@ -5,7 +5,7 @@ using Unity.Mathematics;
 
 [Serializable]
 [GenerateAuthoringComponent]
-public struct HungerData : IComponentData
+public struct BioStatsData : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -21,19 +21,24 @@ public struct HungerData : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public float hunger;
-    public float hungryThreshold;
-    public float hungerMax;
-    public float hungerIncrease;
-    public float pregnancyHungerIncrease;
-    public float eatingSpeed;
-    public Entity entityToEat;
+    //Age data
+    public float age;
+    public float ageIncrease;
+    public float ageMax;
+    public AgeGroup ageGroup;
 
-    public enum Diet
+    public float adultEntryTimer;
+    public float oldEntryTimer;
+
+    public enum AgeGroup
     {
-        Carnivore = EdibleData.FoodType.Meat,
-        Herbivore = EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
-        Omnivore = EdibleData.FoodType.Meat | EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
+        Young, Adult, Old
     }
-    public Diet diet;
+
+    //Gender data
+    public enum Gender
+    {
+        Male, Female
+    }
+    public Gender gender;
 }

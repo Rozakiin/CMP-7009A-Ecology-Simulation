@@ -35,13 +35,20 @@ public class StateSystem : SystemBase
 
         Entities.ForEach((
             ref StateData stateData,
-            in AgeData ageData,
-            in HungerData hungerData,
-            in ThirstData thirstData,
+            ref PregnancyData pregnancyData,
+            ref BasicNeedsData basicNeedsData,
+            ref MovementData movementData,
+            in BioStatsData bioStatsData,
+            //in AgeData ageData,
+            //in HungerData hungerData,
+            //in ThirstData thirstData,
             in MateData mateData,
-            in GenderData genderData,
+            //in GenderData genderData,
             in VisionData visionData,
             in Translation translation
+            
+            
+            //ref MovementData movementData
             )=> {
                 // Implement the work to perform for each entity here.
                 // You should only access data that is local or that is a
@@ -59,23 +66,60 @@ public class StateSystem : SystemBase
                     stateData.state = StateData.States.Dead;
                     stateData.deathReason = StateData.DeathReason.Eaten;
                 }
-                else if (thirstData.thirst >= thirstData.thirstMax)
+                else if (basicNeedsData.thirst >= basicNeedsData.thirstMax)
                 {
                     stateData.previousState = stateData.state;
                     stateData.state = StateData.States.Dead;
                     stateData.deathReason = StateData.DeathReason.Thirst;
                 }
-                else if (hungerData.hunger >= hungerData.hungerMax)
+                else if (basicNeedsData.hunger >= basicNeedsData.hungerMax)
                 {
                     stateData.previousState = stateData.state;
                     stateData.state = StateData.States.Dead;
                     stateData.deathReason = StateData.DeathReason.Hunger;
                 }
-                else if (ageData.age >= ageData.ageMax)
+                else if (bioStatsData.age >= bioStatsData.ageMax)
                 {
                     stateData.previousState = stateData.state;
                     stateData.state = StateData.States.Dead;
                     stateData.deathReason = StateData.DeathReason.Age;
+                }
+
+                if(pregnancyData.pregnant)
+                {
+                    basicNeedsData.hungerIncrease = basicNeedsData.pregnancyHungerIncrease;
+                    movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
+                    if(bioStatsData.age - pregnancyData.pregnancyStartTime >= pregnancyData.PregnancyLength)
+                    {
+                        stateData.previousState = stateData.state;
+                        stateData.state = StateData.States.GivingBirth;
+                        pregnancyData.birthStartTime = bioStatsData.age;
+                        pregnancyData.pregnant = false;
+                    }
+                }
+
+                if (!pregnancyData.pregnant)
+                {
+                    if(bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                    {
+                        basicNeedsData.hungerIncrease = basicNeedsData.youngHungerIncrease;
+                        movementData.moveMultiplier = movementData.youngMoveMultiplier;
+                    }
+                    else if(bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                    {
+                        basicNeedsData.hungerIncrease = basicNeedsData.adultHungerIncrease;
+                        movementData.moveMultiplier = movementData.adultMoveMultiplier;
+                    }
+                    else if(bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
+                    {
+                        basicNeedsData.hungerIncrease = basicNeedsData.oldHungerIncrease;
+                        movementData.moveMultiplier = movementData.oldMoveMultiplier;
+                    }
+                }
+
+                if(bioStatsData.gender == BioStatsData.Gender.Male)
+                {
+
                 }
 
                 //Priorities: Mating>Drinking>Eating>Wandering
@@ -87,12 +131,12 @@ public class StateSystem : SystemBase
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Hungry;
                         }
-                        else if (thirstData.thirst >= thirstData.thirstyThreshold)
+                        else if (basicNeedsData.thirst >= basicNeedsData.thirstyThreshold)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Thirsty;
                         }
-                        else if (hungerData.hunger >= hungerData.hungryThreshold)
+                        else if (basicNeedsData.hunger >= basicNeedsData.hungryThreshold)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Hungry;
@@ -106,9 +150,9 @@ public class StateSystem : SystemBase
                             stateData.state = StateData.States.SexuallyActive;
                         }
 
-                        if (hungerData.entityToEat != Entity.Null)
+                        if (basicNeedsData.entityToEat != Entity.Null)
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[hungerData.entityToEat].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
                             if (euclidian <= visionData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
@@ -117,12 +161,12 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Eating:
-                        if (hungerData.entityToEat == Entity.Null)
+                        if (basicNeedsData.entityToEat == Entity.Null)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Hungry;
                         }
-                        if (hungerData.hunger <= 0 )
+                        if (basicNeedsData.hunger <= 0 )
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Wandering;
@@ -134,9 +178,9 @@ public class StateSystem : SystemBase
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;
                         }
-                        if (thirstData.entityToDrink != Entity.Null)
+                        if (basicNeedsData.entityToDrink != Entity.Null)
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[thirstData.entityToDrink].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
                             if (euclidian <= visionData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
@@ -145,12 +189,12 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Drinking:
-                        if (thirstData.entityToDrink == Entity.Null)
+                        if (basicNeedsData.entityToDrink == Entity.Null)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Thirsty;
                         }
-                        if (thirstData.thirst <= 0)
+                        if (basicNeedsData.thirst <= 0)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Wandering;

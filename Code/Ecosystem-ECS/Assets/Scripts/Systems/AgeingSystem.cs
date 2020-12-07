@@ -23,7 +23,7 @@ public class AgeingSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((ref AgeData ageData) => {
+        Entities.ForEach((ref BioStatsData ageData) => {
             // Implement the work to perform for each entity here.
             // You should only access data that is local or that is a
             // field on this job. Note that the 'rotation' parameter is
@@ -35,6 +35,21 @@ public class AgeingSystem : SystemBase
 
             // Increase age
             ageData.age += ageData.ageIncrease * deltaTime;
+
+            if(ageData.age >= ageData.oldEntryTimer)
+            {
+                if (ageData.ageGroup != BioStatsData.AgeGroup.Old)
+                {
+                    ageData.ageGroup = BioStatsData.AgeGroup.Old;
+                }
+            }
+            else if(ageData.age >= ageData.adultEntryTimer)
+            {
+                if(ageData.ageGroup != BioStatsData.AgeGroup.Adult)
+                {
+                    ageData.ageGroup = BioStatsData.AgeGroup.Adult;
+                }
+            }
 
         }).ScheduleParallel();
     }

@@ -10,7 +10,6 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     public static SimulationManager Instance;
 
-
     #region Archetypes
     // declare All of archetypes
     public static EntityArchetype GrassTileArchetype { get; private set; }
@@ -125,7 +124,9 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData)
+            typeof(AgeData),
+            typeof(BasicNeedsData),
+            typeof(BioStatsData)
             );
 
         FemaleRabbitArchetype = entityManager.CreateArchetype(
@@ -142,7 +143,9 @@ public class SimulationManager : MonoBehaviour
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData)
+            typeof(AgeData),
+            typeof(BasicNeedsData),
+            typeof(BioStatsData)
             );
 
         FoxArchetype = entityManager.CreateArchetype(
@@ -156,7 +159,9 @@ public class SimulationManager : MonoBehaviour
             typeof(TargetData),
             typeof(VisionData),
             typeof(AgeData),
-            typeof(SizeData)
+            typeof(SizeData),
+            typeof(BasicNeedsData),
+            typeof(BioStatsData)
             );
 
         GrassArchetype = entityManager.CreateArchetype(
@@ -331,7 +336,6 @@ public class SimulationManager : MonoBehaviour
         var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
         var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
 
-
         for (int i = 0; i < quantity; i++)
         {
             // Efficiently instantiate a bunch of entities from the already converted entity prefab
@@ -358,26 +362,154 @@ public class SimulationManager : MonoBehaviour
             if (gameObject.name.Contains("Rabbit"))
             {
                 entityManager.AddComponent<isRabbitTag>(prototypeEntity);
-                entityManager.SetComponentData(prototypeEntity, new EdibleData { canBeEaten = RabbitDefaults.canBeEaten, nutritionalValueBase = RabbitDefaults.nutritionalValue, nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier, foodType = RabbitDefaults.foodType });
-                entityManager.SetComponentData(prototypeEntity, new MovementData { rotationSpeed = RabbitDefaults.rotationSpeed, moveSpeedBase = RabbitDefaults.moveSpeed, moveMultiplier = RabbitDefaults.moveMultiplier });
-                entityManager.SetComponentData(prototypeEntity, new HungerData { hunger = RabbitDefaults.hunger, hungryThreshold = RabbitDefaults.hungryThreshold, hungerMax = RabbitDefaults.hungerMax, hungerIncrease = RabbitDefaults.hungerIncrease, eatingSpeed = RabbitDefaults.eatingSpeed, entityToEat = RabbitDefaults.entityToEat, diet = RabbitDefaults.diet });
-                entityManager.SetComponentData(prototypeEntity, new ThirstData { thirst = RabbitDefaults.thirst, thirstyThreshold = RabbitDefaults.thirstyThreshold, thirstMax = RabbitDefaults.thirstMax, thirstIncrease = RabbitDefaults.thirstIncrease, drinkingSpeed = RabbitDefaults.drinkingSpeed, entityToDrink = RabbitDefaults.entityToDrink });
-                entityManager.SetComponentData(prototypeEntity, new MateData { matingDuration = RabbitDefaults.matingDuration, mateStartTime = RabbitDefaults.mateStartTime, reproductiveUrge = RabbitDefaults.reproductiveUrge, reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease, matingThreshold = RabbitDefaults.matingThreshold, entityToMate = RabbitDefaults.entityToMate });
-                entityManager.SetComponentData(prototypeEntity, new StateData { state = RabbitDefaults.state, previousState = RabbitDefaults.previousState, deathReason = RabbitDefaults.deathReason, beenEaten = RabbitDefaults.beenEaten });
-                entityManager.SetComponentData(prototypeEntity, new VisionData { sightRadius = RabbitDefaults.sightRadius, touchRadius = RabbitDefaults.touchRadius });
-                entityManager.SetComponentData(prototypeEntity, new AgeData { age = RabbitDefaults.age, ageIncrease = RabbitDefaults.ageIncrease, ageMax = RabbitDefaults.ageMax });
+                entityManager.SetComponentData(prototypeEntity, 
+                    new EdibleData { 
+                        canBeEaten = RabbitDefaults.canBeEaten, 
+                        nutritionalValueBase = RabbitDefaults.nutritionalValue, 
+                        nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier, 
+                        foodType = RabbitDefaults.foodType 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new MovementData { 
+                        rotationSpeed = RabbitDefaults.rotationSpeed, 
+                        moveSpeedBase = RabbitDefaults.moveSpeed, 
+                        moveMultiplier = RabbitDefaults.moveMultiplier,
+                        pregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier,
+                        originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
+                        youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
+                        adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
+                        oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new HungerData { 
+                        hunger = RabbitDefaults.hunger, 
+                        hungryThreshold = RabbitDefaults.hungryThreshold, 
+                        hungerMax = RabbitDefaults.hungerMax, 
+                        hungerIncrease = RabbitDefaults.hungerIncrease,
+                        pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
+                        eatingSpeed = RabbitDefaults.eatingSpeed, 
+                        entityToEat = RabbitDefaults.entityToEat, 
+                        diet = RabbitDefaults.diet 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new ThirstData { 
+                        thirst = RabbitDefaults.thirst, 
+                        thirstyThreshold = RabbitDefaults.thirstyThreshold, 
+                        thirstMax = RabbitDefaults.thirstMax, 
+                        thirstIncrease = RabbitDefaults.thirstIncrease, 
+                        drinkingSpeed = RabbitDefaults.drinkingSpeed, 
+                        entityToDrink = RabbitDefaults.entityToDrink 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new MateData { 
+                        matingDuration = RabbitDefaults.matingDuration, 
+                        mateStartTime = RabbitDefaults.mateStartTime, 
+                        reproductiveUrge = RabbitDefaults.reproductiveUrge, 
+                        reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease, 
+                        matingThreshold = RabbitDefaults.matingThreshold, 
+                        entityToMate = RabbitDefaults.entityToMate 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new StateData { 
+                        state = RabbitDefaults.state, 
+                        previousState = RabbitDefaults.previousState, 
+                        deathReason = RabbitDefaults.deathReason, 
+                        beenEaten = RabbitDefaults.beenEaten 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new VisionData { 
+                        sightRadius = RabbitDefaults.sightRadius, 
+                        touchRadius = RabbitDefaults.touchRadius 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity, 
+                    new AgeData { 
+                        age = RabbitDefaults.age, 
+                        ageIncrease = RabbitDefaults.ageIncrease, 
+                        ageMax = RabbitDefaults.ageMax,
+                        adultEntryTimer = RabbitDefaults.adultEntryTimer,
+                        oldEntryTimer = RabbitDefaults.oldEntryTimer
+                    }
+                );
+                
+                entityManager.SetComponentData(prototypeEntity, 
+                    new BasicNeedsData { 
+                    hunger = RabbitDefaults.hunger, 
+                    hungryThreshold = RabbitDefaults.hungryThreshold, 
+                    hungerMax = RabbitDefaults.hungerMax, 
+                    hungerIncrease = RabbitDefaults.hungerIncrease,
+                    pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
+                    youngHungerIncrease = RabbitDefaults.youngHungerIncrease,
+                    adultHungerIncrease = RabbitDefaults.adultHungerIncrease,
+                    oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
+                    eatingSpeed = RabbitDefaults.eatingSpeed, 
+                    entityToEat = RabbitDefaults.entityToEat, 
+                    diet = (BasicNeedsData.Diet)RabbitDefaults.diet,
+                    thirst = RabbitDefaults.thirst,
+                    thirstyThreshold = RabbitDefaults.thirstyThreshold,
+                    thirstMax = RabbitDefaults.thirstMax,
+                    thirstIncrease = RabbitDefaults.thirstIncrease,
+                    drinkingSpeed = RabbitDefaults.drinkingSpeed,
+                    entityToDrink = RabbitDefaults.entityToDrink
+                    }
+                );
 
                 //randomise gender of rabbit - equal distribution
                 GenderData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = GenderData.Gender.Female : randGender = GenderData.Gender.Male;
                 Debug.Log(randGender);
                 //set gender differing components
-                entityManager.SetComponentData(prototypeEntity, new GenderData { gender = randGender });
+                entityManager.SetComponentData(prototypeEntity, 
+                    new GenderData { 
+                        gender = randGender 
+                    }
+                );
+                entityManager.SetComponentData(prototypeEntity,
+                    new BioStatsData
+                    {
+                        age = RabbitDefaults.age,
+                        ageIncrease = RabbitDefaults.ageIncrease,
+                        ageMax = RabbitDefaults.ageMax,
+                        ageGroup = RabbitDefaults.ageGroup,
+                        adultEntryTimer = RabbitDefaults.adultEntryTimer,
+                        oldEntryTimer = RabbitDefaults.oldEntryTimer,
+                        gender = (BioStatsData.Gender)randGender
+                    }
+                );
                 if (randGender == GenderData.Gender.Female) 
                 {
                     entityManager.AddComponent<PregnancyData>(prototypeEntity);
-                    entityManager.SetComponentData(prototypeEntity, new PregnancyData { pregnant = RabbitDefaults.pregnant, birthDuration = RabbitDefaults.birthDuration, babiesBorn = RabbitDefaults.babiesBorn, birthStartTime = RabbitDefaults.birthStartTime, currentLitterSize = RabbitDefaults.currentLitterSize, litterSizeMin = RabbitDefaults.litterSizeMin, litterSizeMax = RabbitDefaults.litterSizeMax, litterSizeAve = RabbitDefaults.litterSizeAve, pregnancyLengthBase = RabbitDefaults.pregnancyLength, pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier, pregnancyStartTime = RabbitDefaults.pregnancyStartTime });
+                    entityManager.SetComponentData(prototypeEntity,
+                        new PregnancyData { 
+                            pregnant = RabbitDefaults.pregnant, 
+                            birthDuration = RabbitDefaults.birthDuration, 
+                            babiesBorn = RabbitDefaults.babiesBorn, 
+                            birthStartTime = RabbitDefaults.birthStartTime, 
+                            currentLitterSize = RabbitDefaults.currentLitterSize, 
+                            litterSizeMin = RabbitDefaults.litterSizeMin, 
+                            litterSizeMax = RabbitDefaults.litterSizeMax, 
+                            litterSizeAve = RabbitDefaults.litterSizeAve, 
+                            pregnancyLengthBase = RabbitDefaults.pregnancyLength, 
+                            pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
+                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime                           
+                        }
+                    );
                 }
-                entityManager.SetComponentData(prototypeEntity, new SizeData { size = (randGender == GenderData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), sizeMultiplier = RabbitDefaults.sizeMultiplier });
+                else
+                {
+                    //entityManager.AddComponent<MatingSystem>(MateData.)
+                }
+                entityManager.SetComponentData(prototypeEntity, 
+                    new SizeData { 
+                        size = (randGender == GenderData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
+                        sizeMultiplier = RabbitDefaults.sizeMultiplier 
+                    }
+                );
             }
 
         }
