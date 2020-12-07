@@ -409,7 +409,8 @@ public class SimulationManager : MonoBehaviour
                         matingDuration = RabbitDefaults.matingDuration, 
                         mateStartTime = RabbitDefaults.mateStartTime, 
                         reproductiveUrge = RabbitDefaults.reproductiveUrge, 
-                        reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease, 
+                        reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease,
+                        defaultRepoductiveIncrease = RabbitDefaults.defaultReproductiveIncrease,
                         matingThreshold = RabbitDefaults.matingThreshold, 
                         entityToMate = RabbitDefaults.entityToMate 
                     }
@@ -461,14 +462,14 @@ public class SimulationManager : MonoBehaviour
                 );
 
                 //randomise gender of rabbit - equal distribution
-                GenderData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = GenderData.Gender.Female : randGender = GenderData.Gender.Male;
+                BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
                 Debug.Log(randGender);
                 //set gender differing components
-                entityManager.SetComponentData(prototypeEntity, 
+                /*entityManager.SetComponentData(prototypeEntity, 
                     new GenderData { 
                         gender = randGender 
                     }
-                );
+                );*/
                 entityManager.SetComponentData(prototypeEntity,
                     new BioStatsData
                     {
@@ -478,10 +479,10 @@ public class SimulationManager : MonoBehaviour
                         ageGroup = RabbitDefaults.ageGroup,
                         adultEntryTimer = RabbitDefaults.adultEntryTimer,
                         oldEntryTimer = RabbitDefaults.oldEntryTimer,
-                        gender = (BioStatsData.Gender)randGender
+                        gender = randGender
                     }
                 );
-                if (randGender == GenderData.Gender.Female) 
+                if (randGender == BioStatsData.Gender.Female) 
                 {
                     entityManager.AddComponent<PregnancyData>(prototypeEntity);
                     entityManager.SetComponentData(prototypeEntity,
@@ -506,7 +507,7 @@ public class SimulationManager : MonoBehaviour
                 }
                 entityManager.SetComponentData(prototypeEntity, 
                     new SizeData { 
-                        size = (randGender == GenderData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
+                        size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
                         sizeMultiplier = RabbitDefaults.sizeMultiplier,
                         ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
                         youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,

@@ -1,9 +1,11 @@
-﻿using Unity.Burst;
+﻿using System.Diagnostics;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+
 
 [UpdateAfter(typeof(SimulationSystemGroup))]//Not sure if working
 public class StateSystem : SystemBase
@@ -38,11 +40,11 @@ public class StateSystem : SystemBase
             ref PregnancyData pregnancyData,
             ref BasicNeedsData basicNeedsData,
             ref MovementData movementData,
+            in MateData mateData,
             in BioStatsData bioStatsData,
             //in AgeData ageData,
             //in HungerData hungerData,
-            //in ThirstData thirstData,
-            in MateData mateData,
+            //in ThirstData thirstData, 
             //in GenderData genderData,
             in VisionData visionData,
             in Translation translation
@@ -85,6 +87,7 @@ public class StateSystem : SystemBase
                     stateData.deathReason = StateData.DeathReason.Age;
                 }
 
+                //Update pregnancy status
                 if(pregnancyData.pregnant)
                 {
                     basicNeedsData.hungerIncrease = basicNeedsData.pregnancyHungerIncrease;
@@ -98,6 +101,7 @@ public class StateSystem : SystemBase
                     }
                 }
 
+                //Update Age stats
                 if (!pregnancyData.pregnant)
                 {
                     if(bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
@@ -117,10 +121,14 @@ public class StateSystem : SystemBase
                     }
                 }
 
-                if(bioStatsData.gender == BioStatsData.Gender.Male)
+                /*if(bioStatsData.gender == BioStatsData.Gender.Male && bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
                 {
-
+                    mateData.reproductiveUrgeIncrease = mateData.defaultRepoductiveIncrease;
                 }
+                else
+                {
+                    mateData.reproductiveUrgeIncrease = 0f;
+                }*/
 
                 //Priorities: Mating>Drinking>Eating>Wandering
                 switch (stateData.state)
