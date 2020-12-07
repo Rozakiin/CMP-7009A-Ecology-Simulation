@@ -41,7 +41,7 @@ public class TargetingSystem : SystemBase
         };
         EntityQueryDesc mateDesc = new EntityQueryDesc
         {
-            All = new ComponentType[] { typeof(PregnancyData), typeof(Translation) }
+            All = new ComponentType[] { typeof(ReproductiveData), typeof(BioStatsData), typeof(Translation) }
         };
 
         //create Entity and Component arrays from queries
@@ -54,11 +54,11 @@ public class TargetingSystem : SystemBase
         var waterEntityTranslationArray = GetEntityQuery(waterDesc).ToComponentDataArray<Translation>(Allocator.TempJob);
 
         var mateEntityArray = GetEntityQuery(mateDesc).ToEntityArray(Allocator.TempJob);
-        var mateEntityPregnancyDataArray = GetEntityQuery(mateDesc).ToComponentDataArray<PregnancyData>(Allocator.TempJob);
+        var mateEntityReproductiveDataArray = GetEntityQuery(mateDesc).ToComponentDataArray<ReproductiveData>(Allocator.TempJob);
+        var mateEntityBioStatsDataArray = GetEntityQuery(mateDesc).ToComponentDataArray<BioStatsData>(Allocator.TempJob);
         var mateEntityTranslationArray = GetEntityQuery(mateDesc).ToComponentDataArray<Translation>(Allocator.TempJob);
 
         //Get grid data needed to check walkable
-        //GridNode[,] grid = GridSetup.Instance.grid;
         var gridSize = GridSetup.Instance.gridSize;
         var worldSize = SimulationManager.worldSize;
         NativeArray<GridNode> grid = CreateGridNodeArray();
@@ -72,7 +72,8 @@ public class TargetingSystem : SystemBase
             waterEntityDrinkableDataArray.Dispose();
             waterEntityTranslationArray.Dispose();
             mateEntityArray.Dispose();
-            mateEntityPregnancyDataArray.Dispose();
+            mateEntityReproductiveDataArray.Dispose();
+            mateEntityBioStatsDataArray.Dispose();
             mateEntityTranslationArray.Dispose();
             grid.Dispose();
             return;
@@ -82,9 +83,7 @@ public class TargetingSystem : SystemBase
             Entity entity,
             int entityInQueryIndex,
             ref TargetData targetData,
-            ref HungerData hungerData,
-            //ref ThirstData thirstData,
-            //ref MateData mateData,
+            ref BasicNeedsData basicNeedsData,
             in PathFollowData pathFollowData,
             in Translation translation,
             in StateData stateData,
@@ -129,7 +128,7 @@ public class TargetingSystem : SystemBase
                         for (int i = 0; i != edibleEntityArray.Length; i++)
                         {
                             // if AND bitise diet and edible's foodtype == the edible's foodtype 
-                            EdibleData.FoodType entityDiet = (EdibleData.FoodType)hungerData.diet;
+                            EdibleData.FoodType entityDiet = (EdibleData.FoodType)basicNeedsData.diet;
                             bool isInDiet = (edibleEntityEdibleDataArray[i].foodType & entityDiet) == edibleEntityEdibleDataArray[i].foodType;
                             //Debug.Log($"{entity.Index}:{i}:{edibleEntityArray[i].Index}: {isInDiet}");
 
@@ -172,7 +171,7 @@ public class TargetingSystem : SystemBase
 
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
-                            hungerData.entityToEat = edible;
+                            basicNeedsData.entityToEat = edible;
                         }
                         else 
                         {
@@ -231,7 +230,7 @@ public class TargetingSystem : SystemBase
 
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
-                            //thirstData.entityToDrink = water;
+                            basicNeedsData.entityToDrink = water;
                         }
                         else
                         {
@@ -255,26 +254,30 @@ public class TargetingSystem : SystemBase
                             // is in sight?
                             if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) <= visionData.sightRadius)
                             {
-                                //if not pregnant
-                                if (!mateEntityPregnancyDataArray[i].pregnant)
-                                {   
-                                    // is walkable?
-                                    if (IsWorldPointWalkableFromGridNativeArray(mateEntityTranslationArray[i].Value, worldSize, gridSize, grid))
+                                //is female
+                                if (mateEntityBioStatsDataArray[i].gender == BioStatsData.Gender.Female)
+                                {
+                                    //if not pregnant
+                                    if (!mateEntityReproductiveDataArray[i].pregnant)
                                     {
-                                        // no target yet
-                                        if (mate == Entity.Null)
+                                        // is walkable?
+                                        if (IsWorldPointWalkableFromGridNativeArray(mateEntityTranslationArray[i].Value, worldSize, gridSize, grid))
                                         {
-                                            mate = entity;
-                                            targetPosition = mateEntityTranslationArray[i].Value;
-                                        }
-                                        else
-                                        {
-                                            // Already has target, closest?
-                                            if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) < math.distance(currentPosition, targetPosition))
+                                            // no target yet
+                                            if (mate == Entity.Null)
                                             {
-                                                // New Target closer
-                                                edible = mateEntityArray[i];
+                                                mate = entity;
                                                 targetPosition = mateEntityTranslationArray[i].Value;
+                                            }
+                                            else
+                                            {
+                                                // Already has target, closest?
+                                                if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) < math.distance(currentPosition, targetPosition))
+                                                {
+                                                    // New Target closer
+                                                    edible = mateEntityArray[i];
+                                                    targetPosition = mateEntityTranslationArray[i].Value;
+                                                }
                                             }
                                         }
                                     }
@@ -305,7 +308,8 @@ public class TargetingSystem : SystemBase
             .WithDeallocateOnJobCompletion(waterEntityDrinkableDataArray)
             .WithDeallocateOnJobCompletion(waterEntityTranslationArray)
             .WithDeallocateOnJobCompletion(mateEntityArray)
-            .WithDeallocateOnJobCompletion(mateEntityPregnancyDataArray)
+            .WithDeallocateOnJobCompletion(mateEntityReproductiveDataArray)
+            .WithDeallocateOnJobCompletion(mateEntityBioStatsDataArray)
             .WithDeallocateOnJobCompletion(mateEntityTranslationArray)
             .ScheduleParallel();
         // Make sure that the ECB system knows about our job

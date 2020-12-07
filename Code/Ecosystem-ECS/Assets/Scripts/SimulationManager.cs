@@ -119,15 +119,11 @@ public class SimulationManager : MonoBehaviour
             typeof(NonUniformScale),
             typeof(EdibleData),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
-            typeof(MateData),
-            typeof(GenderData),
+            typeof(ReproductiveData),
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -136,17 +132,13 @@ public class SimulationManager : MonoBehaviour
             typeof(Translation),
             typeof(Rotation),
             typeof(NonUniformScale),
-            typeof(PregnancyData),
+            typeof(ReproductiveData),
             typeof(EdibleData),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
-            typeof(GenderData),
             typeof(SizeData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
             );
@@ -156,12 +148,9 @@ public class SimulationManager : MonoBehaviour
             typeof(Rotation),
             typeof(NonUniformScale),
             typeof(MovementData),
-            typeof(HungerData),
-            typeof(ThirstData),
             typeof(StateData),
             typeof(TargetData),
             typeof(VisionData),
-            typeof(AgeData),
             typeof(SizeData),
             typeof(BasicNeedsData),
             typeof(BioStatsData)
@@ -356,7 +345,13 @@ public class SimulationManager : MonoBehaviour
             //if has target data component set target to self
             if (entityManager.HasComponent<TargetData>(prototypeEntity))
             {
-                entityManager.SetComponentData(prototypeEntity, new TargetData { atTarget = true, currentTarget = worldPoint, oldTarget = worldPoint });
+                entityManager.SetComponentData(prototypeEntity,
+                    new TargetData {
+                        atTarget = true,
+                        currentTarget = worldPoint,
+                        oldTarget = worldPoint 
+                    }
+                );
             }
 
             //set default variables based on gameObject name - not great solution but works for now
@@ -385,39 +380,6 @@ public class SimulationManager : MonoBehaviour
                     }
                 );
                 entityManager.SetComponentData(prototypeEntity, 
-                    new HungerData { 
-                        hunger = RabbitDefaults.hunger, 
-                        hungryThreshold = RabbitDefaults.hungryThreshold, 
-                        hungerMax = RabbitDefaults.hungerMax, 
-                        hungerIncrease = RabbitDefaults.hungerIncrease,
-                        pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
-                        eatingSpeed = RabbitDefaults.eatingSpeed, 
-                        entityToEat = RabbitDefaults.entityToEat, 
-                        diet = RabbitDefaults.diet 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new ThirstData { 
-                        thirst = RabbitDefaults.thirst, 
-                        thirstyThreshold = RabbitDefaults.thirstyThreshold, 
-                        thirstMax = RabbitDefaults.thirstMax, 
-                        thirstIncrease = RabbitDefaults.thirstIncrease, 
-                        drinkingSpeed = RabbitDefaults.drinkingSpeed, 
-                        entityToDrink = RabbitDefaults.entityToDrink 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new MateData { 
-                        matingDuration = RabbitDefaults.matingDuration, 
-                        mateStartTime = RabbitDefaults.mateStartTime, 
-                        reproductiveUrge = RabbitDefaults.reproductiveUrge, 
-                        reproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncrease,
-                        defaultRepoductiveIncrease = RabbitDefaults.defaultReproductiveIncrease,
-                        matingThreshold = RabbitDefaults.matingThreshold, 
-                        entityToMate = RabbitDefaults.entityToMate 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
                     new StateData { 
                         state = RabbitDefaults.state, 
                         previousState = RabbitDefaults.previousState, 
@@ -432,16 +394,6 @@ public class SimulationManager : MonoBehaviour
                     }
                 );
                 entityManager.SetComponentData(prototypeEntity, 
-                    new AgeData { 
-                        age = RabbitDefaults.age, 
-                        ageIncrease = RabbitDefaults.ageIncrease, 
-                        ageMax = RabbitDefaults.ageMax,
-                        adultEntryTimer = RabbitDefaults.adultEntryTimer,
-                        oldEntryTimer = RabbitDefaults.oldEntryTimer
-                    }
-                );
-                
-                entityManager.SetComponentData(prototypeEntity, 
                     new BasicNeedsData { 
                     hunger = RabbitDefaults.hunger, 
                     hungryThreshold = RabbitDefaults.hungryThreshold, 
@@ -453,7 +405,7 @@ public class SimulationManager : MonoBehaviour
                     oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
                     eatingSpeed = RabbitDefaults.eatingSpeed, 
                     entityToEat = RabbitDefaults.entityToEat, 
-                    diet = (BasicNeedsData.Diet)RabbitDefaults.diet,
+                    diet = RabbitDefaults.diet,
                     thirst = RabbitDefaults.thirst,
                     thirstyThreshold = RabbitDefaults.thirstyThreshold,
                     thirstMax = RabbitDefaults.thirstMax,
@@ -465,13 +417,8 @@ public class SimulationManager : MonoBehaviour
 
                 //randomise gender of rabbit - equal distribution
                 BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
-                //Debug.Log(randGender);
                 //set gender differing components
-                /*entityManager.SetComponentData(prototypeEntity, 
-                    new GenderData { 
-                        gender = randGender 
-                    }
-                );*/
+
                 entityManager.SetComponentData(prototypeEntity,
                     new BioStatsData
                     {
@@ -484,29 +431,33 @@ public class SimulationManager : MonoBehaviour
                         gender = randGender
                     }
                 );
-                if (randGender == BioStatsData.Gender.Female) 
-                {
-                    entityManager.AddComponent<PregnancyData>(prototypeEntity);
-                    entityManager.SetComponentData(prototypeEntity,
-                        new PregnancyData { 
-                            pregnant = RabbitDefaults.pregnant, 
-                            birthDuration = RabbitDefaults.birthDuration, 
-                            babiesBorn = RabbitDefaults.babiesBorn, 
-                            birthStartTime = RabbitDefaults.birthStartTime, 
-                            currentLitterSize = RabbitDefaults.currentLitterSize, 
-                            litterSizeMin = RabbitDefaults.litterSizeMin, 
-                            litterSizeMax = RabbitDefaults.litterSizeMax, 
-                            litterSizeAve = RabbitDefaults.litterSizeAve, 
-                            pregnancyLengthBase = RabbitDefaults.pregnancyLength, 
+                //set reproductive data differing on gender
+                entityManager.SetComponentData(prototypeEntity,
+                        new ReproductiveData
+                        {
+                            matingDuration = RabbitDefaults.matingDuration,
+                            mateStartTime = RabbitDefaults.mateStartTime,
+                            reproductiveUrge = RabbitDefaults.reproductiveUrge,
+                            reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                            defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                            matingThreshold = RabbitDefaults.matingThreshold,
+                            entityToMate = RabbitDefaults.entityToMate,
+
+                            pregnant = RabbitDefaults.pregnant,
+                            birthDuration = RabbitDefaults.birthDuration,
+                            babiesBorn = RabbitDefaults.babiesBorn,
+                            birthStartTime = RabbitDefaults.birthStartTime,
+                            currentLitterSize = RabbitDefaults.currentLitterSize,
+                            litterSizeMin = RabbitDefaults.litterSizeMin,
+                            litterSizeMax = RabbitDefaults.litterSizeMax,
+                            litterSizeAve = RabbitDefaults.litterSizeAve,
+                            pregnancyLengthBase = RabbitDefaults.pregnancyLength,
                             pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime                           
+                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime
                         }
                     );
-                }
-                else
-                {
-                    //entityManager.AddComponent<MatingSystem>(MateData.)
-                }
+
+                //set size differing on gender
                 entityManager.SetComponentData(prototypeEntity, 
                     new SizeData { 
                         size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 

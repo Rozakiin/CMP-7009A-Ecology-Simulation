@@ -91,19 +91,15 @@ GameObject:
   - component: {fileID: 8938199291469164372}
   - component: {fileID: -6504437005261823738}
   - component: {fileID: -9147605867028636769}
-  - component: {fileID: -224445953965005878}
-  - component: {fileID: 2407081619555887592}
-  - component: {fileID: -6426143068931531581}
-  - component: {fileID: -8698036066575867697}
   - component: {fileID: -7479947182873029247}
   - component: {fileID: -3378324085052062256}
   - component: {fileID: 1699504912102838281}
   - component: {fileID: -5808282956051259984}
-  - component: {fileID: 7939048878264072187}
   - component: {fileID: -5089060519100572234}
   - component: {fileID: -4092187666830348072}
   - component: {fileID: -114518658351010783}
   - component: {fileID: 1804554870596230297}
+  - component: {fileID: 8782963010654111548}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -176,75 +172,6 @@ MonoBehaviour:
   youngMoveMultiplier: 0
   adultMoveMultiplier: 0
   oldMoveMultiplier: 0
---- !u!114 &-224445953965005878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b7e821f93204bb41a059a1d27a6fd76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hunger: 0
-  hungryThreshold: 20
-  hungerMax: 100
-  hungerIncrease: 1
-  pregnancyHungerIncrease: 0
-  eatingSpeed: 2
-  entityToEat: {fileID: 0}
-  diet: 3
---- !u!114 &2407081619555887592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fa75b397d76cf24388170cdb1d7d161, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thirst: 0
-  thirstyThreshold: 10
-  thirstMax: 100
-  thirstIncrease: 0.5
-  drinkingSpeed: 5
-  entityToDrink: {fileID: 0}
---- !u!114 &-6426143068931531581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2951df03d50ca9747b2486354afd6357, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matingDuration: 0
-  mateStartTime: 0
-  reproductiveUrge: 0
-  reproductiveUrgeIncrease: 0.2
-  matingThreshold: 50
-  entityToMate: {fileID: 0}
---- !u!114 &-8698036066575867697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 070bd108ed79da443bad2061b7b6c648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gender: 0
 --- !u!114 &-7479947182873029247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +186,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 1
   sizeMultiplier: 1
+  ageSizeMultiplier: 0
+  youngSizeMultiplier: 0
+  adultSizeMultiplier: 0
+  oldSizeMultiplier: 0
 --- !u!114 &-3378324085052062256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,23 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sightRadius: 20
   touchRadius: 1
---- !u!114 &7939048878264072187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401487155666583363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd00393cd2cd69a49966c2c710bc2d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  age: 0
-  ageIncrease: 0.1
-  ageMax: 100
-  adultEntryTimer: 0
-  oldEntryTimer: 0
 --- !u!114 &-5089060519100572234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +314,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathIndex: -1
+--- !u!114 &8782963010654111548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37719ffb9bb3564448ebb4eaa16690c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matingDuration: 0
+  mateStartTime: 0
+  reproductiveUrge: 0
+  defaultRepoductiveIncrease: 0
+  reproductiveUrgeIncrease: 0
+  matingThreshold: 0
+  entityToMate: {fileID: 0}
+  pregnant: 0
+  birthDuration: 0
+  birthStartTime: 0
+  babiesBorn: 0
+  litterSizeMin: 0
+  litterSizeMax: 0
+  litterSizeAve: 0
+  currentLitterSize: 0
+  pregnancyStartTime: 0
+  pregnancyLengthBase: 0
+  pregnancyLengthModifier: 0
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0
