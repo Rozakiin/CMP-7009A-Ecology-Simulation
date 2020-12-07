@@ -28,18 +28,18 @@ public class PathFindingTestSystem : SystemBase
         // types you want.
         
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
-            //TESTING set a path to find on click of mouse
-            Entities.WithAll<isRabbitTag>().ForEach((
-            Entity entity, int entityInQueryIndex) =>
-            {
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
+        //    //TESTING set a path to find on click of mouse
+        //    Entities.WithAll<isRabbitTag>().ForEach((
+        //    Entity entity, int entityInQueryIndex) =>
+        //    {
 
-                ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                ecb.SetComponent<PathFindingRequestData>(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = new float3(-95, 0, -95), endPosition = new float3(95, 0, -75) });
-            }).WithoutBurst().Schedule();
-        }
+        //        ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+        //        ecb.SetComponent<PathFindingRequestData>(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = new float3(-95, 0, -95), endPosition = new float3(95, 0, -75) });
+        //    }).WithoutBurst().Schedule();
+        //}
         // Make sure that the ECB system knows about our job
         ecbSystem.AddJobHandleForProducer(this.Dependency);
     }
