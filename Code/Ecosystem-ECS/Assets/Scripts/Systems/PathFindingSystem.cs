@@ -13,9 +13,10 @@ public class PathFindingSystem : SystemBase
     private const int MOVE_DIAGONAL_COST = 14;//14 used as approximate of sqrt(2)*10 for diagonals
 
     private EndSimulationEntityCommandBufferSystem ecbSystem;
-
+    private NativeArray<PathNode> pathNodeArray;
     protected override void OnCreate()
     {
+        base.OnCreate();
         ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
@@ -24,7 +25,9 @@ public class PathFindingSystem : SystemBase
         var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
 
         //PERFORMANCE ISSUE: path node array created each update, could be cached
-        NativeArray<PathNode> pathNodeArray = CreatePathNodeArray();
+        if (!pathNodeArray.IsCreated)
+            pathNodeArray = CreatePathNodeArray();
+        NativeArray<PathNode> tempArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
 
         float2 gridWorldSize = GridSetup.Instance.gridWorldSize;
         int2 gridSize = GridSetup.Instance.gridSize;
@@ -38,15 +41,15 @@ public class PathFindingSystem : SystemBase
             ref PathFollowData pathFollowData
             ) =>
         {
-            NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.Temp);
+            NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(tempArray, Allocator.Temp);
 
             //Find a path
             FindPathJob findPathJob = new FindPathJob
             {
                 gridSize = gridSize,
                 pathNodeArray = tmpPathNodeArray,
-                startNode = NodeFromWorldPoint(pathFindingRequestData.startPosition, gridWorldSize, gridSize, pathNodeArray),
-                targetNode = NodeFromWorldPoint(pathFindingRequestData.endPosition, gridWorldSize, gridSize, pathNodeArray),
+                startNode = NodeFromWorldPoint(pathFindingRequestData.startPosition, gridWorldSize, gridSize, tmpPathNodeArray),
+                targetNode = NodeFromWorldPoint(pathFindingRequestData.endPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                 entity = entity,
             };
             findPathJob.Execute();//execute the find path job
@@ -70,13 +73,18 @@ public class PathFindingSystem : SystemBase
 
             ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity);//remove the requestpathdata from entity
             
-        }).WithDeallocateOnJobCompletion(pathNodeArray).Schedule();
+        }).WithDeallocateOnJobCompletion(tempArray).Schedule();
 
 
 
         // Make sure that the ECB system knows about our job
         ecbSystem.AddJobHandleForProducer(this.Dependency);
-        //pathNodeArray.Dispose();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        pathNodeArray.Dispose();
     }
 
     [BurstCompile]
