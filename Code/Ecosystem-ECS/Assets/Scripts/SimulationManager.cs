@@ -507,7 +507,11 @@ public class SimulationManager : MonoBehaviour
                 entityManager.SetComponentData(prototypeEntity, 
                     new SizeData { 
                         size = (randGender == GenderData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
-                        sizeMultiplier = RabbitDefaults.sizeMultiplier 
+                        sizeMultiplier = RabbitDefaults.sizeMultiplier,
+                        ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
+                        youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
+                        adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
+                        oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
                     }
                 );
             }

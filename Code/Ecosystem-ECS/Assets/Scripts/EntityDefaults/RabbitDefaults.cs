@@ -75,6 +75,10 @@ public static class RabbitDefaults
     public static float sizeMultiplier = 1f;
     public static float scaleMale = 2f;
     public static float scaleFemale = 3f;
+    public static float youngSizeMultiplier = 0.6f;
+    public static float adultSizeMultiplier = 1f;
+    public static float oldSizeMultiplier = 0.75f;
+    public static float ageSizeMultiplier = youngSizeMultiplier;
 
     //State
     public static StateData.States state = StateData.States.Wandering;
