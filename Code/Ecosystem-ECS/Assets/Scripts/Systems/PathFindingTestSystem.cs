@@ -26,10 +26,11 @@ public class PathFindingTestSystem : SystemBase
         // meaning it will process all entities in the world that have both
         // Translation and Rotation components. Change it to process the component
         // types you want.
-        var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
+        
 
         if (Input.GetMouseButtonDown(0))
         {
+            var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
             //TESTING set a path to find on click of mouse
             Entities.WithAll<isRabbitTag>().ForEach((
             Entity entity, int entityInQueryIndex) =>
