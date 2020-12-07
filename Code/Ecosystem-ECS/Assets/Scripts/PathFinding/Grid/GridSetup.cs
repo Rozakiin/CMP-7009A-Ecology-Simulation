@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Physics;
@@ -255,4 +255,29 @@ public class GridSetup : MonoBehaviour
         return grid[x, y];// position of closest node in array
     }
 
+
+    // returns if the given world point is in a walkable tile
+    public bool IsWorldPointWalkable(float3 _worldPos)
+    {
+        return NodeFromWorldPoint(_worldPos).isWalkable;
+    }
+
+
+    // static version combines NodeFromWorldPoint and IsWorldPointWalkable
+    public static bool IsWorldPointWalkableFromGrid(float3 _worldPos, float2 _worldSize, int2 _gridSize, GridNode[,] grid)
+    {
+        // how far along the grid the position is (left 0, middle 0.5, right 1)
+        float percentX = _worldPos.x / _worldSize.x + 0.5f; // optimisation of maths
+        float percentY = _worldPos.z / _worldSize.y + 0.5f;
+
+        //clamp percent between 0 and 1
+        percentX = math.clamp(percentX, 0, 1);
+        percentY = math.clamp(percentY, 0, 1);
+
+        // calc x,y position in the node array for the world position
+        int x = Mathf.FloorToInt(math.min(_gridSize.x * percentX, _gridSize.x - 1));
+        int y = Mathf.FloorToInt(math.min(_gridSize.y * percentY, _gridSize.y - 1));
+
+        return grid[x, y].isWalkable;
+    }
 }
