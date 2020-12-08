@@ -98,11 +98,17 @@ public class GridSetup : MonoBehaviour
         BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         PhysicsWorld physicsWorld = buildPhysicsWorld.PhysicsWorld;
         CollisionWorld world = physicsWorld.CollisionWorld;
+        uint mask = 1 << 3; // set mask to tiles (layer 3)
         RaycastInput input = new RaycastInput()
         {
             Start = RayFrom,
             End = RayTo,
-            Filter = CollisionFilter.Default
+            Filter = new CollisionFilter
+            {
+                BelongsTo = ~0u,
+                CollidesWith = mask,
+                GroupIndex = 0
+            }
         };
 
         if (world.CastRay(input, out RaycastHit hit))
