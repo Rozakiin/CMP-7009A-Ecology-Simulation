@@ -45,6 +45,31 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] public int numberOfGrassToSpawn = 0;
     #endregion
 
+    #region Population Info for Entities
+    [Header("Population Data")]
+    public int rabbitPopulation = 0;
+    public int foxPopulation = 0;
+    public int grassPopulation = 0;
+    #endregion
+
+    #region Death Info for Entities
+    [Header("Death Data")]
+    public int numberOfGrassEaten = 0;
+
+    public int numberOfRabbitsDeadTotal = 0;
+    public int numberOfRabbitsDeadHunger = 0;
+    public int numberOfRabbitsDeadThirst = 0;
+    public int numberOfRabbitsDeadEaten = 0;
+    public int numberOfRabbitsDeadAge = 0;
+
+    public int numberOfFoxesDeadTotal = 0;
+    public int numberOfFoxesDeadHunger = 0;
+    public int numberOfFoxesDeadThirst = 0;
+    public int numberOfFoxesDeadEaten = 0;
+    public int numberOfFoxesDeadAge = 0;
+
+    #endregion
+
     #region Map Data 
     [Header("Map Data")]
     public static string mapPath = "Assets/Scripts/MonoBehaviourTools/Map/MapExample.txt";

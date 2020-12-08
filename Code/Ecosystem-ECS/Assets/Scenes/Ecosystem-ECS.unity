@@ -167,6 +167,20 @@ MonoBehaviour:
   numberOfRabbitsToSpawn: 10
   numberOfFoxesToSpawn: 1
   numberOfGrassToSpawn: 20
+  rabbitPopulation: 0
+  foxPopulation: 0
+  grassPopulation: 0
+  numberOfGrassEaten: 0
+  numberOfRabbitsDeadTotal: 0
+  numberOfRabbitsDeadHunger: 0
+  numberOfRabbitsDeadThirst: 0
+  numberOfRabbitsDeadEaten: 0
+  numberOfRabbitsDeadAge: 0
+  numberOfFoxesDeadTotal: 0
+  numberOfFoxesDeadHunger: 0
+  numberOfFoxesDeadThirst: 0
+  numberOfFoxesDeadEaten: 0
+  numberOfFoxesDeadAge: 0
 --- !u!4 &508030574
 Transform:
   m_ObjectHideFlags: 0
