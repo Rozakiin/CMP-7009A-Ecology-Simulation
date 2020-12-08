@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 899976519481417731}
   - component: {fileID: 8713707039879870890}
   - component: {fileID: 5658520541375007629}
-  - component: {fileID: 6993261194609804958}
   - component: {fileID: 2849055317708304296}
   - component: {fileID: -2443828945367694938}
   - component: {fileID: -6082851943645634421}
+  - component: {fileID: -7866654370977077799}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Untagged
@@ -83,20 +83,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6993261194609804958
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2319766486748558764}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7825443460256949968, guid: 5f5482c224678d9429071f111f544d8c, type: 3}
 --- !u!114 &2849055317708304296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBeEaten: 1
-  nutritionalValue: 5
+  nutritionalValueBase: 0
+  nutritionalValueMultiplier: 0
   foodType: 1
 --- !u!114 &-6082851943645634421
 MonoBehaviour:
@@ -137,7 +124,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4edad15b2ca3644a29ab0afee6b4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size:
-    x: 1
-    y: 1
-    z: 1
+  size: 0
+  sizeMultiplier: 0
+  ageSizeMultiplier: 0
+  youngSizeMultiplier: 0
+  adultSizeMultiplier: 0
+  oldSizeMultiplier: 0
+--- !u!114 &-7866654370977077799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2319766486748558764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6e1526096fcd34e81c5ae7b6e53efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  previousState: 0
+  deathReason: 0
+  beenEaten: 0
