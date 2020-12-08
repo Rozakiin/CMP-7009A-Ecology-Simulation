@@ -79,7 +79,9 @@ public class TargetingSystem : SystemBase
             return;
         }
         //entities without path request data
-        Entities.WithNone<PathFindingRequestData>().ForEach((
+        Entities
+            .WithNone<PathFindingRequestData>()
+            .ForEach((
             Entity entity,
             int entityInQueryIndex,
             ref TargetData targetData,
@@ -89,21 +91,21 @@ public class TargetingSystem : SystemBase
             in StateData stateData
             ) =>
         {
-            //if physically at target
-            //float euclidian = math.distance(translation.Value, targetData.currentTarget);
-            //if (euclidian <= targetData.touchRadius)
-            //{
-            //    targetData.atTarget = true;
-            //    targetData.oldTarget = targetData.currentTarget;
-            //}
-            //else // might not be needed
-            //{
-            //    targetData.atTarget = false;
-            //}
-            //Create a NativeArray representation of the grid array
 
-            // if flag says is at target
-            if (pathFollowData.pathIndex == -1)
+            //if physically at target
+            float euclidian = math.distance(translation.Value, targetData.currentTarget);
+            if (euclidian <= targetData.touchRadius)
+            {
+                targetData.atTarget = true;
+                targetData.oldTarget = targetData.currentTarget;
+            }
+            else // might not be needed
+            {
+                targetData.atTarget = false;
+            }
+
+            // if not following a path
+            if (pathFollowData.pathIndex < 0)
             {
                 float3 currentPosition = translation.Value;
                 float3 targetPosition = worldBottomLeft*2; // set to double bottom left as should be further than everything else in scene
@@ -114,8 +116,8 @@ public class TargetingSystem : SystemBase
                     case StateData.States.Wandering:
                         targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                         if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid)) {
-                            ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
@@ -165,8 +167,8 @@ public class TargetingSystem : SystemBase
                         if (edible != Entity.Null)
                         {
                             // make a path finding request
-                            ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
@@ -178,8 +180,8 @@ public class TargetingSystem : SystemBase
                             targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
-                                ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                                 targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
@@ -224,8 +226,8 @@ public class TargetingSystem : SystemBase
                         if (water != Entity.Null)
                         {
                             // make a path finding request
-                            ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
@@ -237,8 +239,8 @@ public class TargetingSystem : SystemBase
                             targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
-                                ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                                 targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
@@ -287,8 +289,8 @@ public class TargetingSystem : SystemBase
                         if (mate != Entity.Null)
                         {
                             // make a path finding request
-                            ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
                             targetData.currentTarget = GetComponentDataFromEntity<Translation>(true)[mate].Value;
                             //mateData.entityToMate = mate;
