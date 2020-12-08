@@ -18,7 +18,7 @@ public class PathFollowSystem : SystemBase
             ref PathFollowData pathFollowData, 
             in MovementData movementData) => 
         {
-            // if currently follwing a path
+            // if currently following a path
             if (pathFollowData.pathIndex >= 0)
             {
                 //get the world position of next path node to follow
