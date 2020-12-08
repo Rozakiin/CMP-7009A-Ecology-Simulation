@@ -99,6 +99,9 @@ GameObject:
   - component: {fileID: 8782963010654111548}
   - component: {fileID: 6327829983723291044}
   - component: {fileID: -114518658351010783}
+  - component: {fileID: -3387365018944375088}
+  - component: {fileID: -757998555537151899}
+  - component: {fileID: -6372020705764224283}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -245,7 +248,6 @@ MonoBehaviour:
   thirstMax: 0
   thirstIncrease: 0
   drinkingSpeed: 0
-  entityToDrink: {fileID: 0}
   hunger: 0
   hungryThreshold: 0
   hungerMax: 0
@@ -255,7 +257,6 @@ MonoBehaviour:
   adultHungerIncrease: 0
   oldHungerIncrease: 0
   eatingSpeed: 0
-  entityToEat: {fileID: 0}
   diet: 0
 --- !u!114 &-4092187666830348072
 MonoBehaviour:
@@ -294,7 +295,6 @@ MonoBehaviour:
   defaultRepoductiveIncrease: 0
   reproductiveUrgeIncrease: 0
   matingThreshold: 0
-  entityToMate: {fileID: 0}
   pregnant: 0
   birthDuration: 0
   birthStartTime: 0
@@ -331,6 +331,198 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc7f99494b274a478d0db79068f4b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3387365018944375088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShapeType: 0
+  m_PrimitiveCenter:
+    x: 0
+    y: 0.36522713
+    z: 0.06354228
+  m_PrimitiveSize:
+    x: 0.532171
+    y: 0.73054427
+    z: 0.98955274
+  m_PrimitiveOrientation:
+    Value:
+      x: -0
+      y: 0
+      z: 0
+    RotationOrder: 4
+  m_Capsule:
+    Height: 0.98955274
+    Radius: 0.36527213
+    Axis: 2
+  m_Cylinder:
+    Height: 0.98955274
+    Radius: 0.36527213
+    Axis: 2
+  m_CylinderSideCount: 20
+  m_SphereRadius: 0.49477637
+  m_MinimumSkinnedVertexWeight: 0.1
+  m_ConvexHullGenerationParameters:
+    m_SimplificationTolerance: 0.014843289
+    m_BevelRadius: 0.05
+    m_MinimumAngle: 2.5000002
+  m_CustomMesh: {fileID: 0}
+  m_ForceUnique: 0
+  m_Material:
+    m_SupportsTemplate: 1
+    m_Template: {fileID: 0}
+    m_CollisionResponse:
+      m_Override: 0
+      m_Value: 0
+    m_Friction:
+      m_Override: 0
+      m_Value:
+        Value: 0.5
+        CombineMode: 0
+    m_Restitution:
+      m_Override: 0
+      m_Value:
+        Value: 0
+        CombineMode: 2
+    m_BelongsToCategories:
+      m_Override: 0
+      m_Value:
+        Category00: 1
+        Category01: 1
+        Category02: 1
+        Category03: 1
+        Category04: 1
+        Category05: 1
+        Category06: 1
+        Category07: 1
+        Category08: 1
+        Category09: 1
+        Category10: 1
+        Category11: 1
+        Category12: 1
+        Category13: 1
+        Category14: 1
+        Category15: 1
+        Category16: 1
+        Category17: 1
+        Category18: 1
+        Category19: 1
+        Category20: 1
+        Category21: 1
+        Category22: 1
+        Category23: 1
+        Category24: 1
+        Category25: 1
+        Category26: 1
+        Category27: 1
+        Category28: 1
+        Category29: 1
+        Category30: 1
+        Category31: 1
+    m_CollidesWithCategories:
+      m_Override: 0
+      m_Value:
+        Category00: 1
+        Category01: 1
+        Category02: 1
+        Category03: 1
+        Category04: 1
+        Category05: 1
+        Category06: 1
+        Category07: 1
+        Category08: 1
+        Category09: 1
+        Category10: 1
+        Category11: 1
+        Category12: 1
+        Category13: 1
+        Category14: 1
+        Category15: 1
+        Category16: 1
+        Category17: 1
+        Category18: 1
+        Category19: 1
+        Category20: 1
+        Category21: 1
+        Category22: 1
+        Category23: 1
+        Category24: 1
+        Category25: 1
+        Category26: 1
+        Category27: 1
+        Category28: 1
+        Category29: 1
+        Category30: 1
+        Category31: 1
+    m_CustomMaterialTags:
+      m_Override: 0
+      m_Value:
+        Tag00: 0
+        Tag01: 0
+        Tag02: 0
+        Tag03: 0
+        Tag04: 0
+        Tag05: 0
+        Tag06: 0
+        Tag07: 0
+    m_SerializedVersion: 1
+    m_BelongsTo_Deprecated:
+      m_Override: 0
+      m_Value: 
+    m_CollidesWith_Deprecated:
+      m_Override: 0
+      m_Value: 
+    m_CustomTags_Deprecated:
+      m_Override: 0
+      m_Value: 
+    m_IsTrigger_Deprecated:
+      m_Override: 0
+      m_Value: 0
+    m_RaisesCollisionEvents_Deprecated:
+      m_Override: 0
+      m_Value: 0
+  m_SerializedVersion: 1
+  m_ConvexRadius_Deprecated: -1
+--- !u!114 &-757998555537151899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d2f1262250c4e989aee0773a489302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  predatorEntity: {fileID: 0}
+  predatorEntityCount: 0
+  entityToEat: {fileID: 0}
+  edibleEntityCount: 0
+  entityToDrink: {fileID: 0}
+  waterEntityCount: 0
+  entityToMate: {fileID: 0}
+  mateEntityCount: 0
+--- !u!114 &-6372020705764224283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401487155666583363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ColliderTypeNumber: 0
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0

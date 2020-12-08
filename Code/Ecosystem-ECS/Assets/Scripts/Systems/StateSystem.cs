@@ -28,6 +28,7 @@ public class StateSystem : SystemBase
             ref StateData stateData,
             ref BasicNeedsData basicNeedsData,
             ref MovementData movementData,
+            in LookingEntityData lookingEntityData,
             in ReproductiveData reproductiveData,
             in BioStatsData bioStatsData,
             in TargetData targetData,
@@ -100,9 +101,9 @@ public class StateSystem : SystemBase
                             stateData.state = StateData.States.SexuallyActive;
                         }
 
-                        if (basicNeedsData.entityToEat != Entity.Null)
+                        if (lookingEntityData.entityToEat != Entity.Null)
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[lookingEntityData.entityToEat].Value);
                             if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
@@ -111,7 +112,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Eating:
-                        if (basicNeedsData.entityToEat == Entity.Null)
+                        if (lookingEntityData.entityToEat == Entity.Null)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Hungry;
@@ -128,9 +129,9 @@ public class StateSystem : SystemBase
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;
                         }
-                        if (basicNeedsData.entityToDrink != Entity.Null)
+                        if (lookingEntityData.entityToDrink != Entity.Null)
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[lookingEntityData.entityToDrink].Value);
                             if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
@@ -139,7 +140,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Drinking:
-                        if (basicNeedsData.entityToDrink == Entity.Null)
+                        if (lookingEntityData.entityToDrink == Entity.Null)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Thirsty;
@@ -151,9 +152,9 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.SexuallyActive:
-                        if (reproductiveData.entityToMate != Entity.Null)
+                        if (lookingEntityData.entityToMate != Entity.Null)
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[lookingEntityData.entityToMate].Value);
                             if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
@@ -162,7 +163,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Mating:
-                        if (reproductiveData.entityToMate == Entity.Null)
+                        if (lookingEntityData.entityToMate == Entity.Null)
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;

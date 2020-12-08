@@ -21,4 +21,11 @@ public static class GrassDefaults
     public static StateData.States previousState = StateData.States.Wandering;
     public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
     public static bool beenEaten = false;
+
+    //ColliderTypeData
+    public static int GrassColliderNumber = 3;
+    public static int WaterTileColliderNumber = 4;
+    public static int GrassTileColliderNumber = 5;
+    public static int RockTileColliderNumber = 6;
+    public static int SandTileColliderNumber = 7;
 }

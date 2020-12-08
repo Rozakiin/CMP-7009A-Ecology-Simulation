@@ -164,8 +164,8 @@ MonoBehaviour:
   fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 10
-  numberOfFoxesToSpawn: 1
+  numberOfRabbitsToSpawn: 20
+  numberOfFoxesToSpawn: 10
   numberOfGrassToSpawn: 20
   rabbitPopulation: 0
   foxPopulation: 0

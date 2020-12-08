@@ -32,7 +32,7 @@ public static class FoxDefaults
     public static float adultHungerIncrease = 1f;
     public static float oldHungerIncrease = 0.5f;
     public static float eatingSpeed = 1f;
-    public static Entity entityToEat = Entity.Null;
+
     public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Carnivore;
     //Thirst
     public static float thirst = 0f;
@@ -40,7 +40,7 @@ public static class FoxDefaults
     public static float thirstyThreshold = 10f;
     public static float thirstIncrease = 0.5f;
     public static float drinkingSpeed = 2f;
-    public static Entity entityToDrink = Entity.Null;
+
 
 
     //Mate
@@ -50,7 +50,7 @@ public static class FoxDefaults
     public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 50f;
-    public static Entity entityToMate = Entity.Null;
+
     //Pregnancy
     public static float pregnancyStartTime = 0f;
     public static bool pregnant = false;
@@ -95,4 +95,17 @@ public static class FoxDefaults
     //Target
     public static float touchRadius = 1f;
     public static float sightRadius = 20f;
+
+    //lookingEntityData
+    public static Entity predatorEntity = Entity.Null;
+    public static int predatorEntityCount = 0;
+    public static Entity entityToEat = Entity.Null;
+    public static int edibleEntityCount = 0;
+    public static Entity entityToDrink = Entity.Null;
+    public static int waterEntityCount = 0;
+    public static Entity entityToMate = Entity.Null;
+    public static int mateEntityCount = 0;
+
+    //ColliderTypeData
+    public static int ColliderTypeNumber = 1;
 }

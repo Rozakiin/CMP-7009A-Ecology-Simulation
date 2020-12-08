@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1424303472002816977}
   - component: {fileID: 1324611815290753414}
   - component: {fileID: 4316718275981188707}
+  - component: {fileID: -6218427122686803214}
   m_Layer: 0
   m_Name: RockTile
   m_TagString: Untagged
@@ -269,3 +270,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
+--- !u!114 &-6218427122686803214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791125575439614700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ColliderTypeNumber: 0
