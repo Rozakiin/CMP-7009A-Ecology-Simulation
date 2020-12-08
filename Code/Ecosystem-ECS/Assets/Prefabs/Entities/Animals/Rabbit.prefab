@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5367f22afb6ca43ba5d634aa811140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathIndex: 0
+  pathIndex: -1
 --- !u!114 &-114518658351010783
 MonoBehaviour:
   m_ObjectHideFlags: 0

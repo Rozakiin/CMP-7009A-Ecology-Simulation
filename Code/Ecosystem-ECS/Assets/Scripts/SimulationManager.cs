@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
@@ -32,6 +33,7 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] public GameObject sandTile;
     [SerializeField] public GameObject rockTile;
     [SerializeField] public GameObject rabbit;
+    [SerializeField] public GameObject fox;
     [SerializeField] public GameObject grass;
     public GameObject collisionPlaneForMap;
     #endregion
@@ -73,6 +75,8 @@ public class SimulationManager : MonoBehaviour
         {
             CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
             CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
+            CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
+
         }
         else
         {
@@ -329,164 +333,204 @@ public class SimulationManager : MonoBehaviour
 
         for (int i = 0; i < quantity; i++)
         {
-            // Efficiently instantiate a bunch of entities from the already converted entity prefab
-            var prototypeEntity = entityManager.Instantiate(convertedEntity);
-
             // Calc random point on map
             int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
             int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
-            // Get the world co ordinates from the bottom left of the graph
+            // Get the random world co ordinates from the bottom left of the graph
             Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
 
             // Place the instantiated entity in a random point on the map
-            //Set Component Data for the entity
-            entityManager.SetComponentData(prototypeEntity, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
-            entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
-            //if has target data component set target to self
-            if (entityManager.HasComponent<TargetData>(prototypeEntity))
-            {
-                entityManager.SetComponentData(prototypeEntity,
-                    new TargetData {
-                        atTarget = true,
-                        currentTarget = worldPoint,
-                        oldTarget = worldPoint,
-
-                        sightRadius = 0.1f,
-                        touchRadius = 0.1f
-                    }
-                );
-            }
-
             //set default variables based on gameObject name - not great solution but works for now
             //FIXME
             if (gameObject.name.Contains("Rabbit"))
             {
-                entityManager.AddComponent<isRabbitTag>(prototypeEntity);
-                entityManager.SetComponentData(prototypeEntity, 
-                    new EdibleData { 
-                        canBeEaten = RabbitDefaults.canBeEaten, 
-                        nutritionalValueBase = RabbitDefaults.nutritionalValue, 
-                        nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier, 
-                        foodType = RabbitDefaults.foodType 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new MovementData { 
-                        rotationSpeed = RabbitDefaults.rotationSpeed, 
-                        moveSpeedBase = RabbitDefaults.moveSpeed, 
-                        moveMultiplier = RabbitDefaults.moveMultiplier,
-                        pregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier,
-                        originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
-                        youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
-                        adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
-                        oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new StateData { 
-                        state = RabbitDefaults.state, 
-                        previousState = RabbitDefaults.previousState, 
-                        deathReason = RabbitDefaults.deathReason, 
-                        beenEaten = RabbitDefaults.beenEaten 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity,
-                    new TargetData
-                    {
-                        atTarget = true,
-                        currentTarget = worldPoint,
-                        oldTarget = worldPoint,
-                     
-                        sightRadius = RabbitDefaults.sightRadius, 
-                        touchRadius = RabbitDefaults.touchRadius 
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity,
-                    new PathFollowData
-                    {
-                        pathIndex = -1
-                    }
-                );
-                entityManager.SetComponentData(prototypeEntity, 
-                    new BasicNeedsData { 
-                    hunger = RabbitDefaults.hunger, 
-                    hungryThreshold = RabbitDefaults.hungryThreshold, 
-                    hungerMax = RabbitDefaults.hungerMax, 
-                    hungerIncrease = RabbitDefaults.hungerIncrease,
-                    pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
-                    youngHungerIncrease = RabbitDefaults.youngHungerIncrease,
-                    adultHungerIncrease = RabbitDefaults.adultHungerIncrease,
-                    oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
-                    eatingSpeed = RabbitDefaults.eatingSpeed, 
-                    entityToEat = RabbitDefaults.entityToEat, 
-                    diet = RabbitDefaults.diet,
-                    thirst = RabbitDefaults.thirst,
-                    thirstyThreshold = RabbitDefaults.thirstyThreshold,
-                    thirstMax = RabbitDefaults.thirstMax,
-                    thirstIncrease = RabbitDefaults.thirstIncrease,
-                    drinkingSpeed = RabbitDefaults.drinkingSpeed,
-                    entityToDrink = RabbitDefaults.entityToDrink
-                    }
-                );
-
-                //randomise gender of rabbit - equal distribution
-                BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
-                //set gender differing components
+                CreateRabbitAtWorldPoint(worldPoint);
+            }
+            else if (gameObject.name.Contains("Fox"))
+            {
+                CreateFoxAtWorldPoint(worldPoint);
+            }
+            else
+            {
+                // Efficiently instantiate a bunch of entities from the already converted entity prefab
+                var prototypeEntity = entityManager.Instantiate(convertedEntity);
+                //Set Component Data for the entity
+                entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
 
                 entityManager.SetComponentData(prototypeEntity,
-                    new BioStatsData
+                    new Translation
                     {
-                        age = RabbitDefaults.age,
-                        ageIncrease = RabbitDefaults.ageIncrease,
-                        ageMax = RabbitDefaults.ageMax,
-                        ageGroup = RabbitDefaults.ageGroup,
-                        adultEntryTimer = RabbitDefaults.adultEntryTimer,
-                        oldEntryTimer = RabbitDefaults.oldEntryTimer,
-                        gender = randGender
+                        Value = worldPoint
                     }
                 );
-                //set reproductive data differing on gender
-                entityManager.SetComponentData(prototypeEntity,
-                        new ReproductiveData
+                //if has target data component set target to self
+                if (entityManager.HasComponent<TargetData>(prototypeEntity))
+                {
+                    entityManager.SetComponentData(prototypeEntity,
+                        new TargetData
                         {
-                            matingDuration = RabbitDefaults.matingDuration,
-                            mateStartTime = RabbitDefaults.mateStartTime,
-                            reproductiveUrge = RabbitDefaults.reproductiveUrge,
-                            reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
-                            defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
-                            matingThreshold = RabbitDefaults.matingThreshold,
-                            entityToMate = RabbitDefaults.entityToMate,
+                            atTarget = true,
+                            currentTarget = worldPoint,
+                            oldTarget = worldPoint,
 
-                            pregnant = RabbitDefaults.pregnant,
-                            birthDuration = RabbitDefaults.birthDuration,
-                            babiesBorn = RabbitDefaults.babiesBorn,
-                            birthStartTime = RabbitDefaults.birthStartTime,
-                            currentLitterSize = RabbitDefaults.currentLitterSize,
-                            litterSizeMin = RabbitDefaults.litterSizeMin,
-                            litterSizeMax = RabbitDefaults.litterSizeMax,
-                            litterSizeAve = RabbitDefaults.litterSizeAve,
-                            pregnancyLengthBase = RabbitDefaults.pregnancyLength,
-                            pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                            pregnancyStartTime = RabbitDefaults.pregnancyStartTime
+                            sightRadius = 0.1f,
+                            touchRadius = 0.1f
                         }
                     );
-
-                //set size differing on gender
-                entityManager.SetComponentData(prototypeEntity, 
-                    new SizeData { 
-                        size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale), 
-                        sizeMultiplier = RabbitDefaults.sizeMultiplier,
-                        ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
-                        youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
-                        adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
-                        oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
-                    }
-                );
+                }
             }
 
         }
         entityManager.DestroyEntity(convertedEntity);
 
+    }
+
+    private void CreateFoxAtWorldPoint(Vector3 worldPoint)
+    {
+        var entityFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
+        Entity prototypeFox = entityManager.Instantiate(entityFox);
+
+        //set name of entity
+        entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
+
+        entityManager.AddComponent<isFoxTag>(prototypeFox);
+        entityManager.SetComponentData(prototypeFox,
+            new Translation
+            {
+                Value = worldPoint
+            }
+        );
+
+
+        entityManager.SetComponentData(prototypeFox,
+            new EdibleData
+            {
+                canBeEaten = FoxDefaults.canBeEaten,
+                nutritionalValueBase = FoxDefaults.nutritionalValue,
+                nutritionalValueMultiplier = FoxDefaults.nutritionalValueMultiplier,
+                foodType = FoxDefaults.foodType
+            }
+        );
+        entityManager.SetComponentData(prototypeFox,
+            new MovementData
+            {
+                rotationSpeed = FoxDefaults.rotationSpeed,
+                moveSpeedBase = FoxDefaults.moveSpeed,
+                moveMultiplier = FoxDefaults.moveMultiplier,
+                pregnancyMoveMultiplier = FoxDefaults.pregnancyMoveMultiplier,
+                originalMoveMultiplier = FoxDefaults.originalMoveMultiplier,
+                youngMoveMultiplier = FoxDefaults.youngMoveMultiplier,
+                adultMoveMultiplier = FoxDefaults.adultMoveMultiplier,
+                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier
+            }
+        );
+        entityManager.SetComponentData(prototypeFox,
+            new StateData
+            {
+                state = FoxDefaults.state,
+                previousState = FoxDefaults.previousState,
+                deathReason = FoxDefaults.deathReason,
+                beenEaten = FoxDefaults.beenEaten
+            }
+        );
+        entityManager.SetComponentData(prototypeFox,
+            new TargetData
+            {
+                atTarget = true,
+                currentTarget = worldPoint,
+                oldTarget = worldPoint,
+
+                sightRadius = FoxDefaults.sightRadius,
+                touchRadius = FoxDefaults.touchRadius
+            }
+        );
+        entityManager.SetComponentData(prototypeFox,
+            new PathFollowData
+            {
+                pathIndex = -1
+            }
+        );
+        entityManager.SetComponentData(prototypeFox,
+            new BasicNeedsData
+            {
+                hunger = FoxDefaults.hunger,
+                hungryThreshold = FoxDefaults.hungryThreshold,
+                hungerMax = FoxDefaults.hungerMax,
+                hungerIncrease = FoxDefaults.hungerIncrease,
+                pregnancyHungerIncrease = FoxDefaults.pregnancyHungerIncrease,
+                youngHungerIncrease = FoxDefaults.youngHungerIncrease,
+                adultHungerIncrease = FoxDefaults.adultHungerIncrease,
+                oldHungerIncrease = FoxDefaults.oldHungerIncrease,
+                eatingSpeed = FoxDefaults.eatingSpeed,
+                entityToEat = FoxDefaults.entityToEat,
+                diet = FoxDefaults.diet,
+                thirst = FoxDefaults.thirst,
+                thirstyThreshold = FoxDefaults.thirstyThreshold,
+                thirstMax = FoxDefaults.thirstMax,
+                thirstIncrease = FoxDefaults.thirstIncrease,
+                drinkingSpeed = FoxDefaults.drinkingSpeed,
+                entityToDrink = FoxDefaults.entityToDrink
+            }
+        );
+
+        //randomise gender of fox - equal distribution
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        //set gender differing components
+
+        entityManager.SetComponentData(prototypeFox,
+            new BioStatsData
+            {
+                age = FoxDefaults.age,
+                ageIncrease = FoxDefaults.ageIncrease,
+                ageMax = FoxDefaults.ageMax,
+                ageGroup = FoxDefaults.ageGroup,
+                adultEntryTimer = FoxDefaults.adultEntryTimer,
+                oldEntryTimer = FoxDefaults.oldEntryTimer,
+                gender = randGender
+            }
+        );
+        //set reproductive data differing on gender
+        entityManager.SetComponentData(prototypeFox,
+                new ReproductiveData
+                {
+                    matingDuration = FoxDefaults.matingDuration,
+                    mateStartTime = FoxDefaults.mateStartTime,
+                    reproductiveUrge = FoxDefaults.reproductiveUrge,
+                    reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
+                    defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
+                    matingThreshold = FoxDefaults.matingThreshold,
+                    entityToMate = FoxDefaults.entityToMate,
+
+                    pregnant = FoxDefaults.pregnant,
+                    birthDuration = FoxDefaults.birthDuration,
+                    babiesBorn = FoxDefaults.babiesBorn,
+                    birthStartTime = FoxDefaults.birthStartTime,
+                    currentLitterSize = FoxDefaults.currentLitterSize,
+                    litterSizeMin = FoxDefaults.litterSizeMin,
+                    litterSizeMax = FoxDefaults.litterSizeMax,
+                    litterSizeAve = FoxDefaults.litterSizeAve,
+                    pregnancyLengthBase = FoxDefaults.pregnancyLength,
+                    pregnancyLengthModifier = FoxDefaults.pregnancyLengthModifier,
+                    pregnancyStartTime = FoxDefaults.pregnancyStartTime
+                }
+            );
+
+        //set size differing on gender
+        entityManager.SetComponentData(prototypeFox,
+            new SizeData
+            {
+                size = (randGender == BioStatsData.Gender.Female ? FoxDefaults.scaleFemale : FoxDefaults.scaleMale),
+                sizeMultiplier = FoxDefaults.sizeMultiplier,
+                ageSizeMultiplier = FoxDefaults.ageSizeMultiplier,
+                youngSizeMultiplier = FoxDefaults.youngSizeMultiplier,
+                adultSizeMultiplier = FoxDefaults.adultSizeMultiplier,
+                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
+            }
+        );
+
+        foxPopulation++;
+
+        entityManager.DestroyEntity(entityFox);
     }
 
     private void SpawnRabbitAtPosOnClick()
@@ -499,17 +543,155 @@ public class SimulationManager : MonoBehaviour
             {
                 Vector3 targetPosition = hit.point;
                 Debug.Log(targetPosition.ToString());
-                CreateRabbitAtPos(targetPosition);
+                CreateRabbitAtWorldPoint(targetPosition);
             }
         }
     }
-    private void CreateRabbitAtPos(in Vector3 position)
+    private void CreateRabbitAtWorldPoint(in float3 worldPoint)
     {
         var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
         Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
-        entityManager.SetName(prototypeRabbit, "ClickRabbit" + prototypeRabbit.Index);
-        entityManager.SetComponentData(prototypeRabbit, new Translation { Value = position }); // set position data (called translation in ECS)
-        entityManager.SetComponentData(prototypeRabbit, new TargetData { currentTarget = position, oldTarget = position, atTarget = true }); // set target data
+
+        //set name of entity
+        entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
+
+        entityManager.AddComponent<isRabbitTag>(prototypeRabbit);
+        entityManager.SetComponentData(prototypeRabbit, 
+            new Translation 
+            { 
+                Value = worldPoint 
+            }
+        );
+
+
+        entityManager.SetComponentData(prototypeRabbit,
+            new EdibleData
+            {
+                canBeEaten = RabbitDefaults.canBeEaten,
+                nutritionalValueBase = RabbitDefaults.nutritionalValue,
+                nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier,
+                foodType = RabbitDefaults.foodType
+            }
+        );
+        entityManager.SetComponentData(prototypeRabbit,
+            new MovementData
+            {
+                rotationSpeed = RabbitDefaults.rotationSpeed,
+                moveSpeedBase = RabbitDefaults.moveSpeed,
+                moveMultiplier = RabbitDefaults.moveMultiplier,
+                pregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier,
+                originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
+                youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
+                adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
+                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier
+            }
+        );
+        entityManager.SetComponentData(prototypeRabbit,
+            new StateData
+            {
+                state = RabbitDefaults.state,
+                previousState = RabbitDefaults.previousState,
+                deathReason = RabbitDefaults.deathReason,
+                beenEaten = RabbitDefaults.beenEaten
+            }
+        );
+        entityManager.SetComponentData(prototypeRabbit,
+            new TargetData
+            {
+                atTarget = true,
+                currentTarget = worldPoint,
+                oldTarget = worldPoint,
+
+                sightRadius = RabbitDefaults.sightRadius,
+                touchRadius = RabbitDefaults.touchRadius
+            }
+        );
+        entityManager.SetComponentData(prototypeRabbit,
+            new PathFollowData
+            {
+                pathIndex = -1
+            }
+        );
+        entityManager.SetComponentData(prototypeRabbit,
+            new BasicNeedsData
+            {
+                hunger = RabbitDefaults.hunger,
+                hungryThreshold = RabbitDefaults.hungryThreshold,
+                hungerMax = RabbitDefaults.hungerMax,
+                hungerIncrease = RabbitDefaults.hungerIncrease,
+                pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
+                youngHungerIncrease = RabbitDefaults.youngHungerIncrease,
+                adultHungerIncrease = RabbitDefaults.adultHungerIncrease,
+                oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
+                eatingSpeed = RabbitDefaults.eatingSpeed,
+                entityToEat = RabbitDefaults.entityToEat,
+                diet = RabbitDefaults.diet,
+                thirst = RabbitDefaults.thirst,
+                thirstyThreshold = RabbitDefaults.thirstyThreshold,
+                thirstMax = RabbitDefaults.thirstMax,
+                thirstIncrease = RabbitDefaults.thirstIncrease,
+                drinkingSpeed = RabbitDefaults.drinkingSpeed,
+                entityToDrink = RabbitDefaults.entityToDrink
+            }
+        );
+
+        //randomise gender of rabbit - equal distribution
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        //set gender differing components
+
+        entityManager.SetComponentData(prototypeRabbit,
+            new BioStatsData
+            {
+                age = RabbitDefaults.age,
+                ageIncrease = RabbitDefaults.ageIncrease,
+                ageMax = RabbitDefaults.ageMax,
+                ageGroup = RabbitDefaults.ageGroup,
+                adultEntryTimer = RabbitDefaults.adultEntryTimer,
+                oldEntryTimer = RabbitDefaults.oldEntryTimer,
+                gender = randGender
+            }
+        );
+        //set reproductive data differing on gender
+        entityManager.SetComponentData(prototypeRabbit,
+                new ReproductiveData
+                {
+                    matingDuration = RabbitDefaults.matingDuration,
+                    mateStartTime = RabbitDefaults.mateStartTime,
+                    reproductiveUrge = RabbitDefaults.reproductiveUrge,
+                    reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                    defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
+                    matingThreshold = RabbitDefaults.matingThreshold,
+                    entityToMate = RabbitDefaults.entityToMate,
+
+                    pregnant = RabbitDefaults.pregnant,
+                    birthDuration = RabbitDefaults.birthDuration,
+                    babiesBorn = RabbitDefaults.babiesBorn,
+                    birthStartTime = RabbitDefaults.birthStartTime,
+                    currentLitterSize = RabbitDefaults.currentLitterSize,
+                    litterSizeMin = RabbitDefaults.litterSizeMin,
+                    litterSizeMax = RabbitDefaults.litterSizeMax,
+                    litterSizeAve = RabbitDefaults.litterSizeAve,
+                    pregnancyLengthBase = RabbitDefaults.pregnancyLength,
+                    pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
+                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime
+                }
+            );
+
+        //set size differing on gender
+        entityManager.SetComponentData(prototypeRabbit,
+            new SizeData
+            {
+                size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale),
+                sizeMultiplier = RabbitDefaults.sizeMultiplier,
+                ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
+                youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
+                adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
+                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
+            }
+        );
+
+        rabbitPopulation++;
+
         entityManager.DestroyEntity(entityRabbit);
     }
     #endregion
