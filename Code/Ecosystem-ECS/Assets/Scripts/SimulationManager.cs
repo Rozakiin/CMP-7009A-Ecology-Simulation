@@ -490,7 +490,19 @@ public class SimulationManager : MonoBehaviour
                 oldTarget = worldPoint,
 
                 sightRadius = FoxDefaults.sightRadius,
-                touchRadius = FoxDefaults.touchRadius
+                touchRadius = FoxDefaults.touchRadius,
+
+                predatorEntity = FoxDefaults.predatorEntity,
+                predatorEntityCount = FoxDefaults.predatorEntityCount,
+                entityToEat = FoxDefaults.entityToEat,
+                edibleEntityCount = FoxDefaults.edibleEntityCount,
+                entityToDrink = FoxDefaults.entityToDrink,
+                waterEntityCount = FoxDefaults.waterEntityCount,
+                entityToMate = FoxDefaults.entityToMate,
+                mateEntityCount = FoxDefaults.mateEntityCount,
+                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
+                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
             }
         );
         entityManager.SetComponentData(prototypeFox,
@@ -576,23 +588,6 @@ public class SimulationManager : MonoBehaviour
                 oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
             }
         );
-        // set lookingentitydata to Fox entity
-        entityManager.SetComponentData(prototypeFox,
-                    new LookingEntityData
-                    {
-                        predatorEntity = FoxDefaults.predatorEntity,
-                        predatorEntityCount = FoxDefaults.predatorEntityCount,
-                        entityToEat = FoxDefaults.entityToEat,
-                        edibleEntityCount = FoxDefaults.edibleEntityCount,
-                        entityToDrink = FoxDefaults.entityToDrink,
-                        waterEntityCount = FoxDefaults.waterEntityCount,
-                        entityToMate = FoxDefaults.entityToMate,
-                        mateEntityCount = FoxDefaults.mateEntityCount,
-                        shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
-                        shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
-                        shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
-                    }
-                );
         // set ColliderTypeData to Fox entity
         entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
@@ -732,7 +727,19 @@ public class SimulationManager : MonoBehaviour
                 oldTarget = worldPoint,
 
                 sightRadius = RabbitDefaults.sightRadius,
-                touchRadius = RabbitDefaults.touchRadius
+                touchRadius = RabbitDefaults.touchRadius,
+
+                predatorEntity = FoxDefaults.predatorEntity,
+                predatorEntityCount = FoxDefaults.predatorEntityCount,
+                entityToEat = FoxDefaults.entityToEat,
+                edibleEntityCount = FoxDefaults.edibleEntityCount,
+                entityToDrink = FoxDefaults.entityToDrink,
+                waterEntityCount = FoxDefaults.waterEntityCount,
+                entityToMate = FoxDefaults.entityToMate,
+                mateEntityCount = FoxDefaults.mateEntityCount,
+                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
+                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
             }
         );
         entityManager.SetComponentData(prototypeRabbit,
@@ -818,23 +825,6 @@ public class SimulationManager : MonoBehaviour
                 oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
             }
         );
-        // set LookingEntityData to Rabbit entity
-        entityManager.SetComponentData(prototypeRabbit,
-                    new LookingEntityData
-                    {
-                        predatorEntity = RabbitDefaults.predatorEntity,
-                        predatorEntityCount = RabbitDefaults.predatorEntityCount,
-                        entityToEat = RabbitDefaults.entityToEat,
-                        edibleEntityCount = RabbitDefaults.edibleEntityCount,
-                        entityToDrink = RabbitDefaults.entityToDrink,
-                        waterEntityCount = RabbitDefaults.waterEntityCount,
-                        entityToMate = RabbitDefaults.entityToMate,
-                        mateEntityCount = RabbitDefaults.mateEntityCount,
-                        shortestToEdibleDistance = RabbitDefaults.shortestToEdibleDistance,
-                        shortestToWaterDistance = RabbitDefaults.shortestToWaterDistance,
-                        shortestToPredatorDistance = RabbitDefaults.shortestToPredatorDistance
-}
-                );
         // set ColliderTypeData to Rabbit entity
         entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData

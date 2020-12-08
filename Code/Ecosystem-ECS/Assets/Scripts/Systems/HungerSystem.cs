@@ -21,7 +21,7 @@ public class HungerSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((int entityInQueryIndex, BasicNeedsData basicNeedsData, in LookingEntityData lookingEntityData , in StateData stateData, in ReproductiveData reproductiveData, in BioStatsData bioStatsData) =>
+        Entities.ForEach((int entityInQueryIndex, BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData, in ReproductiveData reproductiveData, in BioStatsData bioStatsData) =>
         {
 
             if (!reproductiveData.pregnant)
@@ -48,15 +48,15 @@ public class HungerSystem : SystemBase
             basicNeedsData.hunger += basicNeedsData.hungerIncrease * deltaTime;
 
             //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
-            if (lookingEntityData.entityToEat != Entity.Null && stateData.state == StateData.States.Eating)
+            if (targetData.entityToEat != Entity.Null && stateData.state == StateData.States.Eating)
             {
-                if (HasComponent<EdibleData>(lookingEntityData.entityToEat))
+                if (HasComponent<EdibleData>(targetData.entityToEat))
                 {
-                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[lookingEntityData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
+                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
                     //set beenEaten to true in entityToEat
-                    if (HasComponent<StateData>(lookingEntityData.entityToEat))
+                    if (HasComponent<StateData>(targetData.entityToEat))
                     {
-                        ecb.SetComponent(entityInQueryIndex, lookingEntityData.entityToEat, new StateData { state = StateData.States.Dead, deathReason = StateData.DeathReason.Eaten });
+                        ecb.SetComponent(entityInQueryIndex, targetData.entityToEat, new StateData { state = StateData.States.Dead, deathReason = StateData.DeathReason.Eaten });
                     }
                 }
             }

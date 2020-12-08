@@ -26,8 +26,7 @@ public class LookingEntitySystem : SystemBase
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
         JobHandle FindUnitsGroupInProximityJobHandle = Entities.WithAll<MovementData>().ForEach((
-            ref LookingEntityData lookingEntityData
-            , in TargetData targetData
+            ref TargetData targetData
             , in ColliderTypeData colliderTypeData
             , in Translation translation) =>
         {
@@ -67,20 +66,20 @@ public class LookingEntitySystem : SystemBase
                         {
                             if (childEntityNumber == 2)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
                             {
-                                if (distanceToEntity < lookingEntityData.shortestToEdibleDistance)
+                                if (distanceToEntity < targetData.shortestToEdibleDistance)
                                 {
-                                    lookingEntityData.shortestToEdibleDistance = distanceToEntity;
-                                    lookingEntityData.entityToEat = childEntity;
-                                    lookingEntityData.edibleEntityCount += 1;
+                                    targetData.shortestToEdibleDistance = distanceToEntity;
+                                    targetData.entityToEat = childEntity;
+                                    targetData.edibleEntityCount += 1;
                                 }
                             }
                             else if (childEntityNumber == 4)        // find water
                             {
-                                if (distanceToEntity < lookingEntityData.shortestToWaterDistance)
+                                if (distanceToEntity < targetData.shortestToWaterDistance)
                                 {
-                                    lookingEntityData.shortestToWaterDistance = distanceToEntity;
-                                    lookingEntityData.entityToDrink = childEntity;
-                                    lookingEntityData.waterEntityCount += 1;
+                                    targetData.shortestToWaterDistance = distanceToEntity;
+                                    targetData.entityToDrink = childEntity;
+                                    targetData.waterEntityCount += 1;
                                 }
                             }
                         }
@@ -91,29 +90,29 @@ public class LookingEntitySystem : SystemBase
                         {
                             if (childEntityNumber == 3)             // find Grass
                             {
-                                if (distanceToEntity < lookingEntityData.shortestToEdibleDistance)
+                                if (distanceToEntity < targetData.shortestToEdibleDistance)
                                 {
-                                    lookingEntityData.shortestToEdibleDistance = distanceToEntity;
-                                    lookingEntityData.entityToEat = childEntity;
-                                    lookingEntityData.predatorEntityCount += 1;
+                                    targetData.shortestToEdibleDistance = distanceToEntity;
+                                    targetData.entityToEat = childEntity;
+                                    targetData.predatorEntityCount += 1;
                                 }
                             }
                             else if (childEntityNumber == 4)        //find Water
                             {
-                                if (distanceToEntity < lookingEntityData.shortestToWaterDistance)
+                                if (distanceToEntity < targetData.shortestToWaterDistance)
                                 {
-                                    lookingEntityData.shortestToWaterDistance = distanceToEntity;
-                                    lookingEntityData.entityToDrink = childEntity;
-                                    lookingEntityData.waterEntityCount += 1;
+                                    targetData.shortestToWaterDistance = distanceToEntity;
+                                    targetData.entityToDrink = childEntity;
+                                    targetData.waterEntityCount += 1;
                                 }
                             }
                             else if (childEntityNumber == 1)        //find Fox
                             {
-                                if (distanceToEntity < lookingEntityData.shortestToPredatorDistance)
+                                if (distanceToEntity < targetData.shortestToPredatorDistance)
                                 {
-                                    lookingEntityData.shortestToPredatorDistance = distanceToEntity;
-                                    lookingEntityData.predatorEntity = childEntity;
-                                    lookingEntityData.edibleEntityCount += 1;
+                                    targetData.shortestToPredatorDistance = distanceToEntity;
+                                    targetData.predatorEntity = childEntity;
+                                    targetData.edibleEntityCount += 1;
                                 }
                             }
                         }
@@ -122,21 +121,21 @@ public class LookingEntitySystem : SystemBase
                 // if some type of entity didn't find in this frame so just set up to entity.null
                 // because statesystem will based on, for example predatorEntity is null or not to get into some states
                 // so if no predatorEntity rabbit will go back to wanfering states something like that
-                if (lookingEntityData.edibleEntityCount == 0)
+                if (targetData.edibleEntityCount == 0)
                 {
-                    lookingEntityData.entityToEat = Entity.Null;
+                    targetData.entityToEat = Entity.Null;
                 }
-                if (lookingEntityData.waterEntityCount == 0)
+                if (targetData.waterEntityCount == 0)
                 {
-                    lookingEntityData.entityToDrink = Entity.Null;
+                    targetData.entityToDrink = Entity.Null;
                 }
-                if (lookingEntityData.predatorEntityCount == 0)
+                if (targetData.predatorEntityCount == 0)
                 {
-                    lookingEntityData.predatorEntity = Entity.Null;
+                    targetData.predatorEntity = Entity.Null;
                 }
-                lookingEntityData.edibleEntityCount = 0;
-                lookingEntityData.waterEntityCount = 0;
-                lookingEntityData.predatorEntityCount = 0;
+                targetData.edibleEntityCount = 0;
+                targetData.waterEntityCount = 0;
+                targetData.predatorEntityCount = 0;
             }
             hitsIndices.Dispose();
         }).ScheduleParallel(Dependency);

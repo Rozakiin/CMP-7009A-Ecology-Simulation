@@ -13,7 +13,7 @@ public class MatingSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((ref ReproductiveData reproductiveData, in LookingEntityData lookingEntityData, in StateData stateData, in BioStatsData bioStatsData) => {
+        Entities.ForEach((ref ReproductiveData reproductiveData, in TargetData targetData,in StateData stateData, in BioStatsData bioStatsData) => {
 
             //Disable urge increase for non adults
             if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
@@ -32,7 +32,7 @@ public class MatingSystem : SystemBase
 
 
             //If the entityToMate exists and entity is mating
-            if (lookingEntityData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
+            if (targetData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
             {
 
             }

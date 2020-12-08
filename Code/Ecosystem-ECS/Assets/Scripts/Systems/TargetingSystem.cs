@@ -79,7 +79,6 @@ public class TargetingSystem : SystemBase
                 Entity entity,
                 int entityInQueryIndex,
                 ref TargetData targetData,
-                ref LookingEntityData lookingEntityData,
                 ref BasicNeedsData basicNeedsData,
                 in PathFollowData pathFollowData,
                 in Translation translation,
@@ -168,7 +167,7 @@ public class TargetingSystem : SystemBase
 
                             targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
-                                lookingEntityData.entityToEat = edible;
+                                targetData.entityToEat = edible;
                             }
                             else
                             {
@@ -227,7 +226,7 @@ public class TargetingSystem : SystemBase
 
                             targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
-                                lookingEntityData.entityToDrink = water;
+                                targetData.entityToDrink = water;
                             }
                             else
                             {
