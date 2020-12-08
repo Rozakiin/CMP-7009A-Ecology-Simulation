@@ -104,6 +104,9 @@ public static class RabbitDefaults
     public static int waterEntityCount = 0;
     public static Entity entityToMate = Entity.Null;
     public static int mateEntityCount = 0;
+    public static float shortestToEdibleDistance = 100f; // set initial distance to 100, must more than sight radius
+    public static float shortestToWaterDistance = 100f;
+    public static float shortestToPredatorDistance = 100f;
 
     //ColliderTypeData
     public static int ColliderTypeNumber = 2;

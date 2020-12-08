@@ -576,6 +576,7 @@ public class SimulationManager : MonoBehaviour
                 oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
             }
         );
+        // set lookingentitydata to Fox entity
         entityManager.SetComponentData(prototypeFox,
                     new LookingEntityData
                     {
@@ -587,8 +588,12 @@ public class SimulationManager : MonoBehaviour
                         waterEntityCount = FoxDefaults.waterEntityCount,
                         entityToMate = FoxDefaults.entityToMate,
                         mateEntityCount = FoxDefaults.mateEntityCount,
+                        shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
+                        shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
+                        shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
                     }
                 );
+        // set ColliderTypeData to Fox entity
         entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
@@ -644,6 +649,7 @@ public class SimulationManager : MonoBehaviour
                 sizeMultiplier = GrassDefaults.sizeMultiplier
             }
         );
+        // set ColliderTypeData to Grass entity
         entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
@@ -812,6 +818,7 @@ public class SimulationManager : MonoBehaviour
                 oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
             }
         );
+        // set LookingEntityData to Rabbit entity
         entityManager.SetComponentData(prototypeRabbit,
                     new LookingEntityData
                     {
@@ -823,8 +830,12 @@ public class SimulationManager : MonoBehaviour
                         waterEntityCount = RabbitDefaults.waterEntityCount,
                         entityToMate = RabbitDefaults.entityToMate,
                         mateEntityCount = RabbitDefaults.mateEntityCount,
-                    }
+                        shortestToEdibleDistance = RabbitDefaults.shortestToEdibleDistance,
+                        shortestToWaterDistance = RabbitDefaults.shortestToWaterDistance,
+                        shortestToPredatorDistance = RabbitDefaults.shortestToPredatorDistance
+}
                 );
+        // set ColliderTypeData to Rabbit entity
         entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
