@@ -375,6 +375,10 @@ public class SimulationManager : MonoBehaviour
             {
                 CreateFoxAtWorldPoint(worldPoint);
             }
+            else if (gameObject.name.Contains("Grass"))
+            {
+                CreateGrassAtWorldPoint(worldPoint);
+            }
             else
             {
                 // Efficiently instantiate a bunch of entities from the already converted entity prefab
@@ -410,7 +414,7 @@ public class SimulationManager : MonoBehaviour
 
     }
 
-    private void CreateFoxAtWorldPoint(Vector3 worldPoint)
+    private void CreateFoxAtWorldPoint(float3 worldPoint)
     {
         var entityFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
         Entity prototypeFox = entityManager.Instantiate(entityFox);
@@ -557,7 +561,56 @@ public class SimulationManager : MonoBehaviour
 
         entityManager.DestroyEntity(entityFox);
     }
+    private void CreateGrassAtWorldPoint(float3 worldPoint)
+    {
+        var entityGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
+        Entity prototypeGrass = entityManager.Instantiate(entityGrass);
 
+        //set name of entity
+        entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
+
+        entityManager.AddComponent<isGrassTag>(prototypeGrass);
+        entityManager.SetComponentData(prototypeGrass,
+            new Translation
+            {
+                Value = worldPoint
+            }
+        );
+
+        entityManager.SetComponentData(prototypeGrass,
+            new EdibleData
+            {
+                canBeEaten = GrassDefaults.canBeEaten,
+                nutritionalValueBase = GrassDefaults.nutritionalValue,
+                nutritionalValueMultiplier = GrassDefaults.nutritionalValueMultiplier,
+                foodType = GrassDefaults.foodType
+            }
+        );
+
+        entityManager.SetComponentData(prototypeGrass,
+            new StateData
+            {
+                state = GrassDefaults.state,
+                previousState = GrassDefaults.previousState,
+                deathReason = GrassDefaults.deathReason,
+                beenEaten = GrassDefaults.beenEaten
+            }
+        );
+
+        //set size differing on gender
+        entityManager.SetComponentData(prototypeGrass,
+            new SizeData
+            {
+                size = GrassDefaults.scale,
+                sizeMultiplier = GrassDefaults.sizeMultiplier
+            }
+        );
+
+
+        grassPopulation++;
+
+        entityManager.DestroyEntity(entityGrass);
+    }
     private void SpawnRabbitAtPosOnClick()
     {
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits

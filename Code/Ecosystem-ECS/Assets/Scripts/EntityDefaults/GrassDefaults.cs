@@ -13,12 +13,7 @@ public static class GrassDefaults
 
     //Size
     public static float sizeMultiplier = 1f;
-    public static float scaleMale = 1f;
-    public static float scaleFemale = 1f;
-    public static float youngSizeMultiplier = 0.6f;
-    public static float adultSizeMultiplier = 1f;
-    public static float oldSizeMultiplier = 0.75f;
-    public static float ageSizeMultiplier = youngSizeMultiplier;
+    public static float scale = 1f;
 
 
     //State
