@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
+using Unity.Entities;
 
-//Use this class to define all the default values for components related to Rabbit Entities
-public static class RabbitDefaults
+public static class FoxDefaults
 {
+
     //Age
     public static float age = 0f;
     public static float ageIncrease = 1f;
-    public static float ageMax = 600f;
+    public static float ageMax = 800f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
     public static float adultEntryTimer = 10f;
     public static float oldEntryTimer = 60f;
@@ -18,7 +17,7 @@ public static class RabbitDefaults
 
     //Edible
     public static float nutritionalValue = 10f;
-    public static bool canBeEaten = true;
+    public static bool canBeEaten = false;
     public static float nutritionalValueMultiplier = 1f;
     public static EdibleData.FoodType foodType = EdibleData.FoodType.Meat;
 
@@ -34,7 +33,7 @@ public static class RabbitDefaults
     public static float oldHungerIncrease = 0.5f;
     public static float eatingSpeed = 1f;
     public static Entity entityToEat = Entity.Null;
-    public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Herbivore;
+    public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Carnivore;
     //Thirst
     public static float thirst = 0f;
     public static float thirstMax = 100f;
@@ -59,7 +58,7 @@ public static class RabbitDefaults
     public static float birthStartTime = 0f;
     public static int currentLitterSize = 0;
     public static float pregnancyLengthModifier = 1f;
-    public static float pregnancyLength = 10f; 
+    public static float pregnancyLength = 10f;
     public static float birthDuration = 10f;
     public static int litterSizeMin = 1;
     public static int litterSizeMax = 13;
@@ -67,7 +66,7 @@ public static class RabbitDefaults
 
 
     //Movement
-    public static float moveSpeed = 25f;
+    public static float moveSpeed = 35f;
     public static float rotationSpeed = 10f;
     public static float moveMultiplier = 1f;
     public static float pregnancyMoveMultiplier = 0.5f;
@@ -79,8 +78,8 @@ public static class RabbitDefaults
 
     //Size
     public static float sizeMultiplier = 1f;
-    public static float scaleMale = 2f;
-    public static float scaleFemale = 3f;
+    public static float scaleMale = 3f;
+    public static float scaleFemale = 2f;
     public static float youngSizeMultiplier = 0.6f;
     public static float adultSizeMultiplier = 1f;
     public static float oldSizeMultiplier = 0.75f;
