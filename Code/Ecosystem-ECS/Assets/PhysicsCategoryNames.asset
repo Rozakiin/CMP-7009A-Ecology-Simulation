@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: PhysicsCategoryNames
   m_EditorClassIdentifier: 
   m_CategoryNames:
-  - 
-  - 
-  - 
-  - 
+  - Tile
+  - Rabbit
+  - Fox
+  - Grass
   - 
   - 
   - 

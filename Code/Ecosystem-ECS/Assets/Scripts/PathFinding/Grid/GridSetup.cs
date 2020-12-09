@@ -98,7 +98,7 @@ public class GridSetup : MonoBehaviour
         BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         PhysicsWorld physicsWorld = buildPhysicsWorld.PhysicsWorld;
         CollisionWorld world = physicsWorld.CollisionWorld;
-        uint mask = 1 << 3; // set mask to tiles (layer 3)
+        uint mask = 1 << 0; // set mask to tiles (layer 3)
         RaycastInput input = new RaycastInput()
         {
             Start = RayFrom,

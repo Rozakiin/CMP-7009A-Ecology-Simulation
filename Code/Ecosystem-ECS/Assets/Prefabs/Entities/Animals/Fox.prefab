@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 641457425601611504}
   - component: {fileID: -6817100714713759499}
   - component: {fileID: 8948122840359826860}
-  - component: {fileID: 2260125940335957069}
   - component: {fileID: -8130641995308739688}
   m_Layer: 0
   m_Name: Fox
@@ -179,6 +178,17 @@ MonoBehaviour:
   atTarget: 0
   sightRadius: 0
   touchRadius: 0
+  predatorEntity: {fileID: 0}
+  predatorEntityCount: 0
+  entityToEat: {fileID: 0}
+  edibleEntityCount: 0
+  entityToDrink: {fileID: 0}
+  waterEntityCount: 0
+  entityToMate: {fileID: 0}
+  mateEntityCount: 0
+  shortestToEdibleDistance: 0
+  shortestToWaterDistance: 0
+  shortestToPredatorDistance: 0
 --- !u!114 &3747053419976824136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,8 +325,8 @@ MonoBehaviour:
       m_Override: 0
       m_Value:
         Category00: 0
-        Category01: 1
-        Category02: 0
+        Category01: 0
+        Category02: 1
         Category03: 0
         Category04: 0
         Category05: 0
@@ -410,26 +420,6 @@ MonoBehaviour:
       m_Value: 0
   m_SerializedVersion: 1
   m_ConvexRadius_Deprecated: -1
---- !u!114 &2260125940335957069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1698060286047908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5d2f1262250c4e989aee0773a489302, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  predatorEntity: {fileID: 0}
-  predatorEntityCount: 0
-  entityToEat: {fileID: 0}
-  edibleEntityCount: 0
-  entityToDrink: {fileID: 0}
-  waterEntityCount: 0
-  entityToMate: {fileID: 0}
-  mateEntityCount: 0
 --- !u!114 &-8130641995308739688
 MonoBehaviour:
   m_ObjectHideFlags: 0
