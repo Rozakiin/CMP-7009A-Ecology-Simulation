@@ -39,10 +39,10 @@ namespace UtilTools
         // Returns false is collides with unwalkabletile or doesnt collide with a tile
         public static bool IsWorldPointOnWalkableTile(float3 worldPoint, EntityManager entityManager)
         {
-            float3 tempUp = worldPoint + math.up() * Mathf.Infinity;
-            float3 tempDown = worldPoint + math.up() * -Mathf.Infinity;
+            float3 tempUp = worldPoint + math.up() * 10000;
+            float3 tempDown = worldPoint + math.up() * -10000;
             CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
-            //raycast from positive infinity to negative infinity, colliding with only tiles
+            //raycast from positive 10,000 to negative 10,000, colliding with only tiles
             Entity collidedEntity = PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
 
             if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
