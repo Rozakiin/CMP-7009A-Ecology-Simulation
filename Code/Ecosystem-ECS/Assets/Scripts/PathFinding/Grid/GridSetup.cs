@@ -66,13 +66,14 @@ public class GridSetup : MonoBehaviour
             {
                 float3 worldPoint = SimulationManager.worldBottomLeft + Vector3.right * (x * gridNodeDiameter + gridNodeRadius) + Vector3.forward * (y * gridNodeDiameter + gridNodeRadius);//Get the world co ordinates of the node from the bottom left of the graph
 
-                //TODO
                 bool isWalkable = false;
 
                 int movementPenalty = 0;//penalty for walking over node
                 float3 tempUp = worldPoint + new float3(0, 1000, 0);
                 float3 tempDown = worldPoint + new float3(0, -1000, 0);
-                Entity collidedEntity = RaycastRequest(tempUp, tempDown); //raycast from really high point to under map
+                CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
+                //raycast from really high point to under map, colliding with only tiles
+                Entity collidedEntity = UtilTools.PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter); 
                 if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
                 {
                     movementPenalty = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).terrainPenalty;
@@ -90,29 +91,6 @@ public class GridSetup : MonoBehaviour
 
         BlurMovementPenaltyMap(3);//blur the map with a kernel extent of 3 (5*5)
 
-    }
-
-    // Adapted From https://docs.unity3d.com/Packages/com.unity.physics@0.5/manual/collision_queries.html
-    public Entity RaycastRequest(float3 RayFrom, float3 RayTo)
-    {
-        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
-        PhysicsWorld physicsWorld = buildPhysicsWorld.PhysicsWorld;
-        CollisionWorld world = physicsWorld.CollisionWorld;
-        RaycastInput input = new RaycastInput()
-        {
-            Start = RayFrom,
-            End = RayTo,
-            Filter = CollisionFilter.Default
-        };
-
-        if (world.CastRay(input, out RaycastHit hit))
-        {
-            // see hit.Position
-            // see hit.SurfaceNormal
-            Entity e = physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
-            return e;
-        }
-        return Entity.Null;
     }
 
     //Function that draws the wireframe, and the nodes
