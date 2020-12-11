@@ -151,6 +151,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraFollow: {fileID: 1457398190}
+  InputEntityName: 0
+  CameraHeight: 0
+  CameraRotation: 0
+  CameraAngle: 0
+  EntitiesPosition:
+    x: 0
+    y: 0
+    z: 0
   grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
   lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
@@ -495,6 +504,7 @@ GameObject:
   - component: {fileID: 1457398189}
   - component: {fileID: 1457398188}
   - component: {fileID: 1457398187}
+  - component: {fileID: 1457398190}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -567,3 +577,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 75, y: 0, z: 0}
+--- !u!114 &1457398190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457398186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e14cb21ca2064ef9852219e0aff3a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
