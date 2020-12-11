@@ -48,7 +48,7 @@ public static class RabbitDefaults
     public static float mateStartTime = 0f;
     public static float matingDuration = 5f;
     public static float reproductiveUrge = 0f;
-    public static float reproductiveUrgeIncreaseMale = 0.3f;
+    public static float reproductiveUrgeIncreaseMale = 0.6f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 50f;
     public static Entity entityToMate = Entity.Null;
