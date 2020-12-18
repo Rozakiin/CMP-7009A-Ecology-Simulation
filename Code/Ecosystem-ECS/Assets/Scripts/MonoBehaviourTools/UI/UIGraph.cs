@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 //maybe we need these function later on, this function can modify the number of red line in the graph
 //now only apply in 5 line in X aixs and 5 line in y axis not sure need to updata,discuss monday
-public class Window_Graph : MonoBehaviour
+public class UIGraph : MonoBehaviour
 {
 
     [SerializeField] private Sprite circleSprite;
