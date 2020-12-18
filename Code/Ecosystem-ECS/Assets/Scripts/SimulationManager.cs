@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -12,6 +13,21 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     GameObjectConversionSettings settings;
     public static SimulationManager Instance;
+
+    #region Camera Setting
+    [Header("Camera")]
+    public CameraFollow cameraFollow;
+    [SerializeField] public int InputEntityName;
+    //camera position
+    Vector3 DefaultCameraPosition;
+    [SerializeField] public float CameraHeight;
+    //camera rotation
+    Vector3 DefaultCameraEulerAngles;
+    [SerializeField] public float CameraRotation; // Camera eulerAngles is eulerAngles.z using clockwise
+    [SerializeField] public float CameraAngle;
+    [SerializeField] public float3 EntitiesPosition;
+    #endregion
+
 
     #region Archetypes
     // declare All of archetypes
@@ -83,8 +99,8 @@ public class SimulationManager : MonoBehaviour
     public static float upLimit;
     public static float rightLimit;
     public static float downLimit;
+    
     #endregion
-
     #region Initialisation
     // Start is called before the first frame update
     void Start()
@@ -92,6 +108,12 @@ public class SimulationManager : MonoBehaviour
         Instance = this;
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
+
+        // camera part //get default Camera parameter
+        DefaultCameraPosition = cameraFollow.GetCameraPostion();
+        DefaultCameraEulerAngles = cameraFollow.GetCameraEulerAngles();
+        CameraHeight = 50; // this is transform.y
+        CameraAngle = 90; // eulerAngles.x change angle of camera
 
         CreateArchetypes();
 
@@ -197,8 +219,55 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (InputEntityName == 0)
+        {
+            cameraFollow.SetUpPosition(DefaultCameraPosition);
+        }
+        else
+        {
+            Vector3 FinalEntityPosition = FindEntityBasedOnName(InputEntityName);
+            print(FinalEntityPosition);
+            cameraFollow.SetUpPosition(FinalEntityPosition);
+            // if you are in some specfic entity, just set up DefaultCameraRotation 
+        }
+        if ((CameraAngle == 90 && CameraRotation == 0) || (CameraAngle == 0 && CameraRotation == 0))
+        {
+            cameraFollow.SetUpEulerAngles(DefaultCameraEulerAngles);
+        }
+        else // if user change CameraAngle and CameraRotation so just set up new SetUpEulerAngles
+        {
+            cameraFollow.SetUpEulerAngles(new Vector3(CameraAngle, 0, CameraRotation));
+        }
         SpawnRabbitAtPosOnClick();
     }
+
+    //
+    Vector3 FindEntityBasedOnName(int EntityName)
+    {
+        NativeArray<Entity>  AllEntity = entityManager.GetAllEntities();
+        //print(AllEntity.Length);
+        Vector3 EntityPosition = new Vector3(0, 0, 0);
+        if (EntityName > AllEntity.Length || EntityName < 0)
+        {
+            Debug.Log("Please input Entity Name between 1 to" + AllEntity.Length);
+            EntityPosition = DefaultCameraPosition;
+        }
+        else
+        {
+            foreach (Entity ChildEntity in AllEntity)
+            {
+                if (ChildEntity.Index == EntityName)
+                {
+                    EntitiesPosition = entityManager.GetComponentData<Translation>(ChildEntity).Value;
+                    EntityPosition = new Vector3(EntitiesPosition.x, CameraHeight, EntitiesPosition.z);
+                    print(EntityPosition);
+                }
+            }
+        }
+        AllEntity.Dispose();
+        return EntityPosition;
+    }
+
 
     #region Map Creation Methods
     // Creates the map with entities
