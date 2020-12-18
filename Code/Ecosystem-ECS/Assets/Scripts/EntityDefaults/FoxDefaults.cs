@@ -98,17 +98,14 @@ public static class FoxDefaults
 
     //lookingEntityData
     public static Entity predatorEntity = Entity.Null;
-    public static int predatorEntityCount = 0;
     public static Entity entityToEat = Entity.Null;
-    public static int edibleEntityCount = 0;
     public static Entity entityToDrink = Entity.Null;
-    public static int waterEntityCount = 0;
     public static Entity entityToMate = Entity.Null;
-    public static int mateEntityCount = 0;
     public static float shortestToEdibleDistance = 100f; // set initial distance to 100, must more than sight radius
     public static float shortestToWaterDistance = 100f;
     public static float shortestToPredatorDistance = 100f;
+    public static float shortestToMateDistance = 100f;
 
     //ColliderTypeData
-    public static int ColliderTypeNumber = 1;
+    public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Fox;
 }

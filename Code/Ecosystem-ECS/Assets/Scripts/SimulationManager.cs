@@ -342,7 +342,7 @@ public class SimulationManager : MonoBehaviour
                         entityManager.SetComponentData(prototypeTile,
                             new ColliderTypeData
                             {
-                                ColliderTypeNumber = GrassDefaults.WaterTileColliderNumber
+                                colliderType = GrassDefaults.WaterColliderType
                             }
                         );
                         //tileClone.name += y + "" + x;
@@ -356,12 +356,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
-                        entityManager.SetComponentData(prototypeTile,
-                            new ColliderTypeData
-                            {
-                                ColliderTypeNumber = GrassDefaults.GrassTileColliderNumber
-                            }
-                        );
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 9; //set layer to grass
                         break;
@@ -373,12 +367,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
-                        entityManager.SetComponentData(prototypeTile,
-                            new ColliderTypeData
-                            {
-                                ColliderTypeNumber = GrassDefaults.SandTileColliderNumber
-                            }
-                        );
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 10; //set layer to grass
                         break;
@@ -390,12 +378,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
-                        entityManager.SetComponentData(prototypeTile,
-                            new ColliderTypeData
-                            {
-                                ColliderTypeNumber = GrassDefaults.RockTileColliderNumber
-                            }
-                        );
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 11; //set layer to grass
                         break;
@@ -562,16 +544,13 @@ public class SimulationManager : MonoBehaviour
                 touchRadius = FoxDefaults.touchRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
-                predatorEntityCount = FoxDefaults.predatorEntityCount,
                 entityToEat = FoxDefaults.entityToEat,
-                edibleEntityCount = FoxDefaults.edibleEntityCount,
                 entityToDrink = FoxDefaults.entityToDrink,
-                waterEntityCount = FoxDefaults.waterEntityCount,
                 entityToMate = FoxDefaults.entityToMate,
-                mateEntityCount = FoxDefaults.mateEntityCount,
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
-                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance
             }
         );
         entityManager.SetComponentData(prototypeFox,
@@ -661,7 +640,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
-                ColliderTypeNumber = FoxDefaults.ColliderTypeNumber
+                colliderType = FoxDefaults.colliderType
             }
         );
 
@@ -717,7 +696,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
-                ColliderTypeNumber = GrassDefaults.GrassColliderNumber
+                colliderType = GrassDefaults.GrassColliderType
             }
         );
 
@@ -799,16 +778,13 @@ public class SimulationManager : MonoBehaviour
                 touchRadius = RabbitDefaults.touchRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
-                predatorEntityCount = FoxDefaults.predatorEntityCount,
                 entityToEat = FoxDefaults.entityToEat,
-                edibleEntityCount = FoxDefaults.edibleEntityCount,
                 entityToDrink = FoxDefaults.entityToDrink,
-                waterEntityCount = FoxDefaults.waterEntityCount,
                 entityToMate = FoxDefaults.entityToMate,
-                mateEntityCount = FoxDefaults.mateEntityCount,
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
-                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance
             }
         );
         entityManager.SetComponentData(prototypeRabbit,
@@ -898,7 +874,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
-                ColliderTypeNumber = RabbitDefaults.ColliderTypeNumber
+                colliderType = RabbitDefaults.colliderType
             }
         );
 

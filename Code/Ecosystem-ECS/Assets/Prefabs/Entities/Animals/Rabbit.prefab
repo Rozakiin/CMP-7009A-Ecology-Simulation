@@ -231,16 +231,13 @@ MonoBehaviour:
   sightRadius: 0
   touchRadius: 0
   predatorEntity: {fileID: 0}
-  predatorEntityCount: 0
   entityToEat: {fileID: 0}
-  edibleEntityCount: 0
   entityToDrink: {fileID: 0}
-  waterEntityCount: 0
   entityToMate: {fileID: 0}
-  mateEntityCount: 0
   shortestToEdibleDistance: 0
   shortestToWaterDistance: 0
   shortestToPredatorDistance: 0
+  shortestToMateDistance: 0
 --- !u!114 &-5089060519100572234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,7 +405,7 @@ MonoBehaviour:
         Category01: 1
         Category02: 0
         Category03: 0
-        Category04: 0
+        Category04: 1
         Category05: 0
         Category06: 0
         Category07: 0
@@ -512,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ColliderTypeNumber: 0
+  colliderType: 0
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0

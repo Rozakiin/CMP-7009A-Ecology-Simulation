@@ -43,35 +43,6 @@ public class TargetingSystem : SystemBase
             float time = UnityEngine.Time.time;
             float timeSeed = time * System.DateTimeOffset.Now.Millisecond;
 
-            //entity queries for edible, water, mate - TODO update description to be more specific
-            EntityQueryDesc edibleDesc = new EntityQueryDesc
-            {
-                All = new ComponentType[] { typeof(EdibleData), typeof(Translation) }
-            };
-            EntityQueryDesc waterDesc = new EntityQueryDesc
-            {
-                All = new ComponentType[] { typeof(DrinkableData), typeof(Translation) }
-            };
-            EntityQueryDesc mateDesc = new EntityQueryDesc
-            {
-                All = new ComponentType[] { typeof(ReproductiveData), typeof(BioStatsData), typeof(Translation) }
-            };
-
-            //create Entity and Component arrays from queries
-            var edibleEntityArray = GetEntityQuery(edibleDesc).ToEntityArray(Allocator.TempJob);
-            var edibleEntityEdibleDataArray = GetEntityQuery(edibleDesc).ToComponentDataArray<EdibleData>(Allocator.TempJob);
-            var edibleEntityTranslationArray = GetEntityQuery(edibleDesc).ToComponentDataArray<Translation>(Allocator.TempJob);
-
-            var waterEntityArray = GetEntityQuery(waterDesc).ToEntityArray(Allocator.TempJob);
-            var waterEntityDrinkableDataArray = GetEntityQuery(waterDesc).ToComponentDataArray<DrinkableData>(Allocator.TempJob);
-            var waterEntityTranslationArray = GetEntityQuery(waterDesc).ToComponentDataArray<Translation>(Allocator.TempJob);
-
-            var mateEntityArray = GetEntityQuery(mateDesc).ToEntityArray(Allocator.TempJob);
-            var mateEntityReproductiveDataArray = GetEntityQuery(mateDesc).ToComponentDataArray<ReproductiveData>(Allocator.TempJob);
-            var mateEntityBioStatsDataArray = GetEntityQuery(mateDesc).ToComponentDataArray<BioStatsData>(Allocator.TempJob);
-            var mateEntityTranslationArray = GetEntityQuery(mateDesc).ToComponentDataArray<Translation>(Allocator.TempJob);
-
-
             //entities without path request data
             Entities
                 .WithNone<PathFindingRequestData>()
@@ -94,7 +65,7 @@ public class TargetingSystem : SystemBase
                     targetData.oldTarget = targetData.currentTarget;
                 }
                 else // might not be needed
-            {
+                {
                     targetData.atTarget = false;
                 }
 
@@ -104,7 +75,7 @@ public class TargetingSystem : SystemBase
                     float3 currentPosition = translation.Value;
                     float3 targetPosition = worldBottomLeft * 2; // set to double bottom left as should be further than everything else in scene
                                                                  //create unique seed for random
-                float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
+                    float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
                     switch (stateData.state)
                     {
                         case StateData.States.Wandering:
@@ -114,182 +85,118 @@ public class TargetingSystem : SystemBase
                             //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
                             //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
 
-                            targetData.currentTarget = targetPosition;
+                                targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
                             }
                             break;
                         case StateData.States.Hungry:
-                            Entity edible = Entity.Null;
-                        // Really bad slow way, itterate over all edible object to find closest
-                        for (int i = 0; i != edibleEntityArray.Length; i++)
+                            // if found valid target
+                            if (targetData.entityToEat != Entity.Null)
                             {
-                            // if AND bitise diet and edible's foodtype == the edible's foodtype 
-                            EdibleData.FoodType entityDiet = (EdibleData.FoodType)basicNeedsData.diet;
-                                bool isInDiet = (edibleEntityEdibleDataArray[i].foodType & entityDiet) == edibleEntityEdibleDataArray[i].foodType;
-                            //Debug.Log($"{entity.Index}:{i}:{edibleEntityArray[i].Index}: {isInDiet}");
-
-                            //can be eaten and foodtype in diet?
-                            if (edibleEntityEdibleDataArray[i].canBeEaten && isInDiet)
+                                // make a path finding request
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                if(HasComponent<Translation>(targetData.entityToEat))
                                 {
-                                //Debug.Log($"{entity.Index}:{i}:{edibleEntityArray[i].Index}");
-                                // is in sight?
-                                if (math.distance(currentPosition, edibleEntityTranslationArray[i].Value) <= targetData.sightRadius)
-                                    {
-                                    // is walkable?
-                                    if (IsWorldPointWalkableFromGridNativeArray(edibleEntityTranslationArray[i].Value, worldSize, gridSize, grid))
-                                        {
-                                        // no target yet
-                                        if (edible == Entity.Null)
-                                            {
-                                                edible = edibleEntityArray[i];
-                                                targetPosition = edibleEntityTranslationArray[i].Value;
-                                            }
-                                            else
-                                            {
-                                            // Already has target, closest?
-                                            if (math.distance(currentPosition, edibleEntityTranslationArray[i].Value) < math.distance(currentPosition, targetPosition))
-                                                {
-                                                // New Target closer
-                                                edible = edibleEntityArray[i];
-                                                    targetPosition = edibleEntityTranslationArray[i].Value;
-                                                }
-                                            }
-                                        }
-                                    }
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
                                 }
-                            }
-                        // if found valid target
-                        if (edible != Entity.Null)
-                            {
-                            // make a path finding request
-                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
-                            targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                                targetData.entityToEat = edible;
                             }
                             else
                             {
-                            // find randomTarget
-                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                // find randomTarget
+                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
-                                targetData.currentTarget = targetPosition;
+                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                    targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
                             }
                             break;
                         case StateData.States.Thirsty:
-                            Entity water = Entity.Null;
-                        // Really bad slow way, itterate over all edible object to find closest
-                        for (int i = 0; i != waterEntityArray.Length; i++)
+                            // if found valid target
+                            if (targetData.entityToDrink != Entity.Null)
                             {
-                            //if can be eaten
-                            if (waterEntityDrinkableDataArray[i].canBeDrunk)
+                                // make a path finding request
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                if (HasComponent<Translation>(targetData.entityToDrink))
                                 {
-                                // is in sight?
-                                if (math.distance(currentPosition, waterEntityTranslationArray[i].Value) <= targetData.sightRadius)
-                                    {
-                                    // is walkable?
-                                    if (IsWorldPointWalkableFromGridNativeArray(waterEntityTranslationArray[i].Value, worldSize, gridSize, grid))
-                                        {
-                                        // no target yet
-                                        if (water == Entity.Null)
-                                            {
-                                                water = waterEntityArray[i];
-                                                targetPosition = waterEntityTranslationArray[i].Value;
-                                            }
-                                            else
-                                            {
-                                            // Already has target, closest?
-                                            if (math.distance(currentPosition, waterEntityTranslationArray[i].Value) < math.distance(currentPosition, targetPosition))
-                                                {
-                                                // New Target closer
-                                                water = waterEntityArray[i];
-                                                    targetPosition = waterEntityTranslationArray[i].Value;
-                                                }
-                                            }
-                                        }
-                                    }
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
                                 }
-                            }
-
-                            if (water != Entity.Null)
-                            {
-                            // make a path finding request
-                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
-                            targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                                targetData.entityToDrink = water;
                             }
                             else
                             {
-                            // find randomTarget
-                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                // find randomTarget
+                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
-                                targetData.currentTarget = targetPosition;
+                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                    targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
                             }
                             break;
                         case StateData.States.SexuallyActive:
-                            Entity mate = Entity.Null;
-                        // Really bad slow way, itterate over all mate to find closest
-                        for (int i = 0; i != mateEntityArray.Length; i++)
+                            // if found valid target
+                            if (targetData.entityToMate != Entity.Null)
                             {
-                            // is in sight?
-                            if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) <= targetData.sightRadius)
+                                // make a path finding request
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                if (HasComponent<Translation>(targetData.entityToMate))
                                 {
-                                //is female
-                                if (mateEntityBioStatsDataArray[i].gender == BioStatsData.Gender.Female)
-                                    {
-                                    //if not pregnant
-                                    if (!mateEntityReproductiveDataArray[i].pregnant)
-                                        {
-                                        // is walkable?
-                                        if (IsWorldPointWalkableFromGridNativeArray(mateEntityTranslationArray[i].Value, worldSize, gridSize, grid))
-                                            {
-                                            // no target yet
-                                            if (mate == Entity.Null)
-                                                {
-                                                    mate = entity;
-                                                    targetPosition = mateEntityTranslationArray[i].Value;
-                                                }
-                                                else
-                                                {
-                                                // Already has target, closest?
-                                                if (math.distance(currentPosition, mateEntityTranslationArray[i].Value) < math.distance(currentPosition, targetPosition))
-                                                    {
-                                                    // New Target closer
-                                                    edible = mateEntityArray[i];
-                                                        targetPosition = mateEntityTranslationArray[i].Value;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
                                 }
                             }
-
-                            if (mate != Entity.Null)
+                            else
                             {
-                            // make a path finding request
-                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
-                            targetData.currentTarget = GetComponentDataFromEntity<Translation>(true)[mate].Value;
-                            //mateData.entityToMate = mate;
-                        }
+                                // find randomTarget
+                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                                {
+                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                            }
+                            break;
+                        case StateData.States.Fleeing:
+                            // if found valid target
+                            if (targetData.predatorEntity != Entity.Null)
+                            {
+                                // make a path finding request
+                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                if (HasComponent<Translation>(targetData.predatorEntity))
+                                {
+                                    
+                                    targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                            }
+                            else
+                            {
+                                // find randomTarget
+                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                                {
+                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                            }
                             break;
                         default:
                             break;
@@ -297,16 +204,6 @@ public class TargetingSystem : SystemBase
                 }
             })
                 .WithDeallocateOnJobCompletion(grid)
-                .WithDeallocateOnJobCompletion(edibleEntityArray)
-                .WithDeallocateOnJobCompletion(edibleEntityEdibleDataArray)
-                .WithDeallocateOnJobCompletion(edibleEntityTranslationArray)
-                .WithDeallocateOnJobCompletion(waterEntityArray)
-                .WithDeallocateOnJobCompletion(waterEntityDrinkableDataArray)
-                .WithDeallocateOnJobCompletion(waterEntityTranslationArray)
-                .WithDeallocateOnJobCompletion(mateEntityArray)
-                .WithDeallocateOnJobCompletion(mateEntityReproductiveDataArray)
-                .WithDeallocateOnJobCompletion(mateEntityBioStatsDataArray)
-                .WithDeallocateOnJobCompletion(mateEntityTranslationArray)
                 .ScheduleParallel();
         }
         // Make sure that the ECB system knows about our job
