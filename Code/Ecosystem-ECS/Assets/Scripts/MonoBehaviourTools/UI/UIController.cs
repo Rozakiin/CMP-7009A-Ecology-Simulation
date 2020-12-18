@@ -16,6 +16,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject uiSliderCanvas;
     [SerializeField] private GameObject uiTimeCanvas;
     [SerializeField] private GameObject uiTurnCanvas;
+    [SerializeField] private GameObject uiGraphCanvas;
 
     #endregion
 
@@ -114,6 +115,7 @@ public class UIController : MonoBehaviour
         uiSliderCanvas.SetActive(true);
         uiTimeCanvas.SetActive(true);
         uiTurnCanvas.SetActive(true);
+        uiGraphCanvas.SetActive(true);
 
     }
     #endregion
