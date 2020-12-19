@@ -273,7 +273,7 @@ public class SimulationManager : MonoBehaviour
                         entityManager.SetComponentData(prototypeTile,
                             new ColliderTypeData
                             {
-                                colliderType = GrassDefaults.WaterColliderType
+                                colliderType = ColliderTypeData.ColliderType.Water
                             }
                         );
                         //tileClone.name += y + "" + x;

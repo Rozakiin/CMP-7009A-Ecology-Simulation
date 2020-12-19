@@ -24,5 +24,4 @@ public static class GrassDefaults
 
     //ColliderTypeData
     public static ColliderTypeData.ColliderType GrassColliderType = ColliderTypeData.ColliderType.Grass;
-    public static ColliderTypeData.ColliderType WaterColliderType = ColliderTypeData.ColliderType.Water;
 }

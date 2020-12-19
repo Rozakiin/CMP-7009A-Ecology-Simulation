@@ -40,11 +40,6 @@ public class StateSystem : SystemBase
                     stateData.previousState = stateData.state;
                     stateData.state = StateData.States.Fleeing;
                 }
-                else
-                {
-                    stateData.previousState = stateData.state;
-                    stateData.state = StateData.States.Wandering;
-                }
                 if (stateData.beenEaten)
                 {
                     stateData.previousState = stateData.state;
@@ -187,6 +182,12 @@ public class StateSystem : SystemBase
                     case StateData.States.GivingBirth:
                         break;
                     case StateData.States.Fleeing:
+                    // this is ok , I think? or back to previousState?
+                        if (targetData.predatorEntity == Entity.Null)
+                        {
+                            stateData.previousState = stateData.state;
+                            stateData.state = StateData.States.Wandering;
+                        }
                         break;
                     case StateData.States.Dead:
                         //entitycommandbuffer
