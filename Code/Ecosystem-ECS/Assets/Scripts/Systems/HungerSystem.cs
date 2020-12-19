@@ -21,7 +21,7 @@ public class HungerSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((int entityInQueryIndex, BasicNeedsData basicNeedsData, in StateData stateData, in ReproductiveData reproductiveData, in BioStatsData bioStatsData) =>
+        Entities.ForEach((int entityInQueryIndex, ref BasicNeedsData basicNeedsData, in StateData stateData, in ReproductiveData reproductiveData, in BioStatsData bioStatsData) =>
         {
 
             if (!reproductiveData.pregnant)

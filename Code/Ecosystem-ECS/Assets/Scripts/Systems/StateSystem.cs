@@ -22,7 +22,6 @@ public class StateSystem : SystemBase
 
         // Acquire an ECB and convert it to a concurrent one to be able
         // to use it from a parallel job.
-        var ecb = m_EndSimulationEcbSystem.CreateCommandBuffer().ToConcurrent();
 
         Entities.ForEach((
             ref StateData stateData,

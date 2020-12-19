@@ -37,12 +37,12 @@ public class MatingSystem : SystemBase
             float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
 
             //When the male target gets close
-            if (bioStatsData.gender == BioStatsData.Gender.Female && distanceToMate < targetData.touchRadius &&
-                stateData.state != StateData.States.Mating)
+            /*if (bioStatsData.gender == BioStatsData.Gender.Female && distanceToMate < targetData.touchRadius &&
+                stateData.state != StateData.States.Mating && entityToMate.state == sexuallyActive)
             {
                     reproductiveData.mateStartTime = bioStatsData.age;
                     stateData.state = StateData.States.Mating;
-            }
+            }*/
 
             //If the entityToMate exists and entity is mating
             if (reproductiveData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
