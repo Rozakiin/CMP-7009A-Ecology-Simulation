@@ -74,7 +74,7 @@ public class LookingEntitySystem : SystemBase
                     // I know this code not good, when we finish findCloestEntity I will try to remove Duplicate code
                     if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Fox) // if you are Fox
                     {
-                        if (childEntityNumber != ColliderTypeData.ColliderType.Fox)// to avoid fox find fox
+                        if (childEntityNumber != ColliderTypeData.ColliderType.Fox)// to avoid fox find fox, fox don't have mate system
                         {
                             if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit && stateData.state == StateData.States.Hungry)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
                             {
@@ -94,7 +94,7 @@ public class LookingEntitySystem : SystemBase
                             }
                         }
                     }
-                    else if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Rabbit) // if you are Rabbit
+                    else // if you are Rabbit
                     {
                         if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit) //rabbit don't need to find rabbit now, will change late in find CloestMateEntity
                         {
@@ -106,7 +106,7 @@ public class LookingEntitySystem : SystemBase
                                     EntityToEat = childEntity;
                                 }
                             }
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.state == StateData.States.Hungry)        //find Water
+                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.state == StateData.States.Thirsty)        //find Water
                             {
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
@@ -126,9 +126,8 @@ public class LookingEntitySystem : SystemBase
                         }
                         else
                         {
-                            if ((childEntityNumber == ColliderTypeData.ColliderType.Rabbit) && (stateData.state == StateData.States.SexuallyActive))
+                            if (stateData.state == StateData.States.SexuallyActive)
                             {
-
                                 if ((GetComponentDataFromEntity<ReproductiveData>(true)[childEntity].pregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female))
                                 {
                                     if (distanceToEntity < shortestToMateDistance)
