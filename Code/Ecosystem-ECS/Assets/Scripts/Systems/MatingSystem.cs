@@ -7,19 +7,28 @@ using Unity.Transforms;
 
 public class MatingSystem : SystemBase
 {
+    private EndSimulationEntityCommandBufferSystem ecbSystem;
+
+    protected override void OnCreate()
+    {
+        ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+    }
     protected override void OnUpdate()
     {
+        var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
 
         float deltaTime = Time.DeltaTime;
 
 
         Entities.ForEach((
-            ref ReproductiveData reproductiveData, 
-            ref StateData stateData, 
-            in BioStatsData bioStatsData, 
+            int entityInQueryIndex,
+            ref ReproductiveData reproductiveData,
+            ref StateData stateData,
+            in BioStatsData bioStatsData,
             in Translation translation,
             in TargetData targetData
-            ) => {
+            ) =>
+        {
 
             //Disable urge increase for non adults
             if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
@@ -34,32 +43,45 @@ public class MatingSystem : SystemBase
             // Increase reproductive urge
             reproductiveData.reproductiveUrge += reproductiveData.reproductiveUrgeIncrease * deltaTime;
 
-            float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
+            //float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
 
-            //When the male target gets close
-            /*if (bioStatsData.gender == BioStatsData.Gender.Female && distanceToMate < targetData.touchRadius &&
-                stateData.state != StateData.States.Mating && entityToMate.state == sexuallyActive)
+            //If it's a male, who's mating and the mate is not mating yet, turn her state into Mating
+            if (bioStatsData.gender == BioStatsData.Gender.Male && stateData.state == StateData.States.Mating &&
+                GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].state != StateData.States.Mating)
             {
-                    reproductiveData.mateStartTime = bioStatsData.age;
-                    stateData.state = StateData.States.Mating;
-            }*/
+                //Set the female's state to Mating
+                ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
+                    new StateData
+                    {
+                        state = StateData.States.Mating
+                    }
+                );
+
+                //Set the females mateStartTime to her age
+                ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
+                    new ReproductiveData
+                    {
+                        mateStartTime = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age
+                    }
+                );
+            }
 
             //If the entityToMate exists and entity is mating
             if (reproductiveData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
             {
-                    //If the mating has ended, the female becomes pregnant
-                    if(bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
+                //If the mating has ended, the female becomes pregnant
+                if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
+                {
+                    if (bioStatsData.gender == BioStatsData.Gender.Female)
                     {
-                        if (bioStatsData.gender == BioStatsData.Gender.Female)
-                        {
-                            reproductiveData.pregnancyStartTime = bioStatsData.age;
-                            reproductiveData.pregnant = true;
-                            reproductiveData.currentLitterSize = reproductiveData.LitterSize;
-                        }
-
+                        reproductiveData.pregnancyStartTime = bioStatsData.age;
+                        reproductiveData.pregnant = true;
+                        reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
-                    reproductiveData.reproductiveUrge = 0;
-                    stateData.state = StateData.States.Wandering;
+
+                }
+                reproductiveData.reproductiveUrge = 0;
+                stateData.state = StateData.States.Wandering;
             }
         }).Schedule();
     }
