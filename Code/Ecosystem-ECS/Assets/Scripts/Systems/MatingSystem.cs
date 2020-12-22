@@ -19,6 +19,29 @@ public class MatingSystem : SystemBase
 
         float deltaTime = Time.DeltaTime;
 
+        #region Female data
+        var rabbitMatingDuration = RabbitDefaults.matingDuration;
+        var rabbitMateStartTime = RabbitDefaults.mateStartTime;
+        var rabbitReproductiveUrge = RabbitDefaults.reproductiveUrge;
+        var rabbitMatingThreshold = RabbitDefaults.matingThreshold;
+        var rabbitEntityToMate = RabbitDefaults.entityToMate;
+
+        var rabbitPregnant = RabbitDefaults.pregnant;
+        var rabbitBirthDuration = RabbitDefaults.birthDuration;
+        var rabbitBabiesBorn = RabbitDefaults.babiesBorn;
+        var rabbitBirthStartTime = RabbitDefaults.birthStartTime;
+        var rabbitCurrentLitterSize = RabbitDefaults.currentLitterSize;
+        var rabbitLitterSizeMin = RabbitDefaults.litterSizeMin;
+        var rabbitLitterSizeMax = RabbitDefaults.litterSizeMax;
+        var rabbitLitterSizeAve = RabbitDefaults.litterSizeAve;
+        var rabbitPregnancyLengthBase = RabbitDefaults.pregnancyLength;
+        var rabbitPregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier;
+        var rabbitPregnancyStartTime = RabbitDefaults.pregnancyStartTime;
+
+        var rabbitReproductiveUrgeIncreaseFemale = RabbitDefaults.reproductiveUrgeIncreaseFemale;
+        var rabbitReproductiveUrgeIncreaseMale = RabbitDefaults.reproductiveUrgeIncreaseMale;
+        #endregion
+
 
         Entities.ForEach((
             Entity e,
@@ -64,7 +87,9 @@ public class MatingSystem : SystemBase
                 ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
                     new StateData
                     {
-                        state = StateData.States.Mating
+                        previousState = femaleState,
+                        state = StateData.States.Mating,
+                        beenEaten = false
                     }
                 );
 
@@ -72,7 +97,25 @@ public class MatingSystem : SystemBase
                 ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
                     new ReproductiveData
                     {
-                        mateStartTime = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age
+                        matingDuration = rabbitMatingDuration,
+                        mateStartTime = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age,
+                        reproductiveUrge = rabbitReproductiveUrge,
+                        reproductiveUrgeIncrease = rabbitReproductiveUrgeIncreaseFemale,
+                        defaultRepoductiveIncrease = rabbitReproductiveUrgeIncreaseFemale,
+                        matingThreshold = rabbitMatingThreshold,
+                        entityToMate = rabbitEntityToMate,
+
+                        pregnant = rabbitPregnant,
+                        birthDuration = rabbitBirthDuration,
+                        babiesBorn = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].babiesBorn,
+                        birthStartTime = rabbitBirthStartTime,
+                        currentLitterSize = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].currentLitterSize,
+                        litterSizeMin = rabbitLitterSizeMin,
+                        litterSizeMax = rabbitLitterSizeMax,
+                        litterSizeAve = rabbitLitterSizeAve,
+                        pregnancyLengthBase = rabbitPregnancyLengthBase,
+                        pregnancyLengthModifier = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].pregnancyLengthModifier,
+                        pregnancyStartTime = rabbitPregnancyStartTime
                     }
                 );
             }
