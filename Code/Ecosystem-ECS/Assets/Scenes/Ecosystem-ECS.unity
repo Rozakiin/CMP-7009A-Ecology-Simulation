@@ -350,7 +350,7 @@ MonoBehaviour:
   fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 100
+  numberOfRabbitsToSpawn: 10
   numberOfFoxesToSpawn: 1
   numberOfGrassToSpawn: 20
   rabbitPopulation: 0
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 973c00c589726004db585fff81093531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayGridGizmos: 1
+  displayGridGizmos: 0
   gridWorldSize:
     x: 0
     y: 0

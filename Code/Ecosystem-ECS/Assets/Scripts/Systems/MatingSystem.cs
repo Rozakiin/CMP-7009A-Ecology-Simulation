@@ -21,14 +21,17 @@ public class MatingSystem : SystemBase
 
 
         Entities.ForEach((
+            Entity e,
             int entityInQueryIndex,
             ref ReproductiveData reproductiveData,
-            ref StateData stateData,
             in BioStatsData bioStatsData,
             in Translation translation,
             in TargetData targetData
             ) =>
         {
+            
+            if (!HasComponent<StateData>(e))
+                return;
 
             //Disable urge increase for non adults
             if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
@@ -45,9 +48,17 @@ public class MatingSystem : SystemBase
 
             //float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
 
+            if (!HasComponent<Translation>(targetData.entityToMate))
+                return;
+            StateData state = GetComponent<StateData>(targetData.entityToMate);
+            StateData.States femaleState = state.state;
+
+            StateData eState = GetComponent<StateData>(e);
+            StateData.States entityState = eState.state;
+
             //If it's a male, who's mating and the mate is not mating yet, turn her state into Mating
-            if (bioStatsData.gender == BioStatsData.Gender.Male && stateData.state == StateData.States.Mating &&
-                GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].state != StateData.States.Mating)
+            if (bioStatsData.gender == BioStatsData.Gender.Male && entityState == StateData.States.Mating &&
+                femaleState != StateData.States.Mating)
             {
                 //Set the female's state to Mating
                 ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
@@ -67,7 +78,7 @@ public class MatingSystem : SystemBase
             }
 
             //If the entityToMate exists and entity is mating
-            if (reproductiveData.entityToMate != Entity.Null && stateData.state == StateData.States.Mating)
+            if (reproductiveData.entityToMate != Entity.Null && entityState == StateData.States.Mating)
             {
                 //If the mating has ended, the female becomes pregnant
                 if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
@@ -81,8 +92,8 @@ public class MatingSystem : SystemBase
 
                 }
                 reproductiveData.reproductiveUrge = 0;
-                stateData.state = StateData.States.Wandering;
+                entityState = StateData.States.Wandering;
             }
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

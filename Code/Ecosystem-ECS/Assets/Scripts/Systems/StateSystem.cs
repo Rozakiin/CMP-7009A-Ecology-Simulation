@@ -99,7 +99,7 @@ public class StateSystem : SystemBase
                             stateData.state = StateData.States.SexuallyActive;
                         }
 
-                        if (basicNeedsData.entityToEat != Entity.Null)
+                        if (HasComponent<Translation>(targetData.entityToEat))
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
                             if (euclidian <= targetData.touchRadius)
@@ -110,7 +110,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Eating:
-                        if (basicNeedsData.entityToEat == Entity.Null)
+                        if (!HasComponent<Translation>(targetData.entityToEat))
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Hungry;
@@ -127,7 +127,7 @@ public class StateSystem : SystemBase
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;
                         }
-                        if (basicNeedsData.entityToDrink != Entity.Null)
+                        if (HasComponent<Translation>(targetData.entityToDrink))
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
                             if (euclidian <= targetData.touchRadius)
@@ -138,7 +138,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Drinking:
-                        if (basicNeedsData.entityToDrink == Entity.Null)
+                        if (!HasComponent<Translation>(targetData.entityToDrink))
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Thirsty;
@@ -150,47 +150,19 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.SexuallyActive:
-                        //This part is only for the testing purposes
-                        float3 mate1 = new float3(-40f, 0f, 40f);
-                        float3 mate2 = new float3(-40f, 0f, -20f);
-                        float3 mate3 = new float3(40f, 0f, -20f);
-                        float mate1Distance = math.distance(translation.Value, mate1);
-                        float mate2Distance = math.distance(translation.Value, mate2);
-                        float mate3Distance = math.distance(translation.Value, mate3);
-                        float closestDistance;
-                        float3 closestMate = new float3();
-                        if (mate1Distance < mate2Distance) 
-                        {
-                            closestDistance = (mate1Distance < mate3Distance) ? mate1Distance : mate3Distance;
-                            closestMate = (mate1Distance < mate3Distance) ? mate1 : mate3;
-                        }
-                        else
-                        {
-                            closestDistance = (mate2Distance < mate3Distance) ? mate2Distance : mate3Distance;
-                            closestMate = (mate2Distance < mate3Distance) ? mate2 : mate3;
-                        }
-                        if(closestDistance < targetData.touchRadius)
-                        {
-                            stateData.previousState = stateData.state;
-                            stateData.state = StateData.States.Mating;
-                            reproductiveData.mateStartTime = bioStatsData.age;
-                        }
-                        else if(closestDistance < targetData.sightRadius)
-                        {
-                            targetData.currentTarget = closestMate;
-                        }
-                        if (reproductiveData.entityToMate != Entity.Null)
+                        if (HasComponent<Translation>(targetData.entityToMate))
                         {
                             float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
                             if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Mating;
+                                reproductiveData.mateStartTime = bioStatsData.age;
                             }
                         }
                         break;
                     case StateData.States.Mating:
-                        if (reproductiveData.entityToMate == Entity.Null)
+                        if (!HasComponent<Translation>(targetData.entityToMate))
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;
