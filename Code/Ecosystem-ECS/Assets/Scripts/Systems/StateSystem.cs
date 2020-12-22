@@ -152,7 +152,7 @@ public class StateSystem : SystemBase
                     case StateData.States.SexuallyActive:
                         if (HasComponent<Translation>(targetData.entityToMate))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[reproductiveData.entityToMate].Value);
+                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
                             if (euclidian <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
