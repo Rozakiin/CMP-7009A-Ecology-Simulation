@@ -83,8 +83,8 @@ public class SimulationManager : MonoBehaviour
     public static float upLimit;
     public static float rightLimit;
     public static float downLimit;
+    
     #endregion
-
     #region Initialisation
     // Start is called before the first frame update
     void Start()
@@ -229,7 +229,7 @@ public class SimulationManager : MonoBehaviour
         collisionPlaneForMap.transform.position = transform.position;
         collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
         UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
-        collider.size = new Vector3(worldSize.x,0,worldSize.y);
+        collider.size = new Vector3(worldSize.x, 0, worldSize.y);
 
         SetLimits();
         return true;
@@ -269,8 +269,13 @@ public class SimulationManager : MonoBehaviour
                         //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
-                        entityManager.SetName(prototypeTile, "WaterTile "+y + "," + x);
-
+                        entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
+                        entityManager.SetComponentData(prototypeTile,
+                            new ColliderTypeData
+                            {
+                                colliderType = ColliderTypeData.ColliderType.Water
+                            }
+                        );
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 8; //set layer to unwalkable
                         break;
@@ -282,7 +287,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
-
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 9; //set layer to grass
                         break;
@@ -294,7 +298,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
-
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 10; //set layer to grass
                         break;
@@ -306,7 +309,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
-
                         //tileClone.name += y + "" + x;
                         //tileClone.layer = 11; //set layer to grass
                         break;
@@ -470,7 +472,16 @@ public class SimulationManager : MonoBehaviour
                 oldTarget = worldPoint,
 
                 sightRadius = FoxDefaults.sightRadius,
-                touchRadius = FoxDefaults.touchRadius
+                touchRadius = FoxDefaults.touchRadius,
+
+                predatorEntity = FoxDefaults.predatorEntity,
+                entityToEat = FoxDefaults.entityToEat,
+                entityToDrink = FoxDefaults.entityToDrink,
+                entityToMate = FoxDefaults.entityToMate,
+                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
+                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance
             }
         );
         entityManager.SetComponentData(prototypeFox,
@@ -491,14 +502,14 @@ public class SimulationManager : MonoBehaviour
                 adultHungerIncrease = FoxDefaults.adultHungerIncrease,
                 oldHungerIncrease = FoxDefaults.oldHungerIncrease,
                 eatingSpeed = FoxDefaults.eatingSpeed,
-                entityToEat = FoxDefaults.entityToEat,
+
                 diet = FoxDefaults.diet,
                 thirst = FoxDefaults.thirst,
                 thirstyThreshold = FoxDefaults.thirstyThreshold,
                 thirstMax = FoxDefaults.thirstMax,
                 thirstIncrease = FoxDefaults.thirstIncrease,
                 drinkingSpeed = FoxDefaults.drinkingSpeed,
-                entityToDrink = FoxDefaults.entityToDrink
+
             }
         );
 
@@ -528,7 +539,7 @@ public class SimulationManager : MonoBehaviour
                     reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
                     defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
                     matingThreshold = FoxDefaults.matingThreshold,
-                    entityToMate = FoxDefaults.entityToMate,
+
 
                     pregnant = FoxDefaults.pregnant,
                     birthDuration = FoxDefaults.birthDuration,
@@ -554,6 +565,13 @@ public class SimulationManager : MonoBehaviour
                 youngSizeMultiplier = FoxDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = FoxDefaults.adultSizeMultiplier,
                 oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
+            }
+        );
+        // set ColliderTypeData to Fox entity
+        entityManager.SetComponentData(prototypeFox,
+            new ColliderTypeData
+            {
+                colliderType = FoxDefaults.colliderType
             }
         );
 
@@ -605,6 +623,13 @@ public class SimulationManager : MonoBehaviour
                 sizeMultiplier = GrassDefaults.sizeMultiplier
             }
         );
+        // set ColliderTypeData to Grass entity
+        entityManager.SetComponentData(prototypeGrass,
+            new ColliderTypeData
+            {
+                colliderType = GrassDefaults.GrassColliderType
+            }
+        );
 
 
         grassPopulation++;
@@ -634,10 +659,10 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
 
         entityManager.AddComponent<isRabbitTag>(prototypeRabbit);
-        entityManager.SetComponentData(prototypeRabbit, 
-            new Translation 
-            { 
-                Value = worldPoint 
+        entityManager.SetComponentData(prototypeRabbit,
+            new Translation
+            {
+                Value = worldPoint
             }
         );
 
@@ -681,7 +706,16 @@ public class SimulationManager : MonoBehaviour
                 oldTarget = worldPoint,
 
                 sightRadius = RabbitDefaults.sightRadius,
-                touchRadius = RabbitDefaults.touchRadius
+                touchRadius = RabbitDefaults.touchRadius,
+
+                predatorEntity = FoxDefaults.predatorEntity,
+                entityToEat = FoxDefaults.entityToEat,
+                entityToDrink = FoxDefaults.entityToDrink,
+                entityToMate = FoxDefaults.entityToMate,
+                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
+                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
+                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance
             }
         );
         entityManager.SetComponentData(prototypeRabbit,
@@ -702,14 +736,14 @@ public class SimulationManager : MonoBehaviour
                 adultHungerIncrease = RabbitDefaults.adultHungerIncrease,
                 oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
                 eatingSpeed = RabbitDefaults.eatingSpeed,
-                entityToEat = RabbitDefaults.entityToEat,
+
                 diet = RabbitDefaults.diet,
                 thirst = RabbitDefaults.thirst,
                 thirstyThreshold = RabbitDefaults.thirstyThreshold,
                 thirstMax = RabbitDefaults.thirstMax,
                 thirstIncrease = RabbitDefaults.thirstIncrease,
                 drinkingSpeed = RabbitDefaults.drinkingSpeed,
-                entityToDrink = RabbitDefaults.entityToDrink
+
             }
         );
 
@@ -739,7 +773,7 @@ public class SimulationManager : MonoBehaviour
                     reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
                     defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
                     matingThreshold = RabbitDefaults.matingThreshold,
-                    entityToMate = RabbitDefaults.entityToMate,
+
 
                     pregnant = RabbitDefaults.pregnant,
                     birthDuration = RabbitDefaults.birthDuration,
@@ -765,6 +799,13 @@ public class SimulationManager : MonoBehaviour
                 youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
                 oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
+            }
+        );
+        // set ColliderTypeData to Rabbit entity
+        entityManager.SetComponentData(prototypeRabbit,
+            new ColliderTypeData
+            {
+                colliderType = RabbitDefaults.colliderType
             }
         );
 

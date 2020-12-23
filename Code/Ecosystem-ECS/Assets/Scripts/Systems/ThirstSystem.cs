@@ -13,17 +13,17 @@ public class ThirstSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
 
-        Entities.ForEach((ref BasicNeedsData basicNeedsData, in StateData stateData) => {
+        Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData , in StateData stateData) => {
 
             // Increase thirst
             basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
 
             //If the entityToDrink exists and entity is drinking
-            if (basicNeedsData.entityToDrink != Entity.Null && stateData.state == StateData.States.Drinking)
+            if (targetData.entityToDrink != Entity.Null && stateData.state == StateData.States.Drinking)
             {
-                if (HasComponent<DrinkableData>(basicNeedsData.entityToDrink))
+                if (HasComponent<DrinkableData>(targetData.entityToDrink))
                 {
-                    basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[basicNeedsData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
+                    basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
                 }
             }
         }).ScheduleParallel();

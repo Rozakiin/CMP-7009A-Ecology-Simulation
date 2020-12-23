@@ -34,6 +34,11 @@ public class StateSystem : SystemBase
             )=> {
 
                 //Priorities: Eaten>Thirst>Hunger>Age
+                if (targetData.predatorEntity != Entity.Null)
+                {
+                    stateData.previousState = stateData.state;
+                    stateData.state = StateData.States.Fleeing;
+                }
                 if (stateData.beenEaten)
                 {
                     stateData.previousState = stateData.state;
@@ -69,8 +74,6 @@ public class StateSystem : SystemBase
                     }
                 }
 
-
-
                 //Priorities: Mating>Drinking>Eating>Wandering
                 switch (stateData.state)
                 {
@@ -101,8 +104,8 @@ public class StateSystem : SystemBase
 
                         if (HasComponent<Translation>(targetData.entityToEat))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value);
+                            if (targetData.shortestToEdibleDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Eating;
@@ -129,8 +132,8 @@ public class StateSystem : SystemBase
                         }
                         if (HasComponent<Translation>(targetData.entityToDrink))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value);
+                            if (targetData.shortestToWaterDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Drinking;
@@ -152,8 +155,8 @@ public class StateSystem : SystemBase
                     case StateData.States.SexuallyActive:
                         if (HasComponent<Translation>(targetData.entityToMate))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
+                            if (targetData.shortestToMateDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Mating;
@@ -179,6 +182,12 @@ public class StateSystem : SystemBase
                     case StateData.States.GivingBirth:
                         break;
                     case StateData.States.Fleeing:
+                    // this is ok , I think? or back to previousState?
+                        if (targetData.predatorEntity == Entity.Null)
+                        {
+                            stateData.previousState = stateData.state;
+                            stateData.state = StateData.States.Wandering;
+                        }
                         break;
                     case StateData.States.Dead:
                         //entitycommandbuffer
