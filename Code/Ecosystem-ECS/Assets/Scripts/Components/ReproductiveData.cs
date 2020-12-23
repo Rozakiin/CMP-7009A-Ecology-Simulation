@@ -14,7 +14,6 @@ public struct ReproductiveData : IComponentData
     public float defaultRepoductiveIncrease;
     public float reproductiveUrgeIncrease;
     public float matingThreshold;
-    public Entity entityToMate;
 
     //Pregnancy
     public bool pregnant;

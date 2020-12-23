@@ -84,7 +84,8 @@ public class PathFindingSystem : SystemBase
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        pathNodeArray.Dispose();
+        if(pathNodeArray.IsCreated)
+            pathNodeArray.Dispose();
     }
 
     [BurstCompile]
