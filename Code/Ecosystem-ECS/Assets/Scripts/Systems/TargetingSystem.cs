@@ -74,34 +74,25 @@ public class TargetingSystem : SystemBase
                 {
                     float3 currentPosition = translation.Value;
                     float3 targetPosition = worldBottomLeft * 2; // set to double bottom left as should be further than everything else in scene
-                                                                 //create unique seed for random
-                    float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
+                    
+                    float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;//create unique seed for random
                     switch (stateData.state)
                     {
                         case StateData.States.Wandering:
                             targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
-                            //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                            //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-
                                 targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
                             }
                             break;
                         case StateData.States.Hungry:
                             // if found valid target
-                            if (targetData.entityToEat != Entity.Null)
+                            if(HasComponent<Translation>(targetData.entityToEat))
                             {
-                                // make a path finding request
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-                                if(HasComponent<Translation>(targetData.entityToEat))
-                                {
-                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
+                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
+                                targetData.currentTarget = targetPosition;
+                                targetData.atTarget = false;
                             }
                             else
                             {
@@ -109,8 +100,6 @@ public class TargetingSystem : SystemBase
                                 targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
                                     targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
@@ -118,17 +107,11 @@ public class TargetingSystem : SystemBase
                             break;
                         case StateData.States.Thirsty:
                             // if found valid target
-                            if (targetData.entityToDrink != Entity.Null)
+                            if (HasComponent<Translation>(targetData.entityToDrink))
                             {
-                                // make a path finding request
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-                                if (HasComponent<Translation>(targetData.entityToDrink))
-                                {
-                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
+                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                targetData.currentTarget = targetPosition;
+                                targetData.atTarget = false;
                             }
                             else
                             {
@@ -136,8 +119,6 @@ public class TargetingSystem : SystemBase
                                 targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
                                     targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
@@ -145,17 +126,11 @@ public class TargetingSystem : SystemBase
                             break;
                         case StateData.States.SexuallyActive:
                             // if found valid target
-                            if (targetData.entityToMate != Entity.Null)
+                            if (HasComponent<Translation>(targetData.entityToMate))
                             {
-                                // make a path finding request
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-                                if (HasComponent<Translation>(targetData.entityToMate))
-                                {
-                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
+                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
+                                targetData.currentTarget = targetPosition;
+                                targetData.atTarget = false;
                             }
                             else
                             {
@@ -163,8 +138,6 @@ public class TargetingSystem : SystemBase
                                 targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
                                     targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
@@ -172,18 +145,11 @@ public class TargetingSystem : SystemBase
                             break;
                         case StateData.States.Fleeing:
                             // if found valid target
-                            if (targetData.predatorEntity != Entity.Null)
+                            if (HasComponent<Translation>(targetData.predatorEntity))
                             {
-                                // make a path finding request
-                                //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
-                                if (HasComponent<Translation>(targetData.predatorEntity))
-                                {
-                                    
-                                    targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
+                                targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
+                                targetData.currentTarget = targetPosition;
+                                targetData.atTarget = false;
                             }
                             else
                             {
@@ -191,8 +157,6 @@ public class TargetingSystem : SystemBase
                                 targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                                 if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                 {
-                                    //ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                                    //ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = currentPosition, endPosition = targetPosition });
                                     targetData.currentTarget = targetPosition;
                                     targetData.atTarget = false;
                                 }
@@ -292,159 +256,4 @@ public class TargetingSystem : SystemBase
 
         return gridNodeArray;
     }
-
-
-    //old method
-    private static bool WorldPointIsWalkable(float3 worldPoint, float leftLimit, float rightLimit, float downLimit, float upLimit)
-    {
-        // temp bounds checking algo
-        if (worldPoint.x > leftLimit && worldPoint.x < rightLimit && worldPoint.z > downLimit && worldPoint.z < upLimit)
-            return true;
-        return false;
-
-        //Vector3 point = new Vector3(worldPoint.x, worldPoint.y, worldPoint.z); // convert to Vector3
-        //Ray ray = new Ray(point + Vector3.up * 50, Vector3.down);//50 is just a high value
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit))
-        //{
-        //    Node targetNode = PathFinderController.Instance.NodeFromWorldPoint(worldPoint);//Gets the node closest to the world point
-        //    return targetNode.isWalkable;
-        //}
-        //return false;// didn't hit so out of map area
-    }
-
-    //old method
-    private static float3 FindRandomTargetInVision(float3 position, float sightRadius, float leftLimit, float rightLimit, float downLimit, float upLimit, float seed)
-    {
-        float3 target = new float3(leftLimit+1, 0, downLimit+1); //position off the map
-        bool isTargetWalkable = false;
-        float3 targetWorldPoint;
-
-        // create random generator from seed
-        Random randomGen = new Random((uint)seed + 1);
-
-        //find walkable targetWorldPoint
-        while (!isTargetWalkable) // possible infinite loop if no walkable place?
-        {
-            // generate random numbers with bounds of sightDiameter
-            float randX = randomGen.NextFloat(-sightRadius, sightRadius);
-            float randZ = randomGen.NextFloat(-sightRadius, sightRadius);
-            // random point within the sight radius of the rabbit
-            targetWorldPoint = position + new float3(1*randX,0,1*randZ);
-            //check targetWorldPoint is walkable
-            isTargetWalkable = WorldPointIsWalkable(targetWorldPoint, leftLimit, rightLimit, downLimit, upLimit);
-            if (isTargetWalkable)
-            {
-                //set target to the targetWorldPoint
-                target = targetWorldPoint;
-            }
-        }
-
-        return target;
-    }
-
-    private static Entity FindNearestEdible()
-    {
-        Entity edible = Entity.Null;
-
-        return edible;
-    }
-
-    private static Entity FindNearestMate()
-    {
-        Entity mate = Entity.Null;
-        return mate;
-    }
-
-    private static Entity FindNearestWater()
-    {
-        Entity water = Entity.Null;
-        return water;
-    }
 }
-
-//Method to check if a given position is a walkable node(could be extended to check if the whole path is walkable?)
-//Uses ray hits to check if collided with anything
-//protected bool CheckIfWalkable(Vector3 worldPoint)
-//{
-//    Ray ray = new Ray(worldPoint + Vector3.up * 50, Vector3.down);//50 is just a high value
-//    RaycastHit hit;
-//    if (Physics.Raycast(ray, out hit))
-//    {
-//        Node targetNode = scene.GetComponent<PathFinderController>().NodeFromWorldPoint(worldPoint);//Gets the node closest to the world point
-//        return targetNode.isWalkable;
-//    }
-//    return false;// didn't hit so out of map area
-//}
-
-//protected Edible LookForConsumable(string searchedTag)
-//{
-//    //Edible edible = this;
-//    GameObject closestConsumable = null;
-//    float distanceToConsumable;
-//    float shortestDistance = 1000000000;
-//    GameObject[] allChildren = GameObject.FindGameObjectsWithTag(searchedTag);
-//    //When looking for female mates, ignore the ones that have already been impregnated
-//    if (searchedTag.Contains("Female"))
-//    {
-//        List<GameObject> bufferList = new List<GameObject>();
-//        foreach (GameObject female in allChildren)
-//        {
-//            if (!female.GetComponent<Animal>().pregnant)
-//            {
-//                bufferList.Add(female);
-//            }
-//        }
-//        allChildren = null;
-//        allChildren = new GameObject[bufferList.Count];
-//        for (int i = 0; i < bufferList.Count; i++)
-//        {
-//            allChildren[i] = bufferList[i];
-//        }
-//    }
-//    foreach (GameObject childConsumable in allChildren)
-//    {
-//        distanceToConsumable = Vector3.Distance(transform.position, childConsumable.transform.position);
-//        if (shortestDistance == -1 || distanceToConsumable < shortestDistance)
-//        {
-//            //if the child is on a walkable position
-//            if (CheckIfWalkable(childConsumable.transform.position))
-//            {
-//                shortestDistance = distanceToConsumable;
-//                closestConsumable = childConsumable;
-//            }
-//        }
-//    }
-//    if (closestConsumable != null)
-//    {
-//        return closestConsumable.GetComponent<Edible>();
-//    }
-//    return null;
-//}
-
-
-//protected virtual Animal LookForMate(string searchedTag)
-//{
-//    return (Animal)LookForConsumable(searchedTag);
-//}
-
-//protected Transform FindClosestWater()
-//{
-//    Transform closestWater = transform;
-//    float distanceToWater;
-//    float shortestDistance = -1;
-//    GameObject waterContainer = scene.waterContainer;
-//    Transform[] allWaterTile = waterContainer.GetComponentsInChildren<Transform>();
-
-//    foreach (Transform childWater in allWaterTile)
-//    {
-//        distanceToWater = Vector3.Distance(transform.position, childWater.position);
-//        if (shortestDistance == -1 || distanceToWater < shortestDistance)
-//        {
-//            shortestDistance = distanceToWater;
-//            closestWater = childWater;
-//        }
-//    }
-
-//    return closestWater;
-//}
