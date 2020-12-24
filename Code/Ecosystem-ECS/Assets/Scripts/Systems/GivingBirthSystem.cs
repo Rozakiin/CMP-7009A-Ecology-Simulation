@@ -119,11 +119,9 @@ public class GivingBirthSystem : SystemBase
 
         var ecb = m_EndSimulationEcbSystem.CreateCommandBuffer().ToConcurrent();
         Entities.ForEach((
-            Entity e,
+            Entity entity,
             int entityInQueryIndex,
             ref ReproductiveData reproductiveData,
-            ref StateData stateData,
-            ref MovementData movementData,
             in BioStatsData bioStatsData,
             in Translation translation
             ) => {
@@ -140,7 +138,7 @@ public class GivingBirthSystem : SystemBase
 
                         
                         //ArchetypeChunkEntityType archetype =  this.GetArchetypeChunkEntityType();
-                        Entity newEntity = ecb.Instantiate(entityInQueryIndex, e);
+                        Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
                         ecb.SetComponent(entityInQueryIndex, newEntity,
                             new MovementData
@@ -174,7 +172,7 @@ public class GivingBirthSystem : SystemBase
                                 oldTarget = translation.Value,
 
                                 sightRadius = rabbitSightRadius,
-                                touchRadius = rabbitTouchRadius
+                                touchRadius = rabbitTouchRadius,
                             }
                         );
 
@@ -197,18 +195,16 @@ public class GivingBirthSystem : SystemBase
                                 adultHungerIncrease = rabbitAdultHungerIncrease,
                                 oldHungerIncrease = rabbitOldHungerIncrease,
                                 eatingSpeed = rabbitEatingSpeed,
-                                entityToEat = rabbitEntityToEat,
                                 diet = rabbitDiet,
                                 thirst = rabbitThirst,
                                 thirstyThreshold = rabbitThirstyThreshold,
                                 thirstMax = rabbitThirstMax,
                                 thirstIncrease = rabbitThirstIncrease,
                                 drinkingSpeed = rabbitDrinkingSpeed,
-                                entityToDrink = rabbitEntityToDrink
                             }
                         );
 
-                        float seed = timeSeed * (translation.Value.x * translation.Value.z) + e.Index;
+                        float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
                         Random randomGen = new Random((uint)seed + 2);
                         BioStatsData.Gender randGender = randomGen.NextInt(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
 
@@ -234,7 +230,6 @@ public class GivingBirthSystem : SystemBase
                                 reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
                                 defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
                                 matingThreshold = rabbitMatingThreshold,
-                                entityToMate = rabbitEntityToMate,
 
                                 pregnant = rabbitPregnant,
                                 birthDuration = rabbitBirthDuration,
@@ -269,8 +264,6 @@ public class GivingBirthSystem : SystemBase
                     if(reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
                         reproductiveData.pregnant = false;
-                        movementData.moveMultiplier = movementData.originalMoveMultiplier;
-                        stateData.state = StateData.States.Wandering;
                     }
                 //}
         }).ScheduleParallel();
