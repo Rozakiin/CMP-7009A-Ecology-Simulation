@@ -12,25 +12,19 @@ using Unity.Physics.Systems;
 [UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(StepPhysicsWorld))]
 public class LookingEntitySystem : SystemBase
 {
-    // honestly, not sure why using ECB...... guess it is like some command buffer and allocate job order something like that
-    EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
-    protected override void OnCreate()
-    {
-        base.OnCreate();
-        // Find the ECB system once and store it for later usage
-        m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-    }
     protected override void OnUpdate()
     {
         BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
-        JobHandle FindUnitsGroupInProximityJobHandle = Entities.WithAll<MovementData>().ForEach((
-            ref TargetData targetData
-            , in ColliderTypeData colliderTypeData
-            , in ReproductiveData reproductiveData
-            , in StateData stateData
-            , in Translation translation) =>
+        //JobHandle FindUnitsGroupInProximityJobHandle = Entities.ForEach((
+        Entities.ForEach((
+            ref TargetData targetData,
+            in ColliderTypeData colliderTypeData,
+            in ReproductiveData reproductiveData,
+            in StateData stateData,
+            in Translation translation
+            ) =>
         {
             NativeList<int> hitsIndices = new NativeList<int>(Allocator.Temp);
             uint mask = 1 << 4;
@@ -156,10 +150,9 @@ public class LookingEntitySystem : SystemBase
             }
             hitsIndices.Dispose();
            
-        }).ScheduleParallel(Dependency);
+        }).ScheduleParallel();
         // not sure why....
-        Dependency = JobHandle.CombineDependencies(Dependency, buildPhysicsWorld.GetOutputDependency());
-        Dependency = JobHandle.CombineDependencies(Dependency, FindUnitsGroupInProximityJobHandle);
-        m_EndSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);
+        //Dependency = JobHandle.CombineDependencies(Dependency, buildPhysicsWorld.GetOutputDependency());
+        //Dependency = JobHandle.CombineDependencies(Dependency, FindUnitsGroupInProximityJobHandle);
     }
 }
