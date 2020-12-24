@@ -131,7 +131,6 @@ public class MatingSystem : SystemBase
                             reproductiveUrgeIncrease = rabbitReproductiveUrgeIncreaseFemale,
                             defaultRepoductiveIncrease = rabbitReproductiveUrgeIncreaseFemale,
                             matingThreshold = rabbitMatingThreshold,
-                            entityToMate = rabbitEntityToMate,
 
                             pregnant = rabbitPregnant,
                             birthDuration = rabbitBirthDuration,
