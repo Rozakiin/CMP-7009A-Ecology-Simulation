@@ -9,36 +9,18 @@ using Unity.Transforms;
 
 public class StateSystem : SystemBase
 {
-    EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
-    protected override void OnCreate()
-    {
-        base.OnCreate();
-        // Find the ECB system once and store it for later usage
-        m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-    }
-
     protected override void OnUpdate()
     {
 
-        // Acquire an ECB and convert it to a concurrent one to be able
-        // to use it from a parallel job.
-
         Entities.ForEach((
             ref StateData stateData,
-            ref BasicNeedsData basicNeedsData,
-            ref MovementData movementData,
-            ref TargetData targetData,
-            ref BioStatsData bioStatsData,
             ref ReproductiveData reproductiveData,
+            in BasicNeedsData basicNeedsData,
+            in TargetData targetData,
+            in BioStatsData bioStatsData,
             in Translation translation
             )=> {
-
                 //Priorities: Eaten>Thirst>Hunger>Age
-                if (targetData.predatorEntity != Entity.Null)
-                {
-                    stateData.previousState = stateData.state;
-                    stateData.state = StateData.States.Fleeing;
-                }
                 if (stateData.beenEaten)
                 {
                     stateData.previousState = stateData.state;
@@ -64,8 +46,14 @@ public class StateSystem : SystemBase
                     stateData.deathReason = StateData.DeathReason.Age;
                 }
 
+                //being chased over all other states
+                if (HasComponent<Translation>(targetData.predatorEntity))
+                {
+                    stateData.previousState = stateData.state;
+                    stateData.state = StateData.States.Fleeing;
+                }
                 //Update pregnancy status
-                if(reproductiveData.pregnant)
+                else if (reproductiveData.pregnant)
                 {
                     if(bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
                     {
@@ -182,22 +170,18 @@ public class StateSystem : SystemBase
                     case StateData.States.GivingBirth:
                         break;
                     case StateData.States.Fleeing:
-                    // this is ok , I think? or back to previousState?
-                        if (targetData.predatorEntity == Entity.Null)
+                        // this is ok , I think? or back to previousState?
+                        if (!HasComponent<Translation>(targetData.predatorEntity))
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Wandering;
                         }
                         break;
                     case StateData.States.Dead:
-                        //entitycommandbuffer
-                        //DestroyEntity(entity);
                         break;
                     default:
                         break;
                 }
             }).ScheduleParallel();
-        // Make sure that the ECB system knows about our job
-        m_EndSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);
     }
 }
