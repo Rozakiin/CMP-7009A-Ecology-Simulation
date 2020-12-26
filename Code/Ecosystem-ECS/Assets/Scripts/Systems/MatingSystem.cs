@@ -79,6 +79,7 @@ public class MatingSystem : SystemBase
 
                 }
                 reproductiveData.reproductiveUrge = 0;
+                entityState = StateData.States.Wandering;
             }
         }).ScheduleParallel();
 
