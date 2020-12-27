@@ -250,22 +250,23 @@ public class GivingBirthSystem : SystemBase
                             }
                         );
 
-                    ecb.SetComponent(entityInQueryIndex, newEntity,
-                        new SizeData
-                        {
-                            size = (randGender == BioStatsData.Gender.Female ? rabbitScaleFemale : rabbitScaleMale),
-                            sizeMultiplier = rabbitSizeMultiplier,
-                            ageSizeMultiplier = rabbitAgeSizeMultiplier,
-                            youngSizeMultiplier = rabbitYoungSizeMultiplier,
-                            adultSizeMultiplier = rabbitAdultSizeMultiplier,
-                            oldSizeMultiplier = rabbitOldSizeMultiplier
+                        ecb.SetComponent(entityInQueryIndex, newEntity,
+                            new SizeData
+                            {
+                                size = (randGender == BioStatsData.Gender.Female ? rabbitScaleFemale : rabbitScaleMale),
+                                sizeMultiplier = rabbitSizeMultiplier,
+                                ageSizeMultiplier = rabbitAgeSizeMultiplier,
+                                youngSizeMultiplier = rabbitYoungSizeMultiplier,
+                                adultSizeMultiplier = rabbitAdultSizeMultiplier,
+                                oldSizeMultiplier = rabbitOldSizeMultiplier
                             
-                        }
-                    );
+                            }
+                        );
 
                         reproductiveData.birthStartTime = bioStatsData.age;
                         reproductiveData.babiesBorn++;
                     }
+
                     if(reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
                         reproductiveData.pregnant = false;

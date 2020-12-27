@@ -670,7 +670,9 @@ public class SimulationManager : MonoBehaviour
                 state = RabbitDefaults.state,
                 previousState = RabbitDefaults.previousState,
                 deathReason = RabbitDefaults.deathReason,
-                beenEaten = RabbitDefaults.beenEaten
+                beenEaten = RabbitDefaults.beenEaten,
+                flagState = RabbitDefaults.flagState,
+                previousFlagState = RabbitDefaults.previousFlagState
             }
         );
         entityManager.SetComponentData(prototypeRabbit,

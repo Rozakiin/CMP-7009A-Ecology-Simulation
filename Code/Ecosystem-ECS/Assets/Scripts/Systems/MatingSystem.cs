@@ -121,21 +121,21 @@ public class MatingSystem : SystemBase
             }
 
             //If the entityToMate exists and entity is mating
-            if (reproductiveData.entityToMate != Entity.Null && entityState == StateData.States.Mating)
+            if (entityState == StateData.States.Mating)
             {
-                //If the mating has ended, the female becomes pregnant
+                //If the mating has ended
                 if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
                 {
+                    //If it's female, she becomes pregnant
                     if (bioStatsData.gender == BioStatsData.Gender.Female)
                     {
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
                         reproductiveData.pregnant = true;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
-
-                }
-                reproductiveData.reproductiveUrge = 0;
-                entityState = StateData.States.Wandering;
+                    reproductiveData.reproductiveUrge = 0;
+                    entityState = StateData.States.Wandering;
+                }             
             }
         }).ScheduleParallel();
     }
