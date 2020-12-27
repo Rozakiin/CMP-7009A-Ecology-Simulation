@@ -27,7 +27,6 @@ public struct BasicNeedsData : IComponentData
     public float thirstMax;
     public float thirstIncrease;
     public float drinkingSpeed;
-    public Entity entityToDrink;
 
     //Hunger
     public float hunger;
@@ -39,7 +38,6 @@ public struct BasicNeedsData : IComponentData
     public float adultHungerIncrease;
     public float oldHungerIncrease;
     public float eatingSpeed;
-    public Entity entityToEat;
 
     public enum Diet
     {

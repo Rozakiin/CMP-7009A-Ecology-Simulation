@@ -69,11 +69,12 @@ public class GridSetup : MonoBehaviour
                 bool isWalkable = false;
 
                 int movementPenalty = 0;//penalty for walking over node
-                float3 tempUp = worldPoint + new float3(0, 1000, 0);
-                float3 tempDown = worldPoint + new float3(0, -1000, 0);
+                float3 tempUp = worldPoint + new float3(0, 100000, 0);
+                float3 tempDown = worldPoint + new float3(0, -100000, 0);
                 CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
                 //raycast from really high point to under map, colliding with only tiles
-                Entity collidedEntity = UtilTools.PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter); 
+                Entity collidedEntity = UtilTools.PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
+                
                 if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
                 {
                     movementPenalty = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).terrainPenalty;

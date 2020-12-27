@@ -9,27 +9,15 @@ using Unity.Transforms;
 
 public class StateSystem : SystemBase
 {
-    EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
-    protected override void OnCreate()
-    {
-        base.OnCreate();
-        // Find the ECB system once and store it for later usage
-        m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-    }
-
     protected override void OnUpdate()
     {
 
-        // Acquire an ECB and convert it to a concurrent one to be able
-        // to use it from a parallel job.
-
         Entities.ForEach((
             ref StateData stateData,
-            ref BasicNeedsData basicNeedsData,
-            ref MovementData movementData,
-            ref TargetData targetData,
-            ref BioStatsData bioStatsData,
             ref ReproductiveData reproductiveData,
+            in BasicNeedsData basicNeedsData,
+            in TargetData targetData,
+            in BioStatsData bioStatsData,
             in Translation translation
             )=> {
 
@@ -98,9 +86,16 @@ public class StateSystem : SystemBase
                     stateData.deathReason = StateData.DeathReason.Age;
                 }
 
+                //being chased over all other states
+                if (HasComponent<Translation>(targetData.predatorEntity))
+                {
+                    stateData.previousState = stateData.state;
+                    stateData.state = StateData.States.Fleeing;
+                }
+
                 //Update pregnancy status
                 /*old system
-                if (reproductiveData.pregnant)
+                else if (reproductiveData.pregnant)
                 {
                     if(bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
                     {
@@ -255,8 +250,8 @@ public class StateSystem : SystemBase
 
                         if (HasComponent<Translation>(targetData.entityToEat))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToEat].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value);
+                            if (targetData.shortestToEdibleDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Eating;
@@ -283,8 +278,8 @@ public class StateSystem : SystemBase
                         }
                         if (HasComponent<Translation>(targetData.entityToDrink))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[basicNeedsData.entityToDrink].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value);
+                            if (targetData.shortestToWaterDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Drinking;
@@ -306,8 +301,8 @@ public class StateSystem : SystemBase
                     case StateData.States.SexuallyActive:
                         if (HasComponent<Translation>(targetData.entityToMate))
                         {
-                            float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
-                            if (euclidian <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
+                            if (targetData.shortestToMateDistance <= targetData.touchRadius)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Mating;
@@ -333,17 +328,19 @@ public class StateSystem : SystemBase
                     case StateData.States.GivingBirth:
                         break;
                     case StateData.States.Fleeing:
+                        // this is ok , I think? or back to previousState?
+                        if (!HasComponent<Translation>(targetData.predatorEntity))
+                        {
+                            stateData.previousState = stateData.state;
+                            stateData.state = StateData.States.Wandering;
+                        }
                         break;
                     case StateData.States.Dead:
-                        //entitycommandbuffer
-                        //DestroyEntity(entity);
                         break;
                     default:
                         break;
                 }
                 */
             }).ScheduleParallel();
-        // Make sure that the ECB system knows about our job
-        m_EndSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);
     }
 }

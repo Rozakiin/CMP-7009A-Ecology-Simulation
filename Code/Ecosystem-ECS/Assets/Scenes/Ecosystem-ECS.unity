@@ -166,7 +166,7 @@ MonoBehaviour:
   collisionPlaneForMap: {fileID: 0}
   numberOfRabbitsToSpawn: 1
   numberOfFoxesToSpawn: 1
-  numberOfGrassToSpawn: 20
+  numberOfGrassToSpawn: 50
   rabbitPopulation: 0
   foxPopulation: 0
   grassPopulation: 0
