@@ -5,6 +5,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEditor;
 
 
 public class StateSystem : SystemBase
@@ -21,16 +22,16 @@ public class StateSystem : SystemBase
             in Translation translation
             )=> {
 
-                bool isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
-                bool isThirsty = ((stateData.flagState & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty);
-                bool isEating = ((stateData.flagState & StateData.FlagStates.Eating) == StateData.FlagStates.Eating);
-                bool isDrinking = ((stateData.flagState & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking);
-                bool isSexuallyActive = ((stateData.flagState & StateData.FlagStates.SexuallyActive) == StateData.FlagStates.SexuallyActive);
-                bool isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
-                bool isFleeing = ((stateData.flagState & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
-                bool isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
-                bool isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
-                bool isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
+                stateData.isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
+                stateData.isThirsty = ((stateData.flagState & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty);
+                stateData.isEating = ((stateData.flagState & StateData.FlagStates.Eating) == StateData.FlagStates.Eating);
+                stateData.isDrinking = ((stateData.flagState & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking);
+                stateData.isSexuallyActive = ((stateData.flagState & StateData.FlagStates.SexuallyActive) == StateData.FlagStates.SexuallyActive);
+                stateData.isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
+                stateData.isFleeing = ((stateData.flagState & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
+                stateData.isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
+                stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
+                stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
 
                 //Priorities: Eaten>Thirst>Hunger>Age
                 /*old system
@@ -85,13 +86,15 @@ public class StateSystem : SystemBase
                     stateData.flagState = StateData.FlagStates.Dead;
                     stateData.deathReason = StateData.DeathReason.Age;
                 }
-
+                
+                /*
+                //old system
                 //being chased over all other states
                 if (HasComponent<Translation>(targetData.predatorEntity))
                 {
                     stateData.previousState = stateData.state;
                     stateData.state = StateData.States.Fleeing;
-                }
+                }*/
 
                 //Update pregnancy status
                 /*old system
@@ -105,8 +108,17 @@ public class StateSystem : SystemBase
                 }
                 */
 
+
+
                 //new system
-                if (isPregnant)
+                if (HasComponent<Translation>(targetData.predatorEntity))
+                {
+                    stateData.previousFlagState = stateData.flagState;
+                    stateData.flagState = StateData.FlagStates.Fleeing;
+                }
+
+                //The rabbit can still give birth when fleeing - bad luck I guess
+                if (stateData.isPregnant)
                 {
                     if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
                     {
@@ -115,28 +127,28 @@ public class StateSystem : SystemBase
                     }
                 }
 
-                if (!isGivingBirth && !isEating && !isDrinking && !isMating)
+                if (!stateData.isGivingBirth && !stateData.isEating && !stateData.isDrinking && !stateData.isMating && !stateData.isFleeing)
                 {
                     if(reproductiveData.reproductiveUrge >= reproductiveData.matingThreshold &&
-                    !isSexuallyActive)
+                    !stateData.isSexuallyActive)
                     {
                         stateData.previousFlagState = stateData.flagState;
                         stateData.flagState ^= StateData.FlagStates.SexuallyActive;
                     }
                     if(basicNeedsData.thirst >= basicNeedsData.thirstyThreshold &&
-                    !isThirsty)
+                    !stateData.isThirsty)
                     {
                         stateData.previousFlagState = stateData.flagState;
                         stateData.flagState ^= StateData.FlagStates.Thirsty;
                     }
                     if(basicNeedsData.hunger >= basicNeedsData.hungryThreshold &&
-                    !isHungry)
+                    !stateData.isHungry)
                     {
                         stateData.previousFlagState = stateData.flagState;
                         stateData.flagState ^= StateData.FlagStates.Hungry;
                     }
 
-                    if (isHungry)
+                    if (stateData.isHungry)
                     {
                         if (HasComponent<Translation>(targetData.entityToEat))
                         {
@@ -148,7 +160,7 @@ public class StateSystem : SystemBase
                         }
                     }
 
-                    if (isThirsty)
+                    if (stateData.isThirsty)
                     {
                         if (HasComponent<Translation>(targetData.entityToDrink))
                         {
@@ -160,16 +172,26 @@ public class StateSystem : SystemBase
                         }
                     }
 
-                    if (isSexuallyActive)
+                    if (stateData.isSexuallyActive)
                     {
-                        if (HasComponent<Translation>(targetData.entityToMate))
+                        //If the entity isn't old, mate
+                        if (bioStatsData.ageGroup != BioStatsData.AgeGroup.Old)
                         {
-                            if (targetData.shortestToMateDistance <= targetData.touchRadius)
+                            if (HasComponent<Translation>(targetData.entityToMate))
                             {
-                                stateData.previousFlagState = stateData.flagState;
-                                stateData.flagState = StateData.FlagStates.Mating;
-                                reproductiveData.mateStartTime = bioStatsData.age;
+                                if (targetData.shortestToMateDistance <= targetData.touchRadius)
+                                {
+                                    stateData.previousFlagState = stateData.flagState;
+                                    stateData.flagState = StateData.FlagStates.Mating;
+                                    reproductiveData.mateStartTime = bioStatsData.age;
+                                }
                             }
+                        }
+                        //Otherwise reset reproducitve urge and toggle the substate
+                        else
+                        {
+                            reproductiveData.reproductiveUrge = 0;
+                            stateData.flagState ^= StateData.FlagStates.SexuallyActive;
                         }
                     }               
                 }
@@ -177,7 +199,7 @@ public class StateSystem : SystemBase
                 //This 3 if's will probably have to be modified to accommodate for Will's new targetting system
                 //Instead of checking for the distance to the entity, it might be check what is its intended target
                 //At the moment?
-                if (isEating)
+                if (stateData.isEating)
                 {
                     if (!HasComponent<Translation>(targetData.entityToEat))
                     {
@@ -191,7 +213,7 @@ public class StateSystem : SystemBase
                     }
                 }
 
-                if (isDrinking)
+                if (stateData.isDrinking)
                 {
                     if (!HasComponent<Translation>(targetData.entityToDrink))
                     {
@@ -205,7 +227,7 @@ public class StateSystem : SystemBase
                     }
                 }
 
-                if (isMating)
+                if (stateData.isMating)
                 {
                     if (!HasComponent<Translation>(targetData.entityToMate))
                     {

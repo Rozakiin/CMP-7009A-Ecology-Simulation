@@ -53,15 +53,15 @@ public class MatingSystem : SystemBase
             if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
             {
                 reproductiveData.reproductiveUrgeIncrease = reproductiveData.defaultRepoductiveIncrease;
+                // Increase reproductive urge
+                reproductiveData.reproductiveUrge += reproductiveData.reproductiveUrgeIncrease * deltaTime;
             }
             else
             {
                 reproductiveData.reproductiveUrgeIncrease = 0f;
             }
 
-            // Increase reproductive urge
-            reproductiveData.reproductiveUrge += reproductiveData.reproductiveUrgeIncrease * deltaTime;
-
+            
             //float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
 
             //If entity is mating
