@@ -21,4 +21,7 @@ public static class GrassDefaults
     public static StateData.States previousState = StateData.States.Wandering;
     public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
     public static bool beenEaten = false;
+
+    //ColliderTypeData
+    public static ColliderTypeData.ColliderType GrassColliderType = ColliderTypeData.ColliderType.Grass;
 }
