@@ -125,18 +125,20 @@ public class GivingBirthSystem : SystemBase
             in BioStatsData bioStatsData,
             in Translation translation
             ) => {
-            
-                //If you want to test uncomment this and comment out the if below
-                //if(bioStatsData.age > 10 && bioStatsData.age < 12)
-                //{
-                    if(bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration &&
+
+                if (bioStatsData.gender == BioStatsData.Gender.Female)
+                {
+                    //If you want to test uncomment this and comment out the if below
+                    //if(bioStatsData.age > 10 && bioStatsData.age < 12)
+                    //{
+                    if (bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration &&
                     reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                     {
                         ////give birth
                         //Entity newEntity = e;
                         //EntityManager.Instantiate(e);
 
-                        
+
                         //ArchetypeChunkEntityType archetype =  this.GetArchetypeChunkEntityType();
                         Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
@@ -254,7 +256,7 @@ public class GivingBirthSystem : SystemBase
                                 youngSizeMultiplier = rabbitYoungSizeMultiplier,
                                 adultSizeMultiplier = rabbitAdultSizeMultiplier,
                                 oldSizeMultiplier = rabbitOldSizeMultiplier
-                            
+
                             }
                         );
 
@@ -262,11 +264,12 @@ public class GivingBirthSystem : SystemBase
                         reproductiveData.babiesBorn++;
                     }
 
-                    if(reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
+                    if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
                         reproductiveData.pregnant = false;
                     }
-                //}
+                    //}
+                }
         }).ScheduleParallel();
 
         this.CompleteDependency();
