@@ -45,6 +45,8 @@ public class GivingBirthSystem : SystemBase
         //States
         StateData.States rabbitState = RabbitDefaults.state;
         StateData.States rabbitPreviousState = RabbitDefaults.previousState;
+        StateData.FlagStates rabbitFlagState = RabbitDefaults.flagState;
+        StateData.FlagStates rabbitPreviousFlagState = RabbitDefaults.previousFlagState;
         StateData.DeathReason rabbitDeathReason = RabbitDefaults.deathReason;
         bool rabbitBeenEaten = RabbitDefaults.beenEaten;
 
@@ -122,6 +124,7 @@ public class GivingBirthSystem : SystemBase
             Entity entity,
             int entityInQueryIndex,
             ref ReproductiveData reproductiveData,
+            ref StateData stateData,
             in BioStatsData bioStatsData,
             in Translation translation
             ) => {
@@ -161,6 +164,8 @@ public class GivingBirthSystem : SystemBase
                             {
                                 state = rabbitState,
                                 previousState = rabbitPreviousState,
+                                flagState = rabbitFlagState,
+                                previousFlagState = rabbitPreviousFlagState,
                                 deathReason = rabbitDeathReason,
                                 beenEaten = rabbitBeenEaten
                             }
@@ -266,6 +271,7 @@ public class GivingBirthSystem : SystemBase
 
                     if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
+                        stateData.flagState ^= StateData.FlagStates.Pregnant;
                         reproductiveData.pregnant = false;
                     }
                     //}

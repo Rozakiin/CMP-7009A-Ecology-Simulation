@@ -51,6 +51,7 @@ public class TargetingSystem : SystemBase
                 int entityInQueryIndex,
                 ref TargetData targetData,
                 ref BasicNeedsData basicNeedsData,
+                ref MovementData movementData,
                 in PathFollowData pathFollowData,
                 in Translation translation,
                 in StateData stateData
@@ -112,6 +113,7 @@ public class TargetingSystem : SystemBase
                             targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
                             targetData.currentTarget = targetPosition;
                             targetData.atTarget = false;
+                            movementData.moveMultiplier *= 3f;
                         }
                         else
                         {
@@ -169,7 +171,7 @@ public class TargetingSystem : SystemBase
                         }
                     }
                     //Else normal wandering (I think)
-                    else
+                    else if(!stateData.isMating && !stateData.isEating && !stateData.isEating)
                     {
                         targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                         if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))

@@ -65,7 +65,7 @@ public class MatingSystem : SystemBase
             //float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
 
             //If entity is mating
-            if (stateData.state == StateData.States.Mating)
+            if (stateData.isMating)
             {
                 //If the mating has ended, the female becomes pregnant
                 if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
@@ -73,13 +73,14 @@ public class MatingSystem : SystemBase
                     if (bioStatsData.gender == BioStatsData.Gender.Female)
                     {
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
+                        stateData.flagState ^= StateData.FlagStates.Pregnant;
                         reproductiveData.pregnant = true;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
-
-                }
-                reproductiveData.reproductiveUrge = 0;
-                stateData.state = StateData.States.Wandering;
+                    reproductiveData.reproductiveUrge = 0;
+                    stateData.state = StateData.States.Wandering;
+                    stateData.flagState = StateData.FlagStates.Wandering;
+                }         
             }
         }).ScheduleParallel();
 
@@ -97,12 +98,13 @@ public class MatingSystem : SystemBase
             {
                 //get state of entityToMate
                 StateData.States mateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].state;
+                StateData.FlagStates flagMateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].flagState;
 
                 //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
                 if (
                 bioStatsData.gender == BioStatsData.Gender.Male &&
-                stateData.state == StateData.States.Mating &&
-                mateState != StateData.States.Mating
+                stateData.flagState == StateData.FlagStates.Mating &&
+                flagMateState != StateData.FlagStates.Mating
                 )
                 {
                     //Set the mate's state to Mating
@@ -111,6 +113,9 @@ public class MatingSystem : SystemBase
                         {
                             previousState = mateState,
                             state = StateData.States.Mating,
+
+                            previousFlagState = flagMateState,
+                            flagState = StateData.FlagStates.Mating,
                             beenEaten = false
                         }
                     );
