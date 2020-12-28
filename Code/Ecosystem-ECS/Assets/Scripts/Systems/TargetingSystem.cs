@@ -100,10 +100,10 @@ public class TargetingSystem : SystemBase
                     }
                     //Prioritize finding a mate if the entity isn't about to die out of hunger or thirst
                     //And water or food isn't currently in its reach
-                    else if(targetData.entityToMate != null && 
+                    else if(targetData.entityToMate != Entity.Null && 
                     (
-                    (basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == null) ||
-                    (basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == null)
+                    (basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == Entity.Null) ||
+                    (basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == Entity.Null)
                     ))
                     {
                         // if found valid target
@@ -125,9 +125,9 @@ public class TargetingSystem : SystemBase
                         }
                     }
                     //Check if the entity has food or water nearby
-                    else if(targetData.entityToDrink != null || targetData.entityToEat != null)
+                    else if(targetData.entityToDrink != Entity.Null || targetData.entityToEat != Entity.Null)
                     {
-                        if(targetData.entityToDrink != null && basicNeedsData.thirst >= basicNeedsData.hunger)
+                        if(targetData.entityToDrink != Entity.Null && basicNeedsData.thirst >= basicNeedsData.hunger)
                         {
                             // if found valid target
                             if (HasComponent<Translation>(targetData.entityToDrink))
@@ -147,7 +147,7 @@ public class TargetingSystem : SystemBase
                                 }
                             }
                         }
-                        else if(targetData.entityToEat != null && basicNeedsData.hunger >= basicNeedsData.thirst)
+                        else if(targetData.entityToEat != Entity.Null && basicNeedsData.hunger >= basicNeedsData.thirst)
                         {
                             // if found valid target
                             if (HasComponent<Translation>(targetData.entityToEat))
