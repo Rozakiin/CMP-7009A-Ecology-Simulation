@@ -67,8 +67,7 @@ public class PathFindingSystem : SystemBase
             setBufferPathJob.Execute();//execute the set buffer path job
 
             //update the edited component data from setbufferpathjob
-            ecb.SetComponent<PathFollowData>(entityInQueryIndex, entity,setBufferPathJob.pathFollowData);
-            //pathFindingRequestData = setBufferPathJob.pathfindingRequestData;
+            pathFollowData = setBufferPathJob.pathFollowData;
             pathPositionDataBuffer = setBufferPathJob.pathPositionDataBuffer;
 
             ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity);//remove the requestpathdata from entity
