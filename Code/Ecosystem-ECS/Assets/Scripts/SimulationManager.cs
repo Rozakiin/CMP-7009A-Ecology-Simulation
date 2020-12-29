@@ -13,6 +13,8 @@ public class SimulationManager : MonoBehaviour
     GameObjectConversionSettings settings;
     public static SimulationManager Instance;
 
+    public bool isSetupComplete;
+
     #region Archetypes
     // declare All of archetypes
     public static EntityArchetype GrassTileArchetype { get; private set; }
@@ -90,20 +92,15 @@ public class SimulationManager : MonoBehaviour
     void Start()
     {
         Instance = this;
+        isSetupComplete = false;
+
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         CreateArchetypes();
 
         // Only continue if no errors creating the map
-        if (CreateMap())
-        {
-            CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
-            CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
-            CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
-
-        }
-        else
+        if (!CreateMap())
         {
             Debug.Log("Error Loading Map");
         }
@@ -197,6 +194,16 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isSetupComplete)
+        {
+            if (GridSetup.Instance.CreateGrid())
+            {
+                CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
+                CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
+                CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
+                isSetupComplete = true;
+            }
+        }
         SpawnRabbitAtPosOnClick();
     }
 
@@ -360,11 +367,16 @@ public class SimulationManager : MonoBehaviour
 
         for (int i = 0; i < quantity; i++)
         {
-            // Calc random point on map
-            int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
-            int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
+            
             // Get the random world co ordinates from the bottom left of the graph
-            Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            Vector3 worldPoint;
+            do
+            {
+                // Calc random point on map
+                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
+                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
+                worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, entityManager));
 
             // Place the instantiated entity in a random point on the map
             //set default variables based on gameObject name - not great solution but works for now
