@@ -11,10 +11,9 @@ public class ScaleSystem : SystemBase
     {
         
         Entities.ForEach((
-            ref NonUniformScale scale, 
+            ref CompositeScale scale, 
             ref SizeData sizeData, 
-            in BioStatsData bioStatsData, 
-            in ReproductiveData reproductiveData
+            in BioStatsData bioStatsData
             ) => 
         {
 
@@ -31,8 +30,9 @@ public class ScaleSystem : SystemBase
                 sizeData.ageSizeMultiplier = sizeData.youngSizeMultiplier;
             }
             
-            scale.Value = sizeData.Size;
-
+            scale.Value.c0.x = sizeData.Size;
+            scale.Value.c1.y = sizeData.Size;
+            scale.Value.c2.z = sizeData.Size;
         }).ScheduleParallel();
     }
 }
