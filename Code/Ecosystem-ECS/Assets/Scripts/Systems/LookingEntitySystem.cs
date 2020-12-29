@@ -98,7 +98,7 @@ public class LookingEntitySystem : SystemBase
                     {
                         if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit) //rabbit don't need to find rabbit now, will change late in find CloestMateEntity
                         {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Grass && stateData.state == StateData.States.Hungry)             // find Grass
+                            if (childEntityNumber == ColliderTypeData.ColliderType.Grass)             // find Grass
                             {
                                 if (distanceToEntity < shortestToEdibleDistance)
                                 {
@@ -106,7 +106,7 @@ public class LookingEntitySystem : SystemBase
                                     EntityToEat = childEntity;
                                 }
                             }
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.state == StateData.States.Thirsty)        //find Water
+                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        //find Water
                             {
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
@@ -126,15 +126,12 @@ public class LookingEntitySystem : SystemBase
                         }
                         else
                         {
-                            if (stateData.state == StateData.States.SexuallyActive)
+                            if ((GetComponentDataFromEntity<ReproductiveData>(true)[childEntity].pregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female))
                             {
-                                if ((GetComponentDataFromEntity<ReproductiveData>(true)[childEntity].pregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female))
+                                if (distanceToEntity < shortestToMateDistance)
                                 {
-                                    if (distanceToEntity < shortestToMateDistance)
-                                    {
-                                        shortestToMateDistance = distanceToEntity;
-                                        EntityToMate = childEntity;
-                                    }
+                                    shortestToMateDistance = distanceToEntity;
+                                    EntityToMate = childEntity;
                                 }
                             }
                         }

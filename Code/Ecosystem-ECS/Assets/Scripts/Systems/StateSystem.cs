@@ -19,6 +19,7 @@ public class StateSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        float tileSize = SimulationManager.tileSize;
 
         // Acquire an ECB and convert it to a concurrent one to be able
         // to use it from a parallel job.
@@ -131,10 +132,11 @@ public class StateSystem : SystemBase
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.SexuallyActive;
                         }
-                        if (targetData.entityToDrink != Entity.Null)
+                        if (HasComponent<Translation>(targetData.entityToDrink))
                         {
-                            //float euclidian = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value);
-                            if (targetData.shortestToWaterDistance <= targetData.touchRadius)
+                            //float euclidian = math.distance(translation.Value, targetData.currentTarget);
+                            //some very rough estimation of distance in corner of tile
+                            if (targetData.shortestToWaterDistance <= targetData.touchRadius+tileSize/1.4+1)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Drinking;
@@ -142,7 +144,7 @@ public class StateSystem : SystemBase
                         }
                         break;
                     case StateData.States.Drinking:
-                        if (targetData.entityToDrink == Entity.Null)
+                        if (!HasComponent<Translation>(targetData.entityToDrink))
                         {
                             stateData.previousState = stateData.state;
                             stateData.state = StateData.States.Thirsty;
