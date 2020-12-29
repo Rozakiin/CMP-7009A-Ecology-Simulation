@@ -44,7 +44,7 @@ public class GridSetup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(CreateGrid());
+        //StartCoroutine(CreateGrid());
     }
 
     private void Update()
@@ -52,9 +52,9 @@ public class GridSetup : MonoBehaviour
 
     }
 
-    public IEnumerator CreateGrid()
+    public bool CreateGrid()
     {
-        yield return new WaitForEndOfFrame(); // wait till the end of frame so tile entities have been made
+        //yield return new WaitForEndOfFrame(); // wait till the end of frame so tile entities have been made
         gridWorldSize = SimulationManager.worldSize;
         gridSize.x = (int)math.round(gridWorldSize.x / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSize.y = (int)math.round(gridWorldSize.y / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
@@ -74,12 +74,13 @@ public class GridSetup : MonoBehaviour
                 CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
                 //raycast from really high point to under map, colliding with only tiles
                 Entity collidedEntity = UtilTools.PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
-                
-                if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
+
+                if (entityManager.HasComponent<TerrainTypeData>(collidedEntity))
                 {
                     movementPenalty = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).terrainPenalty;
                     isWalkable = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).isWalkable;
                 }
+                else return false; // if it collides with something that doesnt have terraintype then terrain hasnt loaded
 
                 if (!isWalkable)
                 {
@@ -91,7 +92,7 @@ public class GridSetup : MonoBehaviour
         }
 
         BlurMovementPenaltyMap(3);//blur the map with a kernel extent of 3 (5*5)
-
+        return true;
     }
 
     //Function that draws the wireframe, and the nodes
