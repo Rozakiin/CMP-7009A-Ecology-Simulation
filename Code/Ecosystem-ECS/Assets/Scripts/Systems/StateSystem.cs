@@ -135,7 +135,8 @@ public class StateSystem : SystemBase
                         if (HasComponent<Translation>(targetData.entityToDrink))
                         {
                             //float euclidian = math.distance(translation.Value, targetData.currentTarget);
-                            if (targetData.shortestToWaterDistance <= targetData.touchRadius+tileSize/2+1)
+                            //some very rough estimation of distance in corner of tile
+                            if (targetData.shortestToWaterDistance <= targetData.touchRadius+tileSize/1.4+1)
                             {
                                 stateData.previousState = stateData.state;
                                 stateData.state = StateData.States.Drinking;
