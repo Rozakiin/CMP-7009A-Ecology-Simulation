@@ -129,7 +129,7 @@ public class GivingBirthSystem : SystemBase
             in Translation translation
             ) => {
 
-                if (bioStatsData.gender == BioStatsData.Gender.Female)
+                if (bioStatsData.gender == BioStatsData.Gender.Female && stateData.isPregnant)
                 {
                     //If you want to test uncomment this and comment out the if below
                     //if(bioStatsData.age > 10 && bioStatsData.age < 12)

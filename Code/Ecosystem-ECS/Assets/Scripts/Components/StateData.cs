@@ -55,6 +55,7 @@ public struct StateData : IComponentData
     public FlagStates flagState;
     public FlagStates previousFlagState;
 
+    public bool isWandering;
     public bool isHungry;
     public bool isThirsty;
     public bool isEating;

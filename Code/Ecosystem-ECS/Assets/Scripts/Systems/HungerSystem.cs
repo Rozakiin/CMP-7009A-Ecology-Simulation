@@ -62,9 +62,16 @@ public class HungerSystem : SystemBase
                         //basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
                         //set beenEaten to true in entityToEat
                         if (HasComponent<StateData>(targetData.entityToEat))
-                    {
-                        ecb.SetComponent(entityInQueryIndex, targetData.entityToEat, new StateData { state = StateData.States.Dead, deathReason = StateData.DeathReason.Eaten });
-                    }
+                        {
+                            ecb.SetComponent(entityInQueryIndex, targetData.entityToEat, 
+                                new StateData { 
+                                    state = StateData.States.Dead, 
+                                    deathReason = StateData.DeathReason.Eaten,
+                                    
+                                    flagState = StateData.FlagStates.Dead
+                                }
+                            );
+                        }
                 }
             }
         }).ScheduleParallel();

@@ -33,7 +33,7 @@ public class PathFollowSystem : SystemBase
                 translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
 
                 //If at the targetPosition
-                if (math.distance(translation.Value, targetPosition) < .1f)
+                if (math.distance(translation.Value, targetPosition) < 1f)
                 {
                     // Next waypoint
                     pathFollowData.pathIndex--;

@@ -171,7 +171,7 @@ public class TargetingSystem : SystemBase
                         }
                     }
                     //Else normal wandering (I think)
-                    else if(!stateData.isMating && !stateData.isEating && !stateData.isEating)
+                    else if(!stateData.isMating && !stateData.isEating && !stateData.isDrinking)
                     {
                         targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                         if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))

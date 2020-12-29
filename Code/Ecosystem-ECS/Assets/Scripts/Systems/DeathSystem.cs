@@ -25,7 +25,7 @@ public class DeathSystem : SystemBase
         int rabbitsDeadHunger = 0;
         int rabbitsDeadThirst = 0;
         Entities.WithAll<isRabbitTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if(stateData.isDead)
+            if((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
             {
                 rabbitsDeadTotal++;
                 switch (stateData.deathReason)
