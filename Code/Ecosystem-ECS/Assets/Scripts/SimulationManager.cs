@@ -194,6 +194,7 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //check if the setup has completed yet, finish setup
         if (!isSetupComplete)
         {
             if (GridSetup.Instance.CreateGrid())
@@ -204,8 +205,12 @@ public class SimulationManager : MonoBehaviour
                 isSetupComplete = true;
             }
         }
-        SpawnRabbitAtPosOnClick();
-        EnforceGrassPopulation()
+        else 
+        {
+            SpawnRabbitAtPosOnClick();
+            EnforceGrassPopulation(); 
+        }
+        
     }
 
     #region Map Creation Methods
