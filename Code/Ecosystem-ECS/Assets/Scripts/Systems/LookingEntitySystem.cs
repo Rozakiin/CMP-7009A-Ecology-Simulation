@@ -125,11 +125,8 @@ public class LookingEntitySystem : SystemBase
                                 if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female)
                                 && (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
                                 {
-                                    if (distanceToEntity < shortestToMateDistance)
-                                    {
-                                        shortestToMateDistance = distanceToEntity;
-                                        EntityToMate = childEntity;
-                                    }
+                                    shortestToMateDistance = distanceToEntity;
+                                    EntityToMate = childEntity;
                                 }
                             }
                         }

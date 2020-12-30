@@ -20,7 +20,6 @@ public class HungerSystem : SystemBase
 
         float deltaTime = Time.DeltaTime;
 
-
         Entities.ForEach((
             int entityInQueryIndex, 
             ref BasicNeedsData basicNeedsData, 

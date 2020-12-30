@@ -13,6 +13,8 @@ public class SimulationManager : MonoBehaviour
     GameObjectConversionSettings settings;
     public static SimulationManager Instance;
 
+    public bool isSetupComplete;
+
     #region Archetypes
     // declare All of archetypes
     public static EntityArchetype GrassTileArchetype { get; private set; }
@@ -90,20 +92,15 @@ public class SimulationManager : MonoBehaviour
     void Start()
     {
         Instance = this;
+        isSetupComplete = false;
+
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         CreateArchetypes();
 
         // Only continue if no errors creating the map
-        if (CreateMap())
-        {
-            CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
-            CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
-            CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
-
-        }
-        else
+        if (!CreateMap())
         {
             Debug.Log("Error Loading Map");
         }
@@ -197,7 +194,23 @@ public class SimulationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SpawnRabbitAtPosOnClick();
+        //check if the setup has completed yet, finish setup
+        if (!isSetupComplete)
+        {
+            if (GridSetup.Instance.CreateGrid())
+            {
+                CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
+                CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
+                CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
+                isSetupComplete = true;
+            }
+        }
+        else 
+        {
+            SpawnRabbitAtPosOnClick();
+            EnforceGrassPopulation(); 
+        }
+        
     }
 
     #region Map Creation Methods
@@ -360,11 +373,16 @@ public class SimulationManager : MonoBehaviour
 
         for (int i = 0; i < quantity; i++)
         {
-            // Calc random point on map
-            int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
-            int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
+            
             // Get the random world co ordinates from the bottom left of the graph
-            Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            Vector3 worldPoint;
+            do
+            {
+                // Calc random point on map
+                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
+                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
+                worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, entityManager));
 
             // Place the instantiated entity in a random point on the map
             //set default variables based on gameObject name - not great solution but works for now
@@ -416,7 +434,7 @@ public class SimulationManager : MonoBehaviour
 
     }
 
-    private void CreateFoxAtWorldPoint(float3 worldPoint)
+    private void CreateFoxAtWorldPoint(in float3 worldPoint)
     {
         var entityFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
         Entity prototypeFox = entityManager.Instantiate(entityFox);
@@ -579,7 +597,7 @@ public class SimulationManager : MonoBehaviour
 
         entityManager.DestroyEntity(entityFox);
     }
-    private void CreateGrassAtWorldPoint(float3 worldPoint)
+    private void CreateGrassAtWorldPoint(in float3 worldPoint)
     {
         var entityGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
         Entity prototypeGrass = entityManager.Instantiate(entityGrass);
@@ -636,20 +654,7 @@ public class SimulationManager : MonoBehaviour
 
         entityManager.DestroyEntity(entityGrass);
     }
-    private void SpawnRabbitAtPosOnClick()
-    {
-        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
-        if (Input.GetMouseButtonDown(0))
-        {
-            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Debug.Log(targetPosition.ToString());
-                CreateRabbitAtWorldPoint(targetPosition);
-            }
-        }
-    }
+
     private void CreateRabbitAtWorldPoint(in float3 worldPoint)
     {
         var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
@@ -814,6 +819,28 @@ public class SimulationManager : MonoBehaviour
         rabbitPopulation++;
 
         entityManager.DestroyEntity(entityRabbit);
+    }
+
+    private void SpawnRabbitAtPosOnClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(0))
+        {
+            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Debug.Log(targetPosition.ToString());
+                CreateRabbitAtWorldPoint(targetPosition);
+            }
+        }
+    }
+
+    private void EnforceGrassPopulation()
+    {
+        //randomly spawn as many grass as the number less than numberOfGrassToSpawn
+        if (grassPopulation < numberOfGrassToSpawn)
+            CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn - grassPopulation);
     }
     #endregion
 
