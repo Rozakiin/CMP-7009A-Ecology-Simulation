@@ -164,7 +164,7 @@ MonoBehaviour:
   fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 10
+  numberOfRabbitsToSpawn: 50
   numberOfFoxesToSpawn: 1
   numberOfGrassToSpawn: 50
   rabbitPopulation: 0
@@ -448,6 +448,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d,
         type: 3}
+    - target: {fileID: 3147267486337607350, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: simulationManager
+      value: 
+      objectReference: {fileID: 508030573}
     - target: {fileID: 3751947209844791980, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchoredPosition.x

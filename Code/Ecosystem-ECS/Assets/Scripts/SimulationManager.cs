@@ -94,7 +94,7 @@ public class SimulationManager : MonoBehaviour
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         CreateArchetypes();
-
+        
         // Only continue if no errors creating the map
         if (CreateMap())
         {
@@ -815,4 +815,12 @@ public class SimulationManager : MonoBehaviour
     }
     #endregion
 
+    public float RabbitSpawn()
+    {
+        return (float)numberOfRabbitsToSpawn;
+    }
+    public float RabbitPopulation()
+    {
+        return (float)rabbitPopulation;
+    }
 }

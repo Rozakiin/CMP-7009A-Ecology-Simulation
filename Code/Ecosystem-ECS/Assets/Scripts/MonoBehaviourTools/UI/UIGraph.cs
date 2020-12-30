@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
+using Unity.Entities;
 using UnityEngine.UI;
+
 //maybe we need these function later on, this function can modify the number of red line in the graph
 //now only apply in 5 line in X aixs and 5 line in y axis not sure need to updata,discuss monday
 public class UIGraph : MonoBehaviour
 {
+    public SimulationManager simulationManager;
 
     [SerializeField] private Sprite circleSprite;
-    [SerializeField] public float RabbitNumber = 100f;  //initial value
-    [SerializeField] public float XPos;
+    [SerializeField] Vector2 Line = new Vector2(5, 5);
+
+    private float XPos;
+    private float RabbitNumber;
     private float yMaximum;
     private float xMaximum;
     private RectTransform graphContainer;
@@ -22,7 +27,7 @@ public class UIGraph : MonoBehaviour
     private float graphWidth;
     private float parentWidth;
     private float parentHeight;
-    [SerializeField] Vector2 Line = new Vector2(5, 5);
+
     private void Awake()
     {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
@@ -39,6 +44,10 @@ public class UIGraph : MonoBehaviour
         //List<int> valueList = new List<int>() { 5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33 };
         //ShowGraph(valueList);
         
+    }
+    private void Start()
+    {
+        RabbitNumber = simulationManager.RabbitSpawn();
         yMaximum = RabbitNumber * 5;
         xMaximum = 100f;
 
@@ -50,6 +59,7 @@ public class UIGraph : MonoBehaviour
     }
     private void Update()
     {
+        
         if (RabbitNumber / 8 * 10 > yMaximum)
         {
             //yMaximum = 2 * yMaximum;
@@ -61,26 +71,19 @@ public class UIGraph : MonoBehaviour
             //Create(Line);
 
         }
-        if (XPos / 8 * 10 > xMaximum)
+        print(XPos);
+        if (XPos >= xMaximum)
         {
-            xMaximum = XPos / 8 * 10;
-            UpdataXAxis();
+            //xMaximum = XPos * 2;
+            //UpdataXAxis();
 
-            //xMaximum = 2 * xMaximum;
-            //Line = new Vector2(Line.x*2, Line.y);
-            //DecreaseX();
+            xMaximum = 2 * xMaximum;
+            UpdataXAxis();
+            DecreaseX();
             //DestoryLineX();
             //Create(Line);
         }
-        // just for test
-        if (XPos < 10)
-        {
-            RabbitNumber += 100f * Time.deltaTime;
-        }
-        else
-        {
-            RabbitNumber -= 100f * Time.deltaTime;
-        }
+        RabbitNumber = simulationManager.RabbitPopulation();
         XPos += 1f * Time.deltaTime;    // X aixs is same with turn number in time counter system 
         ShowGraph(XPos,RabbitNumber);
     }
@@ -193,18 +196,18 @@ public class UIGraph : MonoBehaviour
     //        }
     //    }
     //}
-    //private void DecreaseX()
-    //{
-    //    RectTransform[] AllGameObject = graphContainer.GetComponentsInChildren<RectTransform>();
-    //    foreach (RectTransform Child in AllGameObject)
-    //    {
-    //        if (Child.name.Contains("circle"))
-    //        {
-    //            Child.anchoredPosition = new Vector2(Child.anchoredPosition.x/2, Child.anchoredPosition.y);
-    //        }
-    //    }
+    private void DecreaseX()
+    {
+        RectTransform[] AllGameObject = graphContainer.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform Child in AllGameObject)
+        {
+            if (Child.name.Contains("circle"))
+            {
+                Child.anchoredPosition = new Vector2(Child.anchoredPosition.x / 2, Child.anchoredPosition.y);
+            }
+        }
 
-    //}
+    }
 
     private void ShowGraph(float xValue,float yValue)
     {
