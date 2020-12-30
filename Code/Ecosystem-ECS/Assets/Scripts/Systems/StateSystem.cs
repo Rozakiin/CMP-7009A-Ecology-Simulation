@@ -12,6 +12,7 @@ public class StateSystem : SystemBase
 {
     protected override void OnUpdate()
     {
+        float tileSize = SimulationManager.tileSize;
 
         Entities.ForEach((
             ref StateData stateData,

@@ -21,7 +21,7 @@ public class TargetingSystem : SystemBase
     {
         var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
 
-        
+
         // only run if grid has a size aka it has been created
         if (GridSetup.Instance.GridMaxSize > 0)
         {
@@ -32,6 +32,7 @@ public class TargetingSystem : SystemBase
             //Get grid data needed to check walkable
             int2 gridSize = GridSetup.Instance.gridSize;
             float2 worldSize = SimulationManager.worldSize;
+            float tileSize = SimulationManager.tileSize;
 
             float leftLimit = SimulationManager.leftLimit;
             float rightLimit = SimulationManager.rightLimit;
@@ -58,8 +59,8 @@ public class TargetingSystem : SystemBase
                 ) =>
             {
 
-            //if physically at target
-            float euclidian = math.distance(translation.Value, targetData.currentTarget);
+                //if physically at target
+                float euclidian = math.distance(translation.Value, targetData.currentTarget);
                 if (euclidian <= targetData.touchRadius)
                 {
                     targetData.atTarget = true;
@@ -70,12 +71,11 @@ public class TargetingSystem : SystemBase
                     targetData.atTarget = false;
                 }
 
-            // if not following a path
-            if (pathFollowData.pathIndex < 0)
+                // if not following a path
+                if (pathFollowData.pathIndex < 0)
                 {
-                    float3 currentPosition = translation.Value;
-                    float3 targetPosition = worldBottomLeft * 2; // set to double bottom left as should be further than everything else in scene
-                    
+                    float3 targetPosition = float.PositiveInfinity; // should be further than everything else in scene
+
                     float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;//create unique seed for random
 
                     //Fleeing over other states
@@ -186,92 +186,9 @@ public class TargetingSystem : SystemBase
                     /* old system
                     switch (stateData.state)
                     {
-                        case StateData.States.Wandering:
-                            targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                            if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                            {
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            break;
-                        case StateData.States.Hungry:
-                            // if found valid target
-                            if(HasComponent<Translation>(targetData.entityToEat))
-                            {
-                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                            break;
-                        case StateData.States.Thirsty:
-                            // if found valid target
-                            if (HasComponent<Translation>(targetData.entityToDrink))
-                            {
-                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                            break;
-                        case StateData.States.SexuallyActive:
-                            // if found valid target
-                            if (HasComponent<Translation>(targetData.entityToMate))
-                            {
-                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                            break;
-                        case StateData.States.Fleeing:
-                            // if found valid target
-                            if (HasComponent<Translation>(targetData.predatorEntity))
-                            {
-                                targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+                        targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                        targetData.currentTarget = targetPosition;
+                        targetData.atTarget = false;
                     }
                     */
                 }
@@ -304,7 +221,7 @@ public class TargetingSystem : SystemBase
         int x = Mathf.FloorToInt(math.min(gridSize.x * percentX, gridSize.x - 1));
         int y = Mathf.FloorToInt(math.min(gridSize.y * percentY, gridSize.y - 1));
 
-        return grid[x+y * gridSize.x].isWalkable;
+        return grid[x + y * gridSize.x].isWalkable;
     }
     //new pathfinding method
     private static float3 FindRandomWalkableTargetInVision(float3 currentPosition, float sightRadius, float randomSeed, float2 worldSize, int2 gridSize, NativeArray<GridNode> grid)
@@ -318,7 +235,7 @@ public class TargetingSystem : SystemBase
         int timeout = 0; //iteration counter so after certain number of attempts to find a target the loop ends
 
         //find walkable targetWorldPoint
-        while (!isTargetWalkable && timeout<100)
+        while (!isTargetWalkable && timeout < 100)
         {
             // generate random numbers with bounds of sightDiameter
             float randX = randomGen.NextFloat(-sightRadius, sightRadius);
