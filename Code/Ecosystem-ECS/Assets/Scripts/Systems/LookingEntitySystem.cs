@@ -9,23 +9,25 @@ using Unity.Physics.Systems;
 
 
 // this system must update in the end of frame
-[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(StepPhysicsWorld))]
+[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
 public class LookingEntitySystem : SystemBase
 {
     // honestly, not sure why using ECB...... guess it is like some command buffer and allocate job order something like that
     EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
+    BuildPhysicsWorld buildPhysicsWorld;
     protected override void OnCreate()
     {
         base.OnCreate();
         // Find the ECB system once and store it for later usage
         m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
     protected override void OnUpdate()
     {
-        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
+        this.Dependency = JobHandle.CombineDependencies(this.Dependency, buildPhysicsWorld.GetOutputDependency());
 
-        JobHandle FindUnitsGroupInProximityJobHandle = Entities.WithAll<MovementData>().ForEach((
+        this.Dependency = Entities.WithAll<MovementData>().ForEach((
             ref TargetData targetData
             , in ColliderTypeData colliderTypeData
             , in ReproductiveData reproductiveData
@@ -155,8 +157,6 @@ public class LookingEntitySystem : SystemBase
            
         }).ScheduleParallel(Dependency);
         // not sure why....
-        Dependency = JobHandle.CombineDependencies(Dependency, buildPhysicsWorld.GetOutputDependency());
-        Dependency = JobHandle.CombineDependencies(Dependency, FindUnitsGroupInProximityJobHandle);
         m_EndSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);
     }
 }
