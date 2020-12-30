@@ -8,20 +8,10 @@ using Random = Unity.Mathematics.Random;
 
 public class TargetingSystem : SystemBase
 {
-    private EndSimulationEntityCommandBufferSystem ecbSystem;
     private NativeArray<GridNode> gridNodeArray;
-
-    protected override void OnCreate()
-    {
-        base.OnCreate();
-        ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-    }
 
     protected override void OnUpdate()
     {
-        var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
-
-
         // only run if grid has a size aka it has been created
         if (GridSetup.Instance.GridMaxSize > 0)
         {
@@ -158,8 +148,6 @@ public class TargetingSystem : SystemBase
                 .WithDeallocateOnJobCompletion(grid)
                 .ScheduleParallel();
         }
-        // Make sure that the ECB system knows about our job
-        ecbSystem.AddJobHandleForProducer(this.Dependency);
     }
 
     protected override void OnDestroy()

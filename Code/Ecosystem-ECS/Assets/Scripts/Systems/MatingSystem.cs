@@ -36,6 +36,6 @@ public class MatingSystem : SystemBase
             {
 
             }
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

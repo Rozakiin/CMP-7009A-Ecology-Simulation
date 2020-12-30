@@ -29,7 +29,7 @@ public class UIUpdateSystem : SystemBase
 
                 movementData.moveSpeedBase = speed;
 
-            }).Schedule();
+            }).ScheduleParallel();
 
             //Update Scale dependent on gender
             float malesize = RabbitDefaults.scaleMale;
@@ -41,7 +41,7 @@ public class UIUpdateSystem : SystemBase
                     sizeData.size = malesize;
                 else if (bioStatsData.gender == BioStatsData.Gender.Female)
                     sizeData.size = femalesize;
-            }).Schedule();
+            }).ScheduleParallel();
 
             somethingChangedFlag = false;
         }
