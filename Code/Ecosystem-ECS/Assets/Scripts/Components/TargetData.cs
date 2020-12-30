@@ -27,6 +27,7 @@ public struct TargetData : IComponentData
 
     public float sightRadius;
     public float touchRadius;
+    public float mateDistance;
 
 
     // from lookingEntityData

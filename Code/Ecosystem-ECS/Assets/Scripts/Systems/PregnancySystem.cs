@@ -19,9 +19,10 @@ public class PregnancySystem : SystemBase
             {
                 if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
                 {
-                    reproductiveData.birthStartTime = bioStatsData.age;
                     reproductiveData.pregnant = false;
+                    stateData.previousFlagState = stateData.flagState;
                     stateData.flagState ^= StateData.FlagStates.Pregnant;
+                    stateData.flagState = StateData.FlagStates.GivingBirth;
                 }
             }
         }).Schedule();

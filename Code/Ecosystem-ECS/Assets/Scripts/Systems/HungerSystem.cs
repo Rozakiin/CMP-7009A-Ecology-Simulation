@@ -54,7 +54,7 @@ public class HungerSystem : SystemBase
             basicNeedsData.hunger += basicNeedsData.hungerIncrease * deltaTime;
 
             //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
-            if (targetData.entityToEat != Entity.Null && stateData.flagState == StateData.FlagStates.Eating)
+            if (targetData.entityToEat != Entity.Null && stateData.isEating)
             {
                 if (HasComponent<EdibleData>(targetData.entityToEat))
                 {

@@ -15,10 +15,12 @@ public class MovementDataSystem : SystemBase
         Entities.ForEach((
             ref MovementData movementData, 
             in BioStatsData bioStatsData, 
-            in ReproductiveData reproductiveData) => 
+            in ReproductiveData reproductiveData,
+            in StateData stateData
+            ) => 
         {
             
-            if (!reproductiveData.pregnant)
+            if (!stateData.isPregnant)
             {
                 if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
                 {

@@ -99,85 +99,87 @@ public class TargetingSystem : SystemBase
                             }
                         }
                     }
+                    else if (!stateData.isMating && !stateData.isEating && !stateData.isDrinking && !stateData.isGivingBirth) {
                     //Prioritize finding a mate if the entity isn't about to die out of hunger or thirst
                     //And water or food isn't currently in its reach
-                    else if(targetData.entityToMate != Entity.Null && 
-                    (
-                    (basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == Entity.Null) ||
-                    (basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == Entity.Null)
-                    ))
-                    {
-                        // if found valid target
-                        if (HasComponent<Translation>(targetData.entityToMate))
+                        if (targetData.entityToMate != Entity.Null && stateData.isSexuallyActive &&
+                        (
+                        (basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == Entity.Null) ||
+                        (basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == Entity.Null)
+                        ))
                         {
-                            targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
-                            targetData.currentTarget = targetPosition;
-                            targetData.atTarget = false;
-                            movementData.moveMultiplier *= 3f;
+                            // if found valid target
+                            if (HasComponent<Translation>(targetData.entityToMate))
+                            {
+                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
+                                targetData.currentTarget = targetPosition;
+                                targetData.atTarget = false;
+                                movementData.moveMultiplier *= 3f;
+                            }
+                            else
+                            {
+                                // find randomTarget
+                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                                {
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                            }
                         }
+                        //Check if the entity has food or water nearby
+                        else if (targetData.entityToDrink != Entity.Null || targetData.entityToEat != Entity.Null)
+                        {
+                            if (targetData.entityToDrink != Entity.Null && basicNeedsData.thirst >= basicNeedsData.hunger)
+                            {
+                                // if found valid target
+                                if (HasComponent<Translation>(targetData.entityToDrink))
+                                {
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                                else
+                                {
+                                    // find randomTarget
+                                    targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                    if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                                    {
+                                        targetData.currentTarget = targetPosition;
+                                        targetData.atTarget = false;
+                                    }
+                                }
+                            }
+                            else if (targetData.entityToEat != Entity.Null && basicNeedsData.hunger >= basicNeedsData.thirst)
+                            {
+                                // if found valid target
+                                if (HasComponent<Translation>(targetData.entityToEat))
+                                {
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
+                                    targetData.currentTarget = targetPosition;
+                                    targetData.atTarget = false;
+                                }
+                                else
+                                {
+                                    // find randomTarget
+                                    targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                                    if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                                    {
+                                        targetData.currentTarget = targetPosition;
+                                        targetData.atTarget = false;
+                                    }
+                                }
+                            }
+                        }
+                        //Else normal wandering (I think)
                         else
                         {
-                            // find randomTarget
                             targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
                             if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                             {
                                 targetData.currentTarget = targetPosition;
                                 targetData.atTarget = false;
                             }
-                        }
-                    }
-                    //Check if the entity has food or water nearby
-                    else if(targetData.entityToDrink != Entity.Null || targetData.entityToEat != Entity.Null)
-                    {
-                        if(targetData.entityToDrink != Entity.Null && basicNeedsData.thirst >= basicNeedsData.hunger)
-                        {
-                            // if found valid target
-                            if (HasComponent<Translation>(targetData.entityToDrink))
-                            {
-                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                        }
-                        else if(targetData.entityToEat != Entity.Null && basicNeedsData.hunger >= basicNeedsData.thirst)
-                        {
-                            // if found valid target
-                            if (HasComponent<Translation>(targetData.entityToEat))
-                            {
-                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
-                            }
-                            else
-                            {
-                                // find randomTarget
-                                targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                                {
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
-                                }
-                            }
-                        }
-                    }
-                    //Else normal wandering (I think)
-                    else if(!stateData.isMating && !stateData.isEating && !stateData.isDrinking)
-                    {
-                        targetPosition = FindRandomWalkableTargetInVision(currentPosition, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                        if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
-                        {
-                            targetData.currentTarget = targetPosition;
-                            targetData.atTarget = false;
                         }
                     }
 

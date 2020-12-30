@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 public class MatingSystem : SystemBase
 {
@@ -61,8 +62,6 @@ public class MatingSystem : SystemBase
                 reproductiveData.reproductiveUrgeIncrease = 0f;
             }
 
-            
-            //float distanceToMate = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
 
             //If entity is mating
             if (stateData.isMating)
@@ -77,9 +76,10 @@ public class MatingSystem : SystemBase
                         reproductiveData.pregnant = true;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
+                    stateData.flagState ^= StateData.FlagStates.Mating;
                     reproductiveData.reproductiveUrge = 0;
-                    stateData.state = StateData.States.Wandering;
-                    stateData.flagState = StateData.FlagStates.Wandering;
+                    //stateData.state = StateData.States.Wandering;
+                    //stateData.flagState = StateData.FlagStates.Wandering;
                 }         
             }
         }).ScheduleParallel();

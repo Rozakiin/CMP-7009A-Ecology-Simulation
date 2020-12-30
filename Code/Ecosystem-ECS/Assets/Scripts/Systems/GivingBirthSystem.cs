@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using Random = Unity.Mathematics.Random;
+using UnityEngine;
 
 public class GivingBirthSystem : SystemBase
 {
@@ -55,6 +56,7 @@ public class GivingBirthSystem : SystemBase
 
         float rabbitSightRadius = RabbitDefaults.sightRadius;
         float rabbitTouchRadius = RabbitDefaults.touchRadius;
+        float rabbitMateDistance = RabbitDefaults.mateDistance;
 
         //Path follow data
         int rabbitPathIndex = -1;
@@ -129,22 +131,24 @@ public class GivingBirthSystem : SystemBase
             in Translation translation
             ) => {
 
-                if (bioStatsData.gender == BioStatsData.Gender.Female && stateData.isPregnant)
+                if ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth)
                 {
-                    //If you want to test uncomment this and comment out the if below
-                    //if(bioStatsData.age > 10 && bioStatsData.age < 12)
-                    //{
-                    if (bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration &&
+                    //Debug.Log("KURWA MAĆ!");
+
+                    if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
                     reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                     {
                         ////give birth
                         //Entity newEntity = e;
                         //EntityManager.Instantiate(e);
-
-
+                        //Debug.Log("Age: " + bioStatsData.age);
+                        //Debug.Log("Birth Start Time: " + reproductiveData.birthStartTime);
+                        //Debug.Log("Birth Duration: " + reproductiveData.birthDuration);
+                        //Debug.Log("Mać");
                         //ArchetypeChunkEntityType archetype =  this.GetArchetypeChunkEntityType();
                         Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
+                        #region Setting New Entity's Components
                         ecb.SetComponent(entityInQueryIndex, newEntity,
                             new MovementData
                             {
@@ -180,6 +184,7 @@ public class GivingBirthSystem : SystemBase
 
                                 sightRadius = rabbitSightRadius,
                                 touchRadius = rabbitTouchRadius,
+                                mateDistance = rabbitMateDistance
                             }
                         );
 
@@ -264,17 +269,20 @@ public class GivingBirthSystem : SystemBase
 
                             }
                         );
+                        #endregion
 
                         reproductiveData.birthStartTime = bioStatsData.age;
                         reproductiveData.babiesBorn++;
+                        Debug.Log("Babies born: " + reproductiveData.babiesBorn);
+                        Debug.Log("Current Litter Size: " + reproductiveData.currentLitterSize);
                     }
 
                     if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
-                        stateData.flagState ^= StateData.FlagStates.Pregnant;
+                        reproductiveData.babiesBorn = 0;
+                        stateData.flagState ^= StateData.FlagStates.GivingBirth;
                         reproductiveData.pregnant = false;
                     }
-                    //}
                 }
         }).ScheduleParallel();
 

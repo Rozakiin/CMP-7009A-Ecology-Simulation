@@ -50,7 +50,7 @@ public struct StateData : IComponentData
         Fleeing = 128,          // 000010000000
         Dead = 256,             // 000100000000
         Pregnant = 512,         // 001000000000
-        GivingBirth = 1024      // 010000000000
+        GivingBirth = 1024,     // 010000000000
     }
     public FlagStates flagState;
     public FlagStates previousFlagState;

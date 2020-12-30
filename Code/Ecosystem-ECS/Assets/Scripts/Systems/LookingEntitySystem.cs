@@ -120,9 +120,10 @@ public class LookingEntitySystem : SystemBase
                         }
                         else
                         {
-                            if (stateData.isSexuallyActive || stateData.isMating)
+                            if (stateData.isSexuallyActive)
                             {
-                                if ((GetComponentDataFromEntity<ReproductiveData>(true)[childEntity].pregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female))
+                                if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female)
+                                && (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
                                 {
                                     if (distanceToEntity < shortestToMateDistance)
                                     {

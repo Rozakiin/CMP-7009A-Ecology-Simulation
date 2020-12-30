@@ -13,7 +13,7 @@ public static class RabbitDefaults
     public static float ageMax = 600f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
     public static float adultEntryTimer = 10f;
-    public static float oldEntryTimer = 60f;
+    public static float oldEntryTimer = 600f;
 
 
     //Edible
@@ -38,7 +38,7 @@ public static class RabbitDefaults
     public static float thirst = 0f;
     public static float thirstMax = 100f;
     public static float thirstyThreshold = 10f;
-    public static float thirstIncrease = 0.5f;
+    public static float thirstIncrease = 0.0f;
     public static float drinkingSpeed = 2f;
 
 
@@ -46,9 +46,10 @@ public static class RabbitDefaults
     public static float mateStartTime = 0f;
     public static float matingDuration = 5f;
     public static float reproductiveUrge = 0f;
-    public static float reproductiveUrgeIncreaseMale = 0.6f;
+    public static float reproductiveUrgeIncreaseMale = 6f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 25f;
+    public static float mateDistance = 5f;
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
@@ -58,7 +59,7 @@ public static class RabbitDefaults
     public static int currentLitterSize = 0;
     public static float pregnancyLengthModifier = 1f;
     public static float pregnancyLength = 10f;
-    public static float birthDuration = 10f;
+    public static float birthDuration = 1f;
     public static int litterSizeMin = 1;
     public static int litterSizeMax = 13;
     public static int litterSizeAve = 7;
