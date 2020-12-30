@@ -72,7 +72,7 @@ public class PathFindingSystem : SystemBase
 
             ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity);//remove the requestpathdata from entity
             
-        }).WithDeallocateOnJobCompletion(tempArray).Schedule();
+        }).WithDeallocateOnJobCompletion(tempArray).ScheduleParallel();
 
 
 
