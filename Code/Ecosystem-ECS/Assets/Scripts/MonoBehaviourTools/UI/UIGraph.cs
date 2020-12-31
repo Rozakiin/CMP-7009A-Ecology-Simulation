@@ -18,6 +18,8 @@ public class UIGraph : MonoBehaviour
     private float RabbitNumber;
     private float yMaximum;
     private float xMaximum;
+    private float InyMaximum;
+    private float InxMaximum;
     private RectTransform graphContainer;
     private RectTransform labelTemplateX;
     private RectTransform labelTemplateY;
@@ -40,16 +42,15 @@ public class UIGraph : MonoBehaviour
         dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
 
         dashTemplateX.sizeDelta = new Vector2(parentWidth, 3f);
-        dashTemplateY.sizeDelta = new Vector2(parentHeight, 3f);
-        //List<int> valueList = new List<int>() { 5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33 };
-        //ShowGraph(valueList);
-        
+        dashTemplateY.sizeDelta = new Vector2(parentHeight, 3f);    
     }
     private void Start()
     {
         RabbitNumber = simulationManager.RabbitSpawn();
+        InyMaximum = simulationManager.RabbitSpawn() * 5;
         yMaximum = RabbitNumber * 5;
         xMaximum = 100f;
+        InxMaximum = 100f;
 
         graphHeight = graphContainer.sizeDelta.y;
         graphWidth = graphContainer.sizeDelta.x;
@@ -63,21 +64,21 @@ public class UIGraph : MonoBehaviour
         if (RabbitNumber / 8 * 10 > yMaximum)
         {
             //yMaximum = 2 * yMaximum;
+            InyMaximum = yMaximum;
             yMaximum = RabbitNumber / 8 * 10;
             UpdataYAxis();
             //Line = new Vector2(Line.x, Line.y * 2);
-            //DecreaseY();
+            DecreaseY();
             //DestoryLineY();
             //Create(Line);
 
         }
-        print(XPos);
-        if (XPos >= xMaximum)
+        if (XPos / 8 * 10 > xMaximum)
         {
             //xMaximum = XPos * 2;
             //UpdataXAxis();
-
-            xMaximum = 2 * xMaximum;
+            InxMaximum = xMaximum;
+            xMaximum = XPos / 8 * 10;
             UpdataXAxis();
             DecreaseX();
             //DestoryLineX();
@@ -184,18 +185,20 @@ public class UIGraph : MonoBehaviour
         rectTransform.anchorMax = new Vector2(0, 0);
         return gameObject;
     }
+
     //if we need to modify the line number, just leave this here,reason in the line 6
-    //private void DecreaseY()
-    //{
-    //    RectTransform[] AllGameObject = graphContainer.GetComponentsInChildren<RectTransform>();
-    //    foreach (RectTransform Child in AllGameObject)
-    //    {
-    //        if (Child.name.Contains("circle"))
-    //        {
-    //            Child.anchoredPosition = new Vector2 (Child.anchoredPosition.x, Child.anchoredPosition.y / 2);
-    //        }
-    //    }
-    //}
+    private void DecreaseY()
+    {
+        RectTransform[] AllGameObject = graphContainer.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform Child in AllGameObject)
+        {
+            if (Child.name.Contains("circle"))
+            {
+                Child.anchoredPosition = new Vector2(Child.anchoredPosition.x, Child.anchoredPosition.y / (yMaximum /InyMaximum));
+            }
+        }
+    }
+
     private void DecreaseX()
     {
         RectTransform[] AllGameObject = graphContainer.GetComponentsInChildren<RectTransform>();
@@ -203,7 +206,7 @@ public class UIGraph : MonoBehaviour
         {
             if (Child.name.Contains("circle"))
             {
-                Child.anchoredPosition = new Vector2(Child.anchoredPosition.x / 2, Child.anchoredPosition.y);
+                Child.anchoredPosition = new Vector2(Child.anchoredPosition.x / (xMaximum / InxMaximum), Child.anchoredPosition.y);
             }
         }
 
@@ -218,36 +221,4 @@ public class UIGraph : MonoBehaviour
         float xPosition = (xValue / xMaximum) * graphWidth;
         CreateCircle(new Vector2(xPosition, yPosition));
     }
-
-    //just leave code here, not sure useful later reason in the line 6
-    //private void DestoryLineY()
-    //{
-    //    Transform[] AllGameObject = graphContainer.GetComponentsInChildren<Transform>();
-    //    foreach (Transform Child in AllGameObject)
-    //    {
-    //        if (Child.name.Contains("labelTemplateY"))
-    //        {
-    //            Destroy(Child.gameObject);
-    //        }
-    //        if (Child.name.Contains("dashTemplateX"))
-    //        {
-    //            Destroy(Child.gameObject);
-    //        }
-    //    }
-    //}
-    //private void DestoryLineX()
-    //{
-    //    Transform[] AllGameObject = graphContainer.GetComponentsInChildren<Transform>();
-    //    foreach (Transform Child in AllGameObject)
-    //    {
-    //        if (Child.name.Contains("labelTemplateX"))
-    //        {
-    //            Destroy(Child.gameObject);
-    //        }
-    //        if (Child.name.Contains("dashTemplateY"))
-    //        {
-    //            Destroy(Child.gameObject);
-    //        }
-    //    }
-    //}
 }
