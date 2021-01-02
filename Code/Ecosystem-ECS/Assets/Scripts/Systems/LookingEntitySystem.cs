@@ -70,7 +70,7 @@ public class LookingEntitySystem : SystemBase
                     {
                         if (childEntityNumber != ColliderTypeData.ColliderType.Fox)// to avoid fox find fox, fox don't have mate system
                         {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit && stateData.isHungry)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
+                            if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
                             {
                                 if (distanceToEntity < shortestToEdibleDistance)
                                 {
@@ -78,7 +78,7 @@ public class LookingEntitySystem : SystemBase
                                     EntityToEat = childEntity;
                                 }
                             }
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.isThirsty)        // find water
+                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        // find water
                             {
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
@@ -88,46 +88,40 @@ public class LookingEntitySystem : SystemBase
                             }
                         }
                     }
-                    else // if you are Rabbit
+                    else if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Rabbit)// if you are Rabbit
                     {
-                        if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit) //rabbit don't need to find rabbit now, will change late in find CloestMateEntity
+                        if (childEntityNumber == ColliderTypeData.ColliderType.Grass)             // find Grass
                         {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Grass && stateData.isHungry)             // find Grass
+                            if (distanceToEntity < shortestToEdibleDistance)
                             {
-                                if (distanceToEntity < shortestToEdibleDistance)
-                                {
-                                    shortestToEdibleDistance = distanceToEntity;
-                                    EntityToEat = childEntity;
-                                }
-                            }
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.isThirsty)        //find Water
-                            {
-                                if (distanceToEntity < shortestToWaterDistance)
-                                {
-                                    shortestToWaterDistance = distanceToEntity;
-                                    EntityToDrink = childEntity;
-                                }
-                            }
-
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Fox)        //find Fox
-                            {
-                                if (distanceToEntity < shortestToPredatorDistance)
-                                {
-                                    shortestToPredatorDistance = distanceToEntity;
-                                    EntityToPredator = childEntity;
-                                }
+                                shortestToEdibleDistance = distanceToEntity;
+                                EntityToEat = childEntity;
                             }
                         }
-                        else
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        //find Water
                         {
-                            if (stateData.isSexuallyActive)
+                            if (distanceToEntity < shortestToWaterDistance)
                             {
-                                if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female)
-                                && (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
-                                {
-                                    shortestToMateDistance = distanceToEntity;
-                                    EntityToMate = childEntity;
-                                }
+                                shortestToWaterDistance = distanceToEntity;
+                                EntityToDrink = childEntity;
+                            }
+                        }
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Fox)        //find Fox
+                        {
+                            if (distanceToEntity < shortestToPredatorDistance)
+                            {
+                                shortestToPredatorDistance = distanceToEntity;
+                                EntityToPredator = childEntity;
+                            }
+                        }
+                        else if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit)
+                        {
+                            if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) &&
+                                (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female) &&
+                                (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
+                            {
+                                shortestToMateDistance = distanceToEntity;
+                                EntityToMate = childEntity;
                             }
                         }
                     }

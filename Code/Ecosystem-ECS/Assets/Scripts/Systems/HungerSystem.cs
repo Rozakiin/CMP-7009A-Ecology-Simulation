@@ -64,7 +64,6 @@ public class HungerSystem : SystemBase
                         {
                             ecb.SetComponent(entityInQueryIndex, targetData.entityToEat, 
                                 new StateData { 
-                                    state = StateData.States.Dead, 
                                     deathReason = StateData.DeathReason.Eaten,
                                     
                                     flagState = StateData.FlagStates.Dead

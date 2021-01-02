@@ -44,8 +44,6 @@ public class GivingBirthSystem : SystemBase
         float rabbitOldMoveMultiplier = RabbitDefaults.oldMoveMultiplier;
 
         //States
-        StateData.States rabbitState = RabbitDefaults.state;
-        StateData.States rabbitPreviousState = RabbitDefaults.previousState;
         StateData.FlagStates rabbitFlagState = RabbitDefaults.flagState;
         StateData.FlagStates rabbitPreviousFlagState = RabbitDefaults.previousFlagState;
         StateData.DeathReason rabbitDeathReason = RabbitDefaults.deathReason;
@@ -166,8 +164,6 @@ public class GivingBirthSystem : SystemBase
                         ecb.SetComponent(entityInQueryIndex, newEntity,
                             new StateData
                             {
-                                state = rabbitState,
-                                previousState = rabbitPreviousState,
                                 flagState = rabbitFlagState,
                                 previousFlagState = rabbitPreviousFlagState,
                                 deathReason = rabbitDeathReason,

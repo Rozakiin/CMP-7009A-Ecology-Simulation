@@ -63,7 +63,7 @@ public class DeathSystem : SystemBase
         int foxesDeadHunger = 0;
         int foxesDeadThirst = 0;
         Entities.WithAll<isFoxTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if (stateData.state == StateData.States.Dead)
+            if ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
             {
                 foxesDeadTotal++;
                 switch (stateData.deathReason)
@@ -97,7 +97,7 @@ public class DeathSystem : SystemBase
 
         int grassEaten = 0;
         Entities.WithAll<isGrassTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if (stateData.state == StateData.States.Dead)
+            if ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
             {
                 grassEaten++;
                 EntityManager.DestroyEntity(entity);

@@ -23,7 +23,7 @@ public class GridSetup : MonoBehaviour
     [Header("Node Properties")]
     [SerializeField] private float gridNodeRadius;//This stores how big each square on the graph will be
     [SerializeField] private float distanceBetweenGridNodes;//The distance that the gizmo squares will spawn from each other.
-    private float gridNodeDiameter;//Twice the amount of the radius (Set in the start function)
+    public float gridNodeDiameter;//Twice the amount of the radius (Set in the start function)
     public GridNode[,] grid;//The array of nodes that the A Star algorithm uses.
 
     [Header("LayerMask Data")]

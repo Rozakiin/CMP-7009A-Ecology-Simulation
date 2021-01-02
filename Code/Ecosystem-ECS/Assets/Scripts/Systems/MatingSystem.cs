@@ -118,7 +118,6 @@ public class MatingSystem : SystemBase
                 if (HasComponent<Translation>(targetData.entityToMate))
                 {
                     //get state of entityToMate
-                    StateData.States mateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].state;
                     StateData.FlagStates flagMateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].flagState;
 
                     //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
@@ -132,9 +131,6 @@ public class MatingSystem : SystemBase
                         ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
                             new StateData
                             {
-                                previousState = mateState,
-                                state = StateData.States.Mating,
-
                                 previousFlagState = flagMateState,
                                 flagState = StateData.FlagStates.Mating,
                                 beenEaten = false

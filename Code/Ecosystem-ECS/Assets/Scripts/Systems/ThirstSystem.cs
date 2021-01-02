@@ -19,7 +19,7 @@ public class ThirstSystem : SystemBase
             basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
 
             //If the entityToDrink exists and entity is drinking
-            if (HasComponent<DrinkableData>(targetData.entityToDrink) && stateData.state == StateData.States.Drinking)
+            if (HasComponent<DrinkableData>(targetData.entityToDrink) && stateData.isDrinking)
             {
                 basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
             }

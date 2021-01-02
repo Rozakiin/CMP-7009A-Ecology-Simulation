@@ -87,13 +87,10 @@ public static class RabbitDefaults
 
 
     //State
-    public static StateData.States state = StateData.States.Wandering;
-    public static StateData.States previousState = StateData.States.Wandering;
-    public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
-    public static bool beenEaten = false;
-
     public static StateData.FlagStates flagState = StateData.FlagStates.Wandering;
     public static StateData.FlagStates previousFlagState = StateData.FlagStates.Wandering;
+    public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
+    public static bool beenEaten = false;
 
     //Target
     public static float touchRadius = 1f;

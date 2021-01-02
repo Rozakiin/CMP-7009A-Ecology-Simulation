@@ -59,18 +59,21 @@ public class TargetingSystem : SystemBase
                 ) =>
             {
 
-                //if physically at target
-                float euclidian = math.distance(translation.Value, targetData.currentTarget);
-                if (euclidian <= targetData.touchRadius)
-                {
-                    targetData.atTarget = true;
-                    targetData.oldTarget = targetData.currentTarget;
-                }
-                else // might not be needed
-                {
+                ////if physically at target
+                //float euclidian = math.distance(translation.Value, targetData.currentTarget);
+                //if (euclidian <= targetData.touchRadius)
+                //{
+                //    targetData.atTarget = true;
+                //    targetData.oldTarget = targetData.currentTarget;
+                //}
+                //else // might not be needed
+                //{
+                //    targetData.atTarget = false;
+                //}
+                if (pathFollowData.pathIndex >= 0)
                     targetData.atTarget = false;
-                }
-
+                else
+                    targetData.atTarget = true;
                 // if not following a path
                 if (pathFollowData.pathIndex < 0)
                 {
@@ -82,52 +85,49 @@ public class TargetingSystem : SystemBase
                     if (stateData.isFleeing)
                     {
                         targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
+                        targetData.currentTarget = targetPosition;
+                        targetData.atTarget = false;
                     }
-                    else if (!stateData.isMating && !stateData.isEating && !stateData.isDrinking && !stateData.isGivingBirth)
+                    else
                     {
                         //Prioritize finding a mate if the entity isn't about to die out of hunger or thirst
-                        //And water or food isn't currently in its reach
-                        if (HasComponent<Translation>(targetData.entityToMate) && stateData.isSexuallyActive &&
-                        (
-                        (basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == Entity.Null) ||
-                        (basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == Entity.Null)
-                        ))
+
+                        bool isAboutToDieOfHunger = basicNeedsData.hunger > basicNeedsData.hungerMax * 0.9; //90% of max hunger
+                        bool isAboutToDieOfThirst = basicNeedsData.thirst > basicNeedsData.thirstMax * 0.9; //90% of max thirst
+
+                        if (stateData.isSexuallyActive && !stateData.isMating && HasComponent<Translation>(targetData.entityToMate) && !isAboutToDieOfThirst && !isAboutToDieOfHunger)
                         {
                             targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
-                            movementData.moveMultiplier *= 3f;
                         }
-                        //Check if the entity has food or water nearby
-                        else if ((stateData.isThirsty && HasComponent<Translation>(targetData.entityToDrink)) ||
-                        (stateData.isHungry && HasComponent<Translation>(targetData.entityToEat)))
+                        //choose target based on which need is higher
+                        else if ((stateData.isThirsty && !stateData.isDrinking) || (stateData.isHungry && !stateData.isEating))
                         {
-                            if (stateData.isThirsty && HasComponent<Translation>(targetData.entityToDrink) && basicNeedsData.thirst >= basicNeedsData.hunger)
+                            //cache result as HasComponent costly call
+                            bool hasValidDrinkTarget = HasComponent<Translation>(targetData.entityToDrink);
+                            bool hasValidEatTarget = HasComponent<Translation>(targetData.entityToEat);
+
+                            //if thirst greater or eq than hunger, and has valid drink target
+                            if ((basicNeedsData.thirst >= basicNeedsData.hunger) && stateData.isThirsty && hasValidDrinkTarget)
                             {
                                 targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
-
-                                //determine what side of the tile the entity is
-                                if (translation.Value.x > targetPosition.x + tileSize / 2)
-                                    targetPosition = new float3(targetPosition.x + tileSize / 2 + 1, targetPosition.y, targetPosition.z);
-                                else if (translation.Value.x < targetPosition.x - tileSize / 2)
-                                    targetPosition = new float3(targetPosition.x - tileSize / 2 - 1, targetPosition.y, targetPosition.z);
-
-                                if (translation.Value.z > targetPosition.z + tileSize / 2)
-                                    targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z + tileSize / 2 + 1);
-                                else if (translation.Value.z > targetPosition.z - tileSize / 2)
-                                    targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z - tileSize / 2 - 1);
+                                //determine what side of the tile the entity is, and set target to that
+                                targetPosition = GetNearestSideOfTargetTile(translation.Value, targetPosition, tileSize);
                             }
-                            else if (stateData.isHungry && HasComponent<Translation>(targetData.entityToEat) && basicNeedsData.hunger >= basicNeedsData.thirst)
+                            //has hunger greater than thirst, and has valid eat target
+                            else if (stateData.isHungry && hasValidEatTarget)
                             {
                                 targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
                             }
+                            //has hunger greater than thirst, and has valid drink target
+                            else if (stateData.isThirsty && hasValidDrinkTarget)
+                            {
+                                targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                //determine what side of the tile the entity is, and set target to that
+                                targetPosition = GetNearestSideOfTargetTile(translation.Value, targetPosition, tileSize);
+                            }
                         }
-                        // if in a state where you should wander if no valid target
-                        // find a random target
-                        else
-                        {
-                            targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                            targetData.currentTarget = targetPosition;
-                            targetData.atTarget = false;
-                        }
+
+
 
                         //if not positive infinity aka target position has been calculated
                         if (!float.IsPositiveInfinity(targetPosition.x) && !float.IsPositiveInfinity(targetPosition.y) && !float.IsPositiveInfinity(targetPosition.z))
@@ -145,9 +145,79 @@ public class TargetingSystem : SystemBase
                                 targetData.atTarget = false;
                             }
                         }
+                        // if in a state where you should wander, find a random target
+                        else if (stateData.isWandering)
+                        {
+                            targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                            targetData.currentTarget = targetPosition;
+                            targetData.atTarget = false;
+                        }
+
+
+
+
+
+
+                        //if (HasComponent<Translation>(targetData.entityToMate) && stateData.isSexuallyActive &&
+                        //(
+                        //(basicNeedsData.hunger <= 0.9 * basicNeedsData.hungerMax && targetData.entityToEat == Entity.Null) ||
+                        //(basicNeedsData.thirst <= 0.9 * basicNeedsData.thirstMax && targetData.entityToDrink == Entity.Null)
+                        //))
+                        //{
+                        //    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
+                        //    movementData.moveMultiplier *= 3f;
+                        //}
+                        //Check if the entity has food or water nearby
+                        //else if ((stateData.isThirsty && HasComponent<Translation>(targetData.entityToDrink)) ||
+                        //(stateData.isHungry && HasComponent<Translation>(targetData.entityToEat)))
+                        //{
+                        //    if (stateData.isThirsty && HasComponent<Translation>(targetData.entityToDrink) && basicNeedsData.thirst >= basicNeedsData.hunger)
+                        //    {
+                        //        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+
+                        //        //determine what side of the tile the entity is
+                        //        if (translation.Value.x > targetPosition.x + tileSize / 2)
+                        //            targetPosition = new float3(targetPosition.x + tileSize / 2 + 1, targetPosition.y, targetPosition.z);
+                        //        else if (translation.Value.x < targetPosition.x - tileSize / 2)
+                        //            targetPosition = new float3(targetPosition.x - tileSize / 2 - 1, targetPosition.y, targetPosition.z);
+
+                        //        if (translation.Value.z > targetPosition.z + tileSize / 2)
+                        //            targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z + tileSize / 2 + 1);
+                        //        else if (translation.Value.z > targetPosition.z - tileSize / 2)
+                        //            targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z - tileSize / 2 - 1);
+                        //    }
+                        //    else if (stateData.isHungry && HasComponent<Translation>(targetData.entityToEat) && basicNeedsData.hunger >= basicNeedsData.thirst)
+                        //    {
+                        //        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
+                        //    }
+                        //}
+                        // if in a state where you should wander if no valid target
+                        // find a random target
+                        //else
+                        //{
+                        //    targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                        //    targetData.currentTarget = targetPosition;
+                        //    targetData.atTarget = false;
+                        //}
+
+                        ////if not positive infinity aka target position has been calculated
+                        //if (!float.IsPositiveInfinity(targetPosition.x) && !float.IsPositiveInfinity(targetPosition.y) && !float.IsPositiveInfinity(targetPosition.z))
+                        //{
+                        //    //check that the target is walkable
+                        //    if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
+                        //    {
+                        //        targetData.currentTarget = targetPosition;
+                        //        targetData.atTarget = false;
+                        //    }
+                        //    else //find a random target (same as wandering)
+                        //    {
+                        //        targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
+                        //        targetData.currentTarget = targetPosition;
+                        //        targetData.atTarget = false;
+                        //    }
+                        //}
 
                     }
-
                 }
             })
                 .WithDeallocateOnJobCompletion(grid)
@@ -162,6 +232,20 @@ public class TargetingSystem : SystemBase
     {
         base.OnDestroy();
         gridNodeArray.Dispose();
+    }
+
+    private static float3 GetNearestSideOfTargetTile(float3 currentPosition, float3 targetPosition, float tileSize)
+    {
+        if (currentPosition.x > targetPosition.x + tileSize / 2)
+            targetPosition = new float3(targetPosition.x + tileSize / 2 + 1, targetPosition.y, targetPosition.z);
+        else if (currentPosition.x < targetPosition.x - tileSize / 2)
+            targetPosition = new float3(targetPosition.x - tileSize / 2 - 1, targetPosition.y, targetPosition.z);
+
+        if (currentPosition.z > targetPosition.z + tileSize / 2)
+            targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z + tileSize / 2 + 1);
+        else if (currentPosition.z > targetPosition.z - tileSize / 2)
+            targetPosition = new float3(targetPosition.x, targetPosition.y, targetPosition.z - tileSize / 2 - 1);
+        return targetPosition;
     }
 
     //new pathfinding method
