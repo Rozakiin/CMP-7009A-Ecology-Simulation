@@ -23,6 +23,7 @@ public class StateSystem : SystemBase
             in Translation translation
             ) =>
         {
+            
 
             stateData.isWandering = ((stateData.flagState & StateData.FlagStates.Wandering) == StateData.FlagStates.Wandering);
             stateData.isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
@@ -86,19 +87,19 @@ public class StateSystem : SystemBase
                 }
 
                 //The rabbit can still give birth when fleeing - bad luck I guess
-                /*if ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant)
-                {
-                    //Debug.Log("Age: " + bioStatsData.age);
-                    //Debug.Log("Pregnancy Start Time: " + reproductiveData.pregnancyStartTime);
-                    //Debug.Log("Preg Length: " + reproductiveData.PregnancyLength);
-                    Debug.Log(bioStatsData.age - reproductiveData.pregnancyStartTime);
-                    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
-                    {
-                        Debug.Log("cos");
-                        //stateData.previousFlagState = stateData.flagState;
-                        //stateData.flagState = StateData.FlagStates.GivingBirth;
-                    }
-                }*/
+                //if ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant)
+                //{
+                //    //Debug.Log("Age: " + bioStatsData.age);
+                //    //Debug.Log("Pregnancy Start Time: " + reproductiveData.pregnancyStartTime);
+                //    //Debug.Log("Preg Length: " + reproductiveData.PregnancyLength);
+                //    Debug.Log(bioStatsData.age - reproductiveData.pregnancyStartTime);
+                //    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
+                //    {
+                //        Debug.Log("cos");
+                //        //stateData.previousFlagState = stateData.flagState;
+                //        //stateData.flagState = StateData.FlagStates.GivingBirth;
+                //    }
+                //}
 
                 if (((stateData.flagState & StateData.FlagStates.GivingBirth) == 0) &&
                     ((stateData.flagState & StateData.FlagStates.Eating) == 0) &&
@@ -141,7 +142,7 @@ public class StateSystem : SystemBase
                     {
                         if (HasComponent<Translation>(targetData.entityToDrink))
                         {
-                            if (targetData.shortestToWaterDistance <= targetData.touchRadius)
+                            if (targetData.shortestToWaterDistance <= targetData.touchRadius + tileSize / 1.4 + 1)
                             {
                                 stateData.previousFlagState = stateData.flagState;
                                 stateData.flagState |= StateData.FlagStates.Drinking;
@@ -156,18 +157,16 @@ public class StateSystem : SystemBase
                         {
                             if (HasComponent<Translation>(targetData.entityToMate))
                             {
-                                if (targetData.shortestToMateDistance <= targetData.touchRadius * 2)
+                                if (targetData.shortestToMateDistance <= targetData.mateRadius)
                                 {
                                     stateData.previousFlagState = stateData.flagState;
                                     stateData.flagState = StateData.FlagStates.Mating;
-                                    reproductiveData.mateStartTime = bioStatsData.age;
                                 }
                             }
                         }
-                        //Otherwise reset reproducitve urge and toggle the substate
+                        //Otherwise toggle the substate
                         else
                         {
-                            reproductiveData.reproductiveUrge = 0;
                             stateData.flagState ^= StateData.FlagStates.SexuallyActive;
                         }
                     }
@@ -211,11 +210,6 @@ public class StateSystem : SystemBase
                 {
                     if (bioStatsData.gender == BioStatsData.Gender.Male)
                     {
-                        /*if (!HasComponent<Translation>(targetData.entityToMate))
-                        {
-                            stateData.previousFlagState = stateData.flagState;
-                            stateData.flagState = StateData.FlagStates.SexuallyActive;
-                        }*/
                         if (reproductiveData.reproductiveUrge <= 0)
                         {
                             stateData.previousFlagState = stateData.flagState;
@@ -237,6 +231,6 @@ public class StateSystem : SystemBase
             stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
             stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
 
-        }).WithoutBurst().Run();
+        }).ScheduleParallel();
     }
 }

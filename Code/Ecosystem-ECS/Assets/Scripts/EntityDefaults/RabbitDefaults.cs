@@ -38,7 +38,7 @@ public static class RabbitDefaults
     public static float thirst = 0f;
     public static float thirstMax = 100f;
     public static float thirstyThreshold = 10f;
-    public static float thirstIncrease = 0.0f;
+    public static float thirstIncrease = 0.5f;
     public static float drinkingSpeed = 2f;
 
 
@@ -46,10 +46,10 @@ public static class RabbitDefaults
     public static float mateStartTime = 0f;
     public static float matingDuration = 5f;
     public static float reproductiveUrge = 0f;
-    public static float reproductiveUrgeIncreaseMale = 6f;
+    public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
-    public static float matingThreshold = 25f;
-    public static float mateDistance = 5f;
+    public static float matingThreshold = 50f;
+    public static float mateRadius = 5f;
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;

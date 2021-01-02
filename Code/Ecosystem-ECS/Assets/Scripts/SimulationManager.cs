@@ -714,7 +714,7 @@ public class SimulationManager : MonoBehaviour
 
                 sightRadius = RabbitDefaults.sightRadius,
                 touchRadius = RabbitDefaults.touchRadius,
-                mateDistance = RabbitDefaults.mateDistance,
+                mateRadius = RabbitDefaults.mateRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
                 entityToEat = FoxDefaults.entityToEat,

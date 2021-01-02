@@ -56,7 +56,7 @@ public class GivingBirthSystem : SystemBase
 
         float rabbitSightRadius = RabbitDefaults.sightRadius;
         float rabbitTouchRadius = RabbitDefaults.touchRadius;
-        float rabbitMateDistance = RabbitDefaults.mateDistance;
+        float rabbitMateRadius = RabbitDefaults.mateRadius;
 
         //Path follow data
         int rabbitPathIndex = -1;
@@ -184,7 +184,7 @@ public class GivingBirthSystem : SystemBase
 
                                 sightRadius = rabbitSightRadius,
                                 touchRadius = rabbitTouchRadius,
-                                mateDistance = rabbitMateDistance
+                                mateRadius = rabbitMateRadius
                             }
                         );
 

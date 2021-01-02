@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSetupComplete: 0
   grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
   lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
@@ -207,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 973c00c589726004db585fff81093531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayGridGizmos: 0
+  displayGridGizmos: 1
   gridWorldSize:
     x: 0
     y: 0
