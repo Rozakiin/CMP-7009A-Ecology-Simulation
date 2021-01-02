@@ -13,7 +13,7 @@ public static class RabbitDefaults
     public static float ageMax = 600f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
     public static float adultEntryTimer = 10f;
-    public static float oldEntryTimer = 600f;
+    public static float oldEntryTimer = 450f;
 
 
     //Edible
