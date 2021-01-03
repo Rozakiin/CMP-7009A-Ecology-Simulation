@@ -12,6 +12,12 @@ using Unity.Physics.Systems;
 [UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
 public class LookingEntitySystem : SystemBase
 {
+    BuildPhysicsWorld buildPhysicsWorld;
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+        buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+    }
     protected override void OnUpdate()
     {
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
