@@ -13,7 +13,7 @@ public static class RabbitDefaults
     public static float ageMax = 600f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
     public static float adultEntryTimer = 10f;
-    public static float oldEntryTimer = 60f;
+    public static float oldEntryTimer = 450f;
 
 
     //Edible
@@ -49,6 +49,7 @@ public static class RabbitDefaults
     public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 50f;
+    public static float mateRadius = 5f;
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
@@ -58,7 +59,7 @@ public static class RabbitDefaults
     public static int currentLitterSize = 0;
     public static float pregnancyLengthModifier = 1f;
     public static float pregnancyLength = 10f;
-    public static float birthDuration = 10f;
+    public static float birthDuration = 1f;
     public static int litterSizeMin = 1;
     public static int litterSizeMax = 13;
     public static int litterSizeAve = 7;
@@ -86,8 +87,8 @@ public static class RabbitDefaults
 
 
     //State
-    public static StateData.States state = StateData.States.Wandering;
-    public static StateData.States previousState = StateData.States.Wandering;
+    public static StateData.FlagStates flagState = StateData.FlagStates.Wandering;
+    public static StateData.FlagStates previousFlagState = StateData.FlagStates.Wandering;
     public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
     public static bool beenEaten = false;
 

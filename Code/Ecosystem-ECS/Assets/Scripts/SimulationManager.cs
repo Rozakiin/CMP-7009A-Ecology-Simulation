@@ -476,8 +476,8 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeFox,
             new StateData
             {
-                state = FoxDefaults.state,
-                previousState = FoxDefaults.previousState,
+                flagState = FoxDefaults.flagState,
+                previousFlagState = FoxDefaults.previousFlagState,
                 deathReason = FoxDefaults.deathReason,
                 beenEaten = FoxDefaults.beenEaten
             }
@@ -626,8 +626,8 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeGrass,
             new StateData
             {
-                state = GrassDefaults.state,
-                previousState = GrassDefaults.previousState,
+                flagState = GrassDefaults.flagState,
+                previousFlagState = GrassDefaults.previousFlagState,
                 deathReason = GrassDefaults.deathReason,
                 beenEaten = GrassDefaults.beenEaten
             }
@@ -697,10 +697,10 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeRabbit,
             new StateData
             {
-                state = RabbitDefaults.state,
-                previousState = RabbitDefaults.previousState,
+                flagState = RabbitDefaults.flagState,
+                previousFlagState = RabbitDefaults.previousFlagState,
                 deathReason = RabbitDefaults.deathReason,
-                beenEaten = RabbitDefaults.beenEaten
+                beenEaten = RabbitDefaults.beenEaten,
             }
         );
         entityManager.SetComponentData(prototypeRabbit,
@@ -712,6 +712,7 @@ public class SimulationManager : MonoBehaviour
 
                 sightRadius = RabbitDefaults.sightRadius,
                 touchRadius = RabbitDefaults.touchRadius,
+                mateRadius = RabbitDefaults.mateRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
                 entityToEat = FoxDefaults.entityToEat,

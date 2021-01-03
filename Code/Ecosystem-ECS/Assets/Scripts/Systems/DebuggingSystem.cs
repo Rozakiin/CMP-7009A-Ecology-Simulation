@@ -20,15 +20,27 @@ public class DebuggingSystem : SystemBase
         // meaning it will process all entities in the world that have both
         // Translation and Rotation components. Change it to process the component
         // types you want.
-        
-        
-        
+
         Entities.ForEach((in Translation translation, in TargetData targetData) => {
 
             //Debugging: draw a line to target
-            if (targetData.atTarget == false)
+            Debug.DrawLine(translation.Value, targetData.currentTarget);
+            
+            if (HasComponent<Translation>(targetData.entityToDrink))
             {
-                Debug.DrawLine(translation.Value, targetData.currentTarget);
+                Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value, Color.blue);
+            }
+            if (HasComponent<Translation>(targetData.entityToEat))
+            {
+                Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value, Color.green);
+            }
+            if (HasComponent<Translation>(targetData.entityToMate))
+            {
+                Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value, Color.magenta);
+            }
+            if (HasComponent<Translation>(targetData.predatorEntity))
+            {
+                Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value, Color.red);
             }
         }).Run();
 
@@ -41,7 +53,7 @@ public class DebuggingSystem : SystemBase
                 //Debug.Log($"{pathPositionDataBuffer[pathFollowData.pathIndex].position}");
                 for (int i = pathPositionDataBuffer.Length-1; i > 0; i--)
                 {
-                    Debug.DrawLine(pathPositionDataBuffer[i].position, pathPositionDataBuffer[i - 1].position, Color.red);
+                    Debug.DrawLine(pathPositionDataBuffer[i].position, pathPositionDataBuffer[i - 1].position, Color.cyan);
                 }
             }
         }).Run();

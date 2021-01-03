@@ -9,14 +9,20 @@ public class PregnancySystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        Entities.ForEach((ref ReproductiveData reproductiveData, in BioStatsData bioStatsData) => {
+        Entities.ForEach((
+            ref ReproductiveData reproductiveData, 
+            ref StateData stateData,
+            in BioStatsData bioStatsData
+            ) => {
             
-            if (reproductiveData.pregnant)
+            if (stateData.isPregnant)
             {
                 if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
                 {
-                    reproductiveData.birthStartTime = bioStatsData.age;
                     reproductiveData.pregnant = false;
+                    stateData.previousFlagState = stateData.flagState;
+                    stateData.flagState ^= StateData.FlagStates.Pregnant;
+                    stateData.flagState = StateData.FlagStates.GivingBirth;
                 }
             }
         }).Schedule();
