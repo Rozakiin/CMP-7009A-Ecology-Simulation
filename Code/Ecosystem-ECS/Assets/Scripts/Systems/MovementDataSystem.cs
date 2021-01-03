@@ -41,7 +41,7 @@ public class MovementDataSystem : SystemBase
             }
             if(stateData.isFleeing)
             {
-                movementData.moveMultiplier *= 3; // triple move speed while fleeing
+                //movementData.moveMultiplier *= 3; // triple move speed while fleeing
             }
 
         }).ScheduleParallel();
