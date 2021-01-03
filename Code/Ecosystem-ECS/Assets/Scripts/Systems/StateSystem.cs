@@ -1,12 +1,7 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEditor;
-using UnityEngine;
-
 
 public class StateSystem : SystemBase
 {
@@ -24,21 +19,6 @@ public class StateSystem : SystemBase
             in Translation translation
             ) =>
         {
-
-
-            //stateData.isWandering = ((stateData.flagState & StateData.FlagStates.Wandering) == StateData.FlagStates.Wandering);
-            //stateData.isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
-            //stateData.isThirsty = ((stateData.flagState & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty);
-            //stateData.isEating = ((stateData.flagState & StateData.FlagStates.Eating) == StateData.FlagStates.Eating);
-            //stateData.isDrinking = ((stateData.flagState & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking);
-            //stateData.isSexuallyActive = ((stateData.flagState & StateData.FlagStates.SexuallyActive) == StateData.FlagStates.SexuallyActive);
-            //stateData.isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
-            //stateData.isFleeing = ((stateData.flagState & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
-            //stateData.isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
-            //stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
-            //stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
-
-            //New state system
             if (stateData.beenEaten)
             {
                 stateData.previousFlagState = stateData.flagState;
@@ -106,18 +86,6 @@ public class StateSystem : SystemBase
             stateData.isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
             if (!stateData.isDead)
             {
-                ////check if eaten by predator (not great as if they walk into a non hunting predator they die)                
-                //stateData.isFleeing = ((stateData.flagState & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
-                //if (stateData.isFleeing)
-                //{
-                //    if (targetData.shortestToPredatorDistance <= targetData.touchRadius * 2)
-                //    {
-                //        stateData.beenEaten = true;
-                //    }
-                //}
-
-
-
                 // enable eating state if close to entity to eat
                 stateData.isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
                 stateData.isEating = ((stateData.flagState & StateData.FlagStates.Eating) == StateData.FlagStates.Eating);
@@ -253,9 +221,7 @@ public class StateSystem : SystemBase
             stateData.isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
             stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
             stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
-
-        })
-            .ScheduleParallel();
+        }).ScheduleParallel();
     }
 
     public static bool ContainsState(StateData.FlagStates state, StateData.FlagStates stateDataflagStates)

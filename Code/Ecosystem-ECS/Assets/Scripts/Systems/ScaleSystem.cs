@@ -1,22 +1,17 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
 using Unity.Transforms;
 
 public class ScaleSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        
         Entities.ForEach((
-            ref CompositeScale scale, 
-            ref SizeData sizeData, 
+            ref CompositeScale scale,
+            ref SizeData sizeData,
             in BioStatsData bioStatsData
-            ) => 
+            ) =>
         {
-
             if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
             {
                 sizeData.ageSizeMultiplier = sizeData.oldSizeMultiplier;
@@ -29,7 +24,7 @@ public class ScaleSystem : SystemBase
             {
                 sizeData.ageSizeMultiplier = sizeData.youngSizeMultiplier;
             }
-            
+
             scale.Value.c0.x = sizeData.Size;
             scale.Value.c1.y = sizeData.Size;
             scale.Value.c2.z = sizeData.Size;

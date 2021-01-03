@@ -1,15 +1,12 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
 using Unity.Transforms;
-using Random = Unity.Mathematics.Random;
 using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 public class GivingBirthSystem : SystemBase
 {
-    EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
+    EndSimulationEntityCommandBufferSystem ecbSystem;
     public static GivingBirthSystem Instance; // public reference to self (singleton)
 
 
@@ -17,55 +14,55 @@ public class GivingBirthSystem : SystemBase
     {
         base.OnCreate();
         Instance = this;
-        // Find the ECB system once and store it for later usage
-        m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
+
     protected override void OnUpdate()
-    {
+    {        
+        var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
 
         float time = UnityEngine.Time.time;
         float timeSeed = time * System.DateTimeOffset.Now.Millisecond;
 
         #region Default Rabbit stats
         //Edible
-        float rabbitNutritionalValue = RabbitDefaults.nutritionalValue;
-        bool rabbitCanBeEaten = RabbitDefaults.canBeEaten;
-        float rabbitNutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier;
+        var rabbitNutritionalValue = RabbitDefaults.nutritionalValue;
+        var rabbitCanBeEaten = RabbitDefaults.canBeEaten;
+        var rabbitNutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier;
         EdibleData.FoodType rabbitFoodType = RabbitDefaults.foodType;
 
         //Movement
-        float rabbitRotationSpeed = RabbitDefaults.rotationSpeed;
-        float rabbitMoveSpeedBase = RabbitDefaults.moveSpeed;
-        float rabbitMoveMultiplier = RabbitDefaults.moveMultiplier;
-        float rabbitPregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier;
-        float rabbitOriginalMoveMultiplier = RabbitDefaults.originalMoveMultiplier;
-        float rabbitYoungMoveMultiplier = RabbitDefaults.youngMoveMultiplier;
-        float rabbitAdultMoveMultiplier = RabbitDefaults.adultMoveMultiplier;
-        float rabbitOldMoveMultiplier = RabbitDefaults.oldMoveMultiplier;
+        var rabbitRotationSpeed = RabbitDefaults.rotationSpeed;
+        var rabbitMoveSpeedBase = RabbitDefaults.moveSpeed;
+        var rabbitMoveMultiplier = RabbitDefaults.moveMultiplier;
+        var rabbitPregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier;
+        var rabbitOriginalMoveMultiplier = RabbitDefaults.originalMoveMultiplier;
+        var rabbitYoungMoveMultiplier = RabbitDefaults.youngMoveMultiplier;
+        var rabbitAdultMoveMultiplier = RabbitDefaults.adultMoveMultiplier;
+        var rabbitOldMoveMultiplier = RabbitDefaults.oldMoveMultiplier;
 
         //States
         StateData.FlagStates rabbitFlagState = RabbitDefaults.flagState;
         StateData.FlagStates rabbitPreviousFlagState = RabbitDefaults.previousFlagState;
         StateData.DeathReason rabbitDeathReason = RabbitDefaults.deathReason;
-        bool rabbitBeenEaten = RabbitDefaults.beenEaten;
+        var rabbitBeenEaten = RabbitDefaults.beenEaten;
 
         //Target data
-        bool rabbitAtTarget = true;
-
-        float rabbitSightRadius = RabbitDefaults.sightRadius;
-        float rabbitTouchRadius = RabbitDefaults.touchRadius;
-        float rabbitMateRadius = RabbitDefaults.mateRadius;
+        var rabbitAtTarget = true;
+        var rabbitSightRadius = RabbitDefaults.sightRadius;
+        var rabbitTouchRadius = RabbitDefaults.touchRadius;
+        var rabbitMateRadius = RabbitDefaults.mateRadius;
 
         //Path follow data
-        int rabbitPathIndex = -1;
+        var rabbitPathIndex = -1;
 
         //Basic needs data
-        float rabbitHunger = RabbitDefaults.hunger;
-        float rabbitHungryThreshold = RabbitDefaults.hungryThreshold;
-        float rabbitHungerMax = RabbitDefaults.hungerMax;
-        float rabbitHungerIncrease = RabbitDefaults.hungerIncrease;
-        float rabbitPregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease;
-        float rabbitYoungHungerIncrease = RabbitDefaults.youngHungerIncrease;
+        var rabbitHunger = RabbitDefaults.hunger;
+        var rabbitHungryThreshold = RabbitDefaults.hungryThreshold;
+        var rabbitHungerMax = RabbitDefaults.hungerMax;
+        var rabbitHungerIncrease = RabbitDefaults.hungerIncrease;
+        var rabbitPregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease;
+        var rabbitYoungHungerIncrease = RabbitDefaults.youngHungerIncrease;
         var rabbitAdultHungerIncrease = RabbitDefaults.adultHungerIncrease;
         var rabbitOldHungerIncrease = RabbitDefaults.oldHungerIncrease;
         var rabbitEatingSpeed = RabbitDefaults.eatingSpeed;
@@ -105,7 +102,7 @@ public class GivingBirthSystem : SystemBase
         var rabbitPregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier;
         var rabbitPregnancyStartTime = RabbitDefaults.pregnancyStartTime;
 
-        var rabbitReproductiveUrgeIncreaseFemale =  RabbitDefaults.reproductiveUrgeIncreaseFemale;
+        var rabbitReproductiveUrgeIncreaseFemale = RabbitDefaults.reproductiveUrgeIncreaseFemale;
         var rabbitReproductiveUrgeIncreaseMale = RabbitDefaults.reproductiveUrgeIncreaseMale;
 
         //Size data
@@ -119,7 +116,6 @@ public class GivingBirthSystem : SystemBase
         var rabbitScaleMale = RabbitDefaults.scaleMale;
         #endregion
 
-        var ecb = m_EndSimulationEcbSystem.CreateCommandBuffer().ToConcurrent();
         Entities.ForEach((
             Entity entity,
             int entityInQueryIndex,
@@ -127,159 +123,148 @@ public class GivingBirthSystem : SystemBase
             ref StateData stateData,
             in BioStatsData bioStatsData,
             in Translation translation
-            ) => {
-
-                if ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth)
+            ) =>
+        {
+            if ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth)
+            {
+                if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
+                reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                 {
-                    //Debug.Log("KURWA MAĆ!");
+                    ////give birth
+                    Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
-                    if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
-                    reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
-                    {
-                        ////give birth
-                        //Entity newEntity = e;
-                        //EntityManager.Instantiate(e);
-                        //Debug.Log("Age: " + bioStatsData.age);
-                        //Debug.Log("Birth Start Time: " + reproductiveData.birthStartTime);
-                        //Debug.Log("Birth Duration: " + reproductiveData.birthDuration);
-                        //Debug.Log("Mać");
-                        //ArchetypeChunkEntityType archetype =  this.GetArchetypeChunkEntityType();
-                        Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
+                    #region Setting New Entity's Components
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new MovementData
+                        {
+                            rotationSpeed = rabbitRotationSpeed,
+                            moveSpeedBase = rabbitMoveSpeedBase,
+                            moveMultiplier = rabbitMoveMultiplier,
+                            pregnancyMoveMultiplier = rabbitPregnancyMoveMultiplier,
+                            originalMoveMultiplier = rabbitOriginalMoveMultiplier,
+                            youngMoveMultiplier = rabbitYoungMoveMultiplier,
+                            adultMoveMultiplier = rabbitAdultMoveMultiplier,
+                            oldMoveMultiplier = rabbitOldMoveMultiplier
+                        }
+                    );
 
-                        #region Setting New Entity's Components
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new MovementData
-                            {
-                                rotationSpeed = rabbitRotationSpeed,
-                                moveSpeedBase = rabbitMoveSpeedBase,
-                                moveMultiplier = rabbitMoveMultiplier,
-                                pregnancyMoveMultiplier = rabbitPregnancyMoveMultiplier,
-                                originalMoveMultiplier = rabbitOriginalMoveMultiplier,
-                                youngMoveMultiplier = rabbitYoungMoveMultiplier,
-                                adultMoveMultiplier = rabbitAdultMoveMultiplier,
-                                oldMoveMultiplier = rabbitOldMoveMultiplier
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new StateData
+                        {
+                            flagState = rabbitFlagState,
+                            previousFlagState = rabbitPreviousFlagState,
+                            deathReason = rabbitDeathReason,
+                            beenEaten = rabbitBeenEaten
+                        }
+                    );
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new StateData
-                            {
-                                flagState = rabbitFlagState,
-                                previousFlagState = rabbitPreviousFlagState,
-                                deathReason = rabbitDeathReason,
-                                beenEaten = rabbitBeenEaten
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new TargetData
+                        {
+                            atTarget = true,
+                            currentTarget = translation.Value,
+                            oldTarget = translation.Value,
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new TargetData
-                            {
-                                atTarget = true,
-                                currentTarget = translation.Value,
-                                oldTarget = translation.Value,
+                            sightRadius = rabbitSightRadius,
+                            touchRadius = rabbitTouchRadius,
+                            mateRadius = rabbitMateRadius
+                        }
+                    );
 
-                                sightRadius = rabbitSightRadius,
-                                touchRadius = rabbitTouchRadius,
-                                mateRadius = rabbitMateRadius
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new PathFollowData
+                        {
+                            pathIndex = -1
+                        }
+                    );
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new PathFollowData
-                            {
-                                pathIndex = -1
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new BasicNeedsData
+                        {
+                            hunger = rabbitHunger,
+                            hungryThreshold = rabbitHungryThreshold,
+                            hungerMax = rabbitHungerMax,
+                            hungerIncrease = rabbitHungerIncrease,
+                            pregnancyHungerIncrease = rabbitPregnancyHungerIncrease,
+                            youngHungerIncrease = rabbitYoungHungerIncrease,
+                            adultHungerIncrease = rabbitAdultHungerIncrease,
+                            oldHungerIncrease = rabbitOldHungerIncrease,
+                            eatingSpeed = rabbitEatingSpeed,
+                            diet = rabbitDiet,
+                            thirst = rabbitThirst,
+                            thirstyThreshold = rabbitThirstyThreshold,
+                            thirstMax = rabbitThirstMax,
+                            thirstIncrease = rabbitThirstIncrease,
+                            drinkingSpeed = rabbitDrinkingSpeed,
+                        }
+                    );
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new BasicNeedsData
-                            {
-                                hunger = rabbitHunger,
-                                hungryThreshold = rabbitHungryThreshold,
-                                hungerMax = rabbitHungerMax,
-                                hungerIncrease = rabbitHungerIncrease,
-                                pregnancyHungerIncrease = rabbitPregnancyHungerIncrease,
-                                youngHungerIncrease = rabbitYoungHungerIncrease,
-                                adultHungerIncrease = rabbitAdultHungerIncrease,
-                                oldHungerIncrease = rabbitOldHungerIncrease,
-                                eatingSpeed = rabbitEatingSpeed,
-                                diet = rabbitDiet,
-                                thirst = rabbitThirst,
-                                thirstyThreshold = rabbitThirstyThreshold,
-                                thirstMax = rabbitThirstMax,
-                                thirstIncrease = rabbitThirstIncrease,
-                                drinkingSpeed = rabbitDrinkingSpeed,
-                            }
-                        );
+                    float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
+                    Random randomGen = new Random((uint)seed + 2);
+                    BioStatsData.Gender randGender = randomGen.NextInt(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
 
-                        float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
-                        Random randomGen = new Random((uint)seed + 2);
-                        BioStatsData.Gender randGender = randomGen.NextInt(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new BioStatsData
+                        {
+                            age = rabbitAge,
+                            ageIncrease = rabbitAgeIncrease,
+                            ageMax = rabbitAgeMax,
+                            ageGroup = rabbitAgeGroup,
+                            adultEntryTimer = rabbitAdultEntryTimer,
+                            oldEntryTimer = rabbitOldEntryTimer,
+                            gender = randGender
+                        }
+                    );
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new BioStatsData
-                            {
-                                age = rabbitAge,
-                                ageIncrease = rabbitAgeIncrease,
-                                ageMax = rabbitAgeMax,
-                                ageGroup = rabbitAgeGroup,
-                                adultEntryTimer = rabbitAdultEntryTimer,
-                                oldEntryTimer = rabbitOldEntryTimer,
-                                gender = randGender
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new ReproductiveData
+                        {
+                            matingDuration = rabbitMatingDuration,
+                            mateStartTime = rabbitMateStartTime,
+                            reproductiveUrge = rabbitReproductiveUrge,
+                            reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
+                            defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
+                            matingThreshold = rabbitMatingThreshold,
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new ReproductiveData
-                            {
-                                matingDuration = rabbitMatingDuration,
-                                mateStartTime = rabbitMateStartTime,
-                                reproductiveUrge = rabbitReproductiveUrge,
-                                reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
-                                defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? rabbitReproductiveUrgeIncreaseFemale : rabbitReproductiveUrgeIncreaseMale),
-                                matingThreshold = rabbitMatingThreshold,
+                            pregnant = rabbitPregnant,
+                            birthDuration = rabbitBirthDuration,
+                            babiesBorn = rabbitBabiesBorn,
+                            birthStartTime = rabbitBirthStartTime,
+                            currentLitterSize = rabbitCurrentLitterSize,
+                            litterSizeMin = rabbitLitterSizeMin,
+                            litterSizeMax = rabbitLitterSizeMax,
+                            litterSizeAve = rabbitLitterSizeAve,
+                            pregnancyLengthBase = rabbitPregnancyLengthBase,
+                            pregnancyLengthModifier = rabbitPregnancyLengthModifier,
+                            pregnancyStartTime = rabbitPregnancyStartTime
+                        }
+                    );
 
-                                pregnant = rabbitPregnant,
-                                birthDuration = rabbitBirthDuration,
-                                babiesBorn = rabbitBabiesBorn,
-                                birthStartTime = rabbitBirthStartTime,
-                                currentLitterSize = rabbitCurrentLitterSize,
-                                litterSizeMin = rabbitLitterSizeMin,
-                                litterSizeMax = rabbitLitterSizeMax,
-                                litterSizeAve = rabbitLitterSizeAve,
-                                pregnancyLengthBase = rabbitPregnancyLengthBase,
-                                pregnancyLengthModifier = rabbitPregnancyLengthModifier,
-                                pregnancyStartTime = rabbitPregnancyStartTime
-                            }
-                        );
+                    ecb.SetComponent(entityInQueryIndex, newEntity,
+                        new SizeData
+                        {
+                            size = (randGender == BioStatsData.Gender.Female ? rabbitScaleFemale : rabbitScaleMale),
+                            sizeMultiplier = rabbitSizeMultiplier,
+                            ageSizeMultiplier = rabbitAgeSizeMultiplier,
+                            youngSizeMultiplier = rabbitYoungSizeMultiplier,
+                            adultSizeMultiplier = rabbitAdultSizeMultiplier,
+                            oldSizeMultiplier = rabbitOldSizeMultiplier
 
-                        ecb.SetComponent(entityInQueryIndex, newEntity,
-                            new SizeData
-                            {
-                                size = (randGender == BioStatsData.Gender.Female ? rabbitScaleFemale : rabbitScaleMale),
-                                sizeMultiplier = rabbitSizeMultiplier,
-                                ageSizeMultiplier = rabbitAgeSizeMultiplier,
-                                youngSizeMultiplier = rabbitYoungSizeMultiplier,
-                                adultSizeMultiplier = rabbitAdultSizeMultiplier,
-                                oldSizeMultiplier = rabbitOldSizeMultiplier
+                        }
+                    );
+                    #endregion
 
-                            }
-                        );
-                        #endregion
-
-                        reproductiveData.birthStartTime = bioStatsData.age;
-                        reproductiveData.babiesBorn++;
-                        Debug.Log("Babies born: " + reproductiveData.babiesBorn);
-                        Debug.Log("Current Litter Size: " + reproductiveData.currentLitterSize);
-                    }
-
-                    if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
-                    {
-                        reproductiveData.babiesBorn = 0;
-                        stateData.flagState ^= StateData.FlagStates.GivingBirth;
-                        reproductiveData.pregnant = false;
-                    }
+                    reproductiveData.birthStartTime = bioStatsData.age;
+                    reproductiveData.babiesBorn++;
                 }
+
+                if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
+                {
+                    reproductiveData.babiesBorn = 0;
+                    stateData.flagState ^= StateData.FlagStates.GivingBirth;
+                    reproductiveData.pregnant = false;
+                }
+            }
         }).ScheduleParallel();
 
         this.CompleteDependency();

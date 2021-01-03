@@ -1,14 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class UIController : MonoBehaviour
 {
@@ -117,11 +108,7 @@ public class UIController : MonoBehaviour
 
     }
     #endregion
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 
     public void PropertiesUpdate(string propertyToUpdate)
     {

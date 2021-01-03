@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -85,7 +82,7 @@ public class SimulationManager : MonoBehaviour
     public static float upLimit;
     public static float rightLimit;
     public static float downLimit;
-    
+
     #endregion
     #region Initialisation
     // Start is called before the first frame update
@@ -205,12 +202,12 @@ public class SimulationManager : MonoBehaviour
                 isSetupComplete = true;
             }
         }
-        else 
+        else
         {
             SpawnRabbitAtPosOnClick();
-            EnforceGrassPopulation(); 
+            EnforceGrassPopulation();
         }
-        
+
     }
 
     #region Map Creation Methods
@@ -373,7 +370,7 @@ public class SimulationManager : MonoBehaviour
 
         for (int i = 0; i < quantity; i++)
         {
-            
+
             // Get the random world co ordinates from the bottom left of the graph
             Vector3 worldPoint;
             do

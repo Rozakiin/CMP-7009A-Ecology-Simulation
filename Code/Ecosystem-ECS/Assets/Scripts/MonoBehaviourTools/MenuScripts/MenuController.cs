@@ -1,14 +1,12 @@
-﻿using System.Collections;
+﻿using SFB;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using SFB;
 
 namespace SpeedTutorMainMenuSystem
 {
-
     public class MenuController : MonoBehaviour
     {
         public enum MenuNumber
@@ -24,7 +22,9 @@ namespace SpeedTutorMainMenuSystem
             InitialProperties,
             GenerateMap,
         }
+
         string fileContents;
+
         #region Default Values
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
@@ -309,7 +309,7 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
 
-        //MAIN SECTION
+        #region Main Section
         public IEnumerator ConfirmationBox()
         {
             confirmationMenu.SetActive(true);
@@ -345,6 +345,7 @@ namespace SpeedTutorMainMenuSystem
         {
             GetComponent<AudioSource>().Play();
         }
+        #endregion
 
         #region Menu Mouse Clicks
         public void MouseClick(string buttonType)
@@ -489,6 +490,7 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
 
+        #region Initial Properties
         public void InitialPropertiesApply()
         {
             Debug.Log("Apply Initial Properties");
@@ -772,6 +774,7 @@ namespace SpeedTutorMainMenuSystem
                     break;
             }
         }
+        #endregion
 
         #region ResetButton
         public void ResetButton(string menuToReset)

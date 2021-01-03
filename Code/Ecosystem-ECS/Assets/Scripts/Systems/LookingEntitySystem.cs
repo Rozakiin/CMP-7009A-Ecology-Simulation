@@ -1,11 +1,10 @@
-﻿using Unity.Burst;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 using Unity.Physics;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 
 
 // this system must update in the end of frame
@@ -13,13 +12,14 @@ using Unity.Physics.Systems;
 public class LookingEntitySystem : SystemBase
 {
     BuildPhysicsWorld buildPhysicsWorld;
-    
+
+
     protected override void OnCreate()
     {
         base.OnCreate();
         buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
-    
+
     protected override void OnUpdate()
     {
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
@@ -40,6 +40,7 @@ public class LookingEntitySystem : SystemBase
                 CollidesWith = mask,
                 GroupIndex = 0
             };
+
             // hit certain area 
             Aabb aabb = new Aabb
             {
@@ -52,6 +53,7 @@ public class LookingEntitySystem : SystemBase
                 Aabb = aabb,
                 Filter = filter,
             };
+
             // input is filter and range, out all entity who has collider, Aabb is very famous in website a way to detect 3D collision world
             if (collisionWorld.OverlapAabb(overlapAabbInput, ref hitsIndices))
             {
@@ -147,7 +149,6 @@ public class LookingEntitySystem : SystemBase
                 targetData.shortestToMateDistance = shortestToMateDistance;
             }
             hitsIndices.Dispose();
-           
         }).ScheduleParallel();
     }
 }

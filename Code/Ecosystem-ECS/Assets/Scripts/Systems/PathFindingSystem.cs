@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 
 public class PathFindingSystem : SystemBase
 {
@@ -14,6 +12,8 @@ public class PathFindingSystem : SystemBase
 
     private EndSimulationEntityCommandBufferSystem ecbSystem;
     private NativeArray<PathNode> pathNodeArray;
+
+
     protected override void OnCreate()
     {
         base.OnCreate();
@@ -24,7 +24,6 @@ public class PathFindingSystem : SystemBase
     {
         var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
 
-        //PERFORMANCE ISSUE: path node array created each update, could be cached
         if (!pathNodeArray.IsCreated)
             pathNodeArray = CreatePathNodeArray();
         NativeArray<PathNode> tempArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
@@ -54,6 +53,7 @@ public class PathFindingSystem : SystemBase
                 iterationLimit = 100,
             };
             findPathJob.Execute();//execute the find path job
+
             //sets the buffer in the entity to follow the path
             SetBufferPathJob setBufferPathJob = new SetBufferPathJob
             {
@@ -72,10 +72,7 @@ public class PathFindingSystem : SystemBase
             pathPositionDataBuffer = setBufferPathJob.pathPositionDataBuffer;
 
             ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity);//remove the requestpathdata from entity
-            
         }).WithDeallocateOnJobCompletion(tempArray).ScheduleParallel();
-
-
 
         // Make sure that the ECB system knows about our job
         ecbSystem.AddJobHandleForProducer(this.Dependency);
@@ -84,7 +81,7 @@ public class PathFindingSystem : SystemBase
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        if(pathNodeArray.IsCreated)
+        if (pathNodeArray.IsCreated)
             pathNodeArray.Dispose();
     }
 
@@ -122,14 +119,6 @@ public class PathFindingSystem : SystemBase
 
                 while (openList.Length > 0 && iterationLimit > 0)//Whilst there is something in the open list
                 {
-
-                    //This doesnt work as list is not sorted like with the heap implementation
-                    //int currentNodeIndex = openList[0];//set current node to first item in open list
-                    //PathNode currentNode = pathNodeArray[currentNodeIndex]; //get currentnode as pathnode
-
-                    //openList.RemoveAt(0);//remove first item from list (swapback version is more performant)
-                    //closedList.Add(currentNodeIndex);//Add it to the closed List
-
                     int currentNodeIndex = GetLowestCostFNodeIndex(openList, pathNodeArray);//set current node to item with lowest F cost in open list
                     PathNode currentNode = pathNodeArray[currentNodeIndex]; //get currentnode as pathnode
 
@@ -182,7 +171,7 @@ public class PathFindingSystem : SystemBase
                         }
 
                         int moveCost = currentNode.gCost + GetDistance(currentNode, neighbourNode) + neighbourNode.penalty;//Get the total cost of that neighbor
-                        
+
                         //If the total cost is greater than the g cost or it is not in the open list
                         if (moveCost < neighbourNode.gCost || !openList.Contains(neighbourNodeIndex))
                         {
@@ -208,8 +197,6 @@ public class PathFindingSystem : SystemBase
         }
     }
 
-
-    //PATHFINDING: TODO Find out what this does and comment
     [BurstCompile]
     private struct SetBufferPathJob
     {
@@ -232,22 +219,18 @@ public class PathFindingSystem : SystemBase
             if (endNode.cameFromNodeIndex == -1)
             {
                 // Didn't find a path!
-                //Debug.Log("Didn't find a path!");
                 pathFollowData = new PathFollowData { pathIndex = -1 };
             }
             else
             {
                 // Found a path
                 CalculatePath(pathNodeArray, endNode, pathPositionDataBuffer);
-
                 pathFollowData = new PathFollowData { pathIndex = pathPositionDataBuffer.Length - 1 };
             }
-
         }
     }
 
-
-    //PATHFINDING: Retrace path through the nodes(reversed) could maybe use simplifypath?
+    //Retrace path through the nodes(reversed) could maybe use simplifypath?
     private static void CalculatePath(NativeArray<PathNode> pathNodeArray, PathNode endNode, DynamicBuffer<PathPositionData> pathPositionDataBuffer)
     {
         if (endNode.cameFromNodeIndex == -1)
@@ -269,7 +252,7 @@ public class PathFindingSystem : SystemBase
         }
     }
 
-    //PATHFINDER: Retrace path through the nodes
+    //Retrace path through the nodes
     private static NativeArray<float3> GetFinalPath(PathNode _startNode, PathNode _endNode, NativeArray<PathNode> path)
     {
         NativeList<PathNode> finalPath = new NativeList<PathNode>(Allocator.Temp);//List to hold the path sequentially 
@@ -290,7 +273,7 @@ public class PathFindingSystem : SystemBase
         return new NativeArray<float3>(waypoints, Allocator.Temp);//return the simplified final path
     }
 
-    //PATHFINDER: Simplifies the path so the path only contains changes to the direction
+    //Simplifies the path so the path only contains changes to the direction
     private static NativeArray<float3> SimplifyPath(NativeList<PathNode> path)
     {
         NativeList<float3> waypoints = new NativeList<float3>(Allocator.Temp);
@@ -310,7 +293,7 @@ public class PathFindingSystem : SystemBase
         return waypoints;
     }
 
-    //PATHFINDING: Creates a PathNode NativeArray for use in pathfinding from the GridNode array
+    //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
     private NativeArray<PathNode> CreatePathNodeArray()
     {
         GridNode[,] grid = GridSetup.Instance.grid;
@@ -331,8 +314,8 @@ public class PathFindingSystem : SystemBase
                     gCost = int.MaxValue,
 
                     isWalkable = grid[x, y].isWalkable,
-                    penalty = grid[x,y].movementPenalty,
-                    position = grid[x,y].worldPosition,
+                    penalty = grid[x, y].movementPenalty,
+                    position = grid[x, y].worldPosition,
 
                     cameFromNodeIndex = -1
                 };
@@ -352,7 +335,7 @@ public class PathFindingSystem : SystemBase
         float percentY = _worldPos.z / gridWorldSize.y + 0.5f;
 
         //clamp percent between 0 and 1
-        percentX = math.clamp(percentX, 0,1);
+        percentX = math.clamp(percentX, 0, 1);
         percentY = math.clamp(percentY, 0, 1);
 
         // calc x,y position in the node array for the world position
@@ -362,7 +345,7 @@ public class PathFindingSystem : SystemBase
         //int x = (int)math.floor(math.min(gridSize.x * percentX, gridSize.x - 1));
         //int y = (int)math.floor(math.min(gridSize.y * percentY, gridSize.y - 1));
 
-        return pathNodeArray[CalculateIndex(x,y,gridSize.x)];// position of closest node in array
+        return pathNodeArray[CalculateIndex(x, y, gridSize.x)];// position of closest node in array
     }
 
     // if using NESW only
@@ -386,7 +369,7 @@ public class PathFindingSystem : SystemBase
         return MOVE_DIAGONAL_COST * x + MOVE_STRAIGHT_COST * (y - x);
     }
 
-    //PATHFINDING: calc the index in the 1d array from the 2d array
+    //calc the index in the 1d array from the 2d array
     private static int CalculateIndex(int x, int y, int gridSizeX)
     {
         return x + y * gridSizeX;
@@ -403,7 +386,7 @@ public class PathFindingSystem : SystemBase
             {
                 lowestCostPathNode = testPathNode;
             }
-            else if(testPathNode.FCost == lowestCostPathNode.FCost)//Tiebreaker
+            else if (testPathNode.FCost == lowestCostPathNode.FCost)//Tiebreaker
             {
                 //Compare hcosts
                 if (testPathNode.hCost < lowestCostPathNode.hCost)
@@ -415,7 +398,6 @@ public class PathFindingSystem : SystemBase
         return lowestCostPathNode.index;
     }
 
-    //PATHFINDING: 
     private static bool IsPositionInsideGrid(int2 gridPosition, int2 gridSize)
     {
         return
@@ -434,7 +416,7 @@ public class PathFindingSystem : SystemBase
 
         public int gCost;// Cost to move to next node
         public int hCost;// Distance to end from this node
-        public int FCost {get { return gCost + hCost; }}//Total Cost of the Node;
+        public int FCost { get { return gCost + hCost; } }//Total Cost of the Node;
 
         public bool isWalkable;// Is node obstructed
         public int penalty; //penaty for walking the node
@@ -451,6 +433,5 @@ public class PathFindingSystem : SystemBase
             }
             return -compare;//higher priority is lower cost
         }
-
     }
 }

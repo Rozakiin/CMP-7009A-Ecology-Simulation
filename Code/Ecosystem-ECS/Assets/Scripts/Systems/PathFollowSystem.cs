@@ -1,6 +1,4 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -12,12 +10,12 @@ public class PathFollowSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
         Entities.ForEach((
-            DynamicBuffer<PathPositionData> pathPositionDataBuffer, 
-            ref Translation translation, 
-            ref Rotation rotation, 
-            ref PathFollowData pathFollowData, 
+            DynamicBuffer<PathPositionData> pathPositionDataBuffer,
+            ref Translation translation,
+            ref Rotation rotation,
+            ref PathFollowData pathFollowData,
             in MovementData movementData,
-            in TargetData targetData) => 
+            in TargetData targetData) =>
         {
             // if currently following a path
             if (pathFollowData.pathIndex >= 0)
