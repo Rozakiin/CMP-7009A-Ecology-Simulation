@@ -1,5 +1,4 @@
 ﻿using Unity.Mathematics;
-using Unity.Entities;
 
 public struct GridNode
 {

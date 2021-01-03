@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Physics;
+﻿using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
-using RaycastHit = Unity.Physics.RaycastHit;
-using Unity.Physics.Systems;
+using Unity.Physics;
+using UnityEngine;
 
 public class GridSetup : MonoBehaviour
 {
