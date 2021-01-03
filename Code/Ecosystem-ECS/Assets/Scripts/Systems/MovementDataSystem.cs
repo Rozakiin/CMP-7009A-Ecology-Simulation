@@ -39,6 +39,10 @@ public class MovementDataSystem : SystemBase
             {
                 movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
             }
+            if(stateData.isFleeing)
+            {
+                movementData.moveMultiplier *= 3; // triple move speed while fleeing
+            }
 
         }).ScheduleParallel();
     }

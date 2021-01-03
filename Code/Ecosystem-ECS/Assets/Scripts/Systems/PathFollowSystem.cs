@@ -16,7 +16,8 @@ public class PathFollowSystem : SystemBase
             ref Translation translation, 
             ref Rotation rotation, 
             ref PathFollowData pathFollowData, 
-            in MovementData movementData) => 
+            in MovementData movementData,
+            in TargetData targetData) => 
         {
             // if currently following a path
             if (pathFollowData.pathIndex >= 0)
@@ -33,7 +34,7 @@ public class PathFollowSystem : SystemBase
                 translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
 
                 //If at the targetPosition
-                if (math.distance(translation.Value, targetPosition) < 1f)
+                if (math.distance(translation.Value, targetPosition) <= targetData.touchRadius)
                 {
                     // Next waypoint
                     pathFollowData.pathIndex--;

@@ -166,7 +166,7 @@ MonoBehaviour:
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
   numberOfRabbitsToSpawn: 10
-  numberOfFoxesToSpawn: 1
+  numberOfFoxesToSpawn: 2
   numberOfGrassToSpawn: 50
   rabbitPopulation: 0
   foxPopulation: 0
@@ -217,6 +217,7 @@ MonoBehaviour:
     y: 0
   gridNodeRadius: 1
   distanceBetweenGridNodes: 0
+  gridNodeDiameter: 0
   unwalkableProximityPenalty: 10
 --- !u!1 &788710890
 GameObject:

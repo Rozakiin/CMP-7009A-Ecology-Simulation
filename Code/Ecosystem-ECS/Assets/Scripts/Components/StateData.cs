@@ -20,12 +20,6 @@ public struct StateData : IComponentData
     // * You should focus on the data structure that makes the most sense
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
-    public enum States
-    {
-        Wandering, Hungry, Thirsty, Eating, Drinking, SexuallyActive, Mating, Fleeing, Dead, Pregnant, GivingBirth
-    }
-    public States state;
-    public States previousState;
     public enum DeathReason
     {
         Eaten,
