@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Entities;
-using Unity.Mathematics;
-using UnityEngine;
+﻿using Unity.Entities;
 
-//Use this class to define all the default values for components related to Rabbit Entities
+/* Use this class to define all the default values for components related to Rabbit Entities */
 public static class RabbitDefaults
 {
     //Age
@@ -34,6 +30,8 @@ public static class RabbitDefaults
     public static float oldHungerIncrease = 0.5f;
     public static float eatingSpeed = 1f;
     public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Herbivore;
+
+
     //Thirst
     public static float thirst = 0f;
     public static float thirstMax = 100f;
@@ -50,6 +48,7 @@ public static class RabbitDefaults
     public static float reproductiveUrgeIncreaseFemale = 0f;
     public static float matingThreshold = 50f;
     public static float mateRadius = 5f;
+
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
@@ -92,20 +91,23 @@ public static class RabbitDefaults
     public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
     public static bool beenEaten = false;
 
+
     //Target
     public static float touchRadius = 1f;
     public static float sightRadius = 20f;
+
 
     //lookingEntityData
     public static Entity predatorEntity = Entity.Null;
     public static Entity entityToEat = Entity.Null;
     public static Entity entityToDrink = Entity.Null;
     public static Entity entityToMate = Entity.Null;
-    public static float shortestToEdibleDistance = 100f; // set initial distance to 100, must more than sight radius
-    public static float shortestToWaterDistance = 100f;
-    public static float shortestToPredatorDistance = 100f;
-    public static float shortestToMateDistance = 100f;
+    public static float shortestToEdibleDistance = float.PositiveInfinity;
+    public static float shortestToWaterDistance = float.PositiveInfinity;
+    public static float shortestToPredatorDistance = float.PositiveInfinity;
+    public static float shortestToMateDistance = float.PositiveInfinity;
+
 
     //ColliderTypeData
-    public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Rabbit; 
+    public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Rabbit;
 }
