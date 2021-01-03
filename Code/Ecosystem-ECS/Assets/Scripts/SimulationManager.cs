@@ -12,7 +12,7 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     GameObjectConversionSettings settings;
     public static SimulationManager Instance;
-
+    [SerializeField] public bool isDebugEnabled;
     public bool isSetupComplete;
 
     #region Archetypes
