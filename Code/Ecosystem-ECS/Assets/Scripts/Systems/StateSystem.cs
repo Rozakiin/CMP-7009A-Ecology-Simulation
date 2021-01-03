@@ -142,7 +142,6 @@ public class StateSystem : SystemBase
                     if (HasComponent<Translation>(targetData.entityToDrink))
                     {
                         //sqrt due to square tiles (furthest point possible is right in corner of gridnode next to edge of tile
-                        Debug.Log($"{targetData.shortestToWaterDistance}, {targetData.touchRadius + math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter* gridNodeDiameter / 2)}");
                         if (targetData.shortestToWaterDistance <= targetData.touchRadius + math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter * gridNodeDiameter / 2))
                         {
                             stateData.previousFlagState = stateData.flagState;
