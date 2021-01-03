@@ -17,8 +17,8 @@ public static class GrassDefaults
 
 
     //State
-    public static StateData.States state = StateData.States.Wandering;
-    public static StateData.States previousState = StateData.States.Wandering;
+    public static StateData.FlagStates flagState = StateData.FlagStates.None;
+    public static StateData.FlagStates previousFlagState = StateData.FlagStates.None;
     public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
     public static bool beenEaten = false;
 
