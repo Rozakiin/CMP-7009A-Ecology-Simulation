@@ -35,7 +35,7 @@ public class PathRequestSystem : SystemBase
                 ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
                 ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = translation.Value, endPosition = targetData.currentTarget });
             }
-        }).Schedule();
+        }).ScheduleParallel();
 
         // Make sure that the ECB system knows about our job
         ecbSystem.AddJobHandleForProducer(this.Dependency);

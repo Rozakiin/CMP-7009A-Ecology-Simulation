@@ -40,6 +40,6 @@ public class PathFollowSystem : SystemBase
                     pathFollowData.pathIndex--;
                 }
             }
-        }).Schedule();
+        }).ScheduleParallel();
     }
 }

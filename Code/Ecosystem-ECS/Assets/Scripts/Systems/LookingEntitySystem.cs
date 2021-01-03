@@ -9,15 +9,21 @@ using Unity.Physics.Systems;
 
 
 // this system must update in the end of frame
-[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(StepPhysicsWorld))]
+[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
 public class LookingEntitySystem : SystemBase
 {
+    BuildPhysicsWorld buildPhysicsWorld;
+    
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+        buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+    }
+    
     protected override void OnUpdate()
     {
-        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
-        //JobHandle FindUnitsGroupInProximityJobHandle = Entities.ForEach((
         Entities.ForEach((
             ref TargetData targetData,
             in ColliderTypeData colliderTypeData,
@@ -143,8 +149,5 @@ public class LookingEntitySystem : SystemBase
             hitsIndices.Dispose();
            
         }).ScheduleParallel();
-        // not sure why....
-        //Dependency = JobHandle.CombineDependencies(Dependency, buildPhysicsWorld.GetOutputDependency());
-        //Dependency = JobHandle.CombineDependencies(Dependency, FindUnitsGroupInProximityJobHandle);
     }
 }

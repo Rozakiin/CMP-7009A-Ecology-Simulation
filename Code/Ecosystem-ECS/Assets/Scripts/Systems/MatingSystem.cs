@@ -172,6 +172,5 @@ public class MatingSystem : SystemBase
                 }
             }
         }).ScheduleParallel();
-        
     }
 }
