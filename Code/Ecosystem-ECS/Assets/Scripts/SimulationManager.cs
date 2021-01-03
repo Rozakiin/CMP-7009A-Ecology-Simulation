@@ -12,7 +12,7 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     GameObjectConversionSettings settings;
     public static SimulationManager Instance;
-
+    [SerializeField] public bool isDebugEnabled;
     public bool isSetupComplete;
 
     #region Archetypes
@@ -830,7 +830,8 @@ public class SimulationManager : MonoBehaviour
             {
                 Vector3 targetPosition = hit.point;
                 Debug.Log(targetPosition.ToString());
-                CreateRabbitAtWorldPoint(targetPosition);
+                if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                    CreateRabbitAtWorldPoint(targetPosition);
             }
         }
     }
