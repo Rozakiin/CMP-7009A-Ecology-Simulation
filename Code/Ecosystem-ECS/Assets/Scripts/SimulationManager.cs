@@ -829,7 +829,8 @@ public class SimulationManager : MonoBehaviour
             {
                 Vector3 targetPosition = hit.point;
                 Debug.Log(targetPosition.ToString());
-                CreateRabbitAtWorldPoint(targetPosition);
+                if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                    CreateRabbitAtWorldPoint(targetPosition);
             }
         }
     }
