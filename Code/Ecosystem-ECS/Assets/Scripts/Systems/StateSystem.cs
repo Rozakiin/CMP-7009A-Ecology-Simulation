@@ -24,7 +24,7 @@ public class StateSystem : SystemBase
             in Translation translation
             ) =>
         {
-            
+
 
             //stateData.isWandering = ((stateData.flagState & StateData.FlagStates.Wandering) == StateData.FlagStates.Wandering);
             //stateData.isHungry = ((stateData.flagState & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
@@ -105,7 +105,7 @@ public class StateSystem : SystemBase
             //if not dead            
             stateData.isDead = ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
             if (!stateData.isDead)
-            {            
+            {
                 ////check if eaten by predator (not great as if they walk into a non hunting predator they die)                
                 //stateData.isFleeing = ((stateData.flagState & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
                 //if (stateData.isFleeing)
@@ -142,7 +142,8 @@ public class StateSystem : SystemBase
                     if (HasComponent<Translation>(targetData.entityToDrink))
                     {
                         //sqrt due to square tiles (furthest point possible is right in corner of gridnode next to edge of tile
-                        if (targetData.shortestToWaterDistance <= targetData.touchRadius + math.sqrt(tileSize/2 * tileSize / 2) + math.sqrt(gridNodeDiameter/2 * gridNodeDiameter / 2))
+                        Debug.Log($"{targetData.shortestToWaterDistance}, {targetData.touchRadius + math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter* gridNodeDiameter / 2)}");
+                        if (targetData.shortestToWaterDistance <= targetData.touchRadius + math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter * gridNodeDiameter / 2))
                         {
                             stateData.previousFlagState = stateData.flagState;
                             stateData.flagState &= ~StateData.FlagStates.Wandering;//disable wandering
@@ -229,16 +230,16 @@ public class StateSystem : SystemBase
                 stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
                 if (stateData.isPregnant)
                 {
-                //    //Debug.Log("Age: " + bioStatsData.age);
-                //    //Debug.Log("Pregnancy Start Time: " + reproductiveData.pregnancyStartTime);
-                //    //Debug.Log("Preg Length: " + reproductiveData.PregnancyLength);
-                //    Debug.Log(bioStatsData.age - reproductiveData.pregnancyStartTime);
-                //    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
-                //    {
-                //        Debug.Log("cos");
-                //        //stateData.previousFlagState = stateData.flagState;
-                //        //stateData.flagState = StateData.FlagStates.GivingBirth;
-                //    }
+                    //    //Debug.Log("Age: " + bioStatsData.age);
+                    //    //Debug.Log("Pregnancy Start Time: " + reproductiveData.pregnancyStartTime);
+                    //    //Debug.Log("Preg Length: " + reproductiveData.PregnancyLength);
+                    //    Debug.Log(bioStatsData.age - reproductiveData.pregnancyStartTime);
+                    //    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
+                    //    {
+                    //        Debug.Log("cos");
+                    //        //stateData.previousFlagState = stateData.flagState;
+                    //        //stateData.flagState = StateData.FlagStates.GivingBirth;
+                    //    }
                 }
             }
 
@@ -254,6 +255,12 @@ public class StateSystem : SystemBase
             stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
             stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
 
-        }).ScheduleParallel();
+        })
+            .ScheduleParallel();
+    }
+
+    public static bool ContainsState(StateData.FlagStates state, StateData.FlagStates stateDataflagStates)
+    {
+        return (stateDataflagStates & state) == state;
     }
 }
