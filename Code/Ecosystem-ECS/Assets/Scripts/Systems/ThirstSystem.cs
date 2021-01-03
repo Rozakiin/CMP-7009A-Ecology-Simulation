@@ -1,20 +1,14 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class ThirstSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-
         float deltaTime = Time.DeltaTime;
 
-
-        Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData , in StateData stateData) => {
-
+        Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData) =>
+        {
             // Increase thirst
             basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
 

@@ -1,25 +1,19 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class MovementDataSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-
         float deltaTime = Time.DeltaTime;
-        
+
         Entities.ForEach((
-            ref MovementData movementData, 
-            in BioStatsData bioStatsData, 
+            ref MovementData movementData,
+            in BioStatsData bioStatsData,
             in ReproductiveData reproductiveData,
             in StateData stateData
-            ) => 
+            ) =>
         {
-            
             if (!stateData.isPregnant)
             {
                 if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
@@ -39,7 +33,8 @@ public class MovementDataSystem : SystemBase
             {
                 movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
             }
-            if(stateData.isFleeing)
+
+            if (stateData.isFleeing)
             {
                 //movementData.moveMultiplier *= 3; // triple move speed while fleeing
             }

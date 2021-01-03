@@ -1,19 +1,18 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 public class MatingSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem ecbSystem;
 
+
     protected override void OnCreate()
     {
+        base.OnCreate();
         ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
+
     protected override void OnUpdate()
     {
         var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
@@ -113,7 +112,6 @@ public class MatingSystem : SystemBase
         {
             if (stateData.isSexuallyActive)
             {
-
                 //if entityToMate exists (everything should have translation)
                 if (HasComponent<Translation>(targetData.entityToMate))
                 {
@@ -121,11 +119,9 @@ public class MatingSystem : SystemBase
                     StateData.FlagStates flagMateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].flagState;
 
                     //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
-                    if (
-                    bioStatsData.gender == BioStatsData.Gender.Male &&
-                    stateData.flagState == StateData.FlagStates.Mating &&
-                    flagMateState != StateData.FlagStates.Mating
-                    )
+                    if (bioStatsData.gender == BioStatsData.Gender.Male &&
+                        stateData.flagState == StateData.FlagStates.Mating &&
+                        flagMateState != StateData.FlagStates.Mating)
                     {
                         //Set the mate's state to Mating
                         ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
@@ -142,7 +138,6 @@ public class MatingSystem : SystemBase
                         var mateBabiesBorn = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].babiesBorn;
                         var mateCurrentLitterSize = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].currentLitterSize;
                         var matePregnancyLengthModifier = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].pregnancyLengthModifier;
-
 
                         //Set the mates mateStartTime to her age
                         ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,

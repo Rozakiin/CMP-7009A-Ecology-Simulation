@@ -1,16 +1,14 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class HungerSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem ecbSystem;
 
+
     protected override void OnCreate()
     {
+        base.OnCreate();
         ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
@@ -21,14 +19,14 @@ public class HungerSystem : SystemBase
         float deltaTime = Time.DeltaTime;
 
         Entities.ForEach((
-            int entityInQueryIndex, 
-            ref BasicNeedsData basicNeedsData, 
-            in TargetData targetData, 
-            in StateData stateData, 
-            in ReproductiveData reproductiveData, 
+            int entityInQueryIndex,
+            ref BasicNeedsData basicNeedsData,
+            in TargetData targetData,
+            in StateData stateData,
+            in ReproductiveData reproductiveData,
             in BioStatsData bioStatsData
-            ) => {
-
+            ) =>
+        {
             if (!stateData.isPregnant)
             {
                 if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
@@ -57,19 +55,20 @@ public class HungerSystem : SystemBase
             {
                 if (HasComponent<EdibleData>(targetData.entityToEat))
                 {
-                        basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
-                        //basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
-                        //set beenEaten to true in entityToEat
-                        if (HasComponent<StateData>(targetData.entityToEat))
-                        {
-                            ecb.SetComponent(entityInQueryIndex, targetData.entityToEat, 
-                                new StateData { 
-                                    deathReason = StateData.DeathReason.Eaten,
-                                    
-                                    flagState = StateData.FlagStates.Dead
-                                }
-                            );
-                        }
+                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
+                    //basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
+                    //set beenEaten to true in entityToEat
+                    if (HasComponent<StateData>(targetData.entityToEat))
+                    {
+                        ecb.SetComponent(entityInQueryIndex, targetData.entityToEat,
+                            new StateData
+                            {
+                                deathReason = StateData.DeathReason.Eaten,
+
+                                flagState = StateData.FlagStates.Dead
+                            }
+                        );
+                    }
                 }
             }
         }).ScheduleParallel();
