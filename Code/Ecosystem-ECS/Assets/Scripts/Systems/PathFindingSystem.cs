@@ -51,6 +51,7 @@ public class PathFindingSystem : SystemBase
                 startNode = NodeFromWorldPoint(pathFindingRequestData.startPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                 targetNode = NodeFromWorldPoint(pathFindingRequestData.endPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                 entity = entity,
+                iterationLimit = 100,
             };
             findPathJob.Execute();//execute the find path job
             //sets the buffer in the entity to follow the path
@@ -97,6 +98,8 @@ public class PathFindingSystem : SystemBase
         public PathNode targetNode;
 
         public Entity entity;
+
+        public int iterationLimit;
         public void Execute()
         {
             //Only path find if start and end are walkable
@@ -117,7 +120,7 @@ public class PathFindingSystem : SystemBase
 
                 openList.Add(startNode.index);//Add the starting node to the open list to begin the program
 
-                while (openList.Length > 0)//Whilst there is something in the open list
+                while (openList.Length > 0 && iterationLimit > 0)//Whilst there is something in the open list
                 {
 
                     //This doesnt work as list is not sorted like with the heap implementation
@@ -195,6 +198,7 @@ public class PathFindingSystem : SystemBase
                             }
                         }
                     }
+                    iterationLimit--;
                 }
                 //Dispose of arrays
                 neighbourOffsetArray.Dispose();
