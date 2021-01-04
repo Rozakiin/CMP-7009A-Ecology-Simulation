@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class UIController : MonoBehaviour
 {
@@ -273,7 +273,7 @@ public class UIController : MonoBehaviour
         propertyOptions.Add("RabbitPregnancyLength");
         propertyOptions.Add("RabbitBirthDuration");
         propertyOptions.Add("RabbitLitterSizeMin");
-        propertyOptions.Add("RabbitLitterSizeMax"); 
+        propertyOptions.Add("RabbitLitterSizeMax");
         propertyOptions.Add("RabbitLitterSizeAve");
         propertyOptions.Add("RabbitMovementSpeed");
         propertyOptions.Add("RabbitMovementMultiplierBase");
@@ -367,7 +367,7 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitHungerIncreaseYoung":
                 //dropdownPropertySlider.value = RabbitDefaults.youngHungerIncrease;
-                dropdownInputField.text = RabbitDefaults.youngHungerIncrease.ToString(); 
+                dropdownInputField.text = RabbitDefaults.youngHungerIncrease.ToString();
                 break;
             case "RabbitHungerIncreaseAdult":
                 //dropdownPropertySlider.value = RabbitDefaults.adultHungerIncrease;
@@ -375,7 +375,7 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitHungerIncreaseOld":
                 //dropdownPropertySlider.value = RabbitDefaults.oldHungerIncrease;
-                dropdownInputField.text = RabbitDefaults.oldHungerIncrease.ToString(); 
+                dropdownInputField.text = RabbitDefaults.oldHungerIncrease.ToString();
                 break;
             case "RabbitEatingSpeed":
                 //dropdownPropertySlider.value = RabbitDefaults.eatingSpeed;
@@ -383,7 +383,7 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitThirstMax":
                 //dropdownPropertySlider.value = RabbitDefaults.thirstMax;
-                dropdownInputField.text = RabbitDefaults.thirstMax.ToString(); 
+                dropdownInputField.text = RabbitDefaults.thirstMax.ToString();
                 break;
             case "RabbitThirstThreshold":
                 //dropdownPropertySlider.value = RabbitDefaults.thirstyThreshold;
@@ -391,7 +391,7 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitThirstIncreaseBase":
                 //dropdownPropertySlider.value = RabbitDefaults.thirstIncrease;
-                dropdownInputField.text = RabbitDefaults.thirstIncrease.ToString(); 
+                dropdownInputField.text = RabbitDefaults.thirstIncrease.ToString();
                 break;
             case "RabbitThirstIncreaseYoung":
                 ////dropdownPropertySlider.value = RabbitDefaults.scaleFemale;
@@ -407,23 +407,23 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitDrinkingSpeed":
                 //dropdownPropertySlider.value = RabbitDefaults.drinkingSpeed;
-                dropdownInputField.text = RabbitDefaults.drinkingSpeed.ToString(); 
+                dropdownInputField.text = RabbitDefaults.drinkingSpeed.ToString();
                 break;
             case "RabbitMatingDuration":
                 //dropdownPropertySlider.value = RabbitDefaults.matingDuration;
-                dropdownInputField.text = RabbitDefaults.matingDuration.ToString(); 
+                dropdownInputField.text = RabbitDefaults.matingDuration.ToString();
                 break;
             case "RabbitPregnancyLength":
                 //dropdownPropertySlider.value = RabbitDefaults.pregnancyLength;
-                dropdownInputField.text = RabbitDefaults.pregnancyLength.ToString(); 
+                dropdownInputField.text = RabbitDefaults.pregnancyLength.ToString();
                 break;
             case "RabbitBirthDuration":
                 //dropdownPropertySlider.value = RabbitDefaults.birthDuration;
-                dropdownInputField.text = RabbitDefaults.birthDuration.ToString(); 
+                dropdownInputField.text = RabbitDefaults.birthDuration.ToString();
                 break;
             case "RabbitLitterSizeMin":
                 //dropdownPropertySlider.value = RabbitDefaults.litterSizeMin;
-                dropdownInputField.text = RabbitDefaults.litterSizeMin.ToString(); 
+                dropdownInputField.text = RabbitDefaults.litterSizeMin.ToString();
                 break;
             case "RabbitLitterSizeMax":
                 //dropdownPropertySlider.value = RabbitDefaults.litterSizeMax;
@@ -431,15 +431,15 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitLitterSizeAve":
                 //dropdownPropertySlider.value = RabbitDefaults.litterSizeAve;
-                dropdownInputField.text = RabbitDefaults.litterSizeAve.ToString(); 
+                dropdownInputField.text = RabbitDefaults.litterSizeAve.ToString();
                 break;
             case "RabbitMovementSpeed":
                 //dropdownPropertySlider.value = RabbitDefaults.moveSpeed;
-                dropdownInputField.text = RabbitDefaults.moveSpeed.ToString(); 
+                dropdownInputField.text = RabbitDefaults.moveSpeed.ToString();
                 break;
             case "RabbitMovementMultiplierBase":
                 //dropdownPropertySlider.value = RabbitDefaults.originalMoveMultiplier;
-                dropdownInputField.text = RabbitDefaults.originalMoveMultiplier.ToString(); 
+                dropdownInputField.text = RabbitDefaults.originalMoveMultiplier.ToString();
                 break;
             case "RabbitMovementMultiplierYoung":
                 //dropdownPropertySlider.value = RabbitDefaults.youngMoveMultiplier;
@@ -459,7 +459,7 @@ public class UIController : MonoBehaviour
                 break;
             case "RabbitSightRadius":
                 //dropdownPropertySlider.value = RabbitDefaults.sightRadius;
-                dropdownInputField.text = RabbitDefaults.sightRadius.ToString(); 
+                dropdownInputField.text = RabbitDefaults.sightRadius.ToString();
                 break;
             case "RabbitSizeMale":
                 //dropdownPropertySlider.value = RabbitDefaults.scaleMale;

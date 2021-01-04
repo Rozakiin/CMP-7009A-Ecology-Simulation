@@ -256,7 +256,7 @@ public class UIUpdateSystem : SystemBase
             float GrassSize = GrassDefaults.scale;
             Entities.WithAll<isGrassTag>().ForEach((ref SizeData sizeData) =>
             {
-                    sizeData.size = GrassSize;
+                sizeData.size = GrassSize;
             }).ScheduleParallel();
 
 
