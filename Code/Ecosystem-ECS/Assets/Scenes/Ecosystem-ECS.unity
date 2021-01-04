@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugEnabled: 0
   isSetupComplete: 0
   grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
@@ -389,12 +390,22 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3869278028933427020, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5103342709971313175, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5241897233361441899, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407033696833364509, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
