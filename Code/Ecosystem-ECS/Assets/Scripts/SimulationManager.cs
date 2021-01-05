@@ -14,18 +14,6 @@ public class SimulationManager : MonoBehaviour
 
     int secondsOfLastGrassSpawn;
 
-    #region Archetypes
-    // declare All of archetypes
-    public static EntityArchetype GrassTileArchetype { get; private set; }
-    public static EntityArchetype WaterTileArchetype { get; private set; }
-    public static EntityArchetype RockTileArchetype { get; private set; }
-    public static EntityArchetype SandTileArchetype { get; private set; }
-    public static EntityArchetype MaleRabbitArchetype { get; private set; }
-    public static EntityArchetype FemaleRabbitArchetype { get; private set; }
-    public static EntityArchetype GrassArchetype { get; private set; }
-    public static EntityArchetype FoxArchetype { get; private set; }   //I am not sure do we need Female Fox, just Fox if we need, I can add later
-    #endregion
-
     #region Converted Entities
     public Entity conversionGrassTile;
     public Entity conversionLightGrassTile;
@@ -35,7 +23,6 @@ public class SimulationManager : MonoBehaviour
     public Entity conversionRabbit;
     public Entity conversionFox;
     public Entity conversionGrass;
-
     #endregion
 
     #region GameObjects
@@ -96,10 +83,8 @@ public class SimulationManager : MonoBehaviour
     public static float upLimit;
     public static float rightLimit;
     public static float downLimit;
-
     #endregion
     #region Initialisation
-    // Start is called before the first frame update
     void Start()
     {
         Instance = this;
@@ -111,101 +96,14 @@ public class SimulationManager : MonoBehaviour
 
         secondsOfLastGrassSpawn = 0;
 
-        CreateArchetypes();
-
         // Only continue if no errors creating the map
         if (!CreateMap())
         {
             Debug.Log("Error Loading Map");
         }
     }
-
-    private void CreateArchetypes()
-    {
-        //Create archetype of Grass tile, water tile, rock tile, sand tile
-        GrassTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        WaterTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData),
-            typeof(DrinkableData)
-            );
-
-        RockTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        SandTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        //  Create architype of Fox MaleRabbit Female Rabbit Grass
-        MaleRabbitArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(EdibleData),
-            typeof(MovementData),
-            typeof(ReproductiveData),
-            typeof(SizeData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        FemaleRabbitArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(ReproductiveData),
-            typeof(EdibleData),
-            typeof(MovementData),
-            typeof(SizeData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        FoxArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(MovementData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(SizeData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        GrassArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(EdibleData)
-            );
-    }
     #endregion
 
-    // Update is called once per frame
     void Update()
     {
         //check if the setup has completed yet, finish setup
@@ -229,9 +127,7 @@ public class SimulationManager : MonoBehaviour
                 secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
                 CreateEntitiesFromGameObject(grass, 1);
             }
-
         }
-
     }
 
     private void OnDestroy()
@@ -240,29 +136,29 @@ public class SimulationManager : MonoBehaviour
         if (settings != null)
             settings.BlobAssetStore.Dispose();
 
-        if (conversionGrassTile != Entity.Null)
-            entityManager.DestroyEntity(conversionGrassTile);
+        //if (conversionGrassTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionGrassTile);
 
-        if (conversionLightGrassTile != Entity.Null)
-            entityManager.DestroyEntity(conversionLightGrassTile);
+        //if (conversionLightGrassTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionLightGrassTile);
 
-        if (conversionWaterTile != Entity.Null)
-            entityManager.DestroyEntity(conversionWaterTile);
+        //if (conversionWaterTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionWaterTile);
 
-        if (conversionSandTile != Entity.Null)
-            entityManager.DestroyEntity(conversionSandTile);
+        //if (conversionSandTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionSandTile);
 
-        if (conversionRockTile != Entity.Null)
-            entityManager.DestroyEntity(conversionRockTile);
+        //if (conversionRockTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionRockTile);
 
-        if (conversionRabbit != Entity.Null)
-            entityManager.DestroyEntity(conversionRabbit);
+        //if (conversionRabbit != Entity.Null)
+        //    entityManager.DestroyEntity(conversionRabbit);
 
-        if (conversionFox != Entity.Null)
-            entityManager.DestroyEntity(conversionFox);
+        //if (conversionFox != Entity.Null)
+        //    entityManager.DestroyEntity(conversionFox);
 
-        if (conversionGrass != Entity.Null)
-            entityManager.DestroyEntity(conversionGrass);
+        //if (conversionGrass != Entity.Null)
+        //    entityManager.DestroyEntity(conversionGrass);
 
     }
 
@@ -348,8 +244,6 @@ public class SimulationManager : MonoBehaviour
                                 colliderType = ColliderTypeData.ColliderType.Water
                             }
                         );
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 8; //set layer to unwalkable
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -359,8 +253,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -370,8 +262,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -381,8 +271,6 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 11; //set layer to grass
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -391,15 +279,6 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        //entityManager.SetSharedComponentData<RenderMesh>(entity, new RenderMesh
-                        //{
-                        //    mesh = theMesh,
-                        //    material = theMaterial,
-                        //    subMesh = 0,
-                        //    layer = 0, // Here
-                        //    castShadows = ShadowCastingMode.On,
-                        //    receiveShadows = true
-                        //});
                         Debug.Log("Unknown TerrainCost value");
                         break;
                 }
@@ -611,6 +490,7 @@ public class SimulationManager : MonoBehaviour
 
         foxPopulation++;
     }
+
     private void CreateGrassAtWorldPoint(in float3 worldPoint)
     {
         if (conversionGrass == Entity.Null)
@@ -850,5 +730,4 @@ public class SimulationManager : MonoBehaviour
     }
 
     #endregion
-
 }
