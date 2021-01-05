@@ -718,13 +718,17 @@ public class SimulationManager : MonoBehaviour
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
         if (Input.GetMouseButtonDown(0))
         {
-            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Vector3 targetPosition = hit.point;
-                Debug.Log(targetPosition.ToString());
-                if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
-                    CreateRabbitAtWorldPoint(targetPosition);
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateRabbitAtWorldPoint(targetPosition);
+                }
             }
         }
     }
