@@ -151,6 +151,10 @@ public class GridSetup : MonoBehaviour
                 int sampleY = Mathf.Clamp(y, 0, kernelExtents); //clamp so take value from first node rather than out of bounds
                 penaltiesVertical[x, 0] += penaltiesHorizontal[x, sampleY];//sample the penalty from the horizontal pass array
             }
+            
+            //blur bottom row
+            int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, 0] / (kernelSize * kernelSize));//average the penalty and round to nearest int
+            grid[x, 0].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
 
             //loop over all remaining rows in the column
             for (int y = 1; y < gridSize.y; y++)
@@ -158,7 +162,7 @@ public class GridSetup : MonoBehaviour
                 int indexToRemove = Mathf.Clamp(y - kernelExtents - 1, 0, gridSize.y);//calc index of node that is no longer inside kernel after kernel moved along 1
                 int indexToAdd = Mathf.Clamp(y + kernelExtents, 0, gridSize.y - 1);//calc index of node that is now inside kernel after kernel moved along 1
                 penaltiesVertical[x, y] = penaltiesVertical[x, y - 1] - penaltiesHorizontal[x, indexToRemove] + penaltiesHorizontal[x, indexToAdd];//equal to previous - penalty at indexToRemove + penalty at indexToAdd
-                int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
+                blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
                 grid[x, y].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
 
                 //update penalty min and max
