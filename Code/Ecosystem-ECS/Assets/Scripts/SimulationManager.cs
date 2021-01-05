@@ -7,10 +7,12 @@ using UnityEngine;
 public class SimulationManager : MonoBehaviour
 {
     EntityManager entityManager;
-    GameObjectConversionSettings settings;
+    public GameObjectConversionSettings settings;
     public static SimulationManager Instance;
     [SerializeField] public bool isDebugEnabled;
     public bool isSetupComplete;
+
+    int secondsOfLastGrassSpawn;
 
     #region Archetypes
     // declare All of archetypes
@@ -22,6 +24,18 @@ public class SimulationManager : MonoBehaviour
     public static EntityArchetype FemaleRabbitArchetype { get; private set; }
     public static EntityArchetype GrassArchetype { get; private set; }
     public static EntityArchetype FoxArchetype { get; private set; }   //I am not sure do we need Female Fox, just Fox if we need, I can add later
+    #endregion
+
+    #region Converted Entities
+    public Entity conversionGrassTile;
+    public Entity conversionLightGrassTile;
+    public Entity conversionWaterTile;
+    public Entity conversionSandTile;
+    public Entity conversionRockTile;
+    public Entity conversionRabbit;
+    public Entity conversionFox;
+    public Entity conversionGrass;
+
     #endregion
 
     #region GameObjects
@@ -90,9 +104,12 @@ public class SimulationManager : MonoBehaviour
     {
         Instance = this;
         isSetupComplete = false;
+        Application.targetFrameRate = 60; // Target 60fps
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
+
+        secondsOfLastGrassSpawn = 0;
 
         CreateArchetypes();
 
@@ -205,8 +222,47 @@ public class SimulationManager : MonoBehaviour
         else
         {
             SpawnRabbitAtPosOnClick();
-            EnforceGrassPopulation();
+
+            /* Spawn grass entity at random location once every 10 in game seconds */
+            if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
+            {
+                secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
+                CreateEntitiesFromGameObject(grass, 1);
+            }
+
         }
+
+    }
+
+    private void OnDestroy()
+    {
+        //dispose of blobassetstore on destroy
+        if (settings != null)
+            settings.BlobAssetStore.Dispose();
+
+        if (conversionGrassTile != Entity.Null)
+            entityManager.DestroyEntity(conversionGrassTile);
+
+        if (conversionLightGrassTile != Entity.Null)
+            entityManager.DestroyEntity(conversionLightGrassTile);
+
+        if (conversionWaterTile != Entity.Null)
+            entityManager.DestroyEntity(conversionWaterTile);
+
+        if (conversionSandTile != Entity.Null)
+            entityManager.DestroyEntity(conversionSandTile);
+
+        if (conversionRockTile != Entity.Null)
+            entityManager.DestroyEntity(conversionRockTile);
+
+        if (conversionRabbit != Entity.Null)
+            entityManager.DestroyEntity(conversionRabbit);
+
+        if (conversionFox != Entity.Null)
+            entityManager.DestroyEntity(conversionFox);
+
+        if (conversionGrass != Entity.Null)
+            entityManager.DestroyEntity(conversionGrass);
 
     }
 
@@ -250,16 +306,22 @@ public class SimulationManager : MonoBehaviour
         // Set world map data
         gridWidth = mapList[0].Count;
         gridHeight = mapList.Count;
-        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
+        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
         worldSize.x = gridWidth * tileSize;
         worldSize.y = gridHeight * tileSize;
         worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
         // Create entity prefabs from the game objects hierarchy once
-        var entityGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
-        var entityWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
-        var entitySandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
-        var entityRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
+        if (conversionGrassTile == Entity.Null)
+            conversionGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
+        if (conversionLightGrassTile == Entity.Null)
+            conversionLightGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
+        if (conversionWaterTile == Entity.Null)
+            conversionWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
+        if (conversionSandTile == Entity.Null)
+            conversionSandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
+        if (conversionRockTile == Entity.Null)
+            conversionRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
 
 
         for (int y = 0; y < gridHeight; y++)
@@ -273,10 +335,9 @@ public class SimulationManager : MonoBehaviour
                 {
                     case MapReader.TerrainCost.Water:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityWaterTile);
+                        prototypeTile = entityManager.Instantiate(conversionWaterTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
@@ -291,7 +352,7 @@ public class SimulationManager : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
@@ -302,7 +363,7 @@ public class SimulationManager : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entitySandTile);
+                        prototypeTile = entityManager.Instantiate(conversionSandTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
@@ -313,7 +374,7 @@ public class SimulationManager : MonoBehaviour
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityRockTile);
+                        prototypeTile = entityManager.Instantiate(conversionRockTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
@@ -324,7 +385,7 @@ public class SimulationManager : MonoBehaviour
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
@@ -343,13 +404,6 @@ public class SimulationManager : MonoBehaviour
                 }
             }
         }
-
-        entityManager.DestroyEntity(entityGrassTile);
-        entityManager.DestroyEntity(entityWaterTile);
-        entityManager.DestroyEntity(entitySandTile);
-        entityManager.DestroyEntity(entityRockTile);
-
-
     }
 
     private void SetLimits()
@@ -365,25 +419,20 @@ public class SimulationManager : MonoBehaviour
     // Creates entities from a gameobject in a given quantity
     private void CreateEntitiesFromGameObject(GameObject gameObject, int quantity)
     {
-        // Create entity prefab from the game object hierarchy once
-        var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
-
         for (int i = 0; i < quantity; i++)
         {
-
             // Get the random world co ordinates from the bottom left of the graph
             Vector3 worldPoint;
             do
             {
                 // Calc random point on map
-                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
-                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
+                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth);
+                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight);
                 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
             } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, entityManager));
 
             // Place the instantiated entity in a random point on the map
             //set default variables based on gameObject name - not great solution but works for now
-            //FIXME
             if (gameObject.name.Contains("Rabbit"))
             {
                 CreateRabbitAtWorldPoint(worldPoint);
@@ -396,45 +445,14 @@ public class SimulationManager : MonoBehaviour
             {
                 CreateGrassAtWorldPoint(worldPoint);
             }
-            else
-            {
-                // Efficiently instantiate a bunch of entities from the already converted entity prefab
-                var prototypeEntity = entityManager.Instantiate(convertedEntity);
-                //Set Component Data for the entity
-                entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
-
-                entityManager.SetComponentData(prototypeEntity,
-                    new Translation
-                    {
-                        Value = worldPoint
-                    }
-                );
-                //if has target data component set target to self
-                if (entityManager.HasComponent<TargetData>(prototypeEntity))
-                {
-                    entityManager.SetComponentData(prototypeEntity,
-                        new TargetData
-                        {
-                            atTarget = true,
-                            currentTarget = worldPoint,
-                            oldTarget = worldPoint,
-
-                            sightRadius = 0.1f,
-                            touchRadius = 0.1f
-                        }
-                    );
-                }
-            }
-
         }
-        entityManager.DestroyEntity(convertedEntity);
-
     }
 
     private void CreateFoxAtWorldPoint(in float3 worldPoint)
     {
-        var entityFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
-        Entity prototypeFox = entityManager.Instantiate(entityFox);
+        if (conversionFox == Entity.Null)
+            conversionFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
+        Entity prototypeFox = entityManager.Instantiate(conversionFox);
 
         //set name of entity
         entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
@@ -591,13 +609,12 @@ public class SimulationManager : MonoBehaviour
         );
 
         foxPopulation++;
-
-        entityManager.DestroyEntity(entityFox);
     }
     private void CreateGrassAtWorldPoint(in float3 worldPoint)
     {
-        var entityGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
-        Entity prototypeGrass = entityManager.Instantiate(entityGrass);
+        if (conversionGrass == Entity.Null)
+            conversionGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
+        Entity prototypeGrass = entityManager.Instantiate(conversionGrass);
 
         //set name of entity
         entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
@@ -649,13 +666,13 @@ public class SimulationManager : MonoBehaviour
 
         grassPopulation++;
 
-        entityManager.DestroyEntity(entityGrass);
     }
 
     private void CreateRabbitAtWorldPoint(in float3 worldPoint)
     {
-        var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
-        Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
+        if (conversionRabbit == Entity.Null)
+            conversionRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
+        Entity prototypeRabbit = entityManager.Instantiate(conversionRabbit);
 
         //set name of entity
         entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
@@ -813,8 +830,6 @@ public class SimulationManager : MonoBehaviour
         );
 
         rabbitPopulation++;
-
-        entityManager.DestroyEntity(entityRabbit);
     }
 
     private void SpawnRabbitAtPosOnClick()
@@ -833,12 +848,6 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    private void EnforceGrassPopulation()
-    {
-        //randomly spawn as many grass as the number less than numberOfGrassToSpawn
-        if (grassPopulation < numberOfGrassToSpawn)
-            CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn - grassPopulation);
-    }
     #endregion
 
 }
