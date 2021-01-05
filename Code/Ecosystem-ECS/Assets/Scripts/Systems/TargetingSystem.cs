@@ -34,10 +34,8 @@ public class TargetingSystem : SystemBase
                 .WithNone<PathFindingRequestData>()
                 .ForEach((
                 Entity entity,
-                int entityInQueryIndex,
                 ref TargetData targetData,
-                ref BasicNeedsData basicNeedsData,
-                ref MovementData movementData,
+                in BasicNeedsData basicNeedsData,
                 in PathFollowData pathFollowData,
                 in Translation translation,
                 in StateData stateData

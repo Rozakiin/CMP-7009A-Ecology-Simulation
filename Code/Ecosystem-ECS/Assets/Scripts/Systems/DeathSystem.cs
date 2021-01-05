@@ -12,9 +12,9 @@ public class DeathSystem : SystemBase
         int rabbitsDeadEaten = 0;
         int rabbitsDeadHunger = 0;
         int rabbitsDeadThirst = 0;
-        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) =>
+        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
         {
-            if ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 rabbitsDeadTotal++;
                 switch (stateData.deathReason)
@@ -50,9 +50,9 @@ public class DeathSystem : SystemBase
         int foxesDeadEaten = 0;
         int foxesDeadHunger = 0;
         int foxesDeadThirst = 0;
-        Entities.WithAll<isFoxTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) =>
+        Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
         {
-            if ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 foxesDeadTotal++;
                 switch (stateData.deathReason)
@@ -84,9 +84,9 @@ public class DeathSystem : SystemBase
 
 
         int grassEaten = 0;
-        Entities.WithAll<isGrassTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) =>
+        Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
         {
-            if ((stateData.flagState & StateData.FlagStates.Dead) == StateData.FlagStates.Dead)
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 grassEaten++;
                 EntityManager.DestroyEntity(entity);
