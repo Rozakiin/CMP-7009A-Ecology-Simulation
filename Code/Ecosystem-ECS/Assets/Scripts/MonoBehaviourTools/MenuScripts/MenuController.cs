@@ -470,7 +470,8 @@ namespace SpeedTutorMainMenuSystem
 
         public void LoadGame()
         {
-            string filePath = Application.dataPath + "/XM.text";
+            string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
+            string filePath = filePaths[0];
             if (File.Exists(filePath))
             {
                 XmlDocument xmlDocument = new XmlDocument();

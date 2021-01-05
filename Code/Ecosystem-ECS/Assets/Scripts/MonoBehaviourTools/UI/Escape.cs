@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 using System.IO;
+using SFB;
+using System;
 
 public class Escape : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class Escape : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
             if (timeControlSystem.pause)
             {
@@ -46,7 +48,14 @@ public class Escape : MonoBehaviour
         Debug.Log("I am Quit");
     }
 
-    public void SaveGame()
+    public void SaveFile()
+    {
+        string timeStamp = DateTime.Now.ToString();
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", timeStamp, "txt");
+        SaveGame(path);
+    }
+
+    private void SaveGame(string path)
     {
         XmlDocument xmlDocument = new XmlDocument();
 
@@ -611,10 +620,7 @@ public class Escape : MonoBehaviour
 
         xmlDocument.AppendChild(root);
 
-        xmlDocument.Save(Application.dataPath + "/XML.text");
-        if (File.Exists(Application.dataPath + "/XML.text"))
-        {
-            Debug.Log("XML FILED SAVED");
-        }
+
+        xmlDocument.Save(path);
     }
 }
