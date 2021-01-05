@@ -292,6 +292,7 @@ public class SimulationManager : MonoBehaviour
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
         collisionPlaneForMap = new GameObject();
+        collisionPlaneForMap.name = "MapCollisionPlaneGO";
         collisionPlaneForMap.transform.position = transform.position;
         collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
         UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
