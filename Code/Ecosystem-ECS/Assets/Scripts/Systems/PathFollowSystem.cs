@@ -28,7 +28,7 @@ public class PathFollowSystem : SystemBase
                 float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)
 
                 //rotate towards the targetPosition
-                rotation.Value = quaternion.LookRotationSafe(moveDir, math.up());
+                rotation.Value = math.slerp(math.normalizesafe(rotation.Value), quaternion.LookRotationSafe(moveDir, math.up()), step);
                 //move towards the targetPosition
                 translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
 
