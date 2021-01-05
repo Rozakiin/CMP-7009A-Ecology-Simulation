@@ -24,13 +24,10 @@ public class GridSetup : MonoBehaviour
     public GridNode[,] grid;//The array of nodes that the A Star algorithm uses.
 
     [Header("LayerMask Data")]
-    //[SerializeField] LayerMask walkableMask;
-    //[SerializeField] private LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
     [SerializeField] private int unwalkableProximityPenalty;//Penalty for going near to unwalkable nodes
     private int penaltyMin = int.MaxValue;
     private int penaltyMax = int.MinValue;
-    //[SerializeField] private TerrainType[] walkableRegions;
-    //private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
+
 
     private void Awake()
     {
@@ -38,20 +35,9 @@ public class GridSetup : MonoBehaviour
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         gridNodeDiameter = gridNodeRadius * 2;//Double the radius to get diameter
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        //StartCoroutine(CreateGrid());
-    }
-
-    private void Update()
-    {
-
-    }
 
     public bool CreateGrid()
     {
-        //yield return new WaitForEndOfFrame(); // wait till the end of frame so tile entities have been made
         gridWorldSize = SimulationManager.worldSize;
         gridSize.x = (int)math.round(gridWorldSize.x / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSize.y = (int)math.round(gridWorldSize.y / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
@@ -63,9 +49,9 @@ public class GridSetup : MonoBehaviour
             {
                 float3 worldPoint = SimulationManager.worldBottomLeft + Vector3.right * (x * gridNodeDiameter + gridNodeRadius) + Vector3.forward * (y * gridNodeDiameter + gridNodeRadius);//Get the world co ordinates of the node from the bottom left of the graph
 
-                bool isWalkable = false;
+                bool isWalkable;
+                int movementPenalty;//penalty for walking over node
 
-                int movementPenalty = 0;//penalty for walking over node
                 float3 tempUp = worldPoint + new float3(0, 100000, 0);
                 float3 tempDown = worldPoint + new float3(0, -100000, 0);
                 CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
@@ -151,7 +137,7 @@ public class GridSetup : MonoBehaviour
                 int sampleY = Mathf.Clamp(y, 0, kernelExtents); //clamp so take value from first node rather than out of bounds
                 penaltiesVertical[x, 0] += penaltiesHorizontal[x, sampleY];//sample the penalty from the horizontal pass array
             }
-            
+
             //blur bottom row
             int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, 0] / (kernelSize * kernelSize));//average the penalty and round to nearest int
             grid[x, 0].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
