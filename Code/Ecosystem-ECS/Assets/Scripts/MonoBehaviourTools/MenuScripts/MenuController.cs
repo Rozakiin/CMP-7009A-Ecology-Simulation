@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -422,10 +423,18 @@ namespace SpeedTutorMainMenuSystem
 
         private IEnumerator OutputRoutine(string url)
         {
-            var loader = new WWW(url);
-            yield return loader;
-            fileContents = loader.text;
-            Debug.Log(fileContents);
+            UnityWebRequest webRequest = UnityWebRequest.Get(url);
+            yield return webRequest.SendWebRequest();
+            if (webRequest.isNetworkError)
+            {
+                Debug.Log("Error: " + webRequest.error);
+            }
+            else
+            {
+                Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
+                fileContents = webRequest.downloadHandler.text;
+                Debug.Log(fileContents);
+            }
         }
 
         // attempts to load the given file into the MapReader
