@@ -27,8 +27,6 @@ public class LookingEntitySystem : SystemBase
         Entities.ForEach((
             ref TargetData targetData,
             in ColliderTypeData colliderTypeData,
-            in ReproductiveData reproductiveData,
-            in StateData stateData,
             in Translation translation
             ) =>
         {

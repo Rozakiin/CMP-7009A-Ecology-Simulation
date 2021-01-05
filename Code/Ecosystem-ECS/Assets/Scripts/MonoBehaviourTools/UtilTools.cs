@@ -22,11 +22,9 @@ namespace UtilTools
 
             if (world.CastRay(input, out Unity.Physics.RaycastHit hit))
             {
-                // see hit.Position
-                // see hit.SurfaceNormal
-                Entity e = physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
-                return e;
+                return physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
             }
+
             return Entity.Null;
         }
     }
@@ -48,6 +46,15 @@ namespace UtilTools
             }
 
             return false;
+        }
+    }
+
+    public static class ComponentTools
+    {
+        //Returns if flagStates contains a given state
+        public static bool ContainsState(StateData.FlagStates state, StateData.FlagStates stateDataflagStates)
+        {
+            return (stateDataflagStates & state) == state;
         }
     }
 }

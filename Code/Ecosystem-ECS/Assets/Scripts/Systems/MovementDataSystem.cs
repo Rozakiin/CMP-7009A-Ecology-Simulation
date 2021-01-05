@@ -5,12 +5,9 @@ public class MovementDataSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        float deltaTime = Time.DeltaTime;
-
         Entities.ForEach((
             ref MovementData movementData,
             in BioStatsData bioStatsData,
-            in ReproductiveData reproductiveData,
             in StateData stateData
             ) =>
         {
@@ -33,12 +30,6 @@ public class MovementDataSystem : SystemBase
             {
                 movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
             }
-
-            if (stateData.isFleeing)
-            {
-                //movementData.moveMultiplier *= 3; // triple move speed while fleeing
-            }
-
         }).ScheduleParallel();
     }
 }

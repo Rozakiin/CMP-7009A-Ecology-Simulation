@@ -33,12 +33,11 @@ public class DebuggingSystem : SystemBase
             }).Run();
 
 
-            Entities.ForEach((DynamicBuffer<PathPositionData> pathPositionDataBuffer, PathFollowData pathFollowData) =>
+            Entities.ForEach((DynamicBuffer<PathPositionData> pathPositionDataBuffer, in PathFollowData pathFollowData) =>
             {
                 //Debugging: draw a line to each node of path
                 if (pathFollowData.pathIndex >= 0)
                 {
-                    //Debug.Log($"{pathPositionDataBuffer[pathFollowData.pathIndex].position}");
                     for (int i = pathPositionDataBuffer.Length - 1; i > 0; i--)
                     {
                         Debug.DrawLine(pathPositionDataBuffer[i].position, pathPositionDataBuffer[i - 1].position, Color.cyan);

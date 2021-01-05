@@ -23,7 +23,6 @@ public class HungerSystem : SystemBase
             ref BasicNeedsData basicNeedsData,
             in TargetData targetData,
             in StateData stateData,
-            in ReproductiveData reproductiveData,
             in BioStatsData bioStatsData
             ) =>
         {
@@ -51,27 +50,24 @@ public class HungerSystem : SystemBase
             basicNeedsData.hunger += basicNeedsData.hungerIncrease * deltaTime;
 
             //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
-            if (targetData.entityToEat != Entity.Null && stateData.isEating)
+            if (HasComponent<EdibleData>(targetData.entityToEat) && stateData.isEating)
             {
-                if (HasComponent<EdibleData>(targetData.entityToEat))
+                basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
+                //set beenEaten to true in entityToEat
+                if (HasComponent<StateData>(targetData.entityToEat))
                 {
-                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
-                    //basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue * basicNeedsData.eatingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
-                    //set beenEaten to true in entityToEat
-                    if (HasComponent<StateData>(targetData.entityToEat))
-                    {
-                        ecb.SetComponent(entityInQueryIndex, targetData.entityToEat,
-                            new StateData
-                            {
-                                deathReason = StateData.DeathReason.Eaten,
+                    ecb.SetComponent(entityInQueryIndex, targetData.entityToEat,
+                        new StateData
+                        {
+                            deathReason = StateData.DeathReason.Eaten,
 
-                                flagState = StateData.FlagStates.Dead
-                            }
-                        );
-                    }
+                            flagState = StateData.FlagStates.Dead
+                        }
+                    );
                 }
             }
         }).ScheduleParallel();
+
         // Make sure that the ECB system knows about our job
         ecbSystem.AddJobHandleForProducer(this.Dependency);
     }

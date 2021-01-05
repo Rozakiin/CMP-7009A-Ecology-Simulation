@@ -850,13 +850,13 @@ namespace SpeedTutorMainMenuSystem
                     rabbitThirstIncreaseBaseText.text = RabbitDefaults.thirstIncrease.ToString();
                     rabbitThirstIncreaseBaseSlider.value = RabbitDefaults.thirstIncrease;
 
-                    //rabbitThirstIncreaseYoungText.text =                    RabbitDefaults..ToString(); 
+                    //rabbitThirstIncreaseYoungText.text = RabbitDefaults.ToString(); 
                     //rabbitThirstIncreaseYoungSlider.value = RabbitDefaults. ;
 
-                    //rabbitThirstIncreaseAdultText.text =                    RabbitDefaults..ToString(); 
+                    //rabbitThirstIncreaseAdultText.text =  RabbitDefaults.ToString(); 
                     //rabbitThirstIncreaseAdultSlider.value = RabbitDefaults. ;
 
-                    //rabbitThirstIncreaseOldText.text =                    RabbitDefaults..ToString(); 
+                    //rabbitThirstIncreaseOldText.text = RabbitDefaults.ToString(); 
                     //rabbitThirstIncreaseOldSlider.value = RabbitDefaults. ;
 
                     rabbitDrinkingSpeedText.text = RabbitDefaults.drinkingSpeed.ToString();
@@ -915,8 +915,8 @@ namespace SpeedTutorMainMenuSystem
                     foxNutritionalValueText.text = FoxDefaults.nutritionalValue.ToString();
                     foxNutritionalValueSlider.value = FoxDefaults.nutritionalValue;
 
-                    //foxCanBeEaten=                     FoxDefaults.canBeEaten.ToString();
-                    //foxCanBeEaten.value = FoxDefaults .canBeEaten;
+                    //foxCanBeEaten= FoxDefaults.canBeEaten.ToString();
+                    //foxCanBeEaten.value = FoxDefaults.canBeEaten;
 
                     foxHungerMaxText.text = FoxDefaults.hungerMax.ToString();
                     foxHungerMaxSlider.value = FoxDefaults.hungerMax;
@@ -948,13 +948,13 @@ namespace SpeedTutorMainMenuSystem
                     foxThirstIncreaseBaseText.text = FoxDefaults.thirstIncrease.ToString();
                     foxThirstIncreaseBaseSlider.value = FoxDefaults.thirstIncrease;
 
-                    //foxThirstIncreaseYoungText.text =                    FoxDefaults..ToString(); 
+                    //foxThirstIncreaseYoungText.text = FoxDefaults.ToString(); 
                     //foxThirstIncreaseYoungSlider.value = FoxDefaults. ;
 
-                    //foxThirstIncreaseAdultText.text =                    FoxDefaults..ToString(); 
+                    //foxThirstIncreaseAdultText.text = FoxDefaults.ToString(); 
                     //foxThirstIncreaseAdultSlider.value = FoxDefaults. ;
 
-                    //foxThirstIncreaseOldText.text =                    FoxDefaults..ToString(); 
+                    //foxThirstIncreaseOldText.text = FoxDefaults..ToString(); 
                     //foxThirstIncreaseOldSlider.value = FoxDefaults. ;
 
                     foxDrinkingSpeedText.text = FoxDefaults.drinkingSpeed.ToString();
@@ -1011,7 +1011,7 @@ namespace SpeedTutorMainMenuSystem
                     grassNutritionalValueText.text = GrassDefaults.nutritionalValue.ToString();
                     grassNutritionalValueSlider.value = GrassDefaults.nutritionalValue;
 
-                    //grassCanBeEaten=                     GrassDefaults.canBeEaten.ToString();
+                    //grassCanBeEaten= GrassDefaults.canBeEaten.ToString();
                     //grassCanBeEaten.value = GrassDefaults .canBeEaten;
 
                     grassSizeText.text = GrassDefaults.scale.ToString();

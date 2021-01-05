@@ -22,6 +22,7 @@ public class PathFollowSystem : SystemBase
             {
                 //get the world position of next path node to follow
                 float3 targetPosition = pathPositionDataBuffer[pathFollowData.pathIndex].position;
+
                 //calc the direction to move
                 float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
                 float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)

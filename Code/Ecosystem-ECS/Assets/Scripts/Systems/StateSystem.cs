@@ -15,8 +15,7 @@ public class StateSystem : SystemBase
             ref ReproductiveData reproductiveData,
             in BasicNeedsData basicNeedsData,
             in TargetData targetData,
-            in BioStatsData bioStatsData,
-            in Translation translation
+            in BioStatsData bioStatsData
             ) =>
         {
             if (stateData.beenEaten)
@@ -222,10 +221,5 @@ public class StateSystem : SystemBase
             stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
             stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
         }).ScheduleParallel();
-    }
-
-    public static bool ContainsState(StateData.FlagStates state, StateData.FlagStates stateDataflagStates)
-    {
-        return (stateDataflagStates & state) == state;
     }
 }

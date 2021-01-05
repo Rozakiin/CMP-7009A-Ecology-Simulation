@@ -342,9 +342,6 @@ public class PathFindingSystem : SystemBase
         int x = UnityEngine.Mathf.FloorToInt(math.min(gridSize.x * percentX, gridSize.x - 1));
         int y = UnityEngine.Mathf.FloorToInt(math.min(gridSize.y * percentY, gridSize.y - 1));
 
-        //int x = (int)math.floor(math.min(gridSize.x * percentX, gridSize.x - 1));
-        //int y = (int)math.floor(math.min(gridSize.y * percentY, gridSize.y - 1));
-
         return pathNodeArray[CalculateIndex(x, y, gridSize.x)];// position of closest node in array
     }
 
