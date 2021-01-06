@@ -75,6 +75,11 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Toggle invertYToggle;
         #endregion
         #region Initial Properties
+        [Header("Initial Numbers InputFields")]
+        [SerializeField] private InputField rabbitNumberInputField;
+        [SerializeField] private InputField foxNumberInputField;
+        [SerializeField] private InputField grassNumberInputField;
+
         [Header("Initial Properties Sliders")]
         #region Rabbit
         [Header("Rabbit")]
@@ -504,6 +509,25 @@ namespace SpeedTutorMainMenuSystem
         {
             Debug.Log("Apply Initial Properties");
             StartCoroutine(ConfirmationBox());
+        }
+
+        public void OnSetNumberToSpawn(string entityToUpdate)
+        {
+            switch (entityToUpdate)
+            {
+                case "Rabbit":
+                    SimulationManager.InitialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
+                    break;
+                case "Fox":
+                    SimulationManager.InitialFoxesToSpawn = int.Parse(foxNumberInputField.text);
+                    break;
+                case "Grass":
+                    SimulationManager.InitialGrassToSpawn = int.Parse(grassNumberInputField.text);
+                    break;
+                default:
+                    Debug.LogWarning("Attempted to update unknown entity in switch: " + entityToUpdate, this);
+                    break;
+            }
         }
 
         public void InitialPropertiesUpdate(string propertyToUpdate)

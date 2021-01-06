@@ -39,10 +39,13 @@ public class SimulationManager : MonoBehaviour
     #endregion
 
     #region Numbers for Entity Spawning 
-    [Header("Map Data")]
+    [Header("Numbers of Entities Spawning")]
     [SerializeField] public int numberOfRabbitsToSpawn = 0;
     [SerializeField] public int numberOfFoxesToSpawn = 0;
     [SerializeField] public int numberOfGrassToSpawn = 0;
+    public static int InitialRabbitsToSpawn = 0;
+    public static int InitialFoxesToSpawn = 0;
+    public static int InitialGrassToSpawn = 0;
     #endregion
 
     #region Population Info for Entities
@@ -87,13 +90,20 @@ public class SimulationManager : MonoBehaviour
     #region Initialisation
     void Start()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
         isSetupComplete = false;
         Application.targetFrameRate = 60; // Target 60fps
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
+        if (InitialRabbitsToSpawn != 0)
+            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
+        if (InitialFoxesToSpawn != 0)
+            numberOfFoxesToSpawn = InitialFoxesToSpawn;
+        if (InitialGrassToSpawn != 0)
+            numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
