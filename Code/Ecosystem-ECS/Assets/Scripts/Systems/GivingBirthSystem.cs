@@ -161,7 +161,7 @@ public class GivingBirthSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newEntity,
                         new TargetData
                         {
-                            atTarget = true,
+                            atTarget = rabbitAtTarget,
                             currentTarget = translation.Value,
                             oldTarget = translation.Value,
 
@@ -174,7 +174,7 @@ public class GivingBirthSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newEntity,
                         new PathFollowData
                         {
-                            pathIndex = -1
+                            pathIndex = rabbitPathIndex
                         }
                     );
 
