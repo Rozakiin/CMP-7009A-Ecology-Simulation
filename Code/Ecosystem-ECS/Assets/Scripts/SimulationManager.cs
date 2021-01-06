@@ -237,7 +237,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
-                        entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
+                        //entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
                         entityManager.SetComponentData(prototypeTile,
                             new ColliderTypeData
                             {
@@ -252,7 +252,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
+                        //entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -261,7 +261,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
+                        //entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -270,7 +270,7 @@ public class SimulationManager : MonoBehaviour
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
+                        //entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -335,7 +335,7 @@ public class SimulationManager : MonoBehaviour
         Entity prototypeFox = entityManager.Instantiate(conversionFox);
 
         //set name of entity
-        entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
+        //entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
 
         entityManager.AddComponent<isFoxTag>(prototypeFox);
         entityManager.SetComponentData(prototypeFox,
@@ -498,7 +498,7 @@ public class SimulationManager : MonoBehaviour
         Entity prototypeGrass = entityManager.Instantiate(conversionGrass);
 
         //set name of entity
-        entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
+        //entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
 
         entityManager.AddComponent<isGrassTag>(prototypeGrass);
         entityManager.SetComponentData(prototypeGrass,
@@ -556,7 +556,7 @@ public class SimulationManager : MonoBehaviour
         Entity prototypeRabbit = entityManager.Instantiate(conversionRabbit);
 
         //set name of entity
-        entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
+        //entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
 
         entityManager.AddComponent<isRabbitTag>(prototypeRabbit);
         entityManager.SetComponentData(prototypeRabbit,
