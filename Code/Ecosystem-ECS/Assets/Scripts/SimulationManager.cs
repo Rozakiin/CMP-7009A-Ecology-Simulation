@@ -129,8 +129,9 @@ public class SimulationManager : MonoBehaviour
         }
         else
         {
-            SpawnRabbitAtPosOnClick();
-
+            SpawnRabbitAtPosOnLClick();
+            SpawnFoxAtPosOnRClick();
+            SpawnGrassAtPosOnMClick();
             /* Spawn grass entity at random location once every 10 in game seconds */
             if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
             {
@@ -723,7 +724,7 @@ public class SimulationManager : MonoBehaviour
         rabbitPopulation++;
     }
 
-    private void SpawnRabbitAtPosOnClick()
+    private void SpawnRabbitAtPosOnLClick()
     {
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
         if (Input.GetMouseButtonDown(0))
@@ -742,6 +743,43 @@ public class SimulationManager : MonoBehaviour
             }
         }
     }
-
+    private void SpawnFoxAtPosOnRClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(1))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateFoxAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
+    private void SpawnGrassAtPosOnMClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(2))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateGrassAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
     #endregion
 }
