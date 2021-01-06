@@ -4,6 +4,9 @@ using Unity.Collections;
 using UnityEngine;
 using Unity.Entities;
 using UnityEngine.UI;
+using SFB;
+using System.IO;
+using System;
 
 //maybe we need these function later on, this function can modify the number of red line in the graph
 //now only apply in 5 line in X aixs and 5 line in y axis not sure need to updata,discuss monday
@@ -16,12 +19,15 @@ public class UIGraph : MonoBehaviour
 
     [SerializeField] InputField inputField;
     [SerializeField] Button Submit;
+    [SerializeField] Button Save;
 
+    public TimeControlSystem timeControlSystem;
 
     private float nextTime;
     private float nextTime2;
     private float XPos;
     private float RabbitNumber;
+    private float FoxNumber;
     private float yMaximum;
     private float xMaximum;
     private float InyMaximum;
@@ -39,7 +45,8 @@ public class UIGraph : MonoBehaviour
     private float parentWidth;
     private float parentHeight;
     private int input;
-    List<float> GraphList = new List<float> ();
+    List<float> GraphRabbitList = new List<float> ();
+    List<float> GraphFoxList = new List<float>();
 
     private void Awake()
     {
@@ -63,8 +70,9 @@ public class UIGraph : MonoBehaviour
     private void Start()
     {
         RabbitNumber = simulationManager.RabbitSpawn();
+        FoxNumber = simulationManager.FoxSpawn();
         InyMaximum = simulationManager.RabbitSpawn() * 5;
-        yMaximum = RabbitNumber * 5;
+        yMaximum = Mathf.Max(RabbitNumber, FoxNumber) * 5;
         xMaximum = 50f;
         InxMaximum = 100f;
         nextTime = 0;
@@ -76,22 +84,25 @@ public class UIGraph : MonoBehaviour
         // create line in awake based on vector2 Line input from inspector
         Create(Line);
         Submit.onClick.AddListener(ShowTime);
+        Save.onClick.AddListener(SaveFile);
     }
     private void Update()
     {
         if (Time.time >= nextTime)
         {
             RabbitNumber = simulationManager.RabbitPopulation();
-            XPos = Time.time;    // X aixs is same with turn number in time counter system 
-            GraphList.Add(RabbitNumber);
+            FoxNumber = simulationManager.FoxPopulation();
+            XPos = Time.time;   
+            GraphRabbitList.Add(RabbitNumber);
+            GraphFoxList.Add(FoxNumber);
             nextTime += 1;
 
             if (input >= 60 && input <= 300)
             {
-                if (RabbitNumber / 8 * 10 > yMaximum)
+                if (Mathf.Max(RabbitNumber,FoxNumber) / 8 * 10 > yMaximum)
                 {
                     InyMaximum = yMaximum;
-                    yMaximum = RabbitNumber / 8 * 10;
+                    yMaximum = Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10;
                     UpdataYAxis();
                     DecreaseY();
                 }
@@ -105,7 +116,7 @@ public class UIGraph : MonoBehaviour
                         UpdataXAxis();
                         DecreaseX();
                     }
-                    ShowGraph(XPos, RabbitNumber);
+                    ShowGraph(XPos, RabbitNumber,FoxNumber);
                 }
                 else
                 {
@@ -118,21 +129,16 @@ public class UIGraph : MonoBehaviour
                 {
                     ShowAllGraph();
 
-                    if (RabbitNumber / 8 * 10 > yMaximum)
+                    if (Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10 > yMaximum)
                     {
                         InyMaximum = yMaximum;
-                        yMaximum = RabbitNumber / 8 * 10;
+                        yMaximum = Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10;
                         UpdataYAxis();
                         DecreaseY();
                     }
 
-                    int a = (int)Mathf.Floor(GraphList.Count / 100);
-
+                    int a = (int)Mathf.Floor(GraphRabbitList.Count / 100);
                     nextTime2 += a;
-
-                    print("I am update duration"+a);
-                    print("I am total time"+Time.time);
-
                 }
             }
         }
@@ -142,6 +148,31 @@ public class UIGraph : MonoBehaviour
     {
         input = int.Parse(inputField.text);
         nextTime2 = Time.time;
+    }
+
+    void SaveFile()
+    {
+        timeControlSystem.Pause();
+
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "csv");
+        try
+        {
+            // Create a new file     
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                for (int i = 0; i < GraphRabbitList.Count; i++) 
+                {
+                    sw.WriteLine(GraphRabbitList[i]+","+ GraphFoxList[i]);
+                }
+                sw.Close();
+            }
+        }
+        catch (Exception Ex)
+        {
+            Console.WriteLine(Ex.ToString());
+        }
+
+        timeControlSystem.Play();
     }
 
     void UpdataYAxis()
@@ -175,7 +206,7 @@ public class UIGraph : MonoBehaviour
             else
             {
                 int labelNumber = int.Parse(Child.name.ToString());
-                int XText = (int)(GraphList.Count / Line.x * labelNumber);
+                int XText = (int)(GraphRabbitList.Count / Line.x * labelNumber);
                 Child.GetComponent<Text>().text = XText.ToString();
             }
         }
@@ -244,7 +275,22 @@ public class UIGraph : MonoBehaviour
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.transform.SetParent(CircleContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSprite;
-        gameObject.name = "circle" + nextTime.ToString();
+        gameObject.name = "Rabbit" + (Mathf.Round((int)Time.time)).ToString();
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = new Vector2(5, 5);
+        rectTransform.anchorMin = new Vector2(0, 0);
+        rectTransform.anchorMax = new Vector2(0, 0);
+        return gameObject;
+    }
+
+    private GameObject CreateCircle1(Vector2 anchoredPosition)
+    {
+        GameObject gameObject = new GameObject("circle", typeof(Image));
+        gameObject.transform.SetParent(CircleContainer, false);
+        gameObject.GetComponent<Image>().sprite = circleSprite;
+        gameObject.GetComponent<Image>().color = Color.red;
+        gameObject.name = "Fox" + (Mathf.Round((int)Time.time)).ToString();
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = new Vector2(5, 5);
@@ -273,11 +319,13 @@ public class UIGraph : MonoBehaviour
 
     }
 
-    private void ShowGraph(float xValue,float yValue)
+    private void ShowGraph(float xValue,float yValue,float yValue1)
     {
         float yPosition = (yValue / yMaximum) * graphHeight;
         float xPosition = (xValue / xMaximum) * graphWidth;
+        float yPosition1 = (yValue1 / yMaximum) * graphWidth;
         CreateCircle(new Vector2(xPosition, yPosition));
+        CreateCircle1(new Vector2(xPosition, yPosition1));
     }
 
     private void ShowGraphList(int value)
@@ -288,13 +336,14 @@ public class UIGraph : MonoBehaviour
             int number;
             for (int i = 1; i <= value; i++)
             {
-                float yPosition = (GraphList[GraphList.Count - value + i - 1] / yMaximum) * graphHeight;
+                float yPosition = (GraphRabbitList[GraphRabbitList.Count - value + i - 1] / yMaximum) * graphHeight;
+                float yPosition1 = (GraphFoxList[GraphRabbitList.Count - value + i - 1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / value;
                 CreateCircle(new Vector2(xPosition, yPosition));
-
+                CreateCircle1(new Vector2(xPosition, yPosition1));
                 if (i == (int)Mathf.Round(value / Line.x))
                 {
-                    number = GraphList.Count - value + i - 1;
+                    number = GraphRabbitList.Count - value + i - 1;
                     UpdataGraphListXAxis(number,value);
                 }
             }
@@ -306,24 +355,22 @@ public class UIGraph : MonoBehaviour
         DestoryPoint();
         for (int i = 1; i <= 100; i++)
         {
-            int a = (int)Mathf.Round(GraphList.Count * i / 100);
-            float yPosition = (GraphList[a-1] / yMaximum) * graphHeight;
+            int a = (int)Mathf.Round(GraphRabbitList.Count * i / 100);
+            float yPosition = (GraphRabbitList[a-1] / yMaximum) * graphHeight;
+            float yPosition1 = (GraphFoxList[a - 1] / yMaximum) * graphHeight;
             float xPosition = i * graphWidth / 100;
             CreateCircle(new Vector2(xPosition, yPosition));
+            CreateCircle1(new Vector2(xPosition, yPosition1));
         }
         UpdataXAxis();
     }
 
     private void DestoryPoint()
     {
-        Transform[] AllGameObject = graphContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform Child in AllGameObject)
+        Transform[] AllGameObject = CircleContainer.GetComponentsInChildren<Transform>();
+        for (int i=1;i< AllGameObject.Length;i++)
         {
-            if (Child.name.Contains("circle"))
-            {
-                Destroy(Child.gameObject);
-            }
+                Destroy(AllGameObject[i].gameObject);
         }
-        print("I am destroy Point"+Time.time);
     }
 }

@@ -116,7 +116,6 @@ public class UIController : MonoBehaviour
         uiTimeCanvas.SetActive(true);
         uiTurnCanvas.SetActive(true);
         uiGraphCanvas.SetActive(true);
-
     }
     #endregion
     // Update is called once per frame

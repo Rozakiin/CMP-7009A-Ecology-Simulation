@@ -165,7 +165,7 @@ MonoBehaviour:
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
   numberOfRabbitsToSpawn: 10
-  numberOfFoxesToSpawn: 1
+  numberOfFoxesToSpawn: 20
   numberOfGrassToSpawn: 50
   rabbitPopulation: 0
   foxPopulation: 0
@@ -309,6 +309,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &791623804 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9134864169056856313, guid: da6900d68d9224b4380a6d87d5d77c62,
+    type: 3}
+  m_PrefabInstance: {fileID: 1080986908}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &791623807
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791623804}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.4, y: 0.4}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &806546163
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,12 +547,12 @@ PrefabInstance:
     - target: {fileID: 4321917504853043117, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -531.8
+      value: -770.5
       objectReference: {fileID: 0}
     - target: {fileID: 4321917504853043117, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 230
+      value: 365.2
       objectReference: {fileID: 0}
     - target: {fileID: 4785322609468884701, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -677,6 +733,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 462.00006
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854753577306521899, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -771.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854753577306521899, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 137.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da6900d68d9224b4380a6d87d5d77c62, type: 3}

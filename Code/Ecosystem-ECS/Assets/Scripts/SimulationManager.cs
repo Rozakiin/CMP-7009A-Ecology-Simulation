@@ -823,4 +823,12 @@ public class SimulationManager : MonoBehaviour
     {
         return (float)rabbitPopulation;
     }
+    public float FoxSpawn()
+    {
+        return (float)numberOfFoxesToSpawn;
+    }
+    public float FoxPopulation()
+    {
+        return (float)foxPopulation;
+    }
 }
