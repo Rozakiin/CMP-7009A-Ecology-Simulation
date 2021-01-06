@@ -1,5 +1,6 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using Unity.Transforms;
 
 public class MatingSystem : SystemBase
@@ -91,7 +92,9 @@ public class MatingSystem : SystemBase
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
                         stateData.flagState ^= StateData.FlagStates.Pregnant;
                         reproductiveData.pregnant = true;
+
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
+                        //reproductiveData.currentLitterSize = UtilTools.ComponentTools.GaussianDistribution((reproductiveData.litterSizeMax - reproductiveData.litterSizeMin) / 2, reproductiveData.litterSizeAve);
                     }
                     stateData.flagState ^= StateData.FlagStates.Mating;
                     reproductiveData.reproductiveUrge = 0;
