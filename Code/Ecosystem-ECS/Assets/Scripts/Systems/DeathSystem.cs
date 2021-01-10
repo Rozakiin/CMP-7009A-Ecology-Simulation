@@ -1,22 +1,10 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class DeathSystem : SystemBase
 {
-    //private EndSimulationEntityCommandBufferSystem ecbSystem;
-
-    protected override void OnCreate()
-    {
-        //ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-    }
     protected override void OnUpdate()
     {
-        //var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
-
         // Checks What entity is dead, increment the dead count, decrement the living count, store how they died and destory the entity
 
         int rabbitsDeadTotal = 0;
@@ -24,8 +12,9 @@ public class DeathSystem : SystemBase
         int rabbitsDeadEaten = 0;
         int rabbitsDeadHunger = 0;
         int rabbitsDeadThirst = 0;
-        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if(stateData.state == StateData.States.Dead)
+        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 rabbitsDeadTotal++;
                 switch (stateData.deathReason)
@@ -46,7 +35,6 @@ public class DeathSystem : SystemBase
                         throw new System.NotImplementedException();
                 }
                 EntityManager.DestroyEntity(entity);
-                //ecb.DestroyEntity(entityInQueryIndex, entity);
             }
         }).WithStructuralChanges().Run();
         SimulationManager.Instance.rabbitPopulation -= rabbitsDeadTotal;
@@ -62,8 +50,9 @@ public class DeathSystem : SystemBase
         int foxesDeadEaten = 0;
         int foxesDeadHunger = 0;
         int foxesDeadThirst = 0;
-        Entities.WithAll<isFoxTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if (stateData.state == StateData.States.Dead)
+        Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 foxesDeadTotal++;
                 switch (stateData.deathReason)
@@ -84,7 +73,6 @@ public class DeathSystem : SystemBase
                         throw new System.NotImplementedException();
                 }
                 EntityManager.DestroyEntity(entity);
-                //ecb.DestroyEntity(entityInQueryIndex, entity);
             }
         }).WithStructuralChanges().Run();
         SimulationManager.Instance.foxPopulation -= foxesDeadTotal;
@@ -96,19 +84,15 @@ public class DeathSystem : SystemBase
 
 
         int grassEaten = 0;
-        Entities.WithAll<isGrassTag>().ForEach((Entity entity, int entityInQueryIndex, in StateData stateData) => {
-            if (stateData.state == StateData.States.Dead)
+        Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 grassEaten++;
                 EntityManager.DestroyEntity(entity);
-                //ecb.DestroyEntity(entityInQueryIndex, entity);
             }
         }).WithStructuralChanges().Run();
         SimulationManager.Instance.grassPopulation -= grassEaten;
         SimulationManager.Instance.numberOfGrassEaten += grassEaten;
-
-
-        // Make sure that the ECB system knows about our job
-        //ecbSystem.AddJobHandleForProducer(this.Dependency);
     }
 }

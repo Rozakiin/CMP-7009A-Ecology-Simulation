@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeControlSystem : MonoBehaviour
@@ -12,6 +10,8 @@ public class TimeControlSystem : MonoBehaviour
     public Button PauseButton;
     public Button FastButton;
     public Button SlowButton;
+
+
     void Start()
     {
         speedDisplay.text = fastforwardSpeed.ToString();
@@ -22,6 +22,7 @@ public class TimeControlSystem : MonoBehaviour
         //start playing at start
         pause = false;
     }
+
     void Update()
     {
         Time.timeScale = pause ? 0f : fastforwardSpeed;
@@ -30,16 +31,20 @@ public class TimeControlSystem : MonoBehaviour
         {
             fastforwardSpeed = 0f;
         }
+
         speedDisplay.text = string.Format("speed {0}:", fastforwardSpeed.ToString());
     }
+
     public void Play()
     {
         pause = false;
     }
+
     public void Pause()
     {
         pause = true;
     }
+
     public void IncreaseSpeed()
     {
         if (fastforwardSpeed < 1f)
@@ -51,6 +56,7 @@ public class TimeControlSystem : MonoBehaviour
             fastforwardSpeed += 1f;
         }
     }
+
     public void DecreaseSpeed()
     {
         if (fastforwardSpeed <= 1f && fastforwardSpeed > 0.2f)
@@ -62,5 +68,4 @@ public class TimeControlSystem : MonoBehaviour
             fastforwardSpeed -= 1f;
         }
     }
-
 }

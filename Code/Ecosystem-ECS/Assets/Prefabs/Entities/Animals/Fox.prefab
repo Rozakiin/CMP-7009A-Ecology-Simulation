@@ -36,14 +36,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698060286047908}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4957778958104326}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &-2129144141966957146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +178,7 @@ MonoBehaviour:
   atTarget: 0
   sightRadius: 0
   touchRadius: 0
+  mateRadius: 0
   predatorEntity: {fileID: 0}
   entityToEat: {fileID: 0}
   entityToDrink: {fileID: 0}
@@ -239,6 +240,8 @@ MonoBehaviour:
   litterSizeMax: 0
   litterSizeAve: 0
   currentLitterSize: 0
+  sigma: 0
+  mu: 0
   pregnancyStartTime: 0
   pregnancyLengthBase: 0
   pregnancyLengthModifier: 0
@@ -258,6 +261,19 @@ MonoBehaviour:
   previousState: 0
   deathReason: 0
   beenEaten: 0
+  flagState: 0
+  previousFlagState: 0
+  isWandering: 0
+  isHungry: 0
+  isThirsty: 0
+  isEating: 0
+  isDrinking: 0
+  isSexuallyActive: 0
+  isMating: 0
+  isFleeing: 0
+  isDead: 0
+  isPregnant: 0
+  isGivingBirth: 0
 --- !u!114 &8948122840359826860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,13 +471,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930758515862692}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4939315986818478}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &33054505255254576
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -1,7 +1,5 @@
 using System;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 [Serializable]
@@ -26,13 +24,10 @@ public struct ReproductiveData : IComponentData
     public int litterSizeAve;
     //How many the female is carrying right now
     public int currentLitterSize;
-    //TODO use gausian distribution to calc LitterSize
-    public float sigma;
-    public float mu;
 
     public int LitterSize
     {
-        get { return GaussianDistribution((litterSizeMax-litterSizeMin)/2, litterSizeAve);}
+        get { return GaussianDistribution((litterSizeMax - litterSizeMin) / 2, litterSizeAve); }
     }
 
 
