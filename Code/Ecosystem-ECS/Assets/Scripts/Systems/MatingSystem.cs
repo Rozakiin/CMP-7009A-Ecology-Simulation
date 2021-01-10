@@ -45,7 +45,7 @@ public class MatingSystem : SystemBase
         //for each that edits reproductivedata of the entity
         Entities.ForEach((
             ref ReproductiveData reproductiveData,
-            ref StateData stateData,
+            in StateData stateData,
             in BioStatsData bioStatsData,
             in TargetData targetData
             ) =>
@@ -89,21 +89,16 @@ public class MatingSystem : SystemBase
                     if (bioStatsData.gender == BioStatsData.Gender.Female)
                     {
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
-                        stateData.flagState ^= StateData.FlagStates.Pregnant;
                         reproductiveData.pregnant = true;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
-                    stateData.flagState ^= StateData.FlagStates.Mating;
                     reproductiveData.reproductiveUrge = 0;
-                    //stateData.state = StateData.States.Wandering;
-                    //stateData.flagState = StateData.FlagStates.Wandering;
                 }
             }
         }).ScheduleParallel();
 
         //for each that edits the entityToMate components
         Entities.ForEach((
-            Entity entity,
             int entityInQueryIndex,
             in BioStatsData bioStatsData,
             in TargetData targetData,
@@ -115,57 +110,31 @@ public class MatingSystem : SystemBase
                 //if entityToMate exists (everything should have translation)
                 if (HasComponent<Translation>(targetData.entityToMate))
                 {
-                    //get state of entityToMate
-                    StateData.FlagStates flagMateState = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate].flagState;
+                    //get stateData of entityToMate
+                    StateData mateStateData = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate];
 
                     //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
                     if (bioStatsData.gender == BioStatsData.Gender.Male &&
-                        stateData.flagState == StateData.FlagStates.Mating &&
-                        flagMateState != StateData.FlagStates.Mating)
+                        stateData.isMating &&
+                        !mateStateData.isMating)
                     {
                         //Set the mate's state to Mating
-                        ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
-                            new StateData
-                            {
-                                previousFlagState = flagMateState,
-                                flagState = StateData.FlagStates.Mating,
-                                beenEaten = false
-                            }
-                        );
+                        mateStateData.flagState |= StateData.FlagStates.Mating;
+                        ecb.SetComponent(entityInQueryIndex, targetData.entityToMate, mateStateData);
 
                         //GetComponent calls are slow so cache for multiple uses
-                        BioStatsData mateBioStatsData = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate];
-                        var mateBabiesBorn = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].babiesBorn;
-                        var mateCurrentLitterSize = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].currentLitterSize;
-                        var matePregnancyLengthModifier = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate].pregnancyLengthModifier;
+                        float mateAge= GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age;
+                        ReproductiveData mateReproductiveData = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate];
 
                         //Set the mates mateStartTime to her age
-                        ecb.SetComponent(entityInQueryIndex, targetData.entityToMate,
-                            new ReproductiveData
-                            {
-                                matingDuration = rabbitMatingDuration,
-                                mateStartTime = mateBioStatsData.age,
-                                reproductiveUrge = rabbitReproductiveUrge,
-                                reproductiveUrgeIncrease = rabbitReproductiveUrgeIncreaseFemale,
-                                defaultRepoductiveIncrease = rabbitReproductiveUrgeIncreaseFemale,
-                                matingThreshold = rabbitMatingThreshold,
-
-                                pregnant = rabbitPregnant,
-                                birthDuration = rabbitBirthDuration,
-                                babiesBorn = mateBabiesBorn,
-                                birthStartTime = rabbitBirthStartTime,
-                                currentLitterSize = mateCurrentLitterSize,
-                                litterSizeMin = rabbitLitterSizeMin,
-                                litterSizeMax = rabbitLitterSizeMax,
-                                litterSizeAve = rabbitLitterSizeAve,
-                                pregnancyLengthBase = rabbitPregnancyLengthBase,
-                                pregnancyLengthModifier = matePregnancyLengthModifier,
-                                pregnancyStartTime = rabbitPregnancyStartTime
-                            }
-                        );
+                        mateReproductiveData.mateStartTime = mateAge;
+                        ecb.SetComponent(entityInQueryIndex, targetData.entityToMate, mateReproductiveData);
                     }
                 }
             }
         }).ScheduleParallel();
+
+        // Make sure that the ECB system knows about our job
+        ecbSystem.AddJobHandleForProducer(this.Dependency);
     }
 }

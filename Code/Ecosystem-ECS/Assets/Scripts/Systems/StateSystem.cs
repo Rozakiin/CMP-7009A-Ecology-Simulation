@@ -179,6 +179,16 @@ public class StateSystem : SystemBase
                 stateData.isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
                 if (stateData.isMating)
                 {
+                    //If the mating has ended, the female becomes pregnant
+                    if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
+                    {
+                        if (bioStatsData.gender == BioStatsData.Gender.Female)
+                        {
+                            stateData.flagState |= StateData.FlagStates.Pregnant; //enable pregnant state
+                        }
+                        stateData.flagState &= ~StateData.FlagStates.Mating; //disable mating state
+                    }
+
                     if (bioStatsData.gender == BioStatsData.Gender.Male)
                     {
                         //reproductive urge saited, disable sexually active and mating, enable wandering
@@ -196,16 +206,21 @@ public class StateSystem : SystemBase
                 stateData.isPregnant = ((stateData.flagState & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant);
                 if (stateData.isPregnant)
                 {
-                    //    //Debug.Log("Age: " + bioStatsData.age);
-                    //    //Debug.Log("Pregnancy Start Time: " + reproductiveData.pregnancyStartTime);
-                    //    //Debug.Log("Preg Length: " + reproductiveData.PregnancyLength);
-                    //    Debug.Log(bioStatsData.age - reproductiveData.pregnancyStartTime);
-                    //    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
-                    //    {
-                    //        Debug.Log("cos");
-                    //        //stateData.previousFlagState = stateData.flagState;
-                    //        //stateData.flagState = StateData.FlagStates.GivingBirth;
-                    //    }
+                    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
+                    {
+                        stateData.previousFlagState = stateData.flagState;
+                        stateData.flagState &= ~StateData.FlagStates.Pregnant;
+                        stateData.flagState |= StateData.FlagStates.GivingBirth;
+                    }
+                }
+
+                stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
+                if (stateData.isGivingBirth)
+                {
+                    if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
+                    {
+                        stateData.flagState &= ~StateData.FlagStates.GivingBirth;
+                    }
                 }
             }
 

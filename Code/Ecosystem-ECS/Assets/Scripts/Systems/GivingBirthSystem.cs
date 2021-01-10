@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
+using Unity.Collections;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
@@ -116,11 +117,12 @@ public class GivingBirthSystem : SystemBase
         var rabbitScaleMale = RabbitDefaults.scaleMale;
         #endregion
 
+        NativeArray<int> rabbitsBirthed = new NativeArray<int>(1, Allocator.TempJob);
         Entities.ForEach((
             Entity entity,
             int entityInQueryIndex,
             ref ReproductiveData reproductiveData,
-            ref StateData stateData,
+            in StateData stateData,
             in BioStatsData bioStatsData,
             in Translation translation
             ) =>
@@ -256,17 +258,18 @@ public class GivingBirthSystem : SystemBase
 
                     reproductiveData.birthStartTime = bioStatsData.age;
                     reproductiveData.babiesBorn++;
+                    rabbitsBirthed[0]++;
                 }
 
                 if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                 {
                     reproductiveData.babiesBorn = 0;
-                    stateData.flagState ^= StateData.FlagStates.GivingBirth;
                     reproductiveData.pregnant = false;
                 }
             }
         }).ScheduleParallel();
-
         this.CompleteDependency();
+        SimulationManager.Instance.rabbitPopulation += rabbitsBirthed[0];
+        rabbitsBirthed.Dispose();
     }
 }
