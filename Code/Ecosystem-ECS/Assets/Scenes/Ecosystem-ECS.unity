@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSetupComplete: 0
   grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
   lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
@@ -165,8 +166,8 @@ MonoBehaviour:
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
   numberOfRabbitsToSpawn: 10
-  numberOfFoxesToSpawn: 1
-  numberOfGrassToSpawn: 50
+  numberOfFoxesToSpawn: 10
+  numberOfGrassToSpawn: 10
   rabbitPopulation: 0
   foxPopulation: 0
   grassPopulation: 0
@@ -580,9 +581,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0edc250bac6ed4087b75b02d2d261ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanSpeed: 20
-  CanBorderThicknerss: 20
-  canLimit: {x: 100, y: 100}
-  scrollSpeed: 100
-  minY: 20
-  maxY: 300
+  simulationManager: {fileID: 508030573}
