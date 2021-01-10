@@ -782,4 +782,9 @@ public class SimulationManager : MonoBehaviour
         }
     }
     #endregion
+
+    public Vector2 MapSize()
+    {
+        return new Vector2(gridWidth, gridHeight);
+    }
 }
