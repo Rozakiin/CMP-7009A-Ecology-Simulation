@@ -65,7 +65,7 @@ public class CameraControler : MonoBehaviour
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        pos.y += scroll * scrollSpeed;
+        pos.y -= scroll * scrollSpeed;
         pos.y = Mathf.Clamp(pos.y, canYLimit.x, canYLimit.y);
 
         //canspeed and X,Z limit will increase as camera zoom in
