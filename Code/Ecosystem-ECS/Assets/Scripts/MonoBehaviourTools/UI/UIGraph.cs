@@ -32,6 +32,11 @@ public class UIGraph : MonoBehaviour
     private float xMaximum;
     private float InyMaximum;
     private float InxMaximum;
+    private float graphHeight;
+    private float graphWidth;
+    private float parentWidth;
+    private float parentHeight;
+    private int input;
     private RectTransform graphContainer;
     private RectTransform labelTemplateX;
     private RectTransform LabelXContainer;
@@ -40,13 +45,8 @@ public class UIGraph : MonoBehaviour
     private RectTransform dashTemplateX;
     private RectTransform dashTemplateY;
     private RectTransform CircleContainer;
-    private float graphHeight;
-    private float graphWidth;
-    private float parentWidth;
-    private float parentHeight;
-    private int input;
-    List<float> GraphRabbitList = new List<float> ();
-    List<float> GraphFoxList = new List<float>();
+    private List<float> GraphRabbitList = new List<float> ();
+    private List<float> GraphFoxList = new List<float>();
 
     private void Awake()
     {
@@ -97,16 +97,16 @@ public class UIGraph : MonoBehaviour
             GraphFoxList.Add(FoxNumber);
             nextTime += 1;
 
-            if (input >= 60 && input <= 300)
+            if (Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10 > yMaximum)
             {
-                if (Mathf.Max(RabbitNumber,FoxNumber) / 8 * 10 > yMaximum)
-                {
-                    InyMaximum = yMaximum;
-                    yMaximum = Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10;
-                    UpdataYAxis();
-                    DecreaseY();
-                }
+                InyMaximum = yMaximum;
+                yMaximum = Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10;
+                UpdataYAxis();
+                DecreaseY();
+            }
 
+            if (input >= 60)
+            {
                 if (XPos <= input - 1)
                 {
                     if (XPos >= xMaximum)
@@ -129,14 +129,6 @@ public class UIGraph : MonoBehaviour
                 {
                     ShowAllGraph();
 
-                    if (Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10 > yMaximum)
-                    {
-                        InyMaximum = yMaximum;
-                        yMaximum = Mathf.Max(RabbitNumber, FoxNumber) / 8 * 10;
-                        UpdataYAxis();
-                        DecreaseY();
-                    }
-
                     int a = (int)Mathf.Floor(GraphRabbitList.Count / 100);
                     nextTime2 += a;
                 }
@@ -148,6 +140,11 @@ public class UIGraph : MonoBehaviour
     {
         input = int.Parse(inputField.text);
         nextTime2 = Time.time;
+        if (input > GraphRabbitList.Count)
+        {
+            input = 1;
+            Debug.Log("input exceed the max value");
+        }
     }
 
     void SaveFile()
@@ -160,6 +157,7 @@ public class UIGraph : MonoBehaviour
             // Create a new file     
             using (StreamWriter sw = File.CreateText(path))
             {
+                sw.WriteLine("Rabbit"+","+"Fox");
                 for (int i = 0; i < GraphRabbitList.Count; i++) 
                 {
                     sw.WriteLine(GraphRabbitList[i]+","+ GraphFoxList[i]);
@@ -331,7 +329,7 @@ public class UIGraph : MonoBehaviour
     private void ShowGraphList(int value)
     {
         DestoryPoint();
-        if (value <= 300 && value >= 60)
+        if (value <= 100 && value >= 60)
         {
             int number;
             for (int i = 1; i <= value; i++)
@@ -344,9 +342,25 @@ public class UIGraph : MonoBehaviour
                 if (i == (int)Mathf.Round(value / Line.x))
                 {
                     number = GraphRabbitList.Count - value + i - 1;
-                    UpdataGraphListXAxis(number,value);
+                    UpdataGraphListXAxis(number, value);
                 }
             }
+        }
+        else if (value > 100) 
+        {
+            int number;
+            for (int i = 1; i <= 100; i++)
+            {
+                int a = (int)Mathf.Round(value * i / 100);
+                print(i+"I am middle"+(GraphRabbitList.Count - value + a));
+                float yPosition = (GraphRabbitList[GraphRabbitList.Count - value + a-1] / yMaximum) * graphHeight;
+                float yPosition1 = (GraphFoxList[GraphRabbitList.Count - value + a-1] / yMaximum) * graphHeight;
+                float xPosition = i * graphWidth / 100;
+                CreateCircle(new Vector2(xPosition, yPosition));
+                CreateCircle1(new Vector2(xPosition, yPosition1));
+            }
+            number = (int)GraphRabbitList.Count - (value / 5 * 4);
+            UpdataGraphListXAxis(number, value);
         }
     }
 
