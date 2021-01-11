@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugEnabled: 0
   isSetupComplete: 0
   grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
@@ -165,9 +166,9 @@ MonoBehaviour:
   fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
   grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
   collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 120
-  numberOfFoxesToSpawn: 10
-  numberOfGrassToSpawn: 20
+  numberOfRabbitsToSpawn: 10
+  numberOfFoxesToSpawn: 2
+  numberOfGrassToSpawn: 50
   rabbitPopulation: 0
   foxPopulation: 0
   grassPopulation: 0
@@ -217,6 +218,7 @@ MonoBehaviour:
     y: 0
   gridNodeRadius: 1
   distanceBetweenGridNodes: 0
+  gridNodeDiameter: 0
   unwalkableProximityPenalty: 10
 --- !u!1 &788710890
 GameObject:
@@ -388,6 +390,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3869278028933427020, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3869278028933427020, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3869278028933427020, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5103342709971313175, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -396,6 +413,16 @@ PrefabInstance:
     - target: {fileID: 5241897233361441899, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407033696833364509, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407033696833364509, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5469430596456247843, guid: da6900d68d9224b4380a6d87d5d77c62,
@@ -416,12 +443,12 @@ PrefabInstance:
     - target: {fileID: 6942748427998680664, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 626.1868
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6942748427998680664, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 321.94827
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6942748427998680664, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -467,11 +494,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6957196602228386424, guid: da6900d68d9224b4380a6d87d5d77c62,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadGame
       objectReference: {fileID: 0}
     - target: {fileID: 7686407615659811503, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}

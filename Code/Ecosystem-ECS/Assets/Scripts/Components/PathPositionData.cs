@@ -1,6 +1,4 @@
-﻿using System;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 
 [InternalBufferCapacity(200)] //gives max capactity for the buffer

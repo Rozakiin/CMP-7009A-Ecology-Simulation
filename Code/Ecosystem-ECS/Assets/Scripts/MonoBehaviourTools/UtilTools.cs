@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
@@ -26,14 +22,13 @@ namespace UtilTools
 
             if (world.CastRay(input, out Unity.Physics.RaycastHit hit))
             {
-                // see hit.Position
-                // see hit.SurfaceNormal
-                Entity e = physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
-                return e;
+                return physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
             }
+
             return Entity.Null;
         }
     }
+
     public static class GridTools
     {
         // Returns false is collides with unwalkabletile or doesnt collide with a tile
@@ -45,7 +40,7 @@ namespace UtilTools
             //raycast from positive 10,000 to negative 10,000, colliding with only tiles
             Entity collidedEntity = PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
 
-            if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
+            if (entityManager.HasComponent<TerrainTypeData>(collidedEntity))
             {
                 return entityManager.GetComponentData<TerrainTypeData>(collidedEntity).isWalkable;
             }
@@ -53,5 +48,13 @@ namespace UtilTools
             return false;
         }
     }
-}
 
+    public static class ComponentTools
+    {
+        //Returns if flagStates contains a given state
+        public static bool ContainsState(StateData.FlagStates state, StateData.FlagStates stateDataflagStates)
+        {
+            return (stateDataflagStates & state) == state;
+        }
+    }
+}

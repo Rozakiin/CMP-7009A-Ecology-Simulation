@@ -1,13 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 using System.IO;
-using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class MapFileGenerator : MonoBehaviour
 {
-
     public int width;
     public int height;
 
@@ -40,7 +37,6 @@ public class MapFileGenerator : MonoBehaviour
 
     void Start()
     {
-        //GenerateMap("seed");
         mapGeneratorButton.onClick.AddListener(TaskOnClick);
         saveFileButton.onClick.AddListener(FileGenerate);
 
@@ -126,7 +122,7 @@ public class MapFileGenerator : MonoBehaviour
     void GenerateMap(string seed)
     {
         map = new int[width, height];
-        
+
         RandomFillMap(seed);
 
         for (int i = 0; i < 5; i++)
@@ -158,7 +154,6 @@ public class MapFileGenerator : MonoBehaviour
 
     void RandomFillMap(string seed)
     {
-
         System.Random pseudoRandom = new System.Random(seed.GetHashCode());
 
         for (int x = 0; x < width; x++)
@@ -189,7 +184,6 @@ public class MapFileGenerator : MonoBehaviour
                     map[x, y] = 1;
                 else if (neighbourWallTiles < 4)
                     map[x, y] = 0;
-
             }
         }
     }
@@ -225,6 +219,7 @@ public class MapFileGenerator : MonoBehaviour
         {
             tiles = new GameObject[width, height];
         }
+
         if (map != null && tiles != null)
         {
             // Destroy old gameobjects
@@ -243,9 +238,9 @@ public class MapFileGenerator : MonoBehaviour
             {
                 for (int y = 0; y < height; y++)
                 {
-                    pos = new Vector3(x*tileWidth, y*tileHeight , 0);
+                    pos = new Vector3(x * tileWidth, y * tileHeight, 0);
                     tiles[x, y] = Instantiate(tilePrefab); //Instantiate tile
-                    tiles[x,y].transform.SetParent(this.transform); // set parent as this
+                    tiles[x, y].transform.SetParent(this.transform); // set parent as this
                     tiles[x, y].transform.position = pos; // set position
                     // change colour based on value
                     switch (map[x, y])

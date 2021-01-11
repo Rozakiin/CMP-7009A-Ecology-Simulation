@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraControler : MonoBehaviour
 {
@@ -10,8 +8,9 @@ public class CameraControler : MonoBehaviour
 
     public float scrollSpeed = 20f;
     public float minY = -100f;
-    public float maxY = 300; 
-    // Update is called once per frame
+    public float maxY = 300;
+
+
     void Update()
     {
         Vector3 pos = transform.position;
@@ -19,18 +18,22 @@ public class CameraControler : MonoBehaviour
         {
             pos.z += CanSpeed * Time.deltaTime;
         }
+
         if (Input.GetKey("s") || Input.mousePosition.y <= CanBorderThicknerss)
         {
             pos.z -= CanSpeed * Time.deltaTime;
         }
+
         if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - CanBorderThicknerss)
         {
             pos.x += CanSpeed * Time.deltaTime;
         }
+
         if (Input.GetKey("a") || Input.mousePosition.x <= CanBorderThicknerss)
         {
             pos.x -= CanSpeed * Time.deltaTime;
         }
+
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y += scroll * scrollSpeed * 100f * Time.deltaTime;
 
