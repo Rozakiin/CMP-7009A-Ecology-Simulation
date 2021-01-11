@@ -423,7 +423,7 @@ namespace SpeedTutorMainMenuSystem
         #region Loading Map From File
         public void LoadMap()
         {
-            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
+            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "xml", false);
             if (paths.Length > 0)
             {
                 StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
@@ -1135,8 +1135,8 @@ namespace SpeedTutorMainMenuSystem
                 XmlNodeList youngSizeMultiplier = xmlDocument.GetElementsByTagName("youngSizeMultiplier");
                 XmlNodeList adultSizeMultiplier = xmlDocument.GetElementsByTagName("adultSizeMultiplier");
                 XmlNodeList oldSizeMultiplier = xmlDocument.GetElementsByTagName("oldSizeMultiplier");
-                XmlNodeList state = xmlDocument.GetElementsByTagName("state");
-                XmlNodeList previousState = xmlDocument.GetElementsByTagName("previousState");
+                XmlNodeList flagState = xmlDocument.GetElementsByTagName("flagState");
+                XmlNodeList previousFlagState = xmlDocument.GetElementsByTagName("previousFlagState");
                 XmlNodeList deathReason = xmlDocument.GetElementsByTagName("deathReason");
                 XmlNodeList beenEaten = xmlDocument.GetElementsByTagName("beenEaten");
                 XmlNodeList touchRadius = xmlDocument.GetElementsByTagName("touchRadius");
@@ -1210,8 +1210,8 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[0].InnerText);
                 RabbitDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[0].InnerText);
                 RabbitDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[0].InnerText);
-                RabbitDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[0].InnerText);
-                RabbitDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[0].InnerText);
+                RabbitDefaults.flagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), flagState[0].InnerText);
+                RabbitDefaults.previousFlagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), previousFlagState[0].InnerText);
                 RabbitDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[0].InnerText);
                 RabbitDefaults.beenEaten = bool.Parse(beenEaten[0].InnerText);
                 RabbitDefaults.touchRadius = float.Parse(touchRadius[0].InnerText);
@@ -1283,8 +1283,8 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[1].InnerText);
                 FoxDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[1].InnerText);
                 FoxDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[1].InnerText);
-                FoxDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[1].InnerText);
-                FoxDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[1].InnerText);
+                FoxDefaults.flagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), flagState[1].InnerText);
+                FoxDefaults.previousFlagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), previousFlagState[1].InnerText);
                 FoxDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[1].InnerText);
                 FoxDefaults.beenEaten = bool.Parse(beenEaten[1].InnerText);
                 FoxDefaults.touchRadius = float.Parse(touchRadius[1].InnerText);
@@ -1311,9 +1311,9 @@ namespace SpeedTutorMainMenuSystem
 
                 GrassDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[2].InnerText);
 
-                GrassDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[2].InnerText);
+                GrassDefaults.flagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), flagState[2].InnerText);
 
-                GrassDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[2].InnerText);
+                GrassDefaults.previousFlagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), previousFlagState[2].InnerText);
 
                 GrassDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[2].InnerText);;
 

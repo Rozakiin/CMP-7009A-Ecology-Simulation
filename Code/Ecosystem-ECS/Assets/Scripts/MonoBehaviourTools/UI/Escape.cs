@@ -51,7 +51,7 @@ public class Escape : MonoBehaviour
     public void SaveFile()
     {
         string timeStamp = DateTime.Now.ToString();
-        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", timeStamp, "txt");
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", timeStamp, "xml");
         SaveGame(path);
     }
 
@@ -328,14 +328,14 @@ public class Escape : MonoBehaviour
         #region stateData
         XmlElement rStatedata = xmlDocument.CreateElement("stateData");
 
-        XmlElement rState = xmlDocument.CreateElement("state");
-        XmlElement rPreviousstate = xmlDocument.CreateElement("previousState");
+        XmlElement rState = xmlDocument.CreateElement("flagState");
+        XmlElement rPreviousstate = xmlDocument.CreateElement("previousFlagState");
         XmlElement rDeathreason = xmlDocument.CreateElement("deathReason");
         XmlElement rBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-        rState.InnerText = RabbitDefaults.state.ToString();
-        rPreviousstate.InnerText = RabbitDefaults.previousState.ToString();
+        rState.InnerText = RabbitDefaults.flagState.ToString();
+        rPreviousstate.InnerText = RabbitDefaults.previousFlagState.ToString();
         rDeathreason.InnerText = RabbitDefaults.deathReason.ToString();
         rBeeneaten.InnerText = RabbitDefaults.beenEaten.ToString();
 
@@ -681,14 +681,14 @@ public class Escape : MonoBehaviour
         #region stateData
         XmlElement fStatedata = xmlDocument.CreateElement("stateData");
 
-        XmlElement fState = xmlDocument.CreateElement("state");
-        XmlElement fPreviousstate = xmlDocument.CreateElement("previousState");
+        XmlElement fState = xmlDocument.CreateElement("flagState");
+        XmlElement fPreviousstate = xmlDocument.CreateElement("previousFlagState");
         XmlElement fDeathreason = xmlDocument.CreateElement("deathReason");
         XmlElement fBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-        fState.InnerText = FoxDefaults.state.ToString();
-        fPreviousstate.InnerText = FoxDefaults.previousState.ToString();
+        fState.InnerText = FoxDefaults.flagState.ToString();
+        fPreviousstate.InnerText = FoxDefaults.previousFlagState.ToString();
         fDeathreason.InnerText = FoxDefaults.deathReason.ToString();
         fBeeneaten.InnerText = FoxDefaults.beenEaten.ToString();
 
@@ -813,14 +813,14 @@ public class Escape : MonoBehaviour
         #region stateData
         XmlElement gStatedata = xmlDocument.CreateElement("stateData");
 
-        XmlElement gState = xmlDocument.CreateElement("state");
-        XmlElement gPreviousstate = xmlDocument.CreateElement("previousState");
+        XmlElement gState = xmlDocument.CreateElement("flagState");
+        XmlElement gPreviousstate = xmlDocument.CreateElement("previousFlagState");
         XmlElement gDeathreason = xmlDocument.CreateElement("deathReason");
         XmlElement gBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-        gState.InnerText = GrassDefaults.state.ToString();
-        gPreviousstate.InnerText = GrassDefaults.previousState.ToString();
+        gState.InnerText = GrassDefaults.flagState.ToString();
+        gPreviousstate.InnerText = GrassDefaults.previousFlagState.ToString();
         gDeathreason.InnerText = GrassDefaults.deathReason.ToString();
         gBeeneaten.InnerText = GrassDefaults.beenEaten.ToString();
 
