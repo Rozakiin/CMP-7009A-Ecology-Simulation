@@ -1,28 +1,28 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
     EntityManager entityManager;
-    GameObjectConversionSettings settings;
+    public GameObjectConversionSettings settings;
     public static SimulationManager Instance;
+    [SerializeField] public bool isDebugEnabled;
+    public bool isSetupComplete;
 
-    #region Archetypes
-    // declare All of archetypes
-    public static EntityArchetype GrassTileArchetype { get; private set; }
-    public static EntityArchetype WaterTileArchetype { get; private set; }
-    public static EntityArchetype RockTileArchetype { get; private set; }
-    public static EntityArchetype SandTileArchetype { get; private set; }
-    public static EntityArchetype MaleRabbitArchetype { get; private set; }
-    public static EntityArchetype FemaleRabbitArchetype { get; private set; }
-    public static EntityArchetype GrassArchetype { get; private set; }
-    public static EntityArchetype FoxArchetype { get; private set; }   //I am not sure do we need Female Fox, just Fox if we need, I can add later
+    int secondsOfLastGrassSpawn;
+
+    #region Converted Entities
+    public Entity conversionGrassTile;
+    public Entity conversionLightGrassTile;
+    public Entity conversionWaterTile;
+    public Entity conversionSandTile;
+    public Entity conversionRockTile;
+    public Entity conversionRabbit;
+    public Entity conversionFox;
+    public Entity conversionGrass;
     #endregion
 
     #region GameObjects
@@ -39,10 +39,13 @@ public class SimulationManager : MonoBehaviour
     #endregion
 
     #region Numbers for Entity Spawning 
-    [Header("Map Data")]
+    [Header("Numbers of Entities Spawning")]
     [SerializeField] public int numberOfRabbitsToSpawn = 0;
     [SerializeField] public int numberOfFoxesToSpawn = 0;
     [SerializeField] public int numberOfGrassToSpawn = 0;
+    public static int InitialRabbitsToSpawn = 0;
+    public static int InitialFoxesToSpawn = 0;
+    public static int InitialGrassToSpawn = 0;
     #endregion
 
     #region Population Info for Entities
@@ -83,121 +86,91 @@ public class SimulationManager : MonoBehaviour
     public static float upLimit;
     public static float rightLimit;
     public static float downLimit;
-    
     #endregion
     #region Initialisation
-    // Start is called before the first frame update
     void Start()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
+        isSetupComplete = false;
+        Application.targetFrameRate = 60; // Target 60fps
+
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        CreateArchetypes();
-        
-        // Only continue if no errors creating the map
-        if (CreateMap())
-        {
-            CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
-            CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
-            CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
+        if (InitialRabbitsToSpawn != 0)
+            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
+        if (InitialFoxesToSpawn != 0)
+            numberOfFoxesToSpawn = InitialFoxesToSpawn;
+        if (InitialGrassToSpawn != 0)
+            numberOfGrassToSpawn = InitialGrassToSpawn;
+        secondsOfLastGrassSpawn = 0;
 
-        }
-        else
+        // Only continue if no errors creating the map
+        if (!CreateMap())
         {
             Debug.Log("Error Loading Map");
         }
     }
-
-    private void CreateArchetypes()
-    {
-        //Create archetype of Grass tile, water tile, rock tile, sand tile
-        GrassTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        WaterTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData),
-            typeof(DrinkableData)
-            );
-
-        RockTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        SandTileArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(TerrainTypeData)
-            );
-
-        //  Create architype of Fox MaleRabbit Female Rabbit Grass
-        MaleRabbitArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(EdibleData),
-            typeof(MovementData),
-            typeof(ReproductiveData),
-            typeof(SizeData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        FemaleRabbitArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(ReproductiveData),
-            typeof(EdibleData),
-            typeof(MovementData),
-            typeof(SizeData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        FoxArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(MovementData),
-            typeof(StateData),
-            typeof(TargetData),
-            typeof(PathFollowData),
-            typeof(SizeData),
-            typeof(BasicNeedsData),
-            typeof(BioStatsData)
-            );
-
-        GrassArchetype = entityManager.CreateArchetype(
-            typeof(Translation),
-            typeof(Rotation),
-            typeof(NonUniformScale),
-            typeof(EdibleData)
-            );
-    }
     #endregion
 
-    // Update is called once per frame
     void Update()
     {
-        SpawnRabbitAtPosOnClick();
+        //check if the setup has completed yet, finish setup
+        if (!isSetupComplete)
+        {
+            if (GridSetup.Instance.CreateGrid())
+            {
+                CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
+                CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
+                CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
+                isSetupComplete = true;
+            }
+        }
+        else
+        {
+            SpawnRabbitAtPosOnLClick();
+            SpawnFoxAtPosOnRClick();
+            SpawnGrassAtPosOnMClick();
+            /* Spawn grass entity at random location once every 10 in game seconds */
+            if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
+            {
+                secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
+                CreateEntitiesFromGameObject(grass, 1);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        //dispose of blobassetstore on destroy
+        if (settings != null)
+            settings.BlobAssetStore.Dispose();
+
+        //if (conversionGrassTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionGrassTile);
+
+        //if (conversionLightGrassTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionLightGrassTile);
+
+        //if (conversionWaterTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionWaterTile);
+
+        //if (conversionSandTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionSandTile);
+
+        //if (conversionRockTile != Entity.Null)
+        //    entityManager.DestroyEntity(conversionRockTile);
+
+        //if (conversionRabbit != Entity.Null)
+        //    entityManager.DestroyEntity(conversionRabbit);
+
+        //if (conversionFox != Entity.Null)
+        //    entityManager.DestroyEntity(conversionFox);
+
+        //if (conversionGrass != Entity.Null)
+        //    entityManager.DestroyEntity(conversionGrass);
+
     }
 
     #region Map Creation Methods
@@ -226,6 +199,7 @@ public class SimulationManager : MonoBehaviour
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
         collisionPlaneForMap = new GameObject();
+        collisionPlaneForMap.name = "MapCollisionPlaneGO";
         collisionPlaneForMap.transform.position = transform.position;
         collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
         UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
@@ -240,16 +214,22 @@ public class SimulationManager : MonoBehaviour
         // Set world map data
         gridWidth = mapList[0].Count;
         gridHeight = mapList.Count;
-        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x;                   //Get the width of the tile
+        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
         worldSize.x = gridWidth * tileSize;
         worldSize.y = gridHeight * tileSize;
         worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
         // Create entity prefabs from the game objects hierarchy once
-        var entityGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
-        var entityWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
-        var entitySandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
-        var entityRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
+        if (conversionGrassTile == Entity.Null)
+            conversionGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
+        if (conversionLightGrassTile == Entity.Null)
+            conversionLightGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
+        if (conversionWaterTile == Entity.Null)
+            conversionWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
+        if (conversionSandTile == Entity.Null)
+            conversionSandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
+        if (conversionRockTile == Entity.Null)
+            conversionRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
 
 
         for (int y = 0; y < gridHeight; y++)
@@ -263,10 +243,9 @@ public class SimulationManager : MonoBehaviour
                 {
                     case MapReader.TerrainCost.Water:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityWaterTile);
+                        prototypeTile = entityManager.Instantiate(conversionWaterTile);
 
                         // Place the instantiated entity in position on the map
-                        //var position = transform.TransformPoint(new float3(i, noise.cnoise(new float2(i) * 0.21F) * 2, i * 1.3F));
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
@@ -276,70 +255,46 @@ public class SimulationManager : MonoBehaviour
                                 colliderType = ColliderTypeData.ColliderType.Water
                             }
                         );
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 8; //set layer to unwalkable
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 9; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entitySandTile);
+                        prototypeTile = entityManager.Instantiate(conversionSandTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 10; //set layer to grass
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityRockTile);
+                        prototypeTile = entityManager.Instantiate(conversionRockTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
-                        //tileClone.name += y + "" + x;
-                        //tileClone.layer = 11; //set layer to grass
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(entityGrassTile);
+                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
                         entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        //entityManager.SetSharedComponentData<RenderMesh>(entity, new RenderMesh
-                        //{
-                        //    mesh = theMesh,
-                        //    material = theMaterial,
-                        //    subMesh = 0,
-                        //    layer = 0, // Here
-                        //    castShadows = ShadowCastingMode.On,
-                        //    receiveShadows = true
-                        //});
                         Debug.Log("Unknown TerrainCost value");
                         break;
                 }
             }
         }
-
-        entityManager.DestroyEntity(entityGrassTile);
-        entityManager.DestroyEntity(entityWaterTile);
-        entityManager.DestroyEntity(entitySandTile);
-        entityManager.DestroyEntity(entityRockTile);
-
-
     }
 
     private void SetLimits()
@@ -355,20 +310,20 @@ public class SimulationManager : MonoBehaviour
     // Creates entities from a gameobject in a given quantity
     private void CreateEntitiesFromGameObject(GameObject gameObject, int quantity)
     {
-        // Create entity prefab from the game object hierarchy once
-        var convertedEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(gameObject, settings);
-
         for (int i = 0; i < quantity; i++)
         {
-            // Calc random point on map
-            int randWidth = UnityEngine.Random.Range(0, (int)gridWidth - 1);
-            int randHeight = UnityEngine.Random.Range(0, (int)gridHeight - 1);
             // Get the random world co ordinates from the bottom left of the graph
-            Vector3 worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            Vector3 worldPoint;
+            do
+            {
+                // Calc random point on map
+                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth);
+                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight);
+                worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
+            } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, entityManager));
 
             // Place the instantiated entity in a random point on the map
             //set default variables based on gameObject name - not great solution but works for now
-            //FIXME
             if (gameObject.name.Contains("Rabbit"))
             {
                 CreateRabbitAtWorldPoint(worldPoint);
@@ -381,45 +336,14 @@ public class SimulationManager : MonoBehaviour
             {
                 CreateGrassAtWorldPoint(worldPoint);
             }
-            else
-            {
-                // Efficiently instantiate a bunch of entities from the already converted entity prefab
-                var prototypeEntity = entityManager.Instantiate(convertedEntity);
-                //Set Component Data for the entity
-                entityManager.SetName(prototypeEntity, gameObject.name + i); // set name
-
-                entityManager.SetComponentData(prototypeEntity,
-                    new Translation
-                    {
-                        Value = worldPoint
-                    }
-                );
-                //if has target data component set target to self
-                if (entityManager.HasComponent<TargetData>(prototypeEntity))
-                {
-                    entityManager.SetComponentData(prototypeEntity,
-                        new TargetData
-                        {
-                            atTarget = true,
-                            currentTarget = worldPoint,
-                            oldTarget = worldPoint,
-
-                            sightRadius = 0.1f,
-                            touchRadius = 0.1f
-                        }
-                    );
-                }
-            }
-
         }
-        entityManager.DestroyEntity(convertedEntity);
-
     }
 
-    private void CreateFoxAtWorldPoint(float3 worldPoint)
+    private void CreateFoxAtWorldPoint(in float3 worldPoint)
     {
-        var entityFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
-        Entity prototypeFox = entityManager.Instantiate(entityFox);
+        if (conversionFox == Entity.Null)
+            conversionFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
+        Entity prototypeFox = entityManager.Instantiate(conversionFox);
 
         //set name of entity
         entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
@@ -458,8 +382,8 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeFox,
             new StateData
             {
-                state = FoxDefaults.state,
-                previousState = FoxDefaults.previousState,
+                flagState = FoxDefaults.flagState,
+                previousFlagState = FoxDefaults.previousFlagState,
                 deathReason = FoxDefaults.deathReason,
                 beenEaten = FoxDefaults.beenEaten
             }
@@ -576,13 +500,13 @@ public class SimulationManager : MonoBehaviour
         );
 
         foxPopulation++;
-
-        entityManager.DestroyEntity(entityFox);
     }
-    private void CreateGrassAtWorldPoint(float3 worldPoint)
+
+    private void CreateGrassAtWorldPoint(in float3 worldPoint)
     {
-        var entityGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
-        Entity prototypeGrass = entityManager.Instantiate(entityGrass);
+        if (conversionGrass == Entity.Null)
+            conversionGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
+        Entity prototypeGrass = entityManager.Instantiate(conversionGrass);
 
         //set name of entity
         entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
@@ -608,8 +532,8 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeGrass,
             new StateData
             {
-                state = GrassDefaults.state,
-                previousState = GrassDefaults.previousState,
+                flagState = GrassDefaults.flagState,
+                previousFlagState = GrassDefaults.previousFlagState,
                 deathReason = GrassDefaults.deathReason,
                 beenEaten = GrassDefaults.beenEaten
             }
@@ -634,26 +558,13 @@ public class SimulationManager : MonoBehaviour
 
         grassPopulation++;
 
-        entityManager.DestroyEntity(entityGrass);
     }
-    private void SpawnRabbitAtPosOnClick()
-    {
-        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
-        if (Input.GetMouseButtonDown(0))
-        {
-            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Debug.Log(targetPosition.ToString());
-                CreateRabbitAtWorldPoint(targetPosition);
-            }
-        }
-    }
+
     private void CreateRabbitAtWorldPoint(in float3 worldPoint)
     {
-        var entityRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
-        Entity prototypeRabbit = entityManager.Instantiate(entityRabbit);
+        if (conversionRabbit == Entity.Null)
+            conversionRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
+        Entity prototypeRabbit = entityManager.Instantiate(conversionRabbit);
 
         //set name of entity
         entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
@@ -692,10 +603,10 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeRabbit,
             new StateData
             {
-                state = RabbitDefaults.state,
-                previousState = RabbitDefaults.previousState,
+                flagState = RabbitDefaults.flagState,
+                previousFlagState = RabbitDefaults.previousFlagState,
                 deathReason = RabbitDefaults.deathReason,
-                beenEaten = RabbitDefaults.beenEaten
+                beenEaten = RabbitDefaults.beenEaten,
             }
         );
         entityManager.SetComponentData(prototypeRabbit,
@@ -707,6 +618,7 @@ public class SimulationManager : MonoBehaviour
 
                 sightRadius = RabbitDefaults.sightRadius,
                 touchRadius = RabbitDefaults.touchRadius,
+                mateRadius = RabbitDefaults.mateRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
                 entityToEat = FoxDefaults.entityToEat,
@@ -810,25 +722,64 @@ public class SimulationManager : MonoBehaviour
         );
 
         rabbitPopulation++;
+    }
 
-        entityManager.DestroyEntity(entityRabbit);
+    private void SpawnRabbitAtPosOnLClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(0))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateRabbitAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
+    private void SpawnFoxAtPosOnRClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(1))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateFoxAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
+    private void SpawnGrassAtPosOnMClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(2))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateGrassAtWorldPoint(targetPosition);
+                }
+            }
+        }
     }
     #endregion
-
-    public float RabbitSpawn()
-    {
-        return (float)numberOfRabbitsToSpawn;
-    }
-    public float RabbitPopulation()
-    {
-        return (float)rabbitPopulation;
-    }
-    public float FoxSpawn()
-    {
-        return (float)numberOfFoxesToSpawn;
-    }
-    public float FoxPopulation()
-    {
-        return (float)foxPopulation;
-    }
 }

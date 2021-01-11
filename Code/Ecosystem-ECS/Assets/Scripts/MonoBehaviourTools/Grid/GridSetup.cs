@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Physics;
+﻿using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
-using RaycastHit = Unity.Physics.RaycastHit;
-using Unity.Physics.Systems;
+using Unity.Physics;
+using UnityEngine;
 
 public class GridSetup : MonoBehaviour
 {
@@ -23,17 +20,14 @@ public class GridSetup : MonoBehaviour
     [Header("Node Properties")]
     [SerializeField] private float gridNodeRadius;//This stores how big each square on the graph will be
     [SerializeField] private float distanceBetweenGridNodes;//The distance that the gizmo squares will spawn from each other.
-    private float gridNodeDiameter;//Twice the amount of the radius (Set in the start function)
+    public float gridNodeDiameter;//Twice the amount of the radius (Set in the start function)
     public GridNode[,] grid;//The array of nodes that the A Star algorithm uses.
 
     [Header("LayerMask Data")]
-    //[SerializeField] LayerMask walkableMask;
-    //[SerializeField] private LayerMask unwalkableMask;//This is the mask that the program will look for when trying to find obstructions to the path.
     [SerializeField] private int unwalkableProximityPenalty;//Penalty for going near to unwalkable nodes
     private int penaltyMin = int.MaxValue;
     private int penaltyMax = int.MinValue;
-    //[SerializeField] private TerrainType[] walkableRegions;
-    //private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
+
 
     private void Awake()
     {
@@ -41,20 +35,9 @@ public class GridSetup : MonoBehaviour
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         gridNodeDiameter = gridNodeRadius * 2;//Double the radius to get diameter
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartCoroutine(CreateGrid());
-    }
 
-    private void Update()
+    public bool CreateGrid()
     {
-
-    }
-
-    public IEnumerator CreateGrid()
-    {
-        yield return new WaitForEndOfFrame(); // wait till the end of frame so tile entities have been made
         gridWorldSize = SimulationManager.worldSize;
         gridSize.x = (int)math.round(gridWorldSize.x / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
         gridSize.y = (int)math.round(gridWorldSize.y / gridNodeDiameter);//Divide the grids world co-ordinates by the diameter to get the size of the graph in array units.
@@ -66,20 +49,21 @@ public class GridSetup : MonoBehaviour
             {
                 float3 worldPoint = SimulationManager.worldBottomLeft + Vector3.right * (x * gridNodeDiameter + gridNodeRadius) + Vector3.forward * (y * gridNodeDiameter + gridNodeRadius);//Get the world co ordinates of the node from the bottom left of the graph
 
-                bool isWalkable = false;
+                bool isWalkable;
+                int movementPenalty;//penalty for walking over node
 
-                int movementPenalty = 0;//penalty for walking over node
                 float3 tempUp = worldPoint + new float3(0, 100000, 0);
                 float3 tempDown = worldPoint + new float3(0, -100000, 0);
                 CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
                 //raycast from really high point to under map, colliding with only tiles
                 Entity collidedEntity = UtilTools.PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
-                
-                if (collidedEntity != Entity.Null && entityManager.HasComponent<TerrainTypeData>(collidedEntity))
+
+                if (entityManager.HasComponent<TerrainTypeData>(collidedEntity))
                 {
                     movementPenalty = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).terrainPenalty;
                     isWalkable = entityManager.GetComponentData<TerrainTypeData>(collidedEntity).isWalkable;
                 }
+                else return false; // if it collides with something that doesnt have terraintype then terrain hasnt loaded
 
                 if (!isWalkable)
                 {
@@ -91,7 +75,7 @@ public class GridSetup : MonoBehaviour
         }
 
         BlurMovementPenaltyMap(3);//blur the map with a kernel extent of 3 (5*5)
-
+        return true;
     }
 
     //Function that draws the wireframe, and the nodes
@@ -154,13 +138,17 @@ public class GridSetup : MonoBehaviour
                 penaltiesVertical[x, 0] += penaltiesHorizontal[x, sampleY];//sample the penalty from the horizontal pass array
             }
 
+            //blur bottom row
+            int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, 0] / (kernelSize * kernelSize));//average the penalty and round to nearest int
+            grid[x, 0].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
+
             //loop over all remaining rows in the column
             for (int y = 1; y < gridSize.y; y++)
             {
                 int indexToRemove = Mathf.Clamp(y - kernelExtents - 1, 0, gridSize.y);//calc index of node that is no longer inside kernel after kernel moved along 1
                 int indexToAdd = Mathf.Clamp(y + kernelExtents, 0, gridSize.y - 1);//calc index of node that is now inside kernel after kernel moved along 1
                 penaltiesVertical[x, y] = penaltiesVertical[x, y - 1] - penaltiesHorizontal[x, indexToRemove] + penaltiesHorizontal[x, indexToAdd];//equal to previous - penalty at indexToRemove + penalty at indexToAdd
-                int blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
+                blurredPenalty = Mathf.RoundToInt((float)penaltiesVertical[x, y] / (kernelSize * kernelSize));//average the penalty and round to nearest int
                 grid[x, y].movementPenalty = blurredPenalty;//set the penalty in the nodeArray to the new blurred penalty
 
                 //update penalty min and max

@@ -1,24 +1,17 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
 
 public class MovementDataSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-
-        float deltaTime = Time.DeltaTime;
-        
         Entities.ForEach((
-            ref MovementData movementData, 
-            in BioStatsData bioStatsData, 
-            in ReproductiveData reproductiveData) => 
+            ref MovementData movementData,
+            in BioStatsData bioStatsData,
+            in StateData stateData
+            ) =>
         {
-            
-            if (!reproductiveData.pregnant)
+            if (!stateData.isPregnant)
             {
                 if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
                 {
@@ -37,7 +30,6 @@ public class MovementDataSystem : SystemBase
             {
                 movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
             }
-
         }).ScheduleParallel();
     }
 }

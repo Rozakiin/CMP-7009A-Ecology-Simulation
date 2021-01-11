@@ -1,36 +1,34 @@
-﻿using Unity.Burst;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 using Unity.Physics;
 using Unity.Physics.Systems;
+using Unity.Transforms;
 
 
 // this system must update in the end of frame
-[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(StepPhysicsWorld))]
+[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
 public class LookingEntitySystem : SystemBase
 {
-    // honestly, not sure why using ECB...... guess it is like some command buffer and allocate job order something like that
-    EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
+    BuildPhysicsWorld buildPhysicsWorld;
+
+
     protected override void OnCreate()
     {
         base.OnCreate();
-        // Find the ECB system once and store it for later usage
-        m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
+
     protected override void OnUpdate()
     {
-        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
         CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
-        JobHandle FindUnitsGroupInProximityJobHandle = Entities.WithAll<MovementData>().ForEach((
-            ref TargetData targetData
-            , in ColliderTypeData colliderTypeData
-            , in ReproductiveData reproductiveData
-            , in StateData stateData
-            , in Translation translation) =>
+        Entities.ForEach((
+            ref TargetData targetData,
+            in ColliderTypeData colliderTypeData,
+            in Translation translation
+            ) =>
         {
             NativeList<int> hitsIndices = new NativeList<int>(Allocator.Temp);
             uint mask = 1 << 4;
@@ -40,6 +38,7 @@ public class LookingEntitySystem : SystemBase
                 CollidesWith = mask,
                 GroupIndex = 0
             };
+
             // hit certain area 
             Aabb aabb = new Aabb
             {
@@ -52,6 +51,7 @@ public class LookingEntitySystem : SystemBase
                 Aabb = aabb,
                 Filter = filter,
             };
+
             // input is filter and range, out all entity who has collider, Aabb is very famous in website a way to detect 3D collision world
             if (collisionWorld.OverlapAabb(overlapAabbInput, ref hitsIndices))
             {
@@ -59,10 +59,10 @@ public class LookingEntitySystem : SystemBase
                 Entity EntityToDrink = Entity.Null;
                 Entity EntityToPredator = Entity.Null;
                 Entity EntityToMate = Entity.Null;
-                float shortestToEdibleDistance = 100f;
-                float shortestToWaterDistance = 100f;
-                float shortestToPredatorDistance = 100f;
-                float shortestToMateDistance = 100f;
+                float shortestToEdibleDistance = float.PositiveInfinity;
+                float shortestToWaterDistance = float.PositiveInfinity;
+                float shortestToPredatorDistance = float.PositiveInfinity;
+                float shortestToMateDistance = float.PositiveInfinity;
 
                 //Foreach detected unitsGroup check we compare the unitsGroup node vs the one of the units
                 for (int i = 0; i < hitsIndices.Length; i++)
@@ -76,7 +76,7 @@ public class LookingEntitySystem : SystemBase
                     {
                         if (childEntityNumber != ColliderTypeData.ColliderType.Fox)// to avoid fox find fox, fox don't have mate system
                         {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit && stateData.state == StateData.States.Hungry)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
+                            if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
                             {
                                 if (distanceToEntity < shortestToEdibleDistance)
                                 {
@@ -84,7 +84,7 @@ public class LookingEntitySystem : SystemBase
                                     EntityToEat = childEntity;
                                 }
                             }
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.state == StateData.States.Thirsty)        // find water
+                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        // find water
                             {
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
@@ -94,48 +94,40 @@ public class LookingEntitySystem : SystemBase
                             }
                         }
                     }
-                    else // if you are Rabbit
+                    else if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Rabbit)// if you are Rabbit
                     {
-                        if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit) //rabbit don't need to find rabbit now, will change late in find CloestMateEntity
+                        if (childEntityNumber == ColliderTypeData.ColliderType.Grass)             // find Grass
                         {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Grass && stateData.state == StateData.States.Hungry)             // find Grass
+                            if (distanceToEntity < shortestToEdibleDistance)
                             {
-                                if (distanceToEntity < shortestToEdibleDistance)
-                                {
-                                    shortestToEdibleDistance = distanceToEntity;
-                                    EntityToEat = childEntity;
-                                }
-                            }
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water && stateData.state == StateData.States.Thirsty)        //find Water
-                            {
-                                if (distanceToEntity < shortestToWaterDistance)
-                                {
-                                    shortestToWaterDistance = distanceToEntity;
-                                    EntityToDrink = childEntity;
-                                }
-                            }
-
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Fox)        //find Fox
-                            {
-                                if (distanceToEntity < shortestToPredatorDistance)
-                                {
-                                    shortestToPredatorDistance = distanceToEntity;
-                                    EntityToPredator = childEntity;
-                                }
+                                shortestToEdibleDistance = distanceToEntity;
+                                EntityToEat = childEntity;
                             }
                         }
-                        else
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        //find Water
                         {
-                            if (stateData.state == StateData.States.SexuallyActive)
+                            if (distanceToEntity < shortestToWaterDistance)
                             {
-                                if ((GetComponentDataFromEntity<ReproductiveData>(true)[childEntity].pregnant == false) && (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female))
-                                {
-                                    if (distanceToEntity < shortestToMateDistance)
-                                    {
-                                        shortestToMateDistance = distanceToEntity;
-                                        EntityToMate = childEntity;
-                                    }
-                                }
+                                shortestToWaterDistance = distanceToEntity;
+                                EntityToDrink = childEntity;
+                            }
+                        }
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Fox)        //find Fox
+                        {
+                            if (distanceToEntity < shortestToPredatorDistance)
+                            {
+                                shortestToPredatorDistance = distanceToEntity;
+                                EntityToPredator = childEntity;
+                            }
+                        }
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)
+                        {
+                            if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) &&
+                                (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female) &&
+                                (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
+                            {
+                                shortestToMateDistance = distanceToEntity;
+                                EntityToMate = childEntity;
                             }
                         }
                     }
@@ -155,11 +147,6 @@ public class LookingEntitySystem : SystemBase
                 targetData.shortestToMateDistance = shortestToMateDistance;
             }
             hitsIndices.Dispose();
-           
-        }).ScheduleParallel(Dependency);
-        // not sure why....
-        Dependency = JobHandle.CombineDependencies(Dependency, buildPhysicsWorld.GetOutputDependency());
-        Dependency = JobHandle.CombineDependencies(Dependency, FindUnitsGroupInProximityJobHandle);
-        m_EndSimulationEcbSystem.AddJobHandleForProducer(this.Dependency);
+        }).ScheduleParallel();
     }
 }
