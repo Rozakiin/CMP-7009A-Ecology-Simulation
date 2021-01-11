@@ -782,4 +782,22 @@ public class SimulationManager : MonoBehaviour
         }
     }
     #endregion
+
+    public float RabbitSpawn()
+    {
+        return (float)numberOfRabbitsToSpawn;
+    }
+    public float RabbitPopulation()
+    {
+        return (float)rabbitPopulation;
+    }
+    public float FoxSpawn()
+    {
+        return (float)numberOfFoxesToSpawn;
+    }
+    public float FoxPopulation()
+    {
+        return (float)foxPopulation;
+    }
+
 }

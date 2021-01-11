@@ -143,7 +143,7 @@ public class UIGraph : MonoBehaviour
         if (input > GraphRabbitList.Count)
         {
             input = 1;
-            Debug.Log("input exceed the max value");
+            Debug.Log("input exceed the max value So just show you all point");
         }
     }
 
