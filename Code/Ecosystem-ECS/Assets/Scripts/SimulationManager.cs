@@ -800,4 +800,8 @@ public class SimulationManager : MonoBehaviour
         return (float)foxPopulation;
     }
 
+    public Vector2 MapSize()
+    {
+        return new Vector2(gridWidth, gridHeight);
+    }
 }

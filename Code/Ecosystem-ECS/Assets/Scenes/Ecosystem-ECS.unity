@@ -388,17 +388,17 @@ PrefabInstance:
     - target: {fileID: -287506225155014301, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: uiGraphCanvas
-      value: 
+      value:
       objectReference: {fileID: 1568092380}
     - target: {fileID: 265633833014814715, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: simulationManager
-      value: 
+      value:
       objectReference: {fileID: 508030573}
     - target: {fileID: 265633833014814715, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: timeControlSystem
-      value: 
+      value:
       objectReference: {fileID: 1823899748}
     - target: {fileID: 500298135160070407, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -418,7 +418,7 @@ PrefabInstance:
     - target: {fileID: 500298135160070407, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      value:
       objectReference: {fileID: 1823899747}
     - target: {fileID: 1068223107327876684, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -463,7 +463,7 @@ PrefabInstance:
     - target: {fileID: 2881723290549940684, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      value:
       objectReference: {fileID: 1699203138}
     - target: {fileID: 3751947209844791980, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -722,7 +722,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0edc250bac6ed4087b75b02d2d261ba5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
+  simulationManager: {fileID: 508030573}
   CanSpeed: 20
   CanBorderThicknerss: 20
   canLimit: {x: 100, y: 100}
@@ -757,5 +758,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 729a183ebb97c419f832a81638146f6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
