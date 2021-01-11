@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using SFB;
 using System.IO;
 using System.Xml;
+using System;
 
 namespace SpeedTutorMainMenuSystem
 {
@@ -477,438 +478,247 @@ namespace SpeedTutorMainMenuSystem
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(filePath);
 
-                #region Rabbit Data
+                #region  open tage by name
 
-                #region ageData 
-
-                XmlNodeList rAge = xmlDocument.GetElementsByTagName("age");
-                float age = float.Parse(rAge[0].InnerText);
-                RabbitDefaults.age = age;
-                XmlNodeList rAgeincrease = xmlDocument.GetElementsByTagName("ageIncrease");
-                float ageIncrease = float.Parse(rAgeincrease[0].InnerText);
-                RabbitDefaults.ageIncrease = ageIncrease;
-                XmlNodeList rAgemax = xmlDocument.GetElementsByTagName("ageMax");
-                float ageMax = float.Parse(rAgemax[0].InnerText);
-                RabbitDefaults.ageMax = ageMax;
-                XmlNodeList rAdultentrytimer = xmlDocument.GetElementsByTagName("adultEntryTimer");
-                float adultEntryTimer = float.Parse(rAdultentrytimer[0].InnerText);
-                RabbitDefaults.adultEntryTimer = adultEntryTimer;
-                XmlNodeList rOldentrytimer = xmlDocument.GetElementsByTagName("oldEntryTimer");
-                float oldEntryTimer = float.Parse(rOldentrytimer[0].InnerText);
-                RabbitDefaults.oldEntryTimer = oldEntryTimer;
-
-                #endregion ageData
-
-                #region edibleData 
-
-                XmlNodeList rNutritionalvalue = xmlDocument.GetElementsByTagName("nutritionalValue");
-                float nutritionalValue = float.Parse(rNutritionalvalue[0].InnerText);
-                RabbitDefaults.nutritionalValue = nutritionalValue;
-                XmlNodeList rNutritionalvaluemultiplier = xmlDocument.GetElementsByTagName("nutritionalValueMultiplier");
-                float nutritionalValueMultiplier = float.Parse(rNutritionalvaluemultiplier[0].InnerText);
-                RabbitDefaults.nutritionalValueMultiplier = nutritionalValueMultiplier;
-
-                #endregion edibleData
-
-                #region hungerData 
-
-                XmlNodeList rHunger = xmlDocument.GetElementsByTagName("hunger");
-                float hunger = float.Parse(rHunger[0].InnerText);
-                RabbitDefaults.hunger = hunger;
-                XmlNodeList rHungermax = xmlDocument.GetElementsByTagName("hungerMax");
-                float hungerMax = float.Parse(rHungermax[0].InnerText);
-                RabbitDefaults.hungerMax = hungerMax;
-                XmlNodeList rHungrythreshold = xmlDocument.GetElementsByTagName("hungryThreshold");
-                float hungryThreshold = float.Parse(rHungrythreshold[0].InnerText);
-                RabbitDefaults.hungryThreshold = hungryThreshold;
-                XmlNodeList rHungerincrease = xmlDocument.GetElementsByTagName("hungerIncrease");
-                float hungerIncrease = float.Parse(rHungerincrease[0].InnerText);
-                RabbitDefaults.hungerIncrease = hungerIncrease;
-                XmlNodeList rPregnancyhungerincrease = xmlDocument.GetElementsByTagName("pregnancyHungerIncrease");
-                float pregnancyHungerIncrease = float.Parse(rPregnancyhungerincrease[0].InnerText);
-                RabbitDefaults.pregnancyHungerIncrease = pregnancyHungerIncrease;
-                XmlNodeList rYounghungerincrease = xmlDocument.GetElementsByTagName("youngHungerIncrease");
-                float youngHungerIncrease = float.Parse(rYounghungerincrease[0].InnerText);
-                RabbitDefaults.youngHungerIncrease = youngHungerIncrease;
-                XmlNodeList rAdulthungerincrease = xmlDocument.GetElementsByTagName("adultHungerIncrease");
-                float adultHungerIncrease = float.Parse(rAdulthungerincrease[0].InnerText);
-                RabbitDefaults.adultHungerIncrease = adultHungerIncrease;
-                XmlNodeList rOldhungerincrease = xmlDocument.GetElementsByTagName("oldHungerIncrease");
-                float oldHungerIncrease = float.Parse(rOldhungerincrease[0].InnerText);
-                RabbitDefaults.oldHungerIncrease = oldHungerIncrease;
-                XmlNodeList rEatingspeed = xmlDocument.GetElementsByTagName("eatingSpeed");
-                float eatingSpeed = float.Parse(rEatingspeed[0].InnerText);
-                RabbitDefaults.eatingSpeed = eatingSpeed;
-
-                #endregion hungerData
-
-                #region thirstData 
-
-                XmlNodeList rThirst = xmlDocument.GetElementsByTagName("thirst");
-                float thirst = float.Parse(rThirst[0].InnerText);
-                RabbitDefaults.thirst = thirst;
-                XmlNodeList rThirstmax = xmlDocument.GetElementsByTagName("thirstMax");
-                float thirstMax = float.Parse(rThirstmax[0].InnerText);
-                RabbitDefaults.thirstMax = thirstMax;
-                XmlNodeList rThirstythreshold = xmlDocument.GetElementsByTagName("thirstyThreshold");
-                float thirstyThreshold = float.Parse(rThirstythreshold[0].InnerText);
-                RabbitDefaults.thirstyThreshold = thirstyThreshold;
-                XmlNodeList rThirstincrease = xmlDocument.GetElementsByTagName("thirstIncrease");
-                float thirstIncrease = float.Parse(rThirstincrease[0].InnerText);
-                RabbitDefaults.thirstIncrease = thirstIncrease;
-                XmlNodeList rDrinkingspeed = xmlDocument.GetElementsByTagName("drinkingSpeed");
-                float drinkingSpeed = float.Parse(rDrinkingspeed[0].InnerText);
-                RabbitDefaults.drinkingSpeed = drinkingSpeed;
-
-                #endregion thirstData
-
-                #region mateData 
-
-                XmlNodeList rMatestarttime = xmlDocument.GetElementsByTagName("mateStartTime");
-                float mateStartTime = float.Parse(rMatestarttime[0].InnerText);
-                RabbitDefaults.mateStartTime = mateStartTime;
-                XmlNodeList rMatingduration = xmlDocument.GetElementsByTagName("matingDuration");
-                float matingDuration = float.Parse(rMatingduration[0].InnerText);
-                RabbitDefaults.matingDuration = matingDuration;
-                XmlNodeList rReproductiveurge = xmlDocument.GetElementsByTagName("reproductiveUrge");
-                float reproductiveUrge = float.Parse(rReproductiveurge[0].InnerText);
-                RabbitDefaults.reproductiveUrge = reproductiveUrge;
-                XmlNodeList rReproductiveurgeincreasemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseMale");
-                float reproductiveUrgeIncreaseMale = float.Parse(rReproductiveurgeincreasemale[0].InnerText);
-                RabbitDefaults.reproductiveUrgeIncreaseMale = reproductiveUrgeIncreaseMale;
-                XmlNodeList rReproductiveurgeincreasefemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
-                float reproductiveUrgeIncreaseFemale = float.Parse(rReproductiveurgeincreasefemale[0].InnerText);
-                RabbitDefaults.reproductiveUrgeIncreaseFemale = reproductiveUrgeIncreaseFemale;
-                XmlNodeList rMatingthreshold = xmlDocument.GetElementsByTagName("matingThreshold");
-                float matingThreshold = float.Parse(rMatingthreshold[0].InnerText);
-                RabbitDefaults.matingThreshold = matingThreshold;
-
-                #endregion mateData
-
-                #region pregnancyData 
-
-                XmlNodeList rPregnancystarttime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
-                float pregnancyStartTime = float.Parse(rPregnancystarttime[0].InnerText);
-                RabbitDefaults.pregnancyStartTime = pregnancyStartTime;
-                XmlNodeList rBabiesborn = xmlDocument.GetElementsByTagName("babiesBorn");
-                int babiesBorn = int.Parse(rBabiesborn[0].InnerText);
-                RabbitDefaults.babiesBorn = babiesBorn;
-                XmlNodeList rBirthstarttime = xmlDocument.GetElementsByTagName("birthStartTime");
-                float birthStartTime = float.Parse(rBirthstarttime[0].InnerText);
-                RabbitDefaults.birthStartTime = birthStartTime;
-                XmlNodeList rCurrentlittersize = xmlDocument.GetElementsByTagName("currentLitterSize");
-                int currentLitterSize = int.Parse(rCurrentlittersize[0].InnerText);
-                RabbitDefaults.currentLitterSize = currentLitterSize;
-                XmlNodeList rPregnancylengthmodifier = xmlDocument.GetElementsByTagName("pregnancyLengthModifier");
-                float pregnancyLengthModifier = float.Parse(rPregnancylengthmodifier[0].InnerText);
-                RabbitDefaults.pregnancyLengthModifier = pregnancyLengthModifier;
-                XmlNodeList rPregnancylength = xmlDocument.GetElementsByTagName("pregnancyLength");
-                float pregnancyLength = float.Parse(rPregnancylength[0].InnerText);
-                RabbitDefaults.pregnancyLength = pregnancyLength;
-                XmlNodeList rBirthduration = xmlDocument.GetElementsByTagName("birthDuration");
-                float birthDuration = float.Parse(rBirthduration[0].InnerText);
-                RabbitDefaults.birthDuration = birthDuration;
-                XmlNodeList rLittersizemin = xmlDocument.GetElementsByTagName("litterSizeMin");
-                int litterSizeMin = int.Parse(rLittersizemin[0].InnerText);
-                RabbitDefaults.litterSizeMin = litterSizeMin;
-                XmlNodeList rLittersizemax = xmlDocument.GetElementsByTagName("litterSizeMax");
-                int litterSizeMax = int.Parse(rLittersizemax[0].InnerText);
-                RabbitDefaults.litterSizeMax = litterSizeMax;
-                XmlNodeList rLittersizeave = xmlDocument.GetElementsByTagName("litterSizeAve");
-                int litterSizeAve = int.Parse(rLittersizeave[0].InnerText);
-                RabbitDefaults.litterSizeAve = litterSizeAve;
-
-                #endregion pregnancyData
-
-                #region movementData
-
-                XmlNodeList rMovespeed = xmlDocument.GetElementsByTagName("moveSpeed");
-                float moveSpeed = float.Parse(rMovespeed[0].InnerText);
-                RabbitDefaults.moveSpeed = moveSpeed;
-                XmlNodeList rRotationspeed = xmlDocument.GetElementsByTagName("rotationSpeed");
-                float rotationSpeed = float.Parse(rRotationspeed[0].InnerText);
-                RabbitDefaults.rotationSpeed = rotationSpeed;
-                XmlNodeList rMovemultiplier = xmlDocument.GetElementsByTagName("moveMultiplier");
-                float moveMultiplier = float.Parse(rMovemultiplier[0].InnerText);
-                RabbitDefaults.moveMultiplier = moveMultiplier;
-                XmlNodeList rPregnancymovemultiplier = xmlDocument.GetElementsByTagName("pregnancyMoveMultiplier");
-                float pregnancyMoveMultiplier = float.Parse(rPregnancymovemultiplier[0].InnerText);
-                RabbitDefaults.pregnancyMoveMultiplier = pregnancyMoveMultiplier;
-                XmlNodeList rOriginalmovemultiplier = xmlDocument.GetElementsByTagName("originalMoveMultiplier");
-                float originalMoveMultiplier = float.Parse(rOriginalmovemultiplier[0].InnerText);
-                RabbitDefaults.originalMoveMultiplier = originalMoveMultiplier;
-                XmlNodeList rYoungmovemultiplier = xmlDocument.GetElementsByTagName("youngMoveMultiplier");
-                float youngMoveMultiplier = float.Parse(rYoungmovemultiplier[0].InnerText);
-                RabbitDefaults.youngMoveMultiplier = youngMoveMultiplier;
-                XmlNodeList rAdultmovemultiplier = xmlDocument.GetElementsByTagName("adultMoveMultiplier");
-                float adultMoveMultiplier = float.Parse(rAdultmovemultiplier[0].InnerText);
-                RabbitDefaults.adultMoveMultiplier = adultMoveMultiplier;
-                XmlNodeList rOldmovemultiplier = xmlDocument.GetElementsByTagName("oldMoveMultiplier");
-                float oldMoveMultiplier = float.Parse(rOldmovemultiplier[0].InnerText);
-                RabbitDefaults.oldMoveMultiplier = oldMoveMultiplier;
-
-                #endregion movementData
-
-                #region sizeData 
-
-                XmlNodeList rSizemultiplier = xmlDocument.GetElementsByTagName("sizeMultiplier");
-                float sizeMultiplier = float.Parse(rSizemultiplier[0].InnerText);
-                RabbitDefaults.sizeMultiplier = sizeMultiplier;
-                XmlNodeList rScalemale = xmlDocument.GetElementsByTagName("scaleMale");
-                float scaleMale = float.Parse(rScalemale[0].InnerText);
-                RabbitDefaults.scaleMale = scaleMale;
-                XmlNodeList rScalefemale = xmlDocument.GetElementsByTagName("scaleFemale");
-                float scaleFemale = float.Parse(rScalefemale[0].InnerText);
-                RabbitDefaults.scaleFemale = scaleFemale;
-                XmlNodeList rYoungsizemultiplier = xmlDocument.GetElementsByTagName("youngSizeMultiplier");
-                float youngSizeMultiplier = float.Parse(rYoungsizemultiplier[0].InnerText);
-                RabbitDefaults.youngSizeMultiplier = youngSizeMultiplier;
-                XmlNodeList rAdultsizemultiplier = xmlDocument.GetElementsByTagName("adultSizeMultiplier");
-                float adultSizeMultiplier = float.Parse(rAdultsizemultiplier[0].InnerText);
-                RabbitDefaults.adultSizeMultiplier = adultSizeMultiplier;
-                XmlNodeList rOldsizemultiplier = xmlDocument.GetElementsByTagName("oldSizeMultiplier");
-                float oldSizeMultiplier = float.Parse(rOldsizemultiplier[0].InnerText);
-                RabbitDefaults.oldSizeMultiplier = oldSizeMultiplier;
-
-                #endregion sizeData
-
-                #region targetData
+                XmlNodeList age = xmlDocument.GetElementsByTagName("age");
+                XmlNodeList ageIncrease = xmlDocument.GetElementsByTagName("ageIncrease");
+                XmlNodeList ageMax = xmlDocument.GetElementsByTagName("ageMax");
+                XmlNodeList ageGroup = xmlDocument.GetElementsByTagName("ageGroup");
+                XmlNodeList adultEntryTimer = xmlDocument.GetElementsByTagName("adultEntryTimer");
+                XmlNodeList oldEntryTimer = xmlDocument.GetElementsByTagName("oldEntryTimer");
+                XmlNodeList nutritionalValue = xmlDocument.GetElementsByTagName("nutritionalValue");
+                XmlNodeList canBeEaten = xmlDocument.GetElementsByTagName("canBeEaten");
+                XmlNodeList nutritionalValueMultiplier = xmlDocument.GetElementsByTagName("nutritionalValueMultiplier");
+                XmlNodeList foodType = xmlDocument.GetElementsByTagName("foodType");
+                XmlNodeList hunger = xmlDocument.GetElementsByTagName("hunger");
+                XmlNodeList hungerMax = xmlDocument.GetElementsByTagName("hungerMax");
+                XmlNodeList hungryThreshold = xmlDocument.GetElementsByTagName("hungryThreshold");
+                XmlNodeList hungerIncrease = xmlDocument.GetElementsByTagName("hungerIncrease");
+                XmlNodeList pregnancyHungerIncrease = xmlDocument.GetElementsByTagName("pregnancyHungerIncrease");
+                XmlNodeList youngHungerIncrease = xmlDocument.GetElementsByTagName("youngHungerIncrease");
+                XmlNodeList adultHungerIncrease = xmlDocument.GetElementsByTagName("adultHungerIncrease");
+                XmlNodeList oldHungerIncrease = xmlDocument.GetElementsByTagName("oldHungerIncrease");
+                XmlNodeList eatingSpeed = xmlDocument.GetElementsByTagName("eatingSpeed");
+                XmlNodeList diet = xmlDocument.GetElementsByTagName("diet");
+                XmlNodeList thirst = xmlDocument.GetElementsByTagName("thirst");
+                XmlNodeList thirstMax = xmlDocument.GetElementsByTagName("thirstMax");
+                XmlNodeList thirstyThreshold = xmlDocument.GetElementsByTagName("thirstyThreshold");
+                XmlNodeList thirstIncrease = xmlDocument.GetElementsByTagName("thirstIncrease");
+                XmlNodeList drinkingSpeed = xmlDocument.GetElementsByTagName("drinkingSpeed");
+                XmlNodeList mateStartTime = xmlDocument.GetElementsByTagName("mateStartTime");
+                XmlNodeList matingDuration = xmlDocument.GetElementsByTagName("matingDuration");
+                XmlNodeList reproductiveUrge = xmlDocument.GetElementsByTagName("reproductiveUrge");
+                XmlNodeList reproductiveUrgeIncreaseMale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseMale");
+                XmlNodeList reproductiveUrgeIncreaseFemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
+                XmlNodeList matingThreshold = xmlDocument.GetElementsByTagName("matingThreshold");
+                XmlNodeList pregnancyStartTime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
+                XmlNodeList pregnant = xmlDocument.GetElementsByTagName("pregnant");
+                XmlNodeList babiesBorn = xmlDocument.GetElementsByTagName("babiesBorn");
+                XmlNodeList birthStartTime = xmlDocument.GetElementsByTagName("birthStartTime");
+                XmlNodeList currentLitterSize = xmlDocument.GetElementsByTagName("currentLitterSize");
+                XmlNodeList pregnancyLengthModifier = xmlDocument.GetElementsByTagName("pregnancyLengthModifier");
+                XmlNodeList pregnancyLength = xmlDocument.GetElementsByTagName("pregnancyLength");
+                XmlNodeList birthDuration = xmlDocument.GetElementsByTagName("birthDuration");
+                XmlNodeList litterSizeMin = xmlDocument.GetElementsByTagName("litterSizeMin");
+                XmlNodeList litterSizeMax = xmlDocument.GetElementsByTagName("litterSizeMax");
+                XmlNodeList litterSizeAve = xmlDocument.GetElementsByTagName("litterSizeAve");
+                XmlNodeList moveSpeed = xmlDocument.GetElementsByTagName("moveSpeed");
+                XmlNodeList rotationSpeed = xmlDocument.GetElementsByTagName("rotationSpeed");
+                XmlNodeList moveMultiplier = xmlDocument.GetElementsByTagName("moveMultiplier");
+                XmlNodeList pregnancyMoveMultiplier = xmlDocument.GetElementsByTagName("pregnancyMoveMultiplier");
+                XmlNodeList originalMoveMultiplier = xmlDocument.GetElementsByTagName("originalMoveMultiplier");
+                XmlNodeList youngMoveMultiplier = xmlDocument.GetElementsByTagName("youngMoveMultiplier");
+                XmlNodeList adultMoveMultiplier = xmlDocument.GetElementsByTagName("adultMoveMultiplier");
+                XmlNodeList oldMoveMultiplier = xmlDocument.GetElementsByTagName("oldMoveMultiplier");
+                XmlNodeList sizeMultiplier = xmlDocument.GetElementsByTagName("sizeMultiplier");
+                XmlNodeList scaleMale = xmlDocument.GetElementsByTagName("scaleMale");
+                XmlNodeList scaleFemale = xmlDocument.GetElementsByTagName("scaleFemale");
+                XmlNodeList youngSizeMultiplier = xmlDocument.GetElementsByTagName("youngSizeMultiplier");
+                XmlNodeList adultSizeMultiplier = xmlDocument.GetElementsByTagName("adultSizeMultiplier");
+                XmlNodeList oldSizeMultiplier = xmlDocument.GetElementsByTagName("oldSizeMultiplier");
+                XmlNodeList state = xmlDocument.GetElementsByTagName("state");
+                XmlNodeList previousState = xmlDocument.GetElementsByTagName("previousState");
+                XmlNodeList deathReason = xmlDocument.GetElementsByTagName("deathReason");
+                XmlNodeList beenEaten = xmlDocument.GetElementsByTagName("beenEaten");
+                XmlNodeList touchRadius = xmlDocument.GetElementsByTagName("touchRadius");
+                XmlNodeList sightRadius = xmlDocument.GetElementsByTagName("sightRadius");
+                XmlNodeList shortestToEdibleDistance = xmlDocument.GetElementsByTagName("shortestToEdibleDistance");
+                XmlNodeList shortestToWaterDistance = xmlDocument.GetElementsByTagName("shortestToWaterDistance");
+                XmlNodeList shortestToPredatorDistance = xmlDocument.GetElementsByTagName("shortestToPredatorDistance");
+                XmlNodeList shortestToMateDistance = xmlDocument.GetElementsByTagName("shortestToMateDistance");
+                XmlNodeList colliderType = xmlDocument.GetElementsByTagName("colliderType");
 
 
-                XmlNodeList rTouchradius = xmlDocument.GetElementsByTagName("touchRadius");
-                float touchRadius = float.Parse(rTouchradius[0].InnerText);
-                RabbitDefaults.touchRadius = touchRadius;
-                XmlNodeList rSightradius = xmlDocument.GetElementsByTagName("sightRadius");
-                float sightRadius = float.Parse(rSightradius[0].InnerText);
-                RabbitDefaults.sightRadius = sightRadius;
+                #endregion
 
 
-                #endregion targetData
 
-                #endregion RabbitData
+                #region rabbit default
 
-                #region Fox Data
+                RabbitDefaults.age = float.Parse(age[0].InnerText);
+                RabbitDefaults.ageIncrease = float.Parse(ageIncrease[0].InnerText);
+                RabbitDefaults.ageMax = float.Parse(ageMax[0].InnerText);
+                RabbitDefaults.ageGroup = (BioStatsData.AgeGroup)Enum.Parse(typeof(BioStatsData.AgeGroup), ageGroup[0].InnerText);
+                RabbitDefaults.adultEntryTimer = float.Parse(adultEntryTimer[0].InnerText);
+                RabbitDefaults.oldEntryTimer = float.Parse(oldEntryTimer[0].InnerText);
+                RabbitDefaults.nutritionalValue = float.Parse(nutritionalValue[0].InnerText);
+                RabbitDefaults.canBeEaten = bool.Parse(canBeEaten[0].InnerText);
+                RabbitDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[0].InnerText);
+                RabbitDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[0].InnerText);
+                RabbitDefaults.hunger = float.Parse(hunger[0].InnerText);
+                RabbitDefaults.hungerMax = float.Parse(hungerMax[0].InnerText);
+                RabbitDefaults.hungryThreshold = float.Parse(hungryThreshold[0].InnerText);
+                RabbitDefaults.hungerIncrease = float.Parse(hungerIncrease[0].InnerText);
+                RabbitDefaults.pregnancyHungerIncrease = float.Parse(pregnancyHungerIncrease[0].InnerText);
+                RabbitDefaults.youngHungerIncrease = float.Parse(youngHungerIncrease[0].InnerText);
+                RabbitDefaults.adultHungerIncrease = float.Parse(adultHungerIncrease[0].InnerText);
+                RabbitDefaults.oldHungerIncrease = float.Parse(oldHungerIncrease[0].InnerText);
+                RabbitDefaults.eatingSpeed = float.Parse(eatingSpeed[0].InnerText);
+                RabbitDefaults.diet = (BasicNeedsData.Diet)Enum.Parse(typeof(BasicNeedsData.Diet), diet[0].InnerText);
+                RabbitDefaults.thirst = float.Parse(thirst[0].InnerText);
+                RabbitDefaults.thirstMax = float.Parse(thirstMax[0].InnerText);
+                RabbitDefaults.thirstyThreshold = float.Parse(thirstyThreshold[0].InnerText);
+                RabbitDefaults.thirstIncrease = float.Parse(thirstIncrease[0].InnerText);
+                RabbitDefaults.drinkingSpeed = float.Parse(drinkingSpeed[0].InnerText);
+                RabbitDefaults.mateStartTime = float.Parse(mateStartTime[0].InnerText);
+                RabbitDefaults.matingDuration = float.Parse(matingDuration[0].InnerText);
+                RabbitDefaults.reproductiveUrge = float.Parse(reproductiveUrge[0].InnerText);
+                RabbitDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[0].InnerText);
+                RabbitDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[0].InnerText);
+                RabbitDefaults.matingThreshold = float.Parse(matingThreshold[0].InnerText);
+                RabbitDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[0].InnerText);
+                RabbitDefaults.pregnant = bool.Parse(pregnant[0].InnerText);
+                RabbitDefaults.babiesBorn = int.Parse(babiesBorn[0].InnerText);
+                RabbitDefaults.birthStartTime = float.Parse(birthStartTime[0].InnerText);
+                RabbitDefaults.currentLitterSize = int.Parse(currentLitterSize[0].InnerText);
+                RabbitDefaults.pregnancyLengthModifier = float.Parse(pregnancyLengthModifier[0].InnerText);
+                RabbitDefaults.pregnancyLength = float.Parse(pregnancyLength[0].InnerText);
+                RabbitDefaults.birthDuration = float.Parse(birthDuration[0].InnerText);
+                RabbitDefaults.litterSizeMin = int.Parse(litterSizeMin[0].InnerText);
+                RabbitDefaults.litterSizeMax = int.Parse(litterSizeMax[0].InnerText);
+                RabbitDefaults.litterSizeAve = int.Parse(litterSizeAve[0].InnerText);
+                RabbitDefaults.moveSpeed = float.Parse(moveSpeed[0].InnerText);
+                RabbitDefaults.rotationSpeed = float.Parse(rotationSpeed[0].InnerText);
+                RabbitDefaults.moveMultiplier = float.Parse(moveMultiplier[0].InnerText);
+                RabbitDefaults.pregnancyMoveMultiplier = float.Parse(pregnancyMoveMultiplier[0].InnerText);
+                RabbitDefaults.originalMoveMultiplier = float.Parse(originalMoveMultiplier[0].InnerText);
+                RabbitDefaults.youngMoveMultiplier = float.Parse(youngMoveMultiplier[0].InnerText);
+                RabbitDefaults.adultMoveMultiplier = float.Parse(adultMoveMultiplier[0].InnerText);
+                RabbitDefaults.oldMoveMultiplier = float.Parse(oldMoveMultiplier[0].InnerText);
+                RabbitDefaults.sizeMultiplier = float.Parse(sizeMultiplier[0].InnerText);
+                RabbitDefaults.scaleMale = float.Parse(scaleMale[0].InnerText);
+                RabbitDefaults.scaleFemale = float.Parse(scaleFemale[0].InnerText);
+                RabbitDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[0].InnerText);
+                RabbitDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[0].InnerText);
+                RabbitDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[0].InnerText);
+                RabbitDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[0].InnerText);
+                RabbitDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[0].InnerText);
+                RabbitDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[0].InnerText);
+                RabbitDefaults.beenEaten = bool.Parse(beenEaten[0].InnerText);
+                RabbitDefaults.touchRadius = float.Parse(touchRadius[0].InnerText);
+                RabbitDefaults.sightRadius = float.Parse(sightRadius[0].InnerText);
+                RabbitDefaults.shortestToEdibleDistance = float.Parse(shortestToEdibleDistance[0].InnerText);
+                RabbitDefaults.shortestToWaterDistance = float.Parse(shortestToWaterDistance[0].InnerText);
+                RabbitDefaults.shortestToPredatorDistance = float.Parse(shortestToPredatorDistance[0].InnerText);
+                RabbitDefaults.shortestToMateDistance = float.Parse(shortestToMateDistance[0].InnerText);
+                RabbitDefaults.colliderType = (ColliderTypeData.ColliderType)Enum.Parse(typeof(ColliderTypeData.ColliderType), colliderType[0].InnerText);
 
-                #region ageData 
+                #endregion
 
-                XmlNodeList fAge = xmlDocument.GetElementsByTagName("age");
-                float ffage = float.Parse(fAge[0].InnerText);
-                FoxDefaults.age = ffage;
-                XmlNodeList fAgeincrease = xmlDocument.GetElementsByTagName("ageIncrease");
-                float ffageIncrease = float.Parse(fAgeincrease[0].InnerText);
-                FoxDefaults.ageIncrease = ffageIncrease;
-                XmlNodeList fAgemax = xmlDocument.GetElementsByTagName("ageMax");
-                float ffageMax = float.Parse(fAgemax[0].InnerText);
-                FoxDefaults.ageMax = ffageMax;
-                XmlNodeList fAdultentrytimer = xmlDocument.GetElementsByTagName("adultEntryTimer");
-                float ffadultEntryTimer = float.Parse(fAdultentrytimer[0].InnerText);
-                FoxDefaults.adultEntryTimer = ffadultEntryTimer;
-                XmlNodeList fOldentrytimer = xmlDocument.GetElementsByTagName("oldEntryTimer");
-                float ffoldEntryTimer = float.Parse(fOldentrytimer[0].InnerText);
-                FoxDefaults.oldEntryTimer = ffoldEntryTimer;
 
-                #endregion ageData
+                #region fox default
 
-                #region edibleData 
+                FoxDefaults.age = float.Parse(age[1].InnerText);
+                FoxDefaults.ageIncrease = float.Parse(ageIncrease[1].InnerText);
+                FoxDefaults.ageMax = float.Parse(ageMax[1].InnerText);
+                FoxDefaults.ageGroup = (BioStatsData.AgeGroup)Enum.Parse(typeof(BioStatsData.AgeGroup), ageGroup[1].InnerText);
+                FoxDefaults.adultEntryTimer = float.Parse(adultEntryTimer[1].InnerText);
+                FoxDefaults.oldEntryTimer = float.Parse(oldEntryTimer[1].InnerText);
+                FoxDefaults.nutritionalValue = float.Parse(nutritionalValue[1].InnerText);
+                FoxDefaults.canBeEaten = bool.Parse(canBeEaten[1].InnerText);
+                FoxDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[1].InnerText);
+                FoxDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[1].InnerText);
+                FoxDefaults.hunger = float.Parse(hunger[1].InnerText);
+                FoxDefaults.hungerMax = float.Parse(hungerMax[1].InnerText);
+                FoxDefaults.hungryThreshold = float.Parse(hungryThreshold[1].InnerText);
+                FoxDefaults.hungerIncrease = float.Parse(hungerIncrease[1].InnerText);
+                FoxDefaults.pregnancyHungerIncrease = float.Parse(pregnancyHungerIncrease[1].InnerText);
+                FoxDefaults.youngHungerIncrease = float.Parse(youngHungerIncrease[1].InnerText);
+                FoxDefaults.adultHungerIncrease = float.Parse(adultHungerIncrease[1].InnerText);
+                FoxDefaults.oldHungerIncrease = float.Parse(oldHungerIncrease[1].InnerText);
+                FoxDefaults.eatingSpeed = float.Parse(eatingSpeed[1].InnerText);
+                FoxDefaults.diet = (BasicNeedsData.Diet)Enum.Parse(typeof(BasicNeedsData.Diet), diet[1].InnerText);
+                FoxDefaults.thirst = float.Parse(thirst[1].InnerText);
+                FoxDefaults.thirstMax = float.Parse(thirstMax[1].InnerText);
+                FoxDefaults.thirstyThreshold = float.Parse(thirstyThreshold[1].InnerText);
+                FoxDefaults.thirstIncrease = float.Parse(thirstIncrease[1].InnerText);
+                FoxDefaults.drinkingSpeed = float.Parse(drinkingSpeed[1].InnerText);
+                FoxDefaults.mateStartTime = float.Parse(mateStartTime[1].InnerText);
+                FoxDefaults.matingDuration = float.Parse(matingDuration[1].InnerText);
+                FoxDefaults.reproductiveUrge = float.Parse(reproductiveUrge[1].InnerText);
+                FoxDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[1].InnerText);
+                FoxDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[1].InnerText);
+                FoxDefaults.matingThreshold = float.Parse(matingThreshold[1].InnerText);
+                FoxDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[1].InnerText);
+                FoxDefaults.pregnant = bool.Parse(pregnant[1].InnerText);
+                FoxDefaults.babiesBorn = int.Parse(babiesBorn[1].InnerText);
+                FoxDefaults.birthStartTime = float.Parse(birthStartTime[1].InnerText);
+                FoxDefaults.currentLitterSize = int.Parse(currentLitterSize[1].InnerText);
+                FoxDefaults.pregnancyLengthModifier = float.Parse(pregnancyLengthModifier[1].InnerText);
+                FoxDefaults.pregnancyLength = float.Parse(pregnancyLength[1].InnerText);
+                FoxDefaults.birthDuration = float.Parse(birthDuration[1].InnerText);
+                FoxDefaults.litterSizeMin = int.Parse(litterSizeMin[1].InnerText);
+                FoxDefaults.litterSizeMax = int.Parse(litterSizeMax[1].InnerText);
+                FoxDefaults.litterSizeAve = int.Parse(litterSizeAve[1].InnerText);
+                FoxDefaults.moveSpeed = float.Parse(moveSpeed[1].InnerText);
+                FoxDefaults.rotationSpeed = float.Parse(rotationSpeed[1].InnerText);
+                FoxDefaults.moveMultiplier = float.Parse(moveMultiplier[1].InnerText);
+                FoxDefaults.pregnancyMoveMultiplier = float.Parse(pregnancyMoveMultiplier[1].InnerText);
+                FoxDefaults.originalMoveMultiplier = float.Parse(originalMoveMultiplier[1].InnerText);
+                FoxDefaults.youngMoveMultiplier = float.Parse(youngMoveMultiplier[1].InnerText);
+                FoxDefaults.adultMoveMultiplier = float.Parse(adultMoveMultiplier[1].InnerText);
+                FoxDefaults.oldMoveMultiplier = float.Parse(oldMoveMultiplier[1].InnerText);
+                FoxDefaults.sizeMultiplier = float.Parse(sizeMultiplier[1].InnerText);
+                FoxDefaults.scaleMale = float.Parse(scaleMale[1].InnerText);
+                FoxDefaults.scaleFemale = float.Parse(scaleFemale[1].InnerText);
+                FoxDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[1].InnerText);
+                FoxDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[1].InnerText);
+                FoxDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[1].InnerText);
+                FoxDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[1].InnerText);
+                FoxDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[1].InnerText);
+                FoxDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[1].InnerText);
+                FoxDefaults.beenEaten = bool.Parse(beenEaten[1].InnerText);
+                FoxDefaults.touchRadius = float.Parse(touchRadius[1].InnerText);
+                FoxDefaults.sightRadius = float.Parse(sightRadius[1].InnerText);
+                FoxDefaults.shortestToEdibleDistance = float.Parse(shortestToEdibleDistance[1].InnerText);
+                FoxDefaults.shortestToWaterDistance = float.Parse(shortestToWaterDistance[1].InnerText);
+                FoxDefaults.shortestToPredatorDistance = float.Parse(shortestToPredatorDistance[1].InnerText);
+                FoxDefaults.shortestToMateDistance = float.Parse(shortestToMateDistance[1].InnerText);
+                FoxDefaults.colliderType = (ColliderTypeData.ColliderType)Enum.Parse(typeof(ColliderTypeData.ColliderType), colliderType[1].InnerText);
 
-                XmlNodeList fNutritionalvalue = xmlDocument.GetElementsByTagName("nutritionalValue");
-                float ffnutritionalValue = float.Parse(fNutritionalvalue[0].InnerText);
-                FoxDefaults.nutritionalValue = ffnutritionalValue;
-                XmlNodeList fNutritionalvaluemultiplier = xmlDocument.GetElementsByTagName("nutritionalValueMultiplier");
-                float ffnutritionalValueMultiplier = float.Parse(fNutritionalvaluemultiplier[0].InnerText);
-                FoxDefaults.nutritionalValueMultiplier = ffnutritionalValueMultiplier;
 
-                #endregion edibleData
-
-                #region hungerData 
-
-                XmlNodeList fHunger = xmlDocument.GetElementsByTagName("hunger");
-                float ffhunger = float.Parse(fHunger[0].InnerText);
-                FoxDefaults.hunger = ffhunger;
-                XmlNodeList fHungermax = xmlDocument.GetElementsByTagName("hungerMax");
-                float ffhungerMax = float.Parse(fHungermax[0].InnerText);
-                FoxDefaults.hungerMax = ffhungerMax;
-                XmlNodeList fHungrythreshold = xmlDocument.GetElementsByTagName("hungryThreshold");
-                float ffhungryThreshold = float.Parse(fHungrythreshold[0].InnerText);
-                FoxDefaults.hungryThreshold = ffhungryThreshold;
-                XmlNodeList fHungerincrease = xmlDocument.GetElementsByTagName("hungerIncrease");
-                float ffhungerIncrease = float.Parse(fHungerincrease[0].InnerText);
-                FoxDefaults.hungerIncrease = ffhungerIncrease;
-                XmlNodeList fPregnancyhungerincrease = xmlDocument.GetElementsByTagName("pregnancyHungerIncrease");
-                float ffpregnancyHungerIncrease = float.Parse(fPregnancyhungerincrease[0].InnerText);
-                FoxDefaults.pregnancyHungerIncrease = ffpregnancyHungerIncrease;
-                XmlNodeList fYounghungerincrease = xmlDocument.GetElementsByTagName("youngHungerIncrease");
-                float ffyoungHungerIncrease = float.Parse(fYounghungerincrease[0].InnerText);
-                FoxDefaults.youngHungerIncrease = ffyoungHungerIncrease;
-                XmlNodeList fAdulthungerincrease = xmlDocument.GetElementsByTagName("adultHungerIncrease");
-                float ffadultHungerIncrease = float.Parse(fAdulthungerincrease[0].InnerText);
-                FoxDefaults.adultHungerIncrease = ffadultHungerIncrease;
-                XmlNodeList fOldhungerincrease = xmlDocument.GetElementsByTagName("oldHungerIncrease");
-                float ffoldHungerIncrease = float.Parse(fOldhungerincrease[0].InnerText);
-                FoxDefaults.oldHungerIncrease = ffoldHungerIncrease;
-                XmlNodeList fEatingspeed = xmlDocument.GetElementsByTagName("eatingSpeed");
-                float ffeatingSpeed = float.Parse(fEatingspeed[0].InnerText);
-                FoxDefaults.eatingSpeed = ffeatingSpeed;
-
-                #endregion hungerData
-
-                #region thirstData 
-
-                XmlNodeList fThirst = xmlDocument.GetElementsByTagName("thirst");
-                float ffthirst = float.Parse(fThirst[0].InnerText);
-                FoxDefaults.thirst = ffthirst;
-                XmlNodeList fThirstmax = xmlDocument.GetElementsByTagName("thirstMax");
-                float ffthirstMax = float.Parse(fThirstmax[0].InnerText);
-                FoxDefaults.thirstMax = ffthirstMax;
-                XmlNodeList fThirstythreshold = xmlDocument.GetElementsByTagName("thirstyThreshold");
-                float ffthirstyThreshold = float.Parse(fThirstythreshold[0].InnerText);
-                FoxDefaults.thirstyThreshold = ffthirstyThreshold;
-                XmlNodeList fThirstincrease = xmlDocument.GetElementsByTagName("thirstIncrease");
-                float ffthirstIncrease = float.Parse(fThirstincrease[0].InnerText);
-                FoxDefaults.thirstIncrease = ffthirstIncrease;
-                XmlNodeList fDrinkingspeed = xmlDocument.GetElementsByTagName("drinkingSpeed");
-                float ffdrinkingSpeed = float.Parse(fDrinkingspeed[0].InnerText);
-                FoxDefaults.drinkingSpeed = ffdrinkingSpeed;
-
-                #endregion thirstData
-
-                #region mateData 
-
-                XmlNodeList fMatestarttime = xmlDocument.GetElementsByTagName("mateStartTime");
-                float ffmateStartTime = float.Parse(fMatestarttime[0].InnerText);
-                FoxDefaults.mateStartTime = ffmateStartTime;
-                XmlNodeList fMatingduration = xmlDocument.GetElementsByTagName("matingDuration");
-                float ffmatingDuration = float.Parse(fMatingduration[0].InnerText);
-                FoxDefaults.matingDuration = ffmatingDuration;
-                XmlNodeList fReproductiveurge = xmlDocument.GetElementsByTagName("reproductiveUrge");
-                float ffreproductiveUrge = float.Parse(fReproductiveurge[0].InnerText);
-                FoxDefaults.reproductiveUrge = ffreproductiveUrge;
-                XmlNodeList fReproductiveurgeincreasemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseMale");
-                float ffreproductiveUrgeIncreaseMale = float.Parse(fReproductiveurgeincreasemale[0].InnerText);
-                FoxDefaults.reproductiveUrgeIncreaseMale = ffreproductiveUrgeIncreaseMale;
-                XmlNodeList fReproductiveurgeincreasefemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
-                float ffreproductiveUrgeIncreaseFemale = float.Parse(fReproductiveurgeincreasefemale[0].InnerText);
-                FoxDefaults.reproductiveUrgeIncreaseFemale = ffreproductiveUrgeIncreaseFemale;
-                XmlNodeList fMatingthreshold = xmlDocument.GetElementsByTagName("matingThreshold");
-                float ffmatingThreshold = float.Parse(fMatingthreshold[0].InnerText);
-                FoxDefaults.matingThreshold = ffmatingThreshold;
-
-                #endregion mateData
-
-                #region pregnancyData 
-
-                XmlNodeList fPregnancystarttime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
-                float ffpregnancyStartTime = float.Parse(fPregnancystarttime[0].InnerText);
-                FoxDefaults.pregnancyStartTime = ffpregnancyStartTime;
-                XmlNodeList fBabiesborn = xmlDocument.GetElementsByTagName("babiesBorn");
-                int ffbabiesBorn = int.Parse(fBabiesborn[0].InnerText);
-                FoxDefaults.babiesBorn = ffbabiesBorn;
-                XmlNodeList fBirthstarttime = xmlDocument.GetElementsByTagName("birthStartTime");
-                float ffbirthStartTime = float.Parse(fBirthstarttime[0].InnerText);
-                FoxDefaults.birthStartTime = ffbirthStartTime;
-                XmlNodeList fCurrentlittersize = xmlDocument.GetElementsByTagName("currentLitterSize");
-                int ffcurrentLitterSize = int.Parse(fCurrentlittersize[0].InnerText);
-                FoxDefaults.currentLitterSize = ffcurrentLitterSize;
-                XmlNodeList fPregnancylengthmodifier = xmlDocument.GetElementsByTagName("pregnancyLengthModifier");
-                float ffpregnancyLengthModifier = float.Parse(fPregnancylengthmodifier[0].InnerText);
-                FoxDefaults.pregnancyLengthModifier = ffpregnancyLengthModifier;
-                XmlNodeList fPregnancylength = xmlDocument.GetElementsByTagName("pregnancyLength");
-                float ffpregnancyLength = float.Parse(fPregnancylength[0].InnerText);
-                FoxDefaults.pregnancyLength = ffpregnancyLength;
-                XmlNodeList fBirthduration = xmlDocument.GetElementsByTagName("birthDuration");
-                float ffbirthDuration = float.Parse(fBirthduration[0].InnerText);
-                FoxDefaults.birthDuration = ffbirthDuration;
-                XmlNodeList fLittersizemin = xmlDocument.GetElementsByTagName("litterSizeMin");
-                int fflitterSizeMin = int.Parse(fLittersizemin[0].InnerText);
-                FoxDefaults.litterSizeMin = fflitterSizeMin;
-                XmlNodeList fLittersizemax = xmlDocument.GetElementsByTagName("litterSizeMax");
-                int fflitterSizeMax = int.Parse(fLittersizemax[0].InnerText);
-                FoxDefaults.litterSizeMax = fflitterSizeMax;
-                XmlNodeList fLittersizeave = xmlDocument.GetElementsByTagName("litterSizeAve");
-                int fflitterSizeAve = int.Parse(fLittersizeave[0].InnerText);
-                FoxDefaults.litterSizeAve = fflitterSizeAve;
-
-                #endregion pregnancyData
-
-                #region movementData 
-
-                XmlNodeList fMovespeed = xmlDocument.GetElementsByTagName("moveSpeed");
-                float ffmoveSpeed = float.Parse(fMovespeed[0].InnerText);
-                FoxDefaults.moveSpeed = ffmoveSpeed;
-                XmlNodeList fRotationspeed = xmlDocument.GetElementsByTagName("rotationSpeed");
-                float ffrotationSpeed = float.Parse(fRotationspeed[0].InnerText);
-                FoxDefaults.rotationSpeed = ffrotationSpeed;
-                XmlNodeList fMovemultiplier = xmlDocument.GetElementsByTagName("moveMultiplier");
-                float ffmoveMultiplier = float.Parse(fMovemultiplier[0].InnerText);
-                FoxDefaults.moveMultiplier = ffmoveMultiplier;
-                XmlNodeList fPregnancymovemultiplier = xmlDocument.GetElementsByTagName("pregnancyMoveMultiplier");
-                float ffpregnancyMoveMultiplier = float.Parse(fPregnancymovemultiplier[0].InnerText);
-                FoxDefaults.pregnancyMoveMultiplier = ffpregnancyMoveMultiplier;
-                XmlNodeList fOriginalmovemultiplier = xmlDocument.GetElementsByTagName("originalMoveMultiplier");
-                float fforiginalMoveMultiplier = float.Parse(fOriginalmovemultiplier[0].InnerText);
-                FoxDefaults.originalMoveMultiplier = fforiginalMoveMultiplier;
-                XmlNodeList fYoungmovemultiplier = xmlDocument.GetElementsByTagName("youngMoveMultiplier");
-                float ffyoungMoveMultiplier = float.Parse(fYoungmovemultiplier[0].InnerText);
-                FoxDefaults.youngMoveMultiplier = ffyoungMoveMultiplier;
-                XmlNodeList fAdultmovemultiplier = xmlDocument.GetElementsByTagName("adultMoveMultiplier");
-                float ffadultMoveMultiplier = float.Parse(fAdultmovemultiplier[0].InnerText);
-                FoxDefaults.adultMoveMultiplier = ffadultMoveMultiplier;
-                XmlNodeList fOldmovemultiplier = xmlDocument.GetElementsByTagName("oldMoveMultiplier");
-                float ffoldMoveMultiplier = float.Parse(fOldmovemultiplier[0].InnerText);
-                FoxDefaults.oldMoveMultiplier = ffoldMoveMultiplier;
-
-                #endregion movementData
-
-                #region sizeData 
-
-                XmlNodeList fSizemultiplier = xmlDocument.GetElementsByTagName("sizeMultiplier");
-                float ffsizeMultiplier = float.Parse(fSizemultiplier[0].InnerText);
-                FoxDefaults.sizeMultiplier = ffsizeMultiplier;
-                XmlNodeList fScalemale = xmlDocument.GetElementsByTagName("scaleMale");
-                float ffscaleMale = float.Parse(fScalemale[0].InnerText);
-                FoxDefaults.scaleMale = ffscaleMale;
-                XmlNodeList fScalefemale = xmlDocument.GetElementsByTagName("scaleFemale");
-                float ffscaleFemale = float.Parse(fScalefemale[0].InnerText);
-                FoxDefaults.scaleFemale = ffscaleFemale;
-                XmlNodeList fYoungsizemultiplier = xmlDocument.GetElementsByTagName("youngSizeMultiplier");
-                float ffyoungSizeMultiplier = float.Parse(fYoungsizemultiplier[0].InnerText);
-                FoxDefaults.youngSizeMultiplier = ffyoungSizeMultiplier;
-                XmlNodeList fAdultsizemultiplier = xmlDocument.GetElementsByTagName("adultSizeMultiplier");
-                float ffadultSizeMultiplier = float.Parse(fAdultsizemultiplier[0].InnerText);
-                FoxDefaults.adultSizeMultiplier = ffadultSizeMultiplier;
-                XmlNodeList fOldsizemultiplier = xmlDocument.GetElementsByTagName("oldSizeMultiplier");
-                float ffoldSizeMultiplier = float.Parse(fOldsizemultiplier[0].InnerText);
-                FoxDefaults.oldSizeMultiplier = ffoldSizeMultiplier;
-
-                #endregion sizeData
-
-                #region targetData 
-
-                XmlNodeList fTouchradius = xmlDocument.GetElementsByTagName("touchRadius");
-                float fftouchRadius = float.Parse(fTouchradius[0].InnerText);
-                FoxDefaults.touchRadius = fftouchRadius;
-                XmlNodeList fSightradius = xmlDocument.GetElementsByTagName("sightRadius");
-                float ffsightRadius = float.Parse(fSightradius[0].InnerText);
-                FoxDefaults.sightRadius = ffsightRadius;
-
-                #endregion targetData
-
-                #endregion Fox Data
+                #endregion
 
                 #region GrassData 
 
-                XmlNodeList gNutritionalvalue = xmlDocument.GetElementsByTagName("nutritionalValue");
-                float ggnutritionalValue = float.Parse(gNutritionalvalue[0].InnerText);
-                GrassDefaults.nutritionalValue = ggnutritionalValue;
-                XmlNodeList gNutritionalvaluemultiplier = xmlDocument.GetElementsByTagName("nutritionalValueMultiplier");
-                float ggnutritionalValueMultiplier = float.Parse(gNutritionalvaluemultiplier[0].InnerText);
-                GrassDefaults.nutritionalValueMultiplier = ggnutritionalValueMultiplier;
-                XmlNodeList gSizemultiplier = xmlDocument.GetElementsByTagName("sizeMultiplier");
-                float ggsizeMultiplier = float.Parse(gSizemultiplier[0].InnerText);
-                GrassDefaults.sizeMultiplier = ggsizeMultiplier;
-                XmlNodeList gScale = xmlDocument.GetElementsByTagName("scale");
-                float ggscale = float.Parse(gScale[0].InnerText);
-                GrassDefaults.scale = ggscale;
+                GrassDefaults.nutritionalValue = float.Parse(nutritionalValue[2].InnerText);
+         
+                GrassDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[2].InnerText);
+
+                GrassDefaults.sizeMultiplier = float.Parse(sizeMultiplier[2].InnerText);
+
+                XmlNodeList Scale = xmlDocument.GetElementsByTagName("scale");
+                GrassDefaults.scale = float.Parse(Scale[0].InnerText);
+
+                GrassDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[2].InnerText);
+                
+                GrassDefaults.state = (StateData.States)Enum.Parse(typeof(StateData.States), state[2].InnerText);
+                 
+                GrassDefaults.previousState = (StateData.States)Enum.Parse(typeof(StateData.States), previousState[2].InnerText);
+
+                GrassDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[2].InnerText);;
+
+                GrassDefaults.GrassColliderType = (ColliderTypeData.ColliderType)Enum.Parse(typeof(ColliderTypeData.ColliderType), colliderType[2].InnerText);
 
                 #endregion GrassData
                 print("I am load game haha");
