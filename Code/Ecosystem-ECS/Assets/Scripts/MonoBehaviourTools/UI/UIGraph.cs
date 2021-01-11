@@ -138,12 +138,20 @@ public class UIGraph : MonoBehaviour
 
     void ShowTime()
     {
-        input = int.Parse(inputField.text);
+        int lastInput = int.Parse(inputField.text);
         nextTime2 = Time.time;
-        if (input > GraphRabbitList.Count)
+
+        // only GraphRabbitList.Count must high than 100, input will work
+        if (GraphRabbitList.Count >= 100)
         {
-            input = 1;
-            Debug.Log("input exceed the max value So just show you all point");
+            if (lastInput < GraphRabbitList.Count)
+            {
+                input = lastInput;
+            }
+            else
+            {
+                Debug.Log("input value doesn't make sense");
+            }
         }
     }
 
@@ -352,7 +360,6 @@ public class UIGraph : MonoBehaviour
             for (int i = 1; i <= 100; i++)
             {
                 int a = (int)Mathf.Round(value * i / 100);
-                print(i+"I am middle"+(GraphRabbitList.Count - value + a));
                 float yPosition = (GraphRabbitList[GraphRabbitList.Count - value + a-1] / yMaximum) * graphHeight;
                 float yPosition1 = (GraphFoxList[GraphRabbitList.Count - value + a-1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / 100;
