@@ -608,9 +608,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0edc250bac6ed4087b75b02d2d261ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanSpeed: 20
-  CanBorderThicknerss: 20
-  canLimit: {x: 100, y: 100}
-  scrollSpeed: 100
-  minY: 20
-  maxY: 300
+  simulationManager: {fileID: 508030573}
