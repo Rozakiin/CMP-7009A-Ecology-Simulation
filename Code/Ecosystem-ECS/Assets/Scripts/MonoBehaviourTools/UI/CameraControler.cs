@@ -6,18 +6,18 @@ public class CameraControler : MonoBehaviour
 {
     [SerializeField] SimulationManager simulationManager;
 
-    private Vector2 canXLimit;
-    private Vector2 canYLimit;
-    private Vector2 canZLimit;
+    private Vector2 camXLimit;
+    private Vector2 camYLimit;
+    private Vector2 camZLimit;
     private Vector3 pos;
     private Vector2 MapSize;
 
     private readonly float yMin = 30f;
-    private readonly float CanSpeedMax = 2f;
+    private readonly float CamSpeedMax = 2f;
     private readonly float scrollSpeed = 200f;
 
     private float maxMapSize;
-    private float CanSpeed;
+    private float CamSpeed;
     private float xMax;
     private float yMax;
     private float zMax;
@@ -35,11 +35,11 @@ public class CameraControler : MonoBehaviour
         zInitial = -3 * maxMapSize;
         transform.position = new Vector3(0f, yMax, zInitial);
 
-        canYLimit = new Vector2(yMin, yMax);
+        camYLimit = new Vector2(yMin, yMax);
 
         //just set you can't move camera if user didn't zoom in
-        canXLimit = new Vector2(0f, 0f);
-        canZLimit = new Vector2(zInitial, zInitial);
+        camXLimit = new Vector2(0f, 0f);
+        camZLimit = new Vector2(zInitial, zInitial);
 
     }
     void Update()
@@ -49,39 +49,39 @@ public class CameraControler : MonoBehaviour
 
         if (Input.GetKey("w") || Input.GetKey(KeyCode.UpArrow)) 
         {
-            pos.z += CanSpeed;
+            pos.z += CamSpeed;
         }
         if (Input.GetKey("s") || Input.GetKey(KeyCode.DownArrow)) 
         {
-            pos.z -= CanSpeed;
+            pos.z -= CamSpeed;
         }
         if (Input.GetKey("d") || Input.GetKey(KeyCode.RightArrow)) 
         {
-            pos.x += CanSpeed;
+            pos.x += CamSpeed;
         }
         if (Input.GetKey("a") || Input.GetKey(KeyCode.LeftArrow)) 
         {
-            pos.x -= CanSpeed;
+            pos.x -= CamSpeed;
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y -= scroll * scrollSpeed;
-        pos.y = Mathf.Clamp(pos.y, canYLimit.x, canYLimit.y);
+        pos.y = Mathf.Clamp(pos.y, camYLimit.x, camYLimit.y);
 
-        //canspeed and X,Z limit will increase as camera zoom in
+        //camspeed and X,Z limit will increase as camera zoom in
         if (pos.y != lastPosY)
         {
             float rate = (yMax - pos.y) / (yMax - yMin);
             float zLimitMax = (zMax - zInitial) * rate + zInitial;
             float zLimitMin = zInitial - (zMax + zInitial) * rate;
             float xLimit = xMax * rate;
-            canXLimit = new Vector2(-xLimit, xLimit);
-            canZLimit = new Vector2(zLimitMin, zLimitMax);
-            CanSpeed = CanSpeedMax * rate;
+            camXLimit = new Vector2(-xLimit, xLimit);
+            camZLimit = new Vector2(zLimitMin, zLimitMax);
+            CamSpeed = CamSpeedMax * rate;
         }
 
-        pos.x = Mathf.Clamp(pos.x, canXLimit.x, canXLimit.y);
-        pos.z = Mathf.Clamp(pos.z, canZLimit.x, canZLimit.y);
+        pos.x = Mathf.Clamp(pos.x, camXLimit.x, camXLimit.y);
+        pos.z = Mathf.Clamp(pos.z, camZLimit.x, camZLimit.y);
         transform.position = pos;
     }
 }
