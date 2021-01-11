@@ -791,6 +791,7 @@ public class SimulationManager : MonoBehaviour
     {
         return (float)rabbitPopulation;
     }
+
     public float FoxSpawn()
     {
         return (float)numberOfFoxesToSpawn;
@@ -798,6 +799,15 @@ public class SimulationManager : MonoBehaviour
     public float FoxPopulation()
     {
         return (float)foxPopulation;
+    }
+
+    public float GrassSpawn()
+    {
+        return (float)numberOfGrassToSpawn;
+    }
+    public float GrassPopulation()
+    {
+        return (float)grassPopulation;
     }
 
     public Vector2 MapSize()
