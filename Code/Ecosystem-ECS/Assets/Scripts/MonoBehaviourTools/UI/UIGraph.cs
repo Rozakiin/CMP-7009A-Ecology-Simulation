@@ -73,7 +73,7 @@ public class UIGraph : MonoBehaviour
         FoxNumber = simulationManager.FoxSpawn();
         InyMaximum = simulationManager.RabbitSpawn() * 5;
         yMaximum = Mathf.Max(RabbitNumber, FoxNumber) * 5;
-        xMaximum = 50f;
+        xMaximum = 100f;
         InxMaximum = 100f;
         nextTime = 0;
         input = 100;
@@ -105,7 +105,7 @@ public class UIGraph : MonoBehaviour
                 DecreaseY();
             }
 
-            if (input >= 60)
+            if (input >= 100)
             {
                 if (XPos <= input - 1)
                 {
@@ -165,10 +165,10 @@ public class UIGraph : MonoBehaviour
             // Create a new file     
             using (StreamWriter sw = File.CreateText(path))
             {
-                sw.WriteLine("Rabbit"+","+"Fox");
+                sw.WriteLine("Seconds"+","+"Rabbit"+","+"Fox");
                 for (int i = 0; i < GraphRabbitList.Count; i++) 
                 {
-                    sw.WriteLine(GraphRabbitList[i]+","+ GraphFoxList[i]);
+                    sw.WriteLine((i+1)+","+GraphRabbitList[i]+","+ GraphFoxList[i]);
                 }
                 sw.Close();
             }
