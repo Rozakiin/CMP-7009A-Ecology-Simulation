@@ -46,7 +46,7 @@ public static class RabbitDefaults
     public static float reproductiveUrge = 0f;
     public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
-    public static float matingThreshold = 50f;
+    public static float matingThreshold = 10f;
     public static float mateRadius = 5f;
 
 
