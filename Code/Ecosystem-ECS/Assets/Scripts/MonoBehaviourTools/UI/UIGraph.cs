@@ -92,7 +92,7 @@ public class UIGraph : MonoBehaviour
     }
     private void Update()
     {
-        if (Time.time >= nextTime)
+        if (Time.timeSinceLevelLoad >= nextTime)
         {
             GraphRabbitsList.Add(RabbitNumber);
             GraphFoxesList.Add(FoxNumber);
@@ -102,7 +102,7 @@ public class UIGraph : MonoBehaviour
             FoxNumber = simulationManager.FoxPopulation();
             GrassNumber = simulationManager.GrassPopulation();
 
-            XPos = Time.time;   
+            XPos = Time.timeSinceLevelLoad;   
             nextTime += 1;
 
             if (Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) / 8 * 10 > yMaximum) 
@@ -125,7 +125,7 @@ public class UIGraph : MonoBehaviour
                 }
                 else
                 {
-                    if (Time.time >= nextTime2)
+                    if (Time.timeSinceLevelLoad >= nextTime2)
                     {
                         ShowAllGraph();
 
@@ -140,7 +140,7 @@ public class UIGraph : MonoBehaviour
     void ShowTime()
     {
         int lastInput = int.Parse(inputField.text);
-        nextTime2 = Time.time;
+        nextTime2 = Time.timeSinceLevelLoad;
 
         // only GraphRabbitList.Count must high than 100, input will work
         if (GraphRabbitsList.Count > 100)
@@ -283,7 +283,7 @@ public class UIGraph : MonoBehaviour
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.transform.SetParent(CircleContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSprite;
-        gameObject.name = "Rabbit" + (Mathf.Round((int)Time.time)).ToString();
+        gameObject.name = "Rabbit" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = new Vector2(5, 5);
@@ -298,7 +298,7 @@ public class UIGraph : MonoBehaviour
         gameObject.transform.SetParent(CircleContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSprite;
         gameObject.GetComponent<Image>().color = Color.red;
-        gameObject.name = "Fox" + (Mathf.Round((int)Time.time)).ToString();
+        gameObject.name = "Fox" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = new Vector2(5, 5);
@@ -313,7 +313,7 @@ public class UIGraph : MonoBehaviour
         gameObject.transform.SetParent(CircleContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSprite;
         gameObject.GetComponent<Image>().color = Color.green;
-        gameObject.name = "Grass" + (Mathf.Round((int)Time.time)).ToString();
+        gameObject.name = "Grass" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = new Vector2(5, 5);
