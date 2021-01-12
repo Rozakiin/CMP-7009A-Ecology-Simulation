@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
+using UnityEngine;
 
 public class MatingSystem : SystemBase
 {
@@ -90,6 +91,7 @@ public class MatingSystem : SystemBase
                     {
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
                         reproductiveData.pregnant = true;
+                        reproductiveData.babiesBorn = 0;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }
                     reproductiveData.reproductiveUrge = 0;
