@@ -592,73 +592,74 @@ namespace SpeedTutorMainMenuSystem
         public void InitialPropertiesApply()
         {
             Debug.Log("Apply Initial Properties");
-                    RabbitDefaults.ageMax = rabbitAgeMaxSlider.value;
-                    RabbitDefaults.nutritionalValue = rabbitNutritionalValueSlider.value;
+            RabbitDefaults.ageMax = rabbitAgeMaxSlider.value;
+            RabbitDefaults.nutritionalValue = rabbitNutritionalValueSlider.value;
             RabbitDefaults.canBeEaten = rabbitCanBeEaten.isOn;
 
-                    RabbitDefaults.hungerMax = rabbitHungerMaxSlider.value;
-                    RabbitDefaults.hungryThreshold = rabbitHungerThresholdSlider.value;
-                    RabbitDefaults.hungerIncrease = rabbitHungerIncreaseBaseSlider.value;
-                    RabbitDefaults.youngHungerIncrease = rabbitHungerIncreaseYoungSlider.value;
-                    RabbitDefaults.adultHungerIncrease = rabbitHungerIncreaseAdultSlider.value;
-                    RabbitDefaults.oldHungerIncrease = rabbitHungerIncreaseOldSlider.value;
-                    RabbitDefaults.eatingSpeed = rabbitEatingSpeedSlider.value;
-                    RabbitDefaults.thirstMax = rabbitThirstMaxSlider.value;
-                    RabbitDefaults.thirstyThreshold = rabbitThirstThresholdSlider.value;
-                    RabbitDefaults.thirstIncrease = rabbitThirstIncreaseBaseSlider.value;
-                    //RabbitDefaults. = rabbitThirstIncreaseYoungSlider.value;
-                    //RabbitDefaults. = rabbitThirstIncreaseAdultSlider.value;
-                    //RabbitDefaults. = rabbitThirstIncreaseOldSlider.value;
-                    RabbitDefaults.drinkingSpeed = rabbitDrinkingSpeedSlider.value;
-                    RabbitDefaults.matingDuration = rabbitMatingDurationSlider.value;
-                    RabbitDefaults.pregnancyLength = rabbitPregnancyLengthSlider.value;
-                    RabbitDefaults.birthDuration = rabbitBirthDurationSlider.value;
-                    RabbitDefaults.litterSizeMin = (int)rabbitLitterSizeMinSlider.value;
-                    RabbitDefaults.litterSizeMax = (int)rabbitLitterSizeMaxSlider.value;
-                    RabbitDefaults.litterSizeAve = (int)rabbitLitterSizeAveSlider.value;
-                    RabbitDefaults.moveSpeed = rabbitMovementSpeedSlider.value;
-                    RabbitDefaults.originalMoveMultiplier = rabbitMovementMultiplierBaseSlider.value;
-                    RabbitDefaults.youngMoveMultiplier = rabbitMovementMultiplierYoungSlider.value;
-                    RabbitDefaults.adultMoveMultiplier = rabbitMovementMultiplierAdultSlider.value;
-                    RabbitDefaults.oldMoveMultiplier = rabbitMovementMultiplierOldSlider.value;
-                    RabbitDefaults.pregnancyMoveMultiplier = rabbitMovementMultiplierPregnantSlider.value;
-                    RabbitDefaults.sightRadius = rabbitSightRadiusSlider.value;
-                    RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
-                    RabbitDefaults.scaleFemale = rabbitSizeFemaleSlider.value;
-                    FoxDefaults.ageMax = foxAgeMaxSlider.value;
-                    FoxDefaults.nutritionalValue = foxNutritionalValueSlider.value;
-                    FoxDefaults.hungerMax = foxHungerMaxSlider.value;
-                    FoxDefaults.hungryThreshold = foxHungerThresholdSlider.value;
-                    FoxDefaults.hungerIncrease = foxHungerIncreaseBaseSlider.value;
-                    FoxDefaults.youngHungerIncrease = foxHungerIncreaseYoungSlider.value;
-                    FoxDefaults.adultHungerIncrease = foxHungerIncreaseAdultSlider.value;
-                    FoxDefaults.oldHungerIncrease = foxHungerIncreaseOldSlider.value;
-                    FoxDefaults.eatingSpeed = foxEatingSpeedSlider.value;
-                    FoxDefaults.thirstMax = foxThirstMaxSlider.value;
-                    FoxDefaults.thirstyThreshold = foxThirstThresholdSlider.value;
-                    FoxDefaults.thirstIncrease = foxThirstIncreaseBaseSlider.value;
-                    //FoxDefaults. = foxThirstIncreaseYoungSlider.value;
-                    //FoxDefaults. = foxThirstIncreaseAdultSlider.value;
-                    //FoxDefaults. = foxThirstIncreaseOldSlider.value;
-                    FoxDefaults.drinkingSpeed = foxDrinkingSpeedSlider.value;
-                    FoxDefaults.matingDuration = foxMatingDurationSlider.value;
-                    FoxDefaults.pregnancyLength = foxPregnancyLengthSlider.value;
-                    FoxDefaults.birthDuration = foxBirthDurationSlider.value;
-                    FoxDefaults.litterSizeMin = (int)foxLitterSizeMinSlider.value;
-                    FoxDefaults.litterSizeMax = (int)foxLitterSizeMaxSlider.value;
-                    FoxDefaults.litterSizeAve = (int)foxLitterSizeAveSlider.value;
-                    FoxDefaults.moveSpeed = foxMovementSpeedSlider.value;
-                    FoxDefaults.originalMoveMultiplier = foxMovementMultiplierBaseSlider.value;
-                    FoxDefaults.youngMoveMultiplier = foxMovementMultiplierYoungSlider.value;
-                    FoxDefaults.adultMoveMultiplier = foxMovementMultiplierAdultSlider.value;
-                    FoxDefaults.oldMoveMultiplier = foxMovementMultiplierOldSlider.value;
-                    FoxDefaults.pregnancyMoveMultiplier = foxMovementMultiplierPregnantSlider.value;
-                    FoxDefaults.sightRadius = foxSightRadiusSlider.value;
-                    FoxDefaults.scaleMale = foxSizeMaleSlider.value;
-                    FoxDefaults.scaleFemale = foxSizeFemaleSlider.value;
-                    GrassDefaults.nutritionalValue = grassNutritionalValueSlider.value;
-                    GrassDefaults.canBeEaten = grassCanBeEaten.isOn;
-                    GrassDefaults.scale = grassSizeSlider.value;
+            RabbitDefaults.hungerMax = rabbitHungerMaxSlider.value;
+            RabbitDefaults.hungryThreshold = rabbitHungerThresholdSlider.value;
+            RabbitDefaults.hungerIncrease = rabbitHungerIncreaseBaseSlider.value;
+            RabbitDefaults.youngHungerIncrease = rabbitHungerIncreaseYoungSlider.value;
+            RabbitDefaults.adultHungerIncrease = rabbitHungerIncreaseAdultSlider.value;
+            RabbitDefaults.oldHungerIncrease = rabbitHungerIncreaseOldSlider.value;
+            RabbitDefaults.eatingSpeed = rabbitEatingSpeedSlider.value;
+            RabbitDefaults.thirstMax = rabbitThirstMaxSlider.value;
+            RabbitDefaults.thirstyThreshold = rabbitThirstThresholdSlider.value;
+            RabbitDefaults.thirstIncrease = rabbitThirstIncreaseBaseSlider.value;
+            //RabbitDefaults. = rabbitThirstIncreaseYoungSlider.value;
+            //RabbitDefaults. = rabbitThirstIncreaseAdultSlider.value;
+            //RabbitDefaults. = rabbitThirstIncreaseOldSlider.value;
+            RabbitDefaults.drinkingSpeed = rabbitDrinkingSpeedSlider.value;
+            RabbitDefaults.matingDuration = rabbitMatingDurationSlider.value;
+            RabbitDefaults.pregnancyLength = rabbitPregnancyLengthSlider.value;
+            RabbitDefaults.birthDuration = rabbitBirthDurationSlider.value;
+            RabbitDefaults.litterSizeMin = (int)rabbitLitterSizeMinSlider.value;
+            RabbitDefaults.litterSizeMax = (int)rabbitLitterSizeMaxSlider.value;
+            RabbitDefaults.litterSizeAve = (int)rabbitLitterSizeAveSlider.value;
+            RabbitDefaults.moveSpeed = rabbitMovementSpeedSlider.value;
+            RabbitDefaults.originalMoveMultiplier = rabbitMovementMultiplierBaseSlider.value;
+            RabbitDefaults.youngMoveMultiplier = rabbitMovementMultiplierYoungSlider.value;
+            RabbitDefaults.adultMoveMultiplier = rabbitMovementMultiplierAdultSlider.value;
+            RabbitDefaults.oldMoveMultiplier = rabbitMovementMultiplierOldSlider.value;
+            RabbitDefaults.pregnancyMoveMultiplier = rabbitMovementMultiplierPregnantSlider.value;
+            RabbitDefaults.sightRadius = rabbitSightRadiusSlider.value;
+            RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
+            RabbitDefaults.scaleFemale = rabbitSizeFemaleSlider.value;
+            FoxDefaults.ageMax = foxAgeMaxSlider.value;
+            FoxDefaults.canBeEaten = foxCanBeEaten.isOn;
+            FoxDefaults.nutritionalValue = foxNutritionalValueSlider.value;
+            FoxDefaults.hungerMax = foxHungerMaxSlider.value;
+            FoxDefaults.hungryThreshold = foxHungerThresholdSlider.value;
+            FoxDefaults.hungerIncrease = foxHungerIncreaseBaseSlider.value;
+            FoxDefaults.youngHungerIncrease = foxHungerIncreaseYoungSlider.value;
+            FoxDefaults.adultHungerIncrease = foxHungerIncreaseAdultSlider.value;
+            FoxDefaults.oldHungerIncrease = foxHungerIncreaseOldSlider.value;
+            FoxDefaults.eatingSpeed = foxEatingSpeedSlider.value;
+            FoxDefaults.thirstMax = foxThirstMaxSlider.value;
+            FoxDefaults.thirstyThreshold = foxThirstThresholdSlider.value;
+            FoxDefaults.thirstIncrease = foxThirstIncreaseBaseSlider.value;
+            //FoxDefaults. = foxThirstIncreaseYoungSlider.value;
+            //FoxDefaults. = foxThirstIncreaseAdultSlider.value;
+            //FoxDefaults. = foxThirstIncreaseOldSlider.value;
+            FoxDefaults.drinkingSpeed = foxDrinkingSpeedSlider.value;
+            FoxDefaults.matingDuration = foxMatingDurationSlider.value;
+            FoxDefaults.pregnancyLength = foxPregnancyLengthSlider.value;
+            FoxDefaults.birthDuration = foxBirthDurationSlider.value;
+            FoxDefaults.litterSizeMin = (int)foxLitterSizeMinSlider.value;
+            FoxDefaults.litterSizeMax = (int)foxLitterSizeMaxSlider.value;
+            FoxDefaults.litterSizeAve = (int)foxLitterSizeAveSlider.value;
+            FoxDefaults.moveSpeed = foxMovementSpeedSlider.value;
+            FoxDefaults.originalMoveMultiplier = foxMovementMultiplierBaseSlider.value;
+            FoxDefaults.youngMoveMultiplier = foxMovementMultiplierYoungSlider.value;
+            FoxDefaults.adultMoveMultiplier = foxMovementMultiplierAdultSlider.value;
+            FoxDefaults.oldMoveMultiplier = foxMovementMultiplierOldSlider.value;
+            FoxDefaults.pregnancyMoveMultiplier = foxMovementMultiplierPregnantSlider.value;
+            FoxDefaults.sightRadius = foxSightRadiusSlider.value;
+            FoxDefaults.scaleMale = foxSizeMaleSlider.value;
+            FoxDefaults.scaleFemale = foxSizeFemaleSlider.value;
+            GrassDefaults.nutritionalValue = grassNutritionalValueSlider.value;
+            GrassDefaults.canBeEaten = grassCanBeEaten.isOn;
+            GrassDefaults.scale = grassSizeSlider.value;
             StartCoroutine(ConfirmationBox());
         }
 
@@ -789,7 +790,6 @@ namespace SpeedTutorMainMenuSystem
                     break;
                 case "FoxCanBeEaten":
                     //foxCanBeEaten;
-                    FoxDefaults.canBeEaten = foxCanBeEaten.isOn;
                     break;
                 case "FoxHungerMax":
                     foxHungerMaxText.text = foxHungerMaxSlider.value.ToString();
@@ -1381,7 +1381,7 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.adultEntryTimer = float.Parse(adultEntryTimer[0].InnerText);
                 RabbitDefaults.oldEntryTimer = float.Parse(oldEntryTimer[0].InnerText);
                 rabbitNutritionalValueSlider.value = float.Parse(nutritionalValue[0].InnerText);
-                RabbitDefaults.canBeEaten = bool.Parse(canBeEaten[0].InnerText);
+                rabbitCanBeEaten.isOn = bool.Parse(canBeEaten[0].InnerText);
                 RabbitDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[0].InnerText);
                 RabbitDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[0].InnerText);
                 RabbitDefaults.hunger = float.Parse(hunger[0].InnerText);
@@ -1454,7 +1454,7 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.adultEntryTimer = float.Parse(adultEntryTimer[1].InnerText);
                 FoxDefaults.oldEntryTimer = float.Parse(oldEntryTimer[1].InnerText);
                 foxNutritionalValueSlider.value = float.Parse(nutritionalValue[1].InnerText);
-                FoxDefaults.canBeEaten = bool.Parse(canBeEaten[1].InnerText);
+                foxCanBeEaten.isOn = bool.Parse(canBeEaten[1].InnerText);
                 FoxDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[1].InnerText);
                 FoxDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[1].InnerText);
                 FoxDefaults.hunger = float.Parse(hunger[1].InnerText);
@@ -1470,7 +1470,7 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.thirst = float.Parse(thirst[1].InnerText);
                 foxThirstMaxSlider.value = float.Parse(thirstMax[1].InnerText);
                 foxThirstThresholdSlider.value = float.Parse(thirstyThreshold[1].InnerText);
-                foxThirstIncreaseBaseSlider.value= float.Parse(thirstIncrease[1].InnerText);
+                foxThirstIncreaseBaseSlider.value = float.Parse(thirstIncrease[1].InnerText);
                 foxDrinkingSpeedSlider.value = float.Parse(drinkingSpeed[1].InnerText);
                 FoxDefaults.mateStartTime = float.Parse(mateStartTime[1].InnerText);
                 foxMatingDurationSlider.value = float.Parse(matingDuration[1].InnerText);
@@ -1523,6 +1523,7 @@ namespace SpeedTutorMainMenuSystem
                 grassNutritionalValueSlider.value = float.Parse(nutritionalValue[2].InnerText);
 
                 GrassDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[2].InnerText);
+                grassCanBeEaten.isOn = bool.Parse(canBeEaten[2].InnerText);
 
                 GrassDefaults.sizeMultiplier = float.Parse(sizeMultiplier[2].InnerText);
 
@@ -1535,12 +1536,13 @@ namespace SpeedTutorMainMenuSystem
 
                 GrassDefaults.previousFlagState = (StateData.FlagStates)Enum.Parse(typeof(StateData.FlagStates), previousFlagState[2].InnerText);
 
-                GrassDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[2].InnerText);;
+                GrassDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[2].InnerText); ;
 
                 GrassDefaults.GrassColliderType = (ColliderTypeData.ColliderType)Enum.Parse(typeof(ColliderTypeData.ColliderType), colliderType[2].InnerText);
 
                 #endregion GrassData
                 print("I am load game haha");
+                InitialPropertiesApply();
             }
             else
             {
