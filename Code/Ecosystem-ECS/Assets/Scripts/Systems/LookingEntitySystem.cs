@@ -120,7 +120,7 @@ public class LookingEntitySystem : SystemBase
                                 EntityToPredator = childEntity;
                             }
                         }
-                        else if (childEntityNumber != ColliderTypeData.ColliderType.Rabbit)
+                        else if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)
                         {
                             if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) &&
                                 (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female) &&

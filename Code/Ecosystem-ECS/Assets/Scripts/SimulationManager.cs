@@ -39,10 +39,13 @@ public class SimulationManager : MonoBehaviour
     #endregion
 
     #region Numbers for Entity Spawning 
-    [Header("Map Data")]
+    [Header("Numbers of Entities Spawning")]
     [SerializeField] public int numberOfRabbitsToSpawn = 0;
     [SerializeField] public int numberOfFoxesToSpawn = 0;
     [SerializeField] public int numberOfGrassToSpawn = 0;
+    public static int InitialRabbitsToSpawn = 0;
+    public static int InitialFoxesToSpawn = 0;
+    public static int InitialGrassToSpawn = 0;
     #endregion
 
     #region Population Info for Entities
@@ -87,13 +90,20 @@ public class SimulationManager : MonoBehaviour
     #region Initialisation
     void Start()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
         isSetupComplete = false;
         Application.targetFrameRate = 60; // Target 60fps
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
+        if (InitialRabbitsToSpawn != 0)
+            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
+        if (InitialFoxesToSpawn != 0)
+            numberOfFoxesToSpawn = InitialFoxesToSpawn;
+        if (InitialGrassToSpawn != 0)
+            numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
@@ -119,8 +129,9 @@ public class SimulationManager : MonoBehaviour
         }
         else
         {
-            SpawnRabbitAtPosOnClick();
-
+            SpawnRabbitAtPosOnLClick();
+            SpawnFoxAtPosOnRClick();
+            SpawnGrassAtPosOnMClick();
             /* Spawn grass entity at random location once every 10 in game seconds */
             if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
             {
@@ -713,21 +724,94 @@ public class SimulationManager : MonoBehaviour
         rabbitPopulation++;
     }
 
-    private void SpawnRabbitAtPosOnClick()
+    private void SpawnRabbitAtPosOnLClick()
     {
         //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
         if (Input.GetMouseButtonDown(0))
         {
-            UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Vector3 targetPosition = hit.point;
-                Debug.Log(targetPosition.ToString());
-                if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
-                    CreateRabbitAtWorldPoint(targetPosition);
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateRabbitAtWorldPoint(targetPosition);
+                }
             }
         }
     }
-
+    private void SpawnFoxAtPosOnRClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(1))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateFoxAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
+    private void SpawnGrassAtPosOnMClick()
+    {
+        //checks for click of the mouse, sends ray out from camera, creates rabbit where it hits
+        if (Input.GetMouseButtonDown(2))
+        {
+            // if not over the UI
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                {
+                    Vector3 targetPosition = hit.point;
+                    Debug.Log(targetPosition.ToString());
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                        CreateGrassAtWorldPoint(targetPosition);
+                }
+            }
+        }
+    }
     #endregion
+
+    public float RabbitSpawn()
+    {
+        return (float)numberOfRabbitsToSpawn;
+    }
+    public float RabbitPopulation()
+    {
+        return (float)rabbitPopulation;
+    }
+
+    public float FoxSpawn()
+    {
+        return (float)numberOfFoxesToSpawn;
+    }
+    public float FoxPopulation()
+    {
+        return (float)foxPopulation;
+    }
+
+    public float GrassSpawn()
+    {
+        return (float)numberOfGrassToSpawn;
+    }
+    public float GrassPopulation()
+    {
+        return (float)grassPopulation;
+    }
+
+    public Vector2 MapSize()
+    {
+        return new Vector2(gridWidth, gridHeight);
+    }
 }
