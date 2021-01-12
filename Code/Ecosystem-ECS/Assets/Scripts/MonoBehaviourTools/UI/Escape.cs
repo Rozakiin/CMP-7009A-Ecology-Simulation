@@ -50,9 +50,16 @@ public class Escape : MonoBehaviour
 
     public void SaveFile()
     {
-        string timeStamp = DateTime.Now.ToString();
-        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", timeStamp, "xml");
-        SaveGame(path);
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "xml");
+        if (path != string.Empty)
+        {
+            SaveGame(path);
+        }
+        else
+        {
+            Debug.Log("No Path Insert");
+        }
+        
     }
 
     private void SaveGame(string path)

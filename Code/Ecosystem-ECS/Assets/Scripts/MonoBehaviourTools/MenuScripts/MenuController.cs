@@ -423,7 +423,7 @@ namespace SpeedTutorMainMenuSystem
         #region Loading Map From File
         public void LoadMap()
         {
-            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "xml", false);
+            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
             if (paths.Length > 0)
             {
                 StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
@@ -1070,7 +1070,7 @@ namespace SpeedTutorMainMenuSystem
 
         public void LoadGame()
         {
-            string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
+            string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
             string filePath = filePaths[0];
             if (File.Exists(filePath))
             {
@@ -1156,31 +1156,31 @@ namespace SpeedTutorMainMenuSystem
 
                 RabbitDefaults.age = float.Parse(age[0].InnerText);
                 RabbitDefaults.ageIncrease = float.Parse(ageIncrease[0].InnerText);
-                RabbitDefaults.ageMax = float.Parse(ageMax[0].InnerText);
+                rabbitAgeMaxSlider.value = float.Parse(ageMax[0].InnerText);
                 RabbitDefaults.ageGroup = (BioStatsData.AgeGroup)Enum.Parse(typeof(BioStatsData.AgeGroup), ageGroup[0].InnerText);
                 RabbitDefaults.adultEntryTimer = float.Parse(adultEntryTimer[0].InnerText);
                 RabbitDefaults.oldEntryTimer = float.Parse(oldEntryTimer[0].InnerText);
-                RabbitDefaults.nutritionalValue = float.Parse(nutritionalValue[0].InnerText);
+                rabbitNutritionalValueSlider.value = float.Parse(nutritionalValue[0].InnerText);
                 RabbitDefaults.canBeEaten = bool.Parse(canBeEaten[0].InnerText);
                 RabbitDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[0].InnerText);
                 RabbitDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[0].InnerText);
                 RabbitDefaults.hunger = float.Parse(hunger[0].InnerText);
-                RabbitDefaults.hungerMax = float.Parse(hungerMax[0].InnerText);
-                RabbitDefaults.hungryThreshold = float.Parse(hungryThreshold[0].InnerText);
-                RabbitDefaults.hungerIncrease = float.Parse(hungerIncrease[0].InnerText);
+                rabbitHungerMaxSlider.value = float.Parse(hungerMax[0].InnerText);
+                rabbitHungerThresholdSlider.value = float.Parse(hungryThreshold[0].InnerText);
+                rabbitHungerIncreaseBaseSlider.value = float.Parse(hungerIncrease[0].InnerText);
                 RabbitDefaults.pregnancyHungerIncrease = float.Parse(pregnancyHungerIncrease[0].InnerText);
-                RabbitDefaults.youngHungerIncrease = float.Parse(youngHungerIncrease[0].InnerText);
-                RabbitDefaults.adultHungerIncrease = float.Parse(adultHungerIncrease[0].InnerText);
-                RabbitDefaults.oldHungerIncrease = float.Parse(oldHungerIncrease[0].InnerText);
-                RabbitDefaults.eatingSpeed = float.Parse(eatingSpeed[0].InnerText);
+                rabbitHungerIncreaseYoungSlider.value = float.Parse(youngHungerIncrease[0].InnerText);
+                rabbitHungerIncreaseAdultSlider.value = float.Parse(adultHungerIncrease[0].InnerText);
+                rabbitHungerIncreaseOldSlider.value = float.Parse(oldHungerIncrease[0].InnerText);
+                rabbitEatingSpeedSlider.value = float.Parse(eatingSpeed[0].InnerText);
                 RabbitDefaults.diet = (BasicNeedsData.Diet)Enum.Parse(typeof(BasicNeedsData.Diet), diet[0].InnerText);
                 RabbitDefaults.thirst = float.Parse(thirst[0].InnerText);
-                RabbitDefaults.thirstMax = float.Parse(thirstMax[0].InnerText);
-                RabbitDefaults.thirstyThreshold = float.Parse(thirstyThreshold[0].InnerText);
-                RabbitDefaults.thirstIncrease = float.Parse(thirstIncrease[0].InnerText);
-                RabbitDefaults.drinkingSpeed = float.Parse(drinkingSpeed[0].InnerText);
+                rabbitThirstMaxSlider.value = float.Parse(thirstMax[0].InnerText);
+                rabbitThirstThresholdSlider.value = float.Parse(thirstyThreshold[0].InnerText);
+                rabbitThirstIncreaseBaseSlider.value = float.Parse(thirstIncrease[0].InnerText);
+                rabbitDrinkingSpeedSlider.value = float.Parse(drinkingSpeed[0].InnerText);
                 RabbitDefaults.mateStartTime = float.Parse(mateStartTime[0].InnerText);
-                RabbitDefaults.matingDuration = float.Parse(matingDuration[0].InnerText);
+                rabbitMatingDurationSlider.value = float.Parse(matingDuration[0].InnerText);
                 RabbitDefaults.reproductiveUrge = float.Parse(reproductiveUrge[0].InnerText);
                 RabbitDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[0].InnerText);
                 RabbitDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[0].InnerText);
@@ -1191,22 +1191,22 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.birthStartTime = float.Parse(birthStartTime[0].InnerText);
                 RabbitDefaults.currentLitterSize = int.Parse(currentLitterSize[0].InnerText);
                 RabbitDefaults.pregnancyLengthModifier = float.Parse(pregnancyLengthModifier[0].InnerText);
-                RabbitDefaults.pregnancyLength = float.Parse(pregnancyLength[0].InnerText);
-                RabbitDefaults.birthDuration = float.Parse(birthDuration[0].InnerText);
-                RabbitDefaults.litterSizeMin = int.Parse(litterSizeMin[0].InnerText);
-                RabbitDefaults.litterSizeMax = int.Parse(litterSizeMax[0].InnerText);
-                RabbitDefaults.litterSizeAve = int.Parse(litterSizeAve[0].InnerText);
-                RabbitDefaults.moveSpeed = float.Parse(moveSpeed[0].InnerText);
+                rabbitPregnancyLengthSlider.value = float.Parse(pregnancyLength[0].InnerText);
+                rabbitBirthDurationSlider.value = float.Parse(birthDuration[0].InnerText);
+                rabbitLitterSizeMinSlider.value = int.Parse(litterSizeMin[0].InnerText);
+                rabbitLitterSizeMaxSlider.value = int.Parse(litterSizeMax[0].InnerText);
+                rabbitLitterSizeAveSlider.value = int.Parse(litterSizeAve[0].InnerText);
+                rabbitMovementSpeedSlider.value = float.Parse(moveSpeed[0].InnerText);
                 RabbitDefaults.rotationSpeed = float.Parse(rotationSpeed[0].InnerText);
                 RabbitDefaults.moveMultiplier = float.Parse(moveMultiplier[0].InnerText);
-                RabbitDefaults.pregnancyMoveMultiplier = float.Parse(pregnancyMoveMultiplier[0].InnerText);
-                RabbitDefaults.originalMoveMultiplier = float.Parse(originalMoveMultiplier[0].InnerText);
-                RabbitDefaults.youngMoveMultiplier = float.Parse(youngMoveMultiplier[0].InnerText);
-                RabbitDefaults.adultMoveMultiplier = float.Parse(adultMoveMultiplier[0].InnerText);
-                RabbitDefaults.oldMoveMultiplier = float.Parse(oldMoveMultiplier[0].InnerText);
+                rabbitMovementMultiplierPregnantSlider.value = float.Parse(pregnancyMoveMultiplier[0].InnerText);
+                rabbitMovementMultiplierBaseSlider.value = float.Parse(originalMoveMultiplier[0].InnerText);
+                rabbitMovementMultiplierYoungSlider.value = float.Parse(youngMoveMultiplier[0].InnerText);
+                rabbitMovementMultiplierAdultSlider.value = float.Parse(adultMoveMultiplier[0].InnerText);
+                rabbitMovementMultiplierOldSlider.value = float.Parse(oldMoveMultiplier[0].InnerText);
                 RabbitDefaults.sizeMultiplier = float.Parse(sizeMultiplier[0].InnerText);
-                RabbitDefaults.scaleMale = float.Parse(scaleMale[0].InnerText);
-                RabbitDefaults.scaleFemale = float.Parse(scaleFemale[0].InnerText);
+                rabbitSizeMaleSlider.value = float.Parse(scaleMale[0].InnerText);
+                rabbitSizeFemaleSlider.value = float.Parse(scaleFemale[0].InnerText);
                 RabbitDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[0].InnerText);
                 RabbitDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[0].InnerText);
                 RabbitDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[0].InnerText);
@@ -1215,7 +1215,7 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[0].InnerText);
                 RabbitDefaults.beenEaten = bool.Parse(beenEaten[0].InnerText);
                 RabbitDefaults.touchRadius = float.Parse(touchRadius[0].InnerText);
-                RabbitDefaults.sightRadius = float.Parse(sightRadius[0].InnerText);
+                rabbitSightRadiusSlider.value = float.Parse(sightRadius[0].InnerText);
                 RabbitDefaults.shortestToEdibleDistance = float.Parse(shortestToEdibleDistance[0].InnerText);
                 RabbitDefaults.shortestToWaterDistance = float.Parse(shortestToWaterDistance[0].InnerText);
                 RabbitDefaults.shortestToPredatorDistance = float.Parse(shortestToPredatorDistance[0].InnerText);
@@ -1229,31 +1229,31 @@ namespace SpeedTutorMainMenuSystem
 
                 FoxDefaults.age = float.Parse(age[1].InnerText);
                 FoxDefaults.ageIncrease = float.Parse(ageIncrease[1].InnerText);
-                FoxDefaults.ageMax = float.Parse(ageMax[1].InnerText);
+                foxAgeMaxSlider.value = float.Parse(ageMax[1].InnerText);
                 FoxDefaults.ageGroup = (BioStatsData.AgeGroup)Enum.Parse(typeof(BioStatsData.AgeGroup), ageGroup[1].InnerText);
                 FoxDefaults.adultEntryTimer = float.Parse(adultEntryTimer[1].InnerText);
                 FoxDefaults.oldEntryTimer = float.Parse(oldEntryTimer[1].InnerText);
-                FoxDefaults.nutritionalValue = float.Parse(nutritionalValue[1].InnerText);
+                foxNutritionalValueSlider.value = float.Parse(nutritionalValue[1].InnerText);
                 FoxDefaults.canBeEaten = bool.Parse(canBeEaten[1].InnerText);
                 FoxDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[1].InnerText);
                 FoxDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[1].InnerText);
                 FoxDefaults.hunger = float.Parse(hunger[1].InnerText);
-                FoxDefaults.hungerMax = float.Parse(hungerMax[1].InnerText);
-                FoxDefaults.hungryThreshold = float.Parse(hungryThreshold[1].InnerText);
-                FoxDefaults.hungerIncrease = float.Parse(hungerIncrease[1].InnerText);
+                foxHungerMaxSlider.value = float.Parse(hungerMax[1].InnerText);
+                foxHungerThresholdSlider.value = float.Parse(hungryThreshold[1].InnerText);
+                foxHungerIncreaseBaseSlider.value = float.Parse(hungerIncrease[1].InnerText);
                 FoxDefaults.pregnancyHungerIncrease = float.Parse(pregnancyHungerIncrease[1].InnerText);
-                FoxDefaults.youngHungerIncrease = float.Parse(youngHungerIncrease[1].InnerText);
-                FoxDefaults.adultHungerIncrease = float.Parse(adultHungerIncrease[1].InnerText);
-                FoxDefaults.oldHungerIncrease = float.Parse(oldHungerIncrease[1].InnerText);
-                FoxDefaults.eatingSpeed = float.Parse(eatingSpeed[1].InnerText);
+                foxHungerIncreaseYoungSlider.value = float.Parse(youngHungerIncrease[1].InnerText);
+                foxHungerIncreaseAdultSlider.value = float.Parse(adultHungerIncrease[1].InnerText);
+                foxHungerIncreaseOldSlider.value = float.Parse(oldHungerIncrease[1].InnerText);
+                foxEatingSpeedSlider.value = float.Parse(eatingSpeed[1].InnerText);
                 FoxDefaults.diet = (BasicNeedsData.Diet)Enum.Parse(typeof(BasicNeedsData.Diet), diet[1].InnerText);
                 FoxDefaults.thirst = float.Parse(thirst[1].InnerText);
-                FoxDefaults.thirstMax = float.Parse(thirstMax[1].InnerText);
-                FoxDefaults.thirstyThreshold = float.Parse(thirstyThreshold[1].InnerText);
-                FoxDefaults.thirstIncrease = float.Parse(thirstIncrease[1].InnerText);
-                FoxDefaults.drinkingSpeed = float.Parse(drinkingSpeed[1].InnerText);
+                foxThirstMaxSlider.value = float.Parse(thirstMax[1].InnerText);
+                foxThirstThresholdSlider.value = float.Parse(thirstyThreshold[1].InnerText);
+                foxThirstIncreaseBaseSlider.value= float.Parse(thirstIncrease[1].InnerText);
+                foxDrinkingSpeedSlider.value = float.Parse(drinkingSpeed[1].InnerText);
                 FoxDefaults.mateStartTime = float.Parse(mateStartTime[1].InnerText);
-                FoxDefaults.matingDuration = float.Parse(matingDuration[1].InnerText);
+                foxMatingDurationSlider.value = float.Parse(matingDuration[1].InnerText);
                 FoxDefaults.reproductiveUrge = float.Parse(reproductiveUrge[1].InnerText);
                 FoxDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[1].InnerText);
                 FoxDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[1].InnerText);
@@ -1264,22 +1264,22 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.birthStartTime = float.Parse(birthStartTime[1].InnerText);
                 FoxDefaults.currentLitterSize = int.Parse(currentLitterSize[1].InnerText);
                 FoxDefaults.pregnancyLengthModifier = float.Parse(pregnancyLengthModifier[1].InnerText);
-                FoxDefaults.pregnancyLength = float.Parse(pregnancyLength[1].InnerText);
-                FoxDefaults.birthDuration = float.Parse(birthDuration[1].InnerText);
-                FoxDefaults.litterSizeMin = int.Parse(litterSizeMin[1].InnerText);
-                FoxDefaults.litterSizeMax = int.Parse(litterSizeMax[1].InnerText);
-                FoxDefaults.litterSizeAve = int.Parse(litterSizeAve[1].InnerText);
-                FoxDefaults.moveSpeed = float.Parse(moveSpeed[1].InnerText);
+                foxPregnancyLengthSlider.value = float.Parse(pregnancyLength[1].InnerText);
+                foxBirthDurationSlider.value = float.Parse(birthDuration[1].InnerText);
+                foxLitterSizeMinSlider.value = int.Parse(litterSizeMin[1].InnerText);
+                foxLitterSizeMaxSlider.value = int.Parse(litterSizeMax[1].InnerText);
+                foxLitterSizeAveSlider.value = int.Parse(litterSizeAve[1].InnerText);
+                foxMovementSpeedSlider.value = float.Parse(moveSpeed[1].InnerText);
                 FoxDefaults.rotationSpeed = float.Parse(rotationSpeed[1].InnerText);
                 FoxDefaults.moveMultiplier = float.Parse(moveMultiplier[1].InnerText);
-                FoxDefaults.pregnancyMoveMultiplier = float.Parse(pregnancyMoveMultiplier[1].InnerText);
-                FoxDefaults.originalMoveMultiplier = float.Parse(originalMoveMultiplier[1].InnerText);
-                FoxDefaults.youngMoveMultiplier = float.Parse(youngMoveMultiplier[1].InnerText);
-                FoxDefaults.adultMoveMultiplier = float.Parse(adultMoveMultiplier[1].InnerText);
-                FoxDefaults.oldMoveMultiplier = float.Parse(oldMoveMultiplier[1].InnerText);
+                foxMovementMultiplierPregnantSlider.value = float.Parse(pregnancyMoveMultiplier[1].InnerText);
+                foxMovementMultiplierBaseSlider.value = float.Parse(originalMoveMultiplier[1].InnerText);
+                foxMovementMultiplierYoungSlider.value = float.Parse(youngMoveMultiplier[1].InnerText);
+                foxMovementMultiplierAdultSlider.value = float.Parse(adultMoveMultiplier[1].InnerText);
+                foxMovementMultiplierOldSlider.value = float.Parse(oldMoveMultiplier[1].InnerText);
                 FoxDefaults.sizeMultiplier = float.Parse(sizeMultiplier[1].InnerText);
-                FoxDefaults.scaleMale = float.Parse(scaleMale[1].InnerText);
-                FoxDefaults.scaleFemale = float.Parse(scaleFemale[1].InnerText);
+                foxSizeMaleSlider.value = float.Parse(scaleMale[1].InnerText);
+                foxSizeFemaleSlider.value = float.Parse(scaleFemale[1].InnerText);
                 FoxDefaults.youngSizeMultiplier = float.Parse(youngSizeMultiplier[1].InnerText);
                 FoxDefaults.adultSizeMultiplier = float.Parse(adultSizeMultiplier[1].InnerText);
                 FoxDefaults.oldSizeMultiplier = float.Parse(oldSizeMultiplier[1].InnerText);
@@ -1288,7 +1288,7 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.deathReason = (StateData.DeathReason)Enum.Parse(typeof(StateData.DeathReason), deathReason[1].InnerText);
                 FoxDefaults.beenEaten = bool.Parse(beenEaten[1].InnerText);
                 FoxDefaults.touchRadius = float.Parse(touchRadius[1].InnerText);
-                FoxDefaults.sightRadius = float.Parse(sightRadius[1].InnerText);
+                foxSightRadiusSlider.value = float.Parse(sightRadius[1].InnerText);
                 FoxDefaults.shortestToEdibleDistance = float.Parse(shortestToEdibleDistance[1].InnerText);
                 FoxDefaults.shortestToWaterDistance = float.Parse(shortestToWaterDistance[1].InnerText);
                 FoxDefaults.shortestToPredatorDistance = float.Parse(shortestToPredatorDistance[1].InnerText);
@@ -1300,14 +1300,14 @@ namespace SpeedTutorMainMenuSystem
 
                 #region GrassData
 
-                GrassDefaults.nutritionalValue = float.Parse(nutritionalValue[2].InnerText);
+                grassNutritionalValueSlider.value = float.Parse(nutritionalValue[2].InnerText);
 
                 GrassDefaults.nutritionalValueMultiplier = float.Parse(nutritionalValueMultiplier[2].InnerText);
 
                 GrassDefaults.sizeMultiplier = float.Parse(sizeMultiplier[2].InnerText);
 
                 XmlNodeList Scale = xmlDocument.GetElementsByTagName("scale");
-                GrassDefaults.scale = float.Parse(Scale[0].InnerText);
+                grassSizeSlider.value = float.Parse(Scale[0].InnerText);
 
                 GrassDefaults.foodType = (EdibleData.FoodType)Enum.Parse(typeof(EdibleData.FoodType), foodType[2].InnerText);
 
@@ -1326,7 +1326,6 @@ namespace SpeedTutorMainMenuSystem
             {
                 Debug.Log("NOT FOUNDED");
             }
-            SceneManager.LoadScene(_newGameButtonLevel);
         }
         public void ClickLoadGameDialog(string ButtonType)
         {
