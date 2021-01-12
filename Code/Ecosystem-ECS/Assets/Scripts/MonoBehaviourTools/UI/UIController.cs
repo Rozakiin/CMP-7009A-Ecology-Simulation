@@ -8,6 +8,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject uiSliderCanvas;
     [SerializeField] private GameObject uiTimeCanvas;
     [SerializeField] private GameObject uiTurnCanvas;
+    [SerializeField] private GameObject uiGraphCanvas;
+
     #endregion
 
     #region Initial Properties Linking
@@ -99,6 +101,7 @@ public class UIController : MonoBehaviour
         uiSliderCanvas.SetActive(true);
         uiTimeCanvas.SetActive(true);
         uiTurnCanvas.SetActive(true);
+        uiGraphCanvas.SetActive(true);
     }
     #endregion
 
@@ -151,13 +154,13 @@ public class UIController : MonoBehaviour
                                 dropdownInputField.text = RabbitDefaults.thirstIncrease.ToString();
                 break;
             case "RabbitThirstIncreaseYoung":
-                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();    
+                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
                 break;
             case "RabbitThirstIncreaseAdult":
-                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();   
+                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
                 break;
             case "RabbitThirstIncreaseOld":
-                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();   
+                //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
                 break;
             case "RabbitDrinkingSpeed":
                                 dropdownInputField.text = RabbitDefaults.drinkingSpeed.ToString();
@@ -248,13 +251,13 @@ public class UIController : MonoBehaviour
                                 dropdownInputField.text = FoxDefaults.thirstIncrease.ToString();
                 break;
             case "FoxThirstIncreaseYoung":
-                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();    
+                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
                 break;
             case "FoxThirstIncreaseAdult":
-                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();   
+                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
                 break;
             case "FoxThirstIncreaseOld":
-                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();   
+                //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
                 break;
             case "FoxDrinkingSpeed":
                                 dropdownInputField.text = FoxDefaults.drinkingSpeed.ToString();
