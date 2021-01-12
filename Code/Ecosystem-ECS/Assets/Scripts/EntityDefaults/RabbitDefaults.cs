@@ -39,14 +39,14 @@ public static class RabbitDefaults
     public static float thirstIncrease = 0.5f;
     public static float drinkingSpeed = 2f;
 
-
+    
     //Mate
     public static float mateStartTime = 0f;
     public static float matingDuration = 5f;
     public static float reproductiveUrge = 0f;
     public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
-    public static float matingThreshold = 50f;
+    public static float matingThreshold = 10f;
     public static float mateRadius = 5f;
 
 
@@ -63,7 +63,7 @@ public static class RabbitDefaults
     public static int litterSizeMax = 13;
     public static int litterSizeAve = 7;
 
-
+    
     //Movement
     public static float moveSpeed = 25f;
     public static float rotationSpeed = 10f;
@@ -84,7 +84,7 @@ public static class RabbitDefaults
     public static float oldSizeMultiplier = 0.75f;
     public static float ageSizeMultiplier = youngSizeMultiplier;
 
-
+    
     //State
     public static StateData.FlagStates flagState = StateData.FlagStates.Wandering;
     public static StateData.FlagStates previousFlagState = StateData.FlagStates.Wandering;

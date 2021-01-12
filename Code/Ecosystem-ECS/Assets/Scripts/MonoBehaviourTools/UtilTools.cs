@@ -56,5 +56,24 @@ namespace UtilTools
         {
             return (stateDataflagStates & state) == state;
         }
+
+        // mu is average, max = sigma + mu; min = sigma-mu
+        public static int GaussianDistribution(float sigma, float mu, float randomSeed)
+        {
+
+            float x1, x2, w, y1; //, y2;
+            Random randomGen = new Random((uint)randomSeed + 1);
+            do
+            {
+                x1 = (float)(2f * randomGen.NextDouble() - 1f);
+                x2 = 2f * (float)randomGen.NextDouble() - 1f;
+                w = x1 * x1 + x2 * x2;
+            } while (w >= 1f);
+
+            w = math.sqrt((-2f * math.log(w)) / w);
+            y1 = x1 * w;
+            // y2 = x2 * w;
+            return (int)((y1 * sigma) + mu);
+        }
     }
 }

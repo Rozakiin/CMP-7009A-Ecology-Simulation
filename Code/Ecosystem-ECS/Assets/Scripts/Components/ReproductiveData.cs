@@ -27,7 +27,7 @@ public struct ReproductiveData : IComponentData
 
     public int LitterSize
     {
-        get { return GaussianDistribution((litterSizeMax - litterSizeMin) / 2, litterSizeAve); }
+        get { return UtilTools.ComponentTools.GaussianDistribution((litterSizeMax - litterSizeMin) / 2, litterSizeAve, birthStartTime); }
     }
 
 
@@ -38,25 +38,4 @@ public struct ReproductiveData : IComponentData
     {
         get { return pregnancyLengthBase * pregnancyLengthModifier; }
     }
-
-
-    // mu is average, max = sigma + mu; min = sigma-mu
-    private int GaussianDistribution(float sigma, float mu)
-    {
-
-        float x1, x2, w, y1; //, y2;
-        System.Random random = new System.Random();
-        do
-        {
-            x1 = 2f * (float)random.NextDouble() - 1f;
-            x2 = 2f * (float)random.NextDouble() - 1f;
-            w = x1 * x1 + x2 * x2;
-        } while (w >= 1f);
-
-        w = Mathf.Sqrt((-2f * Mathf.Log(w)) / w);
-        y1 = x1 * w;
-        // y2 = x2 * w;
-        return (int)((y1 * sigma) + mu);
-    }
-
 }
