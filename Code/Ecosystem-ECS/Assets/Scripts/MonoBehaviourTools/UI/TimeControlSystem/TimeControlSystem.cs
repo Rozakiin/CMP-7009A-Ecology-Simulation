@@ -5,7 +5,7 @@ public class TimeControlSystem : MonoBehaviour
 {
     public Text speedDisplay;
     public float fastforwardSpeed;
-    private bool pause;
+    public bool pause;
     public Button PlayButton;
     public Button PauseButton;
     public Button FastButton;
@@ -68,4 +68,10 @@ public class TimeControlSystem : MonoBehaviour
             fastforwardSpeed -= 1f;
         }
     }
+
+    public float GetfastforwardSpeed()
+    {
+        return fastforwardSpeed;
+    }
+
 }
