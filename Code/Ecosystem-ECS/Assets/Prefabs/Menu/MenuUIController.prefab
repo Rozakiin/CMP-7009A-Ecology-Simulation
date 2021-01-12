@@ -21786,7 +21786,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: LoadLoad
+  m_Text: Load
 --- !u!114 &2209371842610234702
 MonoBehaviour:
   m_ObjectHideFlags: 0
