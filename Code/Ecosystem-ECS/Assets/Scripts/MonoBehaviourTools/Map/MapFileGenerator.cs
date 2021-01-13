@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFB;
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,7 +39,7 @@ public class MapFileGenerator : MonoBehaviour
     void Start()
     {
         mapGeneratorButton.onClick.AddListener(TaskOnClick);
-        saveFileButton.onClick.AddListener(FileGenerate);
+        saveFileButton.onClick.AddListener(SaveFile);
 
         widthSlider.onValueChanged.AddListener(SetWidth);
         heightSlider.onValueChanged.AddListener(SetHeight);
@@ -83,21 +84,36 @@ public class MapFileGenerator : MonoBehaviour
         }
     }
 
-    void FileGenerate()
+
+    public void SaveFile()
+    {
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "txt");
+        if (path != string.Empty)
+        {
+            FileGenerate(path);
+        }
+        else
+        {
+            Debug.Log("No Path Insert");
+        }
+
+    }
+
+    void FileGenerate(string path)
     {
         Debug.Log("File Generate Yeah!");
-        string file = Application.dataPath;
-        string fileName = file + "/Scripts/Map/Map.txt";
+        //string file = Application.dataPath;
+        //string fileName = file + "/Scripts/Map/Map.txt";
         try
         {
-            // Check if file already exists. If yes, delete it.     
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
+            //// Check if file already exists. If yes, delete it.     
+            //if (File.Exists(fileName))
+            //{
+            //    File.Delete(fileName);
+            //}
 
             // Create a new file     
-            using (StreamWriter sw = File.CreateText(fileName))
+            using (StreamWriter sw = File.CreateText(path))
             {
                 string output = "";
                 for (int i = 0; i < map.GetUpperBound(0); i++)
