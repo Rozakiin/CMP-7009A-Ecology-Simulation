@@ -27,6 +27,8 @@ public class LookingEntitySystem : SystemBase
         Entities.ForEach((
             ref TargetData targetData,
             in ColliderTypeData colliderTypeData,
+            in BasicNeedsData basicNeedsData,
+            in EdibleData edibleData,
             in Translation translation
             ) =>
         {
@@ -71,32 +73,15 @@ public class LookingEntitySystem : SystemBase
 
                     float distanceToEntity = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[childEntity].Value);
                     ColliderTypeData.ColliderType childEntityNumber = GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].colliderType;
-                    // I know this code not good, when we finish findCloestEntity I will try to remove Duplicate code
-                    if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Fox) // if you are Fox
+
+                    // find food
+                    if (HasComponent<EdibleData>(childEntity))
                     {
-                        if (childEntityNumber != ColliderTypeData.ColliderType.Fox)// to avoid fox find fox, fox don't have mate system
-                        {
-                            if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)             //find rabbit and calculate the distance and compare distance with previous closetdistance and store it 
-                            {
-                                if (distanceToEntity < shortestToEdibleDistance)
-                                {
-                                    shortestToEdibleDistance = distanceToEntity;
-                                    EntityToEat = childEntity;
-                                }
-                            }
-                            else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        // find water
-                            {
-                                if (distanceToEntity < shortestToWaterDistance)
-                                {
-                                    shortestToWaterDistance = distanceToEntity;
-                                    EntityToDrink = childEntity;
-                                }
-                            }
-                        }
-                    }
-                    else if (colliderTypeData.colliderType == ColliderTypeData.ColliderType.Rabbit)// if you are Rabbit
-                    {
-                        if (childEntityNumber == ColliderTypeData.ColliderType.Grass)             // find Grass
+                        EdibleData childEdibleData = GetComponentDataFromEntity<EdibleData>(true)[childEntity];
+                        // if foodtype in diet and not same type
+                        if (((childEdibleData.foodType & (EdibleData.FoodType)basicNeedsData.diet) == childEdibleData.foodType) &&
+                            (childEdibleData.canBeEaten) &&
+                            (childEntityNumber != colliderTypeData.colliderType))
                         {
                             if (distanceToEntity < shortestToEdibleDistance)
                             {
@@ -104,7 +89,13 @@ public class LookingEntitySystem : SystemBase
                                 EntityToEat = childEntity;
                             }
                         }
-                        else if (childEntityNumber == ColliderTypeData.ColliderType.Water)        //find Water
+                    }
+
+                    //find drink
+                    if (HasComponent<DrinkableData>(childEntity))
+                    {
+                        DrinkableData childDrinkableData = GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
+                        if (childDrinkableData.canBeDrunk)
                         {
                             if (distanceToEntity < shortestToWaterDistance)
                             {
@@ -112,22 +103,34 @@ public class LookingEntitySystem : SystemBase
                                 EntityToDrink = childEntity;
                             }
                         }
-                        else if (childEntityNumber == ColliderTypeData.ColliderType.Fox)        //find Fox
+                    }
+
+                    //find mate
+                    if (childEntityNumber == colliderTypeData.colliderType)
+                    {
+                        StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
+                        BioStatsData.Gender childGender = GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender;
+                        if ((childStateData.isPregnant == false) &&
+                            (childGender == BioStatsData.Gender.Female) &&
+                            (childStateData.isMating == false))
+                        {
+                            shortestToMateDistance = distanceToEntity;
+                            EntityToMate = childEntity;
+                        }
+                    }
+
+                    //find predator
+                    if (HasComponent<BasicNeedsData>(childEntity))
+                    {
+                        BasicNeedsData.Diet childDiet = GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].diet;
+                        // if child entity has diet that contains this entities foodtype ie predator
+                        if ((((EdibleData.FoodType)childDiet & edibleData.foodType) == edibleData.foodType) &&
+                            (childEntityNumber != colliderTypeData.colliderType))
                         {
                             if (distanceToEntity < shortestToPredatorDistance)
                             {
                                 shortestToPredatorDistance = distanceToEntity;
                                 EntityToPredator = childEntity;
-                            }
-                        }
-                        else if (childEntityNumber == ColliderTypeData.ColliderType.Rabbit)
-                        {
-                            if ((GetComponentDataFromEntity<StateData>(true)[childEntity].isPregnant == false) &&
-                                (GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender == BioStatsData.Gender.Female) &&
-                                (GetComponentDataFromEntity<StateData>(true)[childEntity].isMating == false))
-                            {
-                                shortestToMateDistance = distanceToEntity;
-                                EntityToMate = childEntity;
                             }
                         }
                     }
