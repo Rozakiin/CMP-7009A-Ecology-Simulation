@@ -29,5 +29,15 @@ public class ScaleSystem : SystemBase
             scale.Value.c1.y = sizeData.Size;
             scale.Value.c2.z = sizeData.Size;
         }).ScheduleParallel();
+
+        Entities.WithNone<BioStatsData>().ForEach((
+            ref CompositeScale scale,
+            in SizeData sizeData
+            ) =>
+        {
+            scale.Value.c0.x = sizeData.Size;
+            scale.Value.c1.y = sizeData.Size;
+            scale.Value.c2.z = sizeData.Size;
+        }).ScheduleParallel();
     }
 }
