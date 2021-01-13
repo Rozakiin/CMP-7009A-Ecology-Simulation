@@ -8,12 +8,12 @@ public static class RabbitDefaults
     public static float ageIncrease = 1f;
     public static float ageMax = 600f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-    public static float adultEntryTimer = 10f;
+    public static float adultEntryTimer = 20f;
     public static float oldEntryTimer = 450f;
 
 
     //Edible
-    public static float nutritionalValue = 10f;
+    public static float nutritionalValue = 50f;
     public static bool canBeEaten = true;
     public static float nutritionalValueMultiplier = 1f;
     public static EdibleData.FoodType foodType = EdibleData.FoodType.Meat;
@@ -23,7 +23,7 @@ public static class RabbitDefaults
     public static float hunger = 0f;
     public static float hungerMax = 100f;
     public static float hungryThreshold = 20f;
-    public static float hungerIncrease = 0.5f;
+    public static float hungerIncrease = 1f;
     public static float pregnancyHungerIncrease = 0.7f;
     public static float youngHungerIncrease = 0.3f;
     public static float adultHungerIncrease = 1f;
@@ -36,7 +36,7 @@ public static class RabbitDefaults
     public static float thirst = 0f;
     public static float thirstMax = 100f;
     public static float thirstyThreshold = 10f;
-    public static float thirstIncrease = 0.5f;
+    public static float thirstIncrease = 1f;
     public static float drinkingSpeed = 2f;
 
     
@@ -46,7 +46,7 @@ public static class RabbitDefaults
     public static float reproductiveUrge = 0f;
     public static float reproductiveUrgeIncreaseMale = 0.3f;
     public static float reproductiveUrgeIncreaseFemale = 0f;
-    public static float matingThreshold = 10f;
+    public static float matingThreshold = 50f;
     public static float mateRadius = 5f;
 
 

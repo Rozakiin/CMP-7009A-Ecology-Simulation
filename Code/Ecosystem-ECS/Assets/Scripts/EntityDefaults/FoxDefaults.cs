@@ -8,12 +8,12 @@ public static class FoxDefaults
     public static float ageIncrease = 1f;
     public static float ageMax = 800f;
     public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-    public static float adultEntryTimer = 10f;
-    public static float oldEntryTimer = 60f;
+    public static float adultEntryTimer = 20f;
+    public static float oldEntryTimer = 600f;
 
 
     //Edible
-    public static float nutritionalValue = 10f;
+    public static float nutritionalValue = 100f;
     public static bool canBeEaten = false;
     public static float nutritionalValueMultiplier = 1f;
     public static EdibleData.FoodType foodType = EdibleData.FoodType.Meat;
@@ -59,8 +59,8 @@ public static class FoxDefaults
     public static float pregnancyLength = 10f;
     public static float birthDuration = 10f;
     public static int litterSizeMin = 1;
-    public static int litterSizeMax = 13;
-    public static int litterSizeAve = 7;
+    public static int litterSizeMax = 14;
+    public static int litterSizeAve = 5;
 
 
     //Movement
@@ -93,7 +93,7 @@ public static class FoxDefaults
 
     //Target
     public static float touchRadius = 1f;
-    public static float sightRadius = 20f;
+    public static float sightRadius = 50f;
 
 
     //lookingEntityData
