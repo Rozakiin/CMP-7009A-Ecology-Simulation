@@ -179,6 +179,8 @@ public class StateSystem : SystemBase
                 stateData.isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
                 if (stateData.isMating)
                 {
+                    stateData.flagState &= ~StateData.FlagStates.Wandering;
+
                     //If the mating has ended, the female becomes pregnant
                     if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
                     {
@@ -188,6 +190,7 @@ public class StateSystem : SystemBase
                             stateData.flagState |= StateData.FlagStates.Pregnant; //enable pregnant state
                         }
                         stateData.previousFlagState = stateData.flagState;
+                        stateData.flagState |= StateData.FlagStates.Wandering;
                         stateData.flagState &= ~StateData.FlagStates.Mating; //disable mating state
                     }
 
