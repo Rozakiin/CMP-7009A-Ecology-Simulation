@@ -258,7 +258,6 @@ public class GivingBirthSystem : SystemBase
 
                     reproductiveData.birthStartTime = bioStatsData.age;
                     reproductiveData.babiesBorn++;
-                    Debug.Log($"{entity.Index}: {reproductiveData.babiesBorn} < {reproductiveData.currentLitterSize}");
                     rabbitsBirthed[0]++;
                 }
 

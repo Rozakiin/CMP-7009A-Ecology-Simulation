@@ -37,7 +37,8 @@ public class PathFindingSystem : SystemBase
             int entityInQueryIndex,
             DynamicBuffer<PathPositionData> pathPositionDataBuffer,
             ref PathFindingRequestData pathFindingRequestData,
-            ref PathFollowData pathFollowData
+            ref PathFollowData pathFollowData,
+            in TargetData targetData
             ) =>
         {
             NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(tempArray, Allocator.Temp);
@@ -50,7 +51,7 @@ public class PathFindingSystem : SystemBase
                 startNode = NodeFromWorldPoint(pathFindingRequestData.startPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                 targetNode = NodeFromWorldPoint(pathFindingRequestData.endPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                 entity = entity,
-                iterationLimit = 100,
+                iterationLimit = 10*(int)targetData.sightRadius,//arbitary decision should have better way to determine how long a path should be
             };
             findPathJob.Execute();//execute the find path job
 
