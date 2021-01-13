@@ -58,22 +58,17 @@ namespace UtilTools
         }
 
         // mu is average, max = sigma + mu; min = sigma-mu
-        public static int GaussianDistribution(float sigma, float mu, float randomSeed)
+        public static int GaussianDistribution(int sigma, int mu, float randomSeed)
         {
-
-            float x1, x2, w, y1; //, y2;
+            double x1, x2;
             Random randomGen = new Random((uint)randomSeed + 1);
-            do
-            {
-                x1 = (float)(2f * randomGen.NextDouble() - 1f);
-                x2 = 2f * (float)randomGen.NextDouble() - 1f;
-                w = x1 * x1 + x2 * x2;
-            } while (w >= 1f);
 
-            w = math.sqrt((-2f * math.log(w)) / w);
-            y1 = x1 * w;
-            // y2 = x2 * w;
-            return (int)((y1 * sigma) + mu);
+            x1 = 1f - randomGen.NextDouble();
+            x2 = 1f - randomGen.NextDouble();
+
+            double randStdNormal = (math.sqrt(-2.0 * math.log(x1)) * math.sin(2.0 * math.PI * x2)) * sigma + mu;
+
+            return (int)math.round((int)randStdNormal);
         }
     }
 }

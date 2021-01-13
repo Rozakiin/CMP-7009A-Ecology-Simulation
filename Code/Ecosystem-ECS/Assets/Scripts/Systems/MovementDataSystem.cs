@@ -30,6 +30,12 @@ public class MovementDataSystem : SystemBase
             {
                 movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
             }
+
+            //temp fix set movement to 0 when mating
+            if (stateData.isMating)
+            {
+                movementData.moveMultiplier = 0;
+            }
         }).ScheduleParallel();
     }
 }

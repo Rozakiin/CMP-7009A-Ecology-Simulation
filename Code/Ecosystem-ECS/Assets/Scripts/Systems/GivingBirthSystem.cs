@@ -127,7 +127,7 @@ public class GivingBirthSystem : SystemBase
             in Translation translation
             ) =>
         {
-            if ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth)
+            if (stateData.isGivingBirth)
             {
                 if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
                 reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
@@ -263,7 +263,7 @@ public class GivingBirthSystem : SystemBase
 
                 if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                 {
-                    reproductiveData.babiesBorn = 0;
+                    //reproductiveData.babiesBorn = 0;
                     reproductiveData.pregnant = false;
                 }
             }

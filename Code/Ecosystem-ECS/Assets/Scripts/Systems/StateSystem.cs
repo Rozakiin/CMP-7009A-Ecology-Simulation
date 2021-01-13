@@ -179,13 +179,18 @@ public class StateSystem : SystemBase
                 stateData.isMating = ((stateData.flagState & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
                 if (stateData.isMating)
                 {
+                    stateData.flagState &= ~StateData.FlagStates.Wandering;
+
                     //If the mating has ended, the female becomes pregnant
                     if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
                     {
                         if (bioStatsData.gender == BioStatsData.Gender.Female)
                         {
+                            stateData.previousFlagState = stateData.flagState;
                             stateData.flagState |= StateData.FlagStates.Pregnant; //enable pregnant state
                         }
+                        stateData.previousFlagState = stateData.flagState;
+                        stateData.flagState |= StateData.FlagStates.Wandering;
                         stateData.flagState &= ~StateData.FlagStates.Mating; //disable mating state
                     }
 
@@ -212,6 +217,7 @@ public class StateSystem : SystemBase
                         stateData.flagState &= ~StateData.FlagStates.Pregnant;
                         stateData.flagState |= StateData.FlagStates.GivingBirth;
                     }
+
                 }
 
                 stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
@@ -219,7 +225,14 @@ public class StateSystem : SystemBase
                 {
                     if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
+                        stateData.previousFlagState = stateData.flagState;
                         stateData.flagState &= ~StateData.FlagStates.GivingBirth;
+                    }
+
+                    if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
+                    {
+                        stateData.previousFlagState = stateData.flagState;
+                        stateData.flagState &= ~StateData.FlagStates.Pregnant;
                     }
                 }
             }
