@@ -244,9 +244,9 @@ public class UIUpdateSystem : SystemBase
             /*GRASS*/
 
             //Update EdibleData
-            float GrassnutritionalValueBase = RabbitDefaults.nutritionalValue;
-            bool GrasscanBeEaten = RabbitDefaults.canBeEaten;
-            Entities.WithAll<isRabbitTag>().ForEach((ref EdibleData edibleData) =>
+            float GrassnutritionalValueBase = GrassDefaults.nutritionalValue;
+            bool GrasscanBeEaten = GrassDefaults.canBeEaten;
+            Entities.WithAll<isGrassTag>().ForEach((ref EdibleData edibleData) =>
             {
                 edibleData.canBeEaten = GrasscanBeEaten;
                 edibleData.nutritionalValueBase = GrassnutritionalValueBase;
