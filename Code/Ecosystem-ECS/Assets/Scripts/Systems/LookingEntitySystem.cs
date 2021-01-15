@@ -29,6 +29,7 @@ public class LookingEntitySystem : SystemBase
             in ColliderTypeData colliderTypeData,
             in BasicNeedsData basicNeedsData,
             in EdibleData edibleData,
+            in StateData stateData,
             in Translation translation
             ) =>
         {
@@ -110,12 +111,29 @@ public class LookingEntitySystem : SystemBase
                     {
                         StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
                         BioStatsData.Gender childGender = GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender;
-                        if ((childStateData.isPregnant == false) &&
+                        if ((!childStateData.isPregnant) &&
                             (childGender == BioStatsData.Gender.Female) &&
-                            (childStateData.isMating == false))
+                            (!childStateData.isMating) &&
+                            (!childStateData.isGivingBirth))
                         {
-                            shortestToMateDistance = distanceToEntity;
-                            EntityToMate = childEntity;
+                            if (distanceToEntity < shortestToMateDistance)
+                            {
+                                //if not currently mating change to that closer entity, if mating keep current mate
+                                if (!stateData.isMating)
+                                {
+                                    shortestToMateDistance = distanceToEntity;
+                                    EntityToMate = childEntity;
+                                }
+                                else
+                                {
+                                    //recalc distance
+                                    if (HasComponent<Translation>(targetData.entityToMate))
+                                    {
+                                        shortestToMateDistance = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
+                                        EntityToMate = targetData.entityToMate;
+                                    }
+                                }
+                            }
                         }
                     }
 
