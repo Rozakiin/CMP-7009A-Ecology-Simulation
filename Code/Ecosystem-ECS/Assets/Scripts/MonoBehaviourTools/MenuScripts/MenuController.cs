@@ -34,8 +34,6 @@ namespace SpeedTutorMainMenuSystem
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
         [SerializeField] private float defaultVolume;
-        [SerializeField] private int defaultSen;
-        [SerializeField] private bool defaultInvertY;
 
 
 
@@ -144,18 +142,12 @@ namespace SpeedTutorMainMenuSystem
         #region Slider Linking
         #region Options
         [Header("Menu Sliders")]
-        [SerializeField] private Text controllerSenText;
-        [SerializeField] private Slider controllerSenSlider;
-        public float controlSenFloat = 2f;
-        [Space(10)]
         [SerializeField] private Brightness brightnessEffect;
         [SerializeField] private Slider brightnessSlider;
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
-        [Space(10)]
-        [SerializeField] private Toggle invertYToggle;
         #endregion
         #region Initial Properties
         [Header("Initial Numbers InputFields")]
@@ -563,25 +555,11 @@ namespace SpeedTutorMainMenuSystem
 
         public void ControllerSen()
         {
-            controllerSenText.text = controllerSenSlider.value.ToString("0");
-            controlSenFloat = controllerSenSlider.value;
+
         }
 
         public void GameplayApply()
         {
-            if (invertYToggle.isOn) //Invert Y ON
-            {
-                PlayerPrefs.SetInt("masterInvertY", 1);
-                Debug.Log("Invert" + " " + PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            else if (!invertYToggle.isOn) //Invert Y OFF
-            {
-                PlayerPrefs.SetInt("masterInvertY", 0);
-                Debug.Log(PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            PlayerPrefs.SetFloat("masterSen", controlSenFloat);
             Debug.Log("Sensitivity" + " " + PlayerPrefs.GetFloat("masterSen"));
 
             StartCoroutine(ConfirmationBox());
@@ -1055,11 +1033,6 @@ namespace SpeedTutorMainMenuSystem
                     VolumeApply();
                     break;
                 case "Graphics":
-                    controllerSenText.text = defaultSen.ToString("0");
-                    controllerSenSlider.value = defaultSen;
-                    controlSenFloat = defaultSen;
-
-                    invertYToggle.isOn = false;
                     GameplayApply();
                     break;
                 case "InitialProperties":
