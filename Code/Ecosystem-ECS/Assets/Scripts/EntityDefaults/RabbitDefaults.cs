@@ -42,7 +42,7 @@ namespace EntityDefaults
         public static float thirstIncrease = 1f;
         public static float drinkingSpeed = 2f;
 
-    
+
         //Mate
         public static float mateStartTime = 0f;
         public static float matingDuration = 5f;
@@ -55,7 +55,6 @@ namespace EntityDefaults
 
         //Pregnancy
         public static float pregnancyStartTime = 0f;
-        public static bool pregnant = false;
         public static int babiesBorn = 0;
         public static float birthStartTime = 0f;
         public static int currentLitterSize = 0;
@@ -66,7 +65,7 @@ namespace EntityDefaults
         public static int litterSizeMax = 13;
         public static int litterSizeAve = 7;
 
-    
+
         //Movement
         public static float moveSpeed = 25f;
         public static float rotationSpeed = 10f;
@@ -87,7 +86,7 @@ namespace EntityDefaults
         public static float oldSizeMultiplier = 0.75f;
         public static float ageSizeMultiplier = youngSizeMultiplier;
 
-    
+
         //State
         public static StateData.FlagStates flagState = StateData.FlagStates.Wandering;
         public static StateData.FlagStates previousFlagState = StateData.FlagStates.Wandering;

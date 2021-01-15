@@ -22,29 +22,6 @@ namespace Systems
 
             float deltaTime = Time.DeltaTime;
 
-            #region Female data
-            var rabbitMatingDuration = RabbitDefaults.matingDuration;
-            var rabbitMateStartTime = RabbitDefaults.mateStartTime;
-            var rabbitReproductiveUrge = RabbitDefaults.reproductiveUrge;
-            var rabbitMatingThreshold = RabbitDefaults.matingThreshold;
-            var rabbitEntityToMate = RabbitDefaults.entityToMate;
-
-            var rabbitPregnant = RabbitDefaults.pregnant;
-            var rabbitBirthDuration = RabbitDefaults.birthDuration;
-            var rabbitBabiesBorn = RabbitDefaults.babiesBorn;
-            var rabbitBirthStartTime = RabbitDefaults.birthStartTime;
-            var rabbitCurrentLitterSize = RabbitDefaults.currentLitterSize;
-            var rabbitLitterSizeMin = RabbitDefaults.litterSizeMin;
-            var rabbitLitterSizeMax = RabbitDefaults.litterSizeMax;
-            var rabbitLitterSizeAve = RabbitDefaults.litterSizeAve;
-            var rabbitPregnancyLengthBase = RabbitDefaults.pregnancyLength;
-            var rabbitPregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier;
-            var rabbitPregnancyStartTime = RabbitDefaults.pregnancyStartTime;
-
-            var rabbitReproductiveUrgeIncreaseFemale = RabbitDefaults.reproductiveUrgeIncreaseFemale;
-            var rabbitReproductiveUrgeIncreaseMale = RabbitDefaults.reproductiveUrgeIncreaseMale;
-            #endregion
-
             //for each that edits reproductivedata of the entity
             Entities.ForEach((
                 ref ReproductiveData reproductiveData,
@@ -92,10 +69,10 @@ namespace Systems
                         if (bioStatsData.gender == BioStatsData.Gender.Female)
                         {
                             reproductiveData.pregnancyStartTime = bioStatsData.age;
-                            reproductiveData.pregnant = true;
                             reproductiveData.babiesBorn = 0;
                             reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                         }
+
                         reproductiveData.reproductiveUrge = 0;
                     }
                 }
@@ -127,8 +104,9 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, targetData.entityToMate, mateStateData);
 
                             //GetComponent calls are slow so cache for multiple uses
-                            float mateAge= GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age;
-                            ReproductiveData mateReproductiveData = GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate];
+                            float mateAge = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age;
+                            ReproductiveData mateReproductiveData =
+                                GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate];
 
                             //Set the mates mateStartTime to her age
                             mateReproductiveData.mateStartTime = mateAge;

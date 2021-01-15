@@ -18,15 +18,6 @@ namespace MonoBehaviourTools.MenuScripts
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
 
-        //SENSITIVITY
-        [Space(20)]
-        [SerializeField] private Text controllerText;
-        [SerializeField] private Slider controllerSlider;
-
-        //INVERT Y
-        [Space(20)]
-        [SerializeField] private Toggle invertYToggle;
-
         [Space(20)]
         [SerializeField] private bool canUse = false;
         [SerializeField] private MenuController menuController;
@@ -73,11 +64,6 @@ namespace MonoBehaviourTools.MenuScripts
                 //CONTROLLER SENSITIVITY
                 if (PlayerPrefs.HasKey("masterSen"))
                 {
-                    float localSensitivity = PlayerPrefs.GetFloat("masterSen");
-
-                    controllerText.text = localSensitivity.ToString("0");
-                    controllerSlider.value = localSensitivity;
-                    menuController.controlSenFloat = localSensitivity;
                 }
                 else
                 {
@@ -89,13 +75,11 @@ namespace MonoBehaviourTools.MenuScripts
                 {
                     if (PlayerPrefs.GetInt("masterInvertY") == 1)
                     {
-                        invertYToggle.isOn = true;
 
                     }
 
                     else
                     {
-                        invertYToggle.isOn = false;
                     }
                 }
             }

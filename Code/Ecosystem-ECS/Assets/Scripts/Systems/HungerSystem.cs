@@ -6,7 +6,7 @@ namespace Systems
     public class HungerSystem : SystemBase
     {
         private EndSimulationEntityCommandBufferSystem ecbSystem;
-    
+
         protected override void OnCreate()
         {
             base.OnCreate();
@@ -53,7 +53,9 @@ namespace Systems
                 //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
                 if (HasComponent<EdibleData>(targetData.entityToEat) && stateData.isEating)
                 {
-                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
+                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat]
+                        .NutritionalValue;
+                    if (basicNeedsData.hunger < 0) basicNeedsData.hunger = 0;
                     //set beenEaten to true in entityToEat
                     if (HasComponent<StateData>(targetData.entityToEat))
                     {

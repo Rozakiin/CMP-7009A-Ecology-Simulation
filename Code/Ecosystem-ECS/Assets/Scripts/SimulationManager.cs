@@ -357,10 +357,9 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeFox,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
-
 
         entityManager.SetComponentData(prototypeFox,
             new EdibleData
@@ -368,9 +367,10 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = FoxDefaults.canBeEaten,
                 nutritionalValueBase = FoxDefaults.nutritionalValue,
                 nutritionalValueMultiplier = FoxDefaults.nutritionalValueMultiplier,
-                foodType = FoxDefaults.foodType
+                foodType = FoxDefaults.foodType,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new MovementData
             {
@@ -381,18 +381,20 @@ public class SimulationManager : MonoBehaviour
                 originalMoveMultiplier = FoxDefaults.originalMoveMultiplier,
                 youngMoveMultiplier = FoxDefaults.youngMoveMultiplier,
                 adultMoveMultiplier = FoxDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier
+                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new StateData
             {
                 flagState = FoxDefaults.flagState,
                 previousFlagState = FoxDefaults.previousFlagState,
                 deathReason = FoxDefaults.deathReason,
-                beenEaten = FoxDefaults.beenEaten
+                beenEaten = FoxDefaults.beenEaten,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new TargetData
             {
@@ -402,6 +404,7 @@ public class SimulationManager : MonoBehaviour
 
                 sightRadius = FoxDefaults.sightRadius,
                 touchRadius = FoxDefaults.touchRadius,
+                mateRadius = FoxDefaults.mateRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
                 entityToEat = FoxDefaults.entityToEat,
@@ -410,15 +413,17 @@ public class SimulationManager : MonoBehaviour
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
                 shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new PathFollowData
             {
-                pathIndex = -1
+                pathIndex = -1,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new BasicNeedsData
             {
@@ -438,12 +443,11 @@ public class SimulationManager : MonoBehaviour
                 thirstMax = FoxDefaults.thirstMax,
                 thirstIncrease = FoxDefaults.thirstIncrease,
                 drinkingSpeed = FoxDefaults.drinkingSpeed,
-
             }
         );
 
         //randomise gender of fox - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
         //set gender differing components
 
         entityManager.SetComponentData(prototypeFox,
@@ -455,9 +459,10 @@ public class SimulationManager : MonoBehaviour
                 ageGroup = FoxDefaults.ageGroup,
                 adultEntryTimer = FoxDefaults.adultEntryTimer,
                 oldEntryTimer = FoxDefaults.oldEntryTimer,
-                gender = randGender
+                gender = randGender,
             }
         );
+
         //set reproductive data differing on gender
         entityManager.SetComponentData(prototypeFox,
                 new ReproductiveData
@@ -469,8 +474,6 @@ public class SimulationManager : MonoBehaviour
                     defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
                     matingThreshold = FoxDefaults.matingThreshold,
 
-
-                    pregnant = FoxDefaults.pregnant,
                     birthDuration = FoxDefaults.birthDuration,
                     babiesBorn = FoxDefaults.babiesBorn,
                     birthStartTime = FoxDefaults.birthStartTime,
@@ -480,7 +483,7 @@ public class SimulationManager : MonoBehaviour
                     litterSizeAve = FoxDefaults.litterSizeAve,
                     pregnancyLengthBase = FoxDefaults.pregnancyLength,
                     pregnancyLengthModifier = FoxDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = FoxDefaults.pregnancyStartTime
+                    pregnancyStartTime = FoxDefaults.pregnancyStartTime,
                 }
             );
 
@@ -493,14 +496,14 @@ public class SimulationManager : MonoBehaviour
                 ageSizeMultiplier = FoxDefaults.ageSizeMultiplier,
                 youngSizeMultiplier = FoxDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = FoxDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
+                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier,
             }
         );
         // set ColliderTypeData to Fox entity
         entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
-                colliderType = FoxDefaults.colliderType
+                colliderType = FoxDefaults.colliderType,
             }
         );
 
@@ -520,7 +523,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeGrass,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
 
@@ -530,7 +533,7 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = GrassDefaults.canBeEaten,
                 nutritionalValueBase = GrassDefaults.nutritionalValue,
                 nutritionalValueMultiplier = GrassDefaults.nutritionalValueMultiplier,
-                foodType = GrassDefaults.foodType
+                foodType = GrassDefaults.foodType,
             }
         );
 
@@ -540,7 +543,7 @@ public class SimulationManager : MonoBehaviour
                 flagState = GrassDefaults.flagState,
                 previousFlagState = GrassDefaults.previousFlagState,
                 deathReason = GrassDefaults.deathReason,
-                beenEaten = GrassDefaults.beenEaten
+                beenEaten = GrassDefaults.beenEaten,
             }
         );
 
@@ -550,7 +553,7 @@ public class SimulationManager : MonoBehaviour
             {
                 size = GrassDefaults.scale,
                 sizeMultiplier = GrassDefaults.sizeMultiplier,
-                ageSizeMultiplier = 1f
+                ageSizeMultiplier = 1f,
             }
         );
 
@@ -558,7 +561,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
-                colliderType = GrassDefaults.GrassColliderType
+                colliderType = GrassDefaults.GrassColliderType,
             }
         );
 
@@ -580,7 +583,7 @@ public class SimulationManager : MonoBehaviour
         entityManager.SetComponentData(prototypeRabbit,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
 
@@ -591,9 +594,10 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = RabbitDefaults.canBeEaten,
                 nutritionalValueBase = RabbitDefaults.nutritionalValue,
                 nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier,
-                foodType = RabbitDefaults.foodType
+                foodType = RabbitDefaults.foodType,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new MovementData
             {
@@ -604,9 +608,10 @@ public class SimulationManager : MonoBehaviour
                 originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
                 youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
                 adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier
+                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new StateData
             {
@@ -616,6 +621,7 @@ public class SimulationManager : MonoBehaviour
                 beenEaten = RabbitDefaults.beenEaten,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new TargetData
             {
@@ -634,15 +640,17 @@ public class SimulationManager : MonoBehaviour
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
                 shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new PathFollowData
             {
-                pathIndex = -1
+                pathIndex = -1,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new BasicNeedsData
             {
@@ -667,7 +675,7 @@ public class SimulationManager : MonoBehaviour
         );
 
         //randomise gender of rabbit - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
         //set gender differing components
 
         entityManager.SetComponentData(prototypeRabbit,
@@ -679,9 +687,10 @@ public class SimulationManager : MonoBehaviour
                 ageGroup = RabbitDefaults.ageGroup,
                 adultEntryTimer = RabbitDefaults.adultEntryTimer,
                 oldEntryTimer = RabbitDefaults.oldEntryTimer,
-                gender = randGender
+                gender = randGender,
             }
         );
+
         //set reproductive data differing on gender
         entityManager.SetComponentData(prototypeRabbit,
                 new ReproductiveData
@@ -694,7 +703,6 @@ public class SimulationManager : MonoBehaviour
                     matingThreshold = RabbitDefaults.matingThreshold,
 
 
-                    pregnant = RabbitDefaults.pregnant,
                     birthDuration = RabbitDefaults.birthDuration,
                     babiesBorn = RabbitDefaults.babiesBorn,
                     birthStartTime = RabbitDefaults.birthStartTime,
@@ -704,7 +712,7 @@ public class SimulationManager : MonoBehaviour
                     litterSizeAve = RabbitDefaults.litterSizeAve,
                     pregnancyLengthBase = RabbitDefaults.pregnancyLength,
                     pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime
+                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime,
                 }
             );
 
@@ -717,14 +725,15 @@ public class SimulationManager : MonoBehaviour
                 ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
                 youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
+                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier,
             }
         );
+
         // set ColliderTypeData to Rabbit entity
         entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
-                colliderType = RabbitDefaults.colliderType
+                colliderType = RabbitDefaults.colliderType,
             }
         );
 

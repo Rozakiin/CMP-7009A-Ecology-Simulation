@@ -36,8 +36,6 @@ namespace MonoBehaviourTools.MenuScripts
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
         [SerializeField] private float defaultVolume;
-        [SerializeField] private int defaultSen;
-        [SerializeField] private bool defaultInvertY;
 
 
 
@@ -146,18 +144,12 @@ namespace MonoBehaviourTools.MenuScripts
         #region Slider Linking
         #region Options
         [Header("Menu Sliders")]
-        [SerializeField] private Text controllerSenText;
-        [SerializeField] private Slider controllerSenSlider;
-        public float controlSenFloat = 2f;
-        [Space(10)]
         [SerializeField] private Brightness brightnessEffect;
         [SerializeField] private Slider brightnessSlider;
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
-        [Space(10)]
-        [SerializeField] private Toggle invertYToggle;
         #endregion
         #region Initial Properties
         [Header("Initial Numbers InputFields")]
@@ -565,25 +557,11 @@ namespace MonoBehaviourTools.MenuScripts
 
         public void ControllerSen()
         {
-            controllerSenText.text = controllerSenSlider.value.ToString("0");
-            controlSenFloat = controllerSenSlider.value;
+
         }
 
         public void GameplayApply()
         {
-            if (invertYToggle.isOn) //Invert Y ON
-            {
-                PlayerPrefs.SetInt("masterInvertY", 1);
-                Debug.Log("Invert" + " " + PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            else if (!invertYToggle.isOn) //Invert Y OFF
-            {
-                PlayerPrefs.SetInt("masterInvertY", 0);
-                Debug.Log(PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            PlayerPrefs.SetFloat("masterSen", controlSenFloat);
             Debug.Log("Sensitivity" + " " + PlayerPrefs.GetFloat("masterSen"));
 
             StartCoroutine(ConfirmationBox());
@@ -1057,11 +1035,6 @@ namespace MonoBehaviourTools.MenuScripts
                     VolumeApply();
                     break;
                 case "Graphics":
-                    controllerSenText.text = defaultSen.ToString("0");
-                    controllerSenSlider.value = defaultSen;
-                    controlSenFloat = defaultSen;
-
-                    invertYToggle.isOn = false;
                     GameplayApply();
                     break;
                 case "InitialProperties":
@@ -1333,7 +1306,6 @@ namespace MonoBehaviourTools.MenuScripts
                 XmlNodeList reproductiveUrgeIncreaseFemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
                 XmlNodeList matingThreshold = xmlDocument.GetElementsByTagName("matingThreshold");
                 XmlNodeList pregnancyStartTime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
-                XmlNodeList pregnant = xmlDocument.GetElementsByTagName("pregnant");
                 XmlNodeList babiesBorn = xmlDocument.GetElementsByTagName("babiesBorn");
                 XmlNodeList birthStartTime = xmlDocument.GetElementsByTagName("birthStartTime");
                 XmlNodeList currentLitterSize = xmlDocument.GetElementsByTagName("currentLitterSize");
@@ -1408,7 +1380,6 @@ namespace MonoBehaviourTools.MenuScripts
                 RabbitDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[0].InnerText);
                 RabbitDefaults.matingThreshold = float.Parse(matingThreshold[0].InnerText);
                 RabbitDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[0].InnerText);
-                RabbitDefaults.pregnant = bool.Parse(pregnant[0].InnerText);
                 RabbitDefaults.babiesBorn = int.Parse(babiesBorn[0].InnerText);
                 RabbitDefaults.birthStartTime = float.Parse(birthStartTime[0].InnerText);
                 RabbitDefaults.currentLitterSize = int.Parse(currentLitterSize[0].InnerText);
@@ -1481,7 +1452,6 @@ namespace MonoBehaviourTools.MenuScripts
                 FoxDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[1].InnerText);
                 FoxDefaults.matingThreshold = float.Parse(matingThreshold[1].InnerText);
                 FoxDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[1].InnerText);
-                FoxDefaults.pregnant = bool.Parse(pregnant[1].InnerText);
                 FoxDefaults.babiesBorn = int.Parse(babiesBorn[1].InnerText);
                 FoxDefaults.birthStartTime = float.Parse(birthStartTime[1].InnerText);
                 FoxDefaults.currentLitterSize = int.Parse(currentLitterSize[1].InnerText);
