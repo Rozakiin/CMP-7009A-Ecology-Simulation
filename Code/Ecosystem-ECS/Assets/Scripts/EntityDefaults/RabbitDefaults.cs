@@ -52,7 +52,6 @@ public static class RabbitDefaults
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
-    public static bool pregnant = false;
     public static int babiesBorn = 0;
     public static float birthStartTime = 0f;
     public static int currentLitterSize = 0;

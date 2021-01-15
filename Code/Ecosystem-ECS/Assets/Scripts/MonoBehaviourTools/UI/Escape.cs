@@ -223,7 +223,6 @@ public class Escape : MonoBehaviour
         XmlElement rPregnancydata = xmlDocument.CreateElement("pregnancyData");
 
         XmlElement rPregnancystarttime = xmlDocument.CreateElement("pregnancyStartTime");
-        XmlElement rPregnant = xmlDocument.CreateElement("pregnant");
         XmlElement rBabiesborn = xmlDocument.CreateElement("babiesBorn");
         XmlElement rBirthstarttime = xmlDocument.CreateElement("birthStartTime");
         XmlElement rCurrentlittersize = xmlDocument.CreateElement("currentLitterSize");
@@ -236,7 +235,6 @@ public class Escape : MonoBehaviour
 
 
         rPregnancystarttime.InnerText = RabbitDefaults.pregnancyStartTime.ToString();
-        rPregnant.InnerText = RabbitDefaults.pregnant.ToString();
         rBabiesborn.InnerText = RabbitDefaults.babiesBorn.ToString();
         rBirthstarttime.InnerText = RabbitDefaults.birthStartTime.ToString();
         rCurrentlittersize.InnerText = RabbitDefaults.currentLitterSize.ToString();
@@ -249,7 +247,6 @@ public class Escape : MonoBehaviour
 
 
         rPregnancydata.AppendChild(rPregnancystarttime);
-        rPregnancydata.AppendChild(rPregnant);
         rPregnancydata.AppendChild(rBabiesborn);
         rPregnancydata.AppendChild(rBirthstarttime);
         rPregnancydata.AppendChild(rCurrentlittersize);
@@ -578,7 +575,6 @@ public class Escape : MonoBehaviour
         XmlElement fPregnancydata = xmlDocument.CreateElement("pregnancyData");
 
         XmlElement fPregnancystarttime = xmlDocument.CreateElement("pregnancyStartTime");
-        XmlElement fPregnant = xmlDocument.CreateElement("pregnant");
         XmlElement fBabiesborn = xmlDocument.CreateElement("babiesBorn");
         XmlElement fBirthstarttime = xmlDocument.CreateElement("birthStartTime");
         XmlElement fCurrentlittersize = xmlDocument.CreateElement("currentLitterSize");
@@ -591,7 +587,6 @@ public class Escape : MonoBehaviour
 
 
         fPregnancystarttime.InnerText = FoxDefaults.pregnancyStartTime.ToString();
-        fPregnant.InnerText = FoxDefaults.pregnant.ToString();
         fBabiesborn.InnerText = FoxDefaults.babiesBorn.ToString();
         fBirthstarttime.InnerText = FoxDefaults.birthStartTime.ToString();
         fCurrentlittersize.InnerText = FoxDefaults.currentLitterSize.ToString();
@@ -604,7 +599,6 @@ public class Escape : MonoBehaviour
 
 
         fPregnancydata.AppendChild(fPregnancystarttime);
-        fPregnancydata.AppendChild(fPregnant);
         fPregnancydata.AppendChild(fBabiesborn);
         fPregnancydata.AppendChild(fBirthstarttime);
         fPregnancydata.AppendChild(fCurrentlittersize);

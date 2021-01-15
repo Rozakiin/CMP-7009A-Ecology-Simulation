@@ -1304,7 +1304,6 @@ namespace SpeedTutorMainMenuSystem
                 XmlNodeList reproductiveUrgeIncreaseFemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
                 XmlNodeList matingThreshold = xmlDocument.GetElementsByTagName("matingThreshold");
                 XmlNodeList pregnancyStartTime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
-                XmlNodeList pregnant = xmlDocument.GetElementsByTagName("pregnant");
                 XmlNodeList babiesBorn = xmlDocument.GetElementsByTagName("babiesBorn");
                 XmlNodeList birthStartTime = xmlDocument.GetElementsByTagName("birthStartTime");
                 XmlNodeList currentLitterSize = xmlDocument.GetElementsByTagName("currentLitterSize");
@@ -1379,7 +1378,6 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[0].InnerText);
                 RabbitDefaults.matingThreshold = float.Parse(matingThreshold[0].InnerText);
                 RabbitDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[0].InnerText);
-                RabbitDefaults.pregnant = bool.Parse(pregnant[0].InnerText);
                 RabbitDefaults.babiesBorn = int.Parse(babiesBorn[0].InnerText);
                 RabbitDefaults.birthStartTime = float.Parse(birthStartTime[0].InnerText);
                 RabbitDefaults.currentLitterSize = int.Parse(currentLitterSize[0].InnerText);
@@ -1452,7 +1450,6 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[1].InnerText);
                 FoxDefaults.matingThreshold = float.Parse(matingThreshold[1].InnerText);
                 FoxDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[1].InnerText);
-                FoxDefaults.pregnant = bool.Parse(pregnant[1].InnerText);
                 FoxDefaults.babiesBorn = int.Parse(babiesBorn[1].InnerText);
                 FoxDefaults.birthStartTime = float.Parse(birthStartTime[1].InnerText);
                 FoxDefaults.currentLitterSize = int.Parse(currentLitterSize[1].InnerText);
