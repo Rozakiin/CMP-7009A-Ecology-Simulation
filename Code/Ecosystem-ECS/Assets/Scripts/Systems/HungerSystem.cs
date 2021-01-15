@@ -53,6 +53,7 @@ public class HungerSystem : SystemBase
             if (HasComponent<EdibleData>(targetData.entityToEat) && stateData.isEating)
             {
                 basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat].NutritionalValue;
+                if (basicNeedsData.hunger < 0) basicNeedsData.hunger = 0;
                 //set beenEaten to true in entityToEat
                 if (HasComponent<StateData>(targetData.entityToEat))
                 {
