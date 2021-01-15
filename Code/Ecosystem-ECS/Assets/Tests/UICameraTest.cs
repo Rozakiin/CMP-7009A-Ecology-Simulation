@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Tests
 {
-    public class CameraTest
+    public class UICameraTest
     {
-        private CameraFunction cameraFunction;
+        private UICameraFunction cameraFunction;
         private readonly Vector2 mapSize = new Vector2(100, 120); 
         
         [SetUp]
         public void Setup()
         {
-            cameraFunction = new CameraFunction(mapSize);
+            cameraFunction = new UICameraFunction(mapSize);
         }
         
         [Test]

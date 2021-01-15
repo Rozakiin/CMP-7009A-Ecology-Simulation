@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace MonoBehaviourTools.UI
 {
-    public class CameraFunction
+    public class UICameraFunction
     {
         private Vector2 camXLimit;
-        private Vector2 camYLimit;
+        private readonly Vector2 camYLimit;
         private Vector2 camZLimit;
         private Vector3 pos;
         private Vector2 mapSize;
@@ -22,7 +22,7 @@ namespace MonoBehaviourTools.UI
         private readonly float zInitial;
         private float lastPosY;
 
-        public CameraFunction(Vector2 mapSize)
+        public UICameraFunction(Vector2 mapSize)
         {
             var maxMapSize = Mathf.Max(mapSize.x, mapSize.y);
             xMax = mapSize.x * 5;
@@ -36,14 +36,14 @@ namespace MonoBehaviourTools.UI
             camXLimit = new Vector2(0f, 0f);
             camZLimit = new Vector2(zInitial, zInitial);
         }
-        public Vector3 CheckCameraBorder(Vector3 pos, float lastPosY)
+        public Vector3 CheckCameraBorder(Vector3 cameraPosition, float cameraLastPositionY)
         {
-            pos.y = Mathf.Clamp(pos.y, camYLimit.x, camYLimit.y);
+            cameraPosition.y = Mathf.Clamp(cameraPosition.y, camYLimit.x, camYLimit.y);
 
             //camSpeed and X,Z limit will increase as camera zoom in
-            if (Math.Abs(pos.y - lastPosY) >= 5f)
+            if (Math.Abs(cameraPosition.y - cameraLastPositionY) >= 5f)
             {
-                float rate = (yMax - pos.y) / (yMax - yMin);
+                float rate = (yMax - cameraPosition.y) / (yMax - yMin);
                 float zLimitMax = (zMax - zInitial) * rate + zInitial;
                 float zLimitMin = zInitial - (zMax + zInitial) * rate;
                 float xLimit = xMax * rate;
@@ -52,9 +52,9 @@ namespace MonoBehaviourTools.UI
                 camSpeed = camSpeedMax * rate;
             }
 
-            pos.x = Mathf.Clamp(pos.x, camXLimit.x, camXLimit.y);
-            pos.z = Mathf.Clamp(pos.z, camZLimit.x, camZLimit.y);
-            return pos;
+            cameraPosition.x = Mathf.Clamp(cameraPosition.x, camXLimit.x, camXLimit.y);
+            cameraPosition.z = Mathf.Clamp(cameraPosition.z, camZLimit.x, camZLimit.y);
+            return cameraPosition;
         }
 
         public Vector3 GetInitialPosition()

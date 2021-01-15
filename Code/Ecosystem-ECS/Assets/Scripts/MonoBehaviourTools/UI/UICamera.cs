@@ -5,12 +5,12 @@ namespace MonoBehaviourTools.UI
     public class UICamera : MonoBehaviour
     {
         [SerializeField] private SimulationManager simulationManager;
-        private CameraFunction cameraFunction;
+        private UICameraFunction cameraFunction;
     
         private void Start()
         {
             Vector2 mapSize = SimulationManager.MapSize();
-            cameraFunction = new CameraFunction(mapSize);
+            cameraFunction = new UICameraFunction(mapSize);
             transform.position = cameraFunction.GetInitialPosition();
         }
         private void Update()
