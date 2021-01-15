@@ -13,11 +13,11 @@ namespace EntityDefaults
         public static EdibleData.FoodType foodType = EdibleData.FoodType.Plant;
 
 
-        //Size
-        public static float sizeMultiplier = 1f;
-        public static float scale = 1f;
-
-
+    //Size
+    public static float sizeMultiplier = 1f;
+    public static float scale = 5f;
+    
+    
         //State
         public static StateData.FlagStates flagState = StateData.FlagStates.None;
         public static StateData.FlagStates previousFlagState = StateData.FlagStates.None;

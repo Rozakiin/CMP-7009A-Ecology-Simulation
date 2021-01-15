@@ -549,9 +549,11 @@ public class SimulationManager : MonoBehaviour
             new SizeData
             {
                 size = GrassDefaults.scale,
-                sizeMultiplier = GrassDefaults.sizeMultiplier
+                sizeMultiplier = GrassDefaults.sizeMultiplier,
+                ageSizeMultiplier = 1f
             }
         );
+
         // set ColliderTypeData to Grass entity
         entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData

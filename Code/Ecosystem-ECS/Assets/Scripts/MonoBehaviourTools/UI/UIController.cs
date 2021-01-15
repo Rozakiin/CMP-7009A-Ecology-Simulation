@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using Systems;
 using EntityDefaults;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace MonoBehaviourTools.UI
     public class UIController : MonoBehaviour
     {
         #region UI Canvas'
+
         [SerializeField] private GameObject uiSliderCanvas;
         [SerializeField] private GameObject uiTimeCanvas;
         [SerializeField] private GameObject uiTurnCanvas;
@@ -17,12 +19,16 @@ namespace MonoBehaviourTools.UI
         #endregion
 
         #region Initial Properties Linking
-        [Header("Initial Properties")]
-        [SerializeField] private Dropdown dropdownPropertyDropdown;
+
+        [Header("Initial Properties")] [SerializeField]
+        private Dropdown dropdownPropertyDropdown;
+
         [SerializeField] private InputField dropdownInputField;
+
         #endregion
 
         #region Initialisation
+
         void Awake()
         {
             SetDropDownPropertyValues();
@@ -35,6 +41,7 @@ namespace MonoBehaviourTools.UI
             propertyOptions.Add("None");
             propertyOptions.Add("RabbitAgeMax");
             propertyOptions.Add("RabbitNutritionalValue");
+            propertyOptions.Add("RabbitCanBeEaten");
             propertyOptions.Add("RabbitHungerMax");
             propertyOptions.Add("RabbitHungerThreshold");
             propertyOptions.Add("RabbitHungerIncreaseBase");
@@ -65,6 +72,7 @@ namespace MonoBehaviourTools.UI
 
             propertyOptions.Add("FoxAgeMax");
             propertyOptions.Add("FoxNutritionalValue");
+            propertyOptions.Add("FoxCanBeEaten");
             propertyOptions.Add("FoxHungerMax");
             propertyOptions.Add("FoxHungerThreshold");
             propertyOptions.Add("FoxHungerIncreaseBase");
@@ -94,6 +102,7 @@ namespace MonoBehaviourTools.UI
 
 
             propertyOptions.Add("GrassNutritionalValue");
+            propertyOptions.Add("GrassCanBeEaten");
             propertyOptions.Add("GrassSize");
 
             dropdownPropertyDropdown.ClearOptions();
@@ -107,6 +116,7 @@ namespace MonoBehaviourTools.UI
             uiTurnCanvas.SetActive(true);
             uiGraphCanvas.SetActive(true);
         }
+
         #endregion
 
         public void OnSelectDropdown()
@@ -124,8 +134,7 @@ namespace MonoBehaviourTools.UI
                     dropdownInputField.text = RabbitDefaults.nutritionalValue.ToString();
                     break;
                 case "RabbitCanBeEaten":
-                    //rabbitCanBeEaten;
-                    //RabbitDefaults.canBeEaten = foxCan
+                    dropdownInputField.text = Convert.ToInt32(RabbitDefaults.canBeEaten).ToString();
                     break;
                 case "RabbitHungerMax":
                     dropdownInputField.text = RabbitDefaults.hungerMax.ToString();
@@ -221,8 +230,7 @@ namespace MonoBehaviourTools.UI
                     dropdownInputField.text = FoxDefaults.nutritionalValue.ToString();
                     break;
                 case "FoxCanBeEaten":
-                    //foxCanBeEaten;
-                    //FoxDefaults.canBeEaten = foxCan
+                    dropdownInputField.text = Convert.ToInt32(FoxDefaults.canBeEaten).ToString();
                     break;
                 case "FoxHungerMax":
                     dropdownInputField.text = FoxDefaults.hungerMax.ToString();
@@ -315,8 +323,7 @@ namespace MonoBehaviourTools.UI
                     dropdownInputField.text = GrassDefaults.nutritionalValue.ToString();
                     break;
                 case "GrassCanBeEaten":
-                    //grassCanBeEaten;
-                    //GrassDefaults.canBeEaten = grassCa
+                    dropdownInputField.text = Convert.ToInt32(GrassDefaults.canBeEaten).ToString();
                     break;
                 case "GrassSize":
                     dropdownInputField.text = GrassDefaults.scale.ToString();
@@ -330,7 +337,7 @@ namespace MonoBehaviourTools.UI
         public void DropdownPropertiesUpdate()
         {
             string selectedOption = dropdownPropertyDropdown.options[dropdownPropertyDropdown.value].text;
-            Debug.Log($"{selectedOption}: {float.Parse(dropdownInputField.text)}");
+            //Debug.Log($"{selectedOption}: {float.Parse(dropdownInputField.text)}");
             switch (selectedOption)
             {
                 case "None":
@@ -342,8 +349,10 @@ namespace MonoBehaviourTools.UI
                     RabbitDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
                     break;
                 case "RabbitCanBeEaten":
-                    //rabbitCanBeEaten;
-                    //RabbitDefaults.canBeEaten = rabbitCanBeEaten.value;
+                    if (int.Parse(dropdownInputField.text) == 0)
+                        RabbitDefaults.canBeEaten = false;
+                    else
+                        RabbitDefaults.canBeEaten = true;
                     break;
                 case "RabbitHungerMax":
                     RabbitDefaults.hungerMax = float.Parse(dropdownInputField.text);
@@ -439,8 +448,10 @@ namespace MonoBehaviourTools.UI
                     FoxDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
                     break;
                 case "FoxCanBeEaten":
-                    //foxCanBeEaten;
-                    //FoxDefaults.canBeEaten = foxCanBeEaten.value;
+                    if (int.Parse(dropdownInputField.text) == 0)
+                        FoxDefaults.canBeEaten = false;
+                    else
+                        FoxDefaults.canBeEaten = true;
                     break;
                 case "FoxHungerMax":
                     FoxDefaults.hungerMax = float.Parse(dropdownInputField.text);
@@ -533,8 +544,10 @@ namespace MonoBehaviourTools.UI
                     GrassDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
                     break;
                 case "GrassCanBeEaten":
-                    //grassCanBeEaten;
-                    //GrassDefaults.canBeEaten = grassCanBeEaten.value;
+                    if (int.Parse(dropdownInputField.text) == 0)
+                        GrassDefaults.canBeEaten = false;
+                    else
+                        GrassDefaults.canBeEaten = true;
                     break;
                 case "GrassSize":
                     GrassDefaults.scale = float.Parse(dropdownInputField.text);
@@ -543,6 +556,7 @@ namespace MonoBehaviourTools.UI
                     Debug.LogWarning("Attempted to update unknown property in switch: " + selectedOption, this);
                     break;
             }
+
             UIUpdateSystem.Instance.somethingChangedFlag = true;
         }
     }
