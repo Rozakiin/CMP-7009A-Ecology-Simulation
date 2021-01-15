@@ -88,7 +88,7 @@ namespace Systems
                             if (distanceToEntity < shortestToEdibleDistance)
                             {
                                 shortestToEdibleDistance = distanceToEntity;
-                                EntityToEat = childEntity;
+                                entityToEat = childEntity;
                             }
                         }
                     }
@@ -102,7 +102,7 @@ namespace Systems
                             if (distanceToEntity < shortestToWaterDistance)
                             {
                                 shortestToWaterDistance = distanceToEntity;
-                                EntityToDrink = childEntity;
+                                entityToDrink = childEntity;
                             }
                         }
                     }
@@ -117,7 +117,7 @@ namespace Systems
                             (childStateData.isMating == false))
                         {
                             shortestToMateDistance = distanceToEntity;
-                            EntityToMate = childEntity;
+                            entityToMate = childEntity;
                         }
                     }
 
@@ -132,7 +132,7 @@ namespace Systems
                             if (distanceToEntity < shortestToPredatorDistance)
                             {
                                 shortestToPredatorDistance = distanceToEntity;
-                                EntityToPredator = childEntity;
+                                entityToPredator = childEntity;
                             }
                         }
                     }

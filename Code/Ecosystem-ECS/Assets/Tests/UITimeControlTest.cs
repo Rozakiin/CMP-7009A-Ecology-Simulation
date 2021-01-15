@@ -60,33 +60,16 @@ namespace Tests
         }
         
         [Test]
-        public void UpdatefastForwardSpeedTest()
+        public void UpdateFastForwardSpeedTest()
         {
-            uITimeControl.fastForwardSpeed = 2f;
-            uITimeControl.Pause();
-            uITimeControl.UpdatefastForwardSpeed();
-            Assert.AreEqual(2f,Time.timeScale);
-            
-            uITimeControl.Play();
-            uITimeControl.UpdatefastForwardSpeed();
-            Assert.AreEqual(0f,Time.timeScale);
-            
             uITimeControl.fastForwardSpeed = 1000f;
             uITimeControl.Play();
-            uITimeControl.UpdatefastForwardSpeed();
+            uITimeControl.UpdateFastForwardSpeed();
             Assert.AreEqual(100f,Time.timeScale);
             
             uITimeControl.fastForwardSpeed = -10f;
-            uITimeControl.UpdatefastForwardSpeed();
+            uITimeControl.UpdateFastForwardSpeed();
             Assert.AreEqual(0f,Time.timeScale);
         }
-
-        // [TearDown]
-        // public void TearDown()
-        // {
-        //     Object.Destroy(uITimeControl.gameObject);
-        // }
-        
-
     }
 }

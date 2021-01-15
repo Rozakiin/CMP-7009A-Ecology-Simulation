@@ -27,11 +27,11 @@ namespace MonoBehaviourTools.UI
 
         private void Update()
         {
-            UpdatefastForwardSpeed();
+            UpdateFastForwardSpeed();
             speedDisplay.text = string.Format("speed {0}:", fastForwardSpeed.ToString());
         }
 
-        public void UpdatefastForwardSpeed()
+        public void UpdateFastForwardSpeed()
         {
             if (fastForwardSpeed < 0.2f) 
             {
@@ -82,10 +82,6 @@ namespace MonoBehaviourTools.UI
         {
             return pause;
         }
-    
-        public float GetfastForwardSpeed()
-        {
-            return fastForwardSpeed;
-        }
+        
     }
 }

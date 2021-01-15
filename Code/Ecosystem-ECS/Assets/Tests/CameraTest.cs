@@ -40,11 +40,5 @@ namespace Tests
             Assert.Less(pos6.z,mapSize.y*5);
             Assert.Less(camSpeed2, camSpeed);
         }
-        
-        [TearDown]
-        public void TearDown()
-        {
-        }
-
     }
 }
