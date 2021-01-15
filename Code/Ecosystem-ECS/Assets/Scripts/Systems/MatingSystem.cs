@@ -1,4 +1,4 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
@@ -90,7 +90,6 @@ public class MatingSystem : SystemBase
                     if (bioStatsData.gender == BioStatsData.Gender.Female)
                     {
                         reproductiveData.pregnancyStartTime = bioStatsData.age;
-                        reproductiveData.pregnant = true;
                         reproductiveData.babiesBorn = 0;
                         reproductiveData.currentLitterSize = reproductiveData.LitterSize;
                     }

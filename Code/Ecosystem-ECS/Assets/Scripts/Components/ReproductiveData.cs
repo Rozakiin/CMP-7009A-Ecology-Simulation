@@ -15,7 +15,6 @@ public struct ReproductiveData : IComponentData
     public float matingThreshold;
 
     //Pregnancy
-    public bool pregnant;
     public float birthDuration;   //How long between babies being born
     public float birthStartTime;
     public int babiesBorn;      //How many she has given birth to

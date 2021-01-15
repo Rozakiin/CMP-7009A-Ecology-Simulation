@@ -1,4 +1,4 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using Unity.Collections;
@@ -91,7 +91,6 @@ public class GivingBirthSystem : SystemBase
         var rabbitMatingThreshold = RabbitDefaults.matingThreshold;
         var rabbitEntityToMate = RabbitDefaults.entityToMate;
 
-        var rabbitPregnant = RabbitDefaults.pregnant;
         var rabbitBirthDuration = RabbitDefaults.birthDuration;
         var rabbitBabiesBorn = RabbitDefaults.babiesBorn;
         var rabbitBirthStartTime = RabbitDefaults.birthStartTime;
@@ -257,12 +256,6 @@ public class GivingBirthSystem : SystemBase
 
                     reproductiveData.birthStartTime = bioStatsData.age;
                     reproductiveData.babiesBorn++;
-                }
-
-                if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
-                {
-                    //reproductiveData.babiesBorn = 0;
-                    reproductiveData.pregnant = false;
                 }
             }
         }).ScheduleParallel();

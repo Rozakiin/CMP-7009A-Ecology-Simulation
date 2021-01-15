@@ -51,7 +51,6 @@ public static class FoxDefaults
 
     //Pregnancy
     public static float pregnancyStartTime = 0f;
-    public static bool pregnant = false;
     public static int babiesBorn = 0;
     public static float birthStartTime = 0f;
     public static int currentLitterSize = 0;
@@ -94,7 +93,7 @@ public static class FoxDefaults
     //Target
     public static float touchRadius = 1f;
     public static float sightRadius = 50f;
-
+    public static float mateRadius = 5f;
 
     //lookingEntityData
     public static Entity predatorEntity = Entity.Null;
