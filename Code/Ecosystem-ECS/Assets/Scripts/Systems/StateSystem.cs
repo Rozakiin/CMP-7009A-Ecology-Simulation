@@ -1,4 +1,4 @@
-﻿using Unity.Entities;
+using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -133,6 +133,16 @@ public class StateSystem : SystemBase
                             stateData.flagState |= StateData.FlagStates.Mating;//enable mating
                         }
                     }
+                    if (bioStatsData.gender == BioStatsData.Gender.Male)
+                    {
+                        //reproductive urge saited, disable sexually active and mating, enable wandering
+                        if (reproductiveData.reproductiveUrge <= 0)
+                        {
+                            stateData.previousFlagState = stateData.flagState;
+                            stateData.flagState |= StateData.FlagStates.Wandering;
+                            stateData.flagState &= ~StateData.FlagStates.SexuallyActive;
+                        }
+                    }
                 }
 
 
@@ -193,18 +203,6 @@ public class StateSystem : SystemBase
                         stateData.flagState |= StateData.FlagStates.Wandering;
                         stateData.flagState &= ~StateData.FlagStates.Mating; //disable mating state
                     }
-
-                    if (bioStatsData.gender == BioStatsData.Gender.Male)
-                    {
-                        //reproductive urge saited, disable sexually active and mating, enable wandering
-                        if (reproductiveData.reproductiveUrge <= 0)
-                        {
-                            stateData.previousFlagState = stateData.flagState;
-                            stateData.flagState |= StateData.FlagStates.Wandering;
-                            stateData.flagState &= ~StateData.FlagStates.SexuallyActive;
-                            stateData.flagState &= ~StateData.FlagStates.Mating;
-                        }
-                    }
                 }
 
                 //The rabbit can still give birth when fleeing - bad luck I guess
@@ -217,7 +215,6 @@ public class StateSystem : SystemBase
                         stateData.flagState &= ~StateData.FlagStates.Pregnant;
                         stateData.flagState |= StateData.FlagStates.GivingBirth;
                     }
-
                 }
 
                 stateData.isGivingBirth = ((stateData.flagState & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth);
@@ -226,13 +223,8 @@ public class StateSystem : SystemBase
                     if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
                     {
                         stateData.previousFlagState = stateData.flagState;
-                        stateData.flagState &= ~StateData.FlagStates.GivingBirth;
-                    }
-
-                    if (reproductiveData.babiesBorn >= reproductiveData.currentLitterSize)
-                    {
-                        stateData.previousFlagState = stateData.flagState;
                         stateData.flagState &= ~StateData.FlagStates.Pregnant;
+                        stateData.flagState &= ~StateData.FlagStates.GivingBirth;
                     }
                 }
             }
