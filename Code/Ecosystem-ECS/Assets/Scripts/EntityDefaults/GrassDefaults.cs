@@ -1,25 +1,31 @@
 ﻿/* Use this class to define all the default values for components related to Grass Entities */
-public static class GrassDefaults
+
+using Components;
+
+namespace EntityDefaults
 {
-    //Edible
-    public static float nutritionalValue = 10f;
-    public static bool canBeEaten = true;
-    public static float nutritionalValueMultiplier = 1f;
-    public static EdibleData.FoodType foodType = EdibleData.FoodType.Plant;
+    public static class GrassDefaults
+    {
+        //Edible
+        public static float nutritionalValue = 10f;
+        public static bool canBeEaten = true;
+        public static float nutritionalValueMultiplier = 1f;
+        public static EdibleData.FoodType foodType = EdibleData.FoodType.Plant;
 
 
-    //Size
-    public static float sizeMultiplier = 1f;
-    public static float scale = 1f;
+        //Size
+        public static float sizeMultiplier = 1f;
+        public static float scale = 1f;
 
 
-    //State
-    public static StateData.FlagStates flagState = StateData.FlagStates.None;
-    public static StateData.FlagStates previousFlagState = StateData.FlagStates.None;
-    public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
-    public static bool beenEaten = false;
+        //State
+        public static StateData.FlagStates flagState = StateData.FlagStates.None;
+        public static StateData.FlagStates previousFlagState = StateData.FlagStates.None;
+        public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
+        public static bool beenEaten = false;
 
 
-    //ColliderTypeData
-    public static ColliderTypeData.ColliderType GrassColliderType = ColliderTypeData.ColliderType.Grass;
+        //ColliderTypeData
+        public static ColliderTypeData.ColliderType GrassColliderType = ColliderTypeData.ColliderType.Grass;
+    }
 }

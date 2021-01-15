@@ -1,0 +1,31 @@
+{
+    "name": "NewAssembly",
+    "references": [
+        "Unity.Entities",
+        "Unity.Burst",
+        "Unity.Entities.BuildUtils",
+        "Unity.Entities.Hybrid",
+        "Unity.Entities.Hybrid.EndToEnd.Tests",
+        "Unity.Entities.Editor",
+        "Unity.Mathematics",
+        "Unity.Physics",
+        "Unity.Physics.Hybrid",
+        "Unity.Physics.Editor",
+        "UnityEngine.UI",
+        "Unity.Collections",
+        "Unity.Transforms.Editor",
+        "Unity.Transforms.Hybrid",
+        "Unity.Transforms",
+        "Unity.Rider.Editor",
+        "Unity.VSCode.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

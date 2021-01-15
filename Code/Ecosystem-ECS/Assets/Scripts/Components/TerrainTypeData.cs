@@ -1,16 +1,19 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-[GenerateAuthoringComponent]
-
-public struct TerrainTypeData : IComponentData
+namespace Components
 {
-    public enum TerrainType
+    [Serializable]
+    [GenerateAuthoringComponent]
+
+    public struct TerrainTypeData : IComponentData
     {
-        Water, Grass, Sand, Rock
+        public enum TerrainType
+        {
+            Water, Grass, Sand, Rock
+        }
+        public TerrainType terrainType;
+        public int terrainPenalty;
+        public bool isWalkable;
     }
-    public TerrainType terrainType;
-    public int terrainPenalty;
-    public bool isWalkable;
 }

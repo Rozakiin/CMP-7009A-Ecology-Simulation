@@ -1,25 +1,27 @@
-﻿using Unity.Collections;
+﻿using Components;
 using Unity.Entities;
-using Unity.Jobs;
 
-public class PregnancySystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class PregnancySystem : SystemBase
     {
-        Entities.ForEach((
-            ref ReproductiveData reproductiveData,
-            in StateData stateData,
-            in BioStatsData bioStatsData
-            ) =>
+        protected override void OnUpdate()
         {
-
-            if (stateData.isPregnant)
+            Entities.ForEach((
+                ref ReproductiveData reproductiveData,
+                in StateData stateData,
+                in BioStatsData bioStatsData
+            ) =>
             {
-                if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
+
+                if (stateData.isPregnant)
                 {
-                    reproductiveData.pregnant = false;
+                    if (bioStatsData.age - reproductiveData.pregnancyStartTime >= reproductiveData.PregnancyLength)
+                    {
+                        reproductiveData.pregnant = false;
+                    }
                 }
-            }
-        }).ScheduleParallel();
+            }).ScheduleParallel();
+        }
     }
 }

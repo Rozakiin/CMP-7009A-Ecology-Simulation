@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpeedTutorMainMenuSystem
+namespace MonoBehaviourTools.MenuScripts
 {
     public class Init_LoadPreferences : MonoBehaviour
     {
