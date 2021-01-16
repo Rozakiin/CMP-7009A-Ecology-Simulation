@@ -50,7 +50,6 @@ namespace EntityDefaults
         public static float reproductiveUrgeIncreaseMale = 0.3f;
         public static float reproductiveUrgeIncreaseFemale = 0f;
         public static float matingThreshold = 50f;
-        public static float mateRadius = 5f;
 
 
         //Pregnancy
@@ -97,6 +96,7 @@ namespace EntityDefaults
         //Target
         public static float touchRadius = 1f;
         public static float sightRadius = 20f;
+        public static float mateRadius = 5f;
 
 
         //lookingEntityData
