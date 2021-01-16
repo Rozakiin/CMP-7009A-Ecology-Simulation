@@ -277,35 +277,17 @@ namespace Systems
             return new NativeArray<float3>(waypoints, Allocator.Temp);//return the simplified final path
         }
 
-        //Simplifies the path so the path only contains changes to the direction
-        private static NativeArray<float3> SimplifyPath(NativeList<PathNode> path)
+    //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
+    private NativeArray<PathNode> CreatePathNodeArray()
+    {
+        GridNode[,] grid = GridSetup.Instance.grid;
+        int2 gridSize = GridSetup.Instance.gridSize;
+        int gridMaxSize = GridSetup.Instance.GridMaxSize;
+        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
+
+        for (int x = 0; x < gridSize.x; x++)
         {
-            NativeList<float3> waypoints = new NativeList<float3>(Allocator.Temp);
-            int2 directionOld = int2.zero; // store the direction of last 2 nodes
-
-            //checks for changes to direction in the path, only adds nodes that have differing direction to previous
-            for (int i = 1; i < path.Length; i++)
-            {
-                int2 directionNew = new int2(path[i - 1].x - path[i].x, path[i - 1].y - path[i].y); // new direction still 0 if no change in direction
-                if (!directionNew.Equals(directionOld))
-                {
-                    waypoints.Add(path[i - 1].position);
-                }
-                directionOld = directionNew;
-            }
-
-            return waypoints;
-        }
-
-        //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
-        private NativeArray<PathNode> CreatePathNodeArray()
-        {
-            GridNode[,] grid = GridSetup.Instance.grid;
-            int2 gridSize = GridSetup.Instance.gridSize;
-            int gridMaxSize = GridSetup.Instance.GridMaxSize;
-            NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
-
-            for (int x = 0; x < gridSize.x; x++)
+            for (int y = 0; y < gridSize.y; y++)
             {
                 for (int y = 0; y < gridSize.y; y++)
                 {
@@ -355,9 +337,6 @@ namespace Systems
             int x = math.abs(_nodeA.x - _nodeB.x);//x1-x2
             int y = math.abs(_nodeA.y - _nodeB.y);//y1-y2
 
-            return x + y;//Return the sum
-        }
-
         // if using diagonals
         private static int GetDistance(PathNode _nodeA, PathNode _nodeB)
         {
@@ -369,13 +348,13 @@ namespace Systems
             }
             return MOVE_DIAGONAL_COST * x + MOVE_STRAIGHT_COST * (y - x);
         }
-
+        
         //calc the index in the 1d array from the 2d array
         private static int CalculateIndex(int x, int y, int gridSizeX)
         {
             return x + y * gridSizeX;
         }
-
+        
         private static int GetLowestCostFNodeIndex(NativeList<int> openList, NativeArray<PathNode> pathNodeArray)
         {
             PathNode lowestCostPathNode = pathNodeArray[openList[0]]; //set to first in array

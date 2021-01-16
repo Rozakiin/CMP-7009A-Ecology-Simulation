@@ -4,7 +4,7 @@ using Unity.Entities;
 namespace Components
 {
     [Serializable]
-    public struct isFoxTag : IComponentData
+    public struct IsFoxTag : IComponentData
     {
     
     }

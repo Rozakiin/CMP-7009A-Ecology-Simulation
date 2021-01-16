@@ -6,8 +6,7 @@ using UnityEditor;
 namespace MonoBehaviourTools.StandaloneFileBrowser {
     public class StandaloneFileBrowserEditor : IStandaloneFileBrowser  {
         public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect) {
-            string path = "";
-
+            string path;
             if (extensions == null) {
                 path = EditorUtility.OpenFilePanel(title, directory, "");
             }

@@ -40,7 +40,7 @@ namespace Systems
             float RadultHungerIncrease = RabbitDefaults.adultHungerIncrease;
             float RoldHungerIncrease = RabbitDefaults.oldHungerIncrease;
             float ReatingSpeed = RabbitDefaults.eatingSpeed;
-            Entities.WithAll<isRabbitTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
             {
                 basicNeedsData.thirstyThreshold = RthirstThreshold;
                 basicNeedsData.thirstMax = RthirstMax;
@@ -60,7 +60,7 @@ namespace Systems
             //Update BioStatsData
             float RageIncrease = RabbitDefaults.ageIncrease;
             float RageMax = RabbitDefaults.ageMax;
-            Entities.WithAll<isRabbitTag>().ForEach((ref BioStatsData bioStatsData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref BioStatsData bioStatsData) =>
             {
                 bioStatsData.ageIncrease = RageIncrease;
                 bioStatsData.ageMax = RageMax;
@@ -69,7 +69,7 @@ namespace Systems
             //Update EdibleData
             float RnutritionalValueBase = RabbitDefaults.nutritionalValue;
             bool RcanBeEaten = RabbitDefaults.canBeEaten;
-            Entities.WithAll<isRabbitTag>().ForEach((ref EdibleData edibleData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref EdibleData edibleData) =>
             {
                 edibleData.canBeEaten = RcanBeEaten;
                 edibleData.nutritionalValueBase = RnutritionalValueBase;
@@ -81,7 +81,7 @@ namespace Systems
             float RyoungMoveMultiplier = RabbitDefaults.youngMoveMultiplier;
             float RadultMoveMultiplier = RabbitDefaults.adultMoveMultiplier;
             float RoldMoveMultiplier = RabbitDefaults.oldMoveMultiplier;
-            Entities.WithAll<isRabbitTag>().ForEach((ref MovementData movementData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref MovementData movementData) =>
             {
                 movementData.moveSpeedBase = RmoveSpeed;
                 movementData.pregnancyMoveMultiplier = RpregnancyMoveMultiplier;
@@ -97,7 +97,7 @@ namespace Systems
             int RlitterSizeMin = RabbitDefaults.litterSizeMin;
             int RlitterSizeMax = RabbitDefaults.litterSizeMax;
             int RlitterSizeAve = RabbitDefaults.litterSizeAve;
-            Entities.WithAll<isRabbitTag>().ForEach((ref ReproductiveData reproductiveData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref ReproductiveData reproductiveData) =>
             {
                 reproductiveData.matingDuration = RmatingDuration;
                 reproductiveData.pregnancyLengthBase = RpregnancyLength;
@@ -114,7 +114,7 @@ namespace Systems
             float RyoungSizeMultiplier = RabbitDefaults.youngSizeMultiplier;
             float RadultSizeMultiplier = RabbitDefaults.adultSizeMultiplier;
             float RoldSizeMultiplier = RabbitDefaults.oldSizeMultiplier;
-            Entities.WithAll<isRabbitTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
             {
                 if (bioStatsData.gender == BioStatsData.Gender.Male)
                     sizeData.size = RmaleSize;
@@ -127,7 +127,7 @@ namespace Systems
 
             //Update TargetData
             float RsightRadius = RabbitDefaults.sightRadius;
-            Entities.WithAll<isRabbitTag>().ForEach((ref TargetData targetData) =>
+            Entities.WithAll<IsRabbitTag>().ForEach((ref TargetData targetData) =>
             {
                 targetData.sightRadius = RsightRadius;
             }).ScheduleParallel();
@@ -150,7 +150,7 @@ namespace Systems
             float FadultHungerIncrease = FoxDefaults.adultHungerIncrease;
             float FoldHungerIncrease = FoxDefaults.oldHungerIncrease;
             float FeatingSpeed = FoxDefaults.eatingSpeed;
-            Entities.WithAll<isFoxTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
             {
                 basicNeedsData.thirstyThreshold = FthirstThreshold;
                 basicNeedsData.thirstMax = FthirstMax;
@@ -170,7 +170,7 @@ namespace Systems
             //Update BioStatsData
             float FageIncrease = FoxDefaults.ageIncrease;
             float FageMax = FoxDefaults.ageMax;
-            Entities.WithAll<isFoxTag>().ForEach((ref BioStatsData bioStatsData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref BioStatsData bioStatsData) =>
             {
                 bioStatsData.ageIncrease = FageIncrease;
                 bioStatsData.ageMax = FageMax;
@@ -179,7 +179,7 @@ namespace Systems
             //Update EdibleData
             float FnutritionalValueBase = FoxDefaults.nutritionalValue;
             bool FcanBeEaten = FoxDefaults.canBeEaten;
-            Entities.WithAll<isFoxTag>().ForEach((ref EdibleData edibleData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref EdibleData edibleData) =>
             {
                 edibleData.canBeEaten = FcanBeEaten;
                 edibleData.nutritionalValueBase = FnutritionalValueBase;
@@ -191,7 +191,7 @@ namespace Systems
             float FyoungMoveMultiplier = FoxDefaults.youngMoveMultiplier;
             float FadultMoveMultiplier = FoxDefaults.adultMoveMultiplier;
             float FoldMoveMultiplier = FoxDefaults.oldMoveMultiplier;
-            Entities.WithAll<isFoxTag>().ForEach((ref MovementData movementData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref MovementData movementData) =>
             {
                 movementData.moveSpeedBase = FmoveSpeed;
                 movementData.pregnancyMoveMultiplier = FpregnancyMoveMultiplier;
@@ -207,7 +207,7 @@ namespace Systems
             int FlitterSizeMin = FoxDefaults.litterSizeMin;
             int FlitterSizeMax = FoxDefaults.litterSizeMax;
             int FlitterSizeAve = FoxDefaults.litterSizeAve;
-            Entities.WithAll<isFoxTag>().ForEach((ref ReproductiveData reproductiveData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref ReproductiveData reproductiveData) =>
             {
                 reproductiveData.matingDuration = FmatingDuration;
                 reproductiveData.pregnancyLengthBase = FpregnancyLength;
@@ -224,7 +224,7 @@ namespace Systems
             float FyoungSizeMultiplier = FoxDefaults.youngSizeMultiplier;
             float FadultSizeMultiplier = FoxDefaults.adultSizeMultiplier;
             float FoldSizeMultiplier = FoxDefaults.oldSizeMultiplier;
-            Entities.WithAll<isFoxTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
             {
                 if (bioStatsData.gender == BioStatsData.Gender.Male)
                     sizeData.size = FmaleSize;
@@ -237,7 +237,7 @@ namespace Systems
 
             //Update TargetData
             float FsightRadius = FoxDefaults.sightRadius;
-            Entities.WithAll<isFoxTag>().ForEach((ref TargetData targetData) =>
+            Entities.WithAll<IsFoxTag>().ForEach((ref TargetData targetData) =>
             {
                 targetData.sightRadius = FsightRadius;
             }).ScheduleParallel();
@@ -249,7 +249,7 @@ namespace Systems
             //Update EdibleData
             float GrassnutritionalValueBase = GrassDefaults.nutritionalValue;
             bool GrasscanBeEaten = GrassDefaults.canBeEaten;
-            Entities.WithAll<isGrassTag>().ForEach((ref EdibleData edibleData) =>
+            Entities.WithAll<IsGrassTag>().ForEach((ref EdibleData edibleData) =>
             {
                 edibleData.canBeEaten = GrasscanBeEaten;
                 edibleData.nutritionalValueBase = GrassnutritionalValueBase;
@@ -257,7 +257,7 @@ namespace Systems
 
             //Update SizeData
             float GrassSize = GrassDefaults.scale;
-            Entities.WithAll<isGrassTag>().ForEach((ref SizeData sizeData) =>
+            Entities.WithAll<IsGrassTag>().ForEach((ref SizeData sizeData) =>
             {
                 sizeData.size = GrassSize;
             }).ScheduleParallel();

@@ -16,8 +16,11 @@ namespace Systems
             int rabbitsDeadHunger = 0;
             int rabbitsDeadThirst = 0;
 
-            int rabbitsTotal = 0;
-            Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+        int rabbitsTotal = 0;
+        Entities.WithAll<IsRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            rabbitsTotal++;
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 rabbitsTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -58,8 +61,11 @@ namespace Systems
             int foxesDeadHunger = 0;
             int foxesDeadThirst = 0;
 
-            int foxesTotal = 0;
-            Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
+        int foxesTotal = 0;
+        Entities.WithAll<IsFoxTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            foxesTotal++;
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 foxesTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -97,7 +103,10 @@ namespace Systems
             int grassEaten = 0;
             int grassTotal = 0;
 
-            Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
+        Entities.WithAll<IsGrassTag>().ForEach((Entity entity, in StateData stateData) =>
+        {
+            grassTotal++;
+            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
             {
                 grassTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))

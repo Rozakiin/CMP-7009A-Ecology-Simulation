@@ -218,12 +218,10 @@ namespace Systems
                     if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
                         reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                     {
-                        ////give birth
-
+                        //give birth
                         #region Setting New Entity's Components
-
                         // determine if rabbit or fox giving birth - not very scalable
-                        if (HasComponent<isRabbitTag>(entity))
+                        if (HasComponent<IsRabbitTag>(entity))
                         {
                             Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
@@ -353,7 +351,7 @@ namespace Systems
                                 }
                             );
                         }
-                        else if (HasComponent<isFoxTag>(entity))
+                        else if (HasComponent<IsFoxTag>(entity))
                         {
                             Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 

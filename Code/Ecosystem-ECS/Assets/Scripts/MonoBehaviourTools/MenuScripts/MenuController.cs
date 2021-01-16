@@ -41,8 +41,6 @@ namespace MonoBehaviourTools.MenuScripts
 
         [Header("Levels To Load")]
         public string _newGameButtonLevel;
-        private string levelToLoad;
-
         private MenuNumber menuNumber;
 
         #region Entity Default Values For Reset

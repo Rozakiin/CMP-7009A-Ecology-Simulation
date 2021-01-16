@@ -15,32 +15,25 @@ namespace MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader
         [Range(0.5f, 2f)]
         public float brightness = 1f;
 
-        void Start()
-        {
-            // Disable if we don't support image effects
-            if (!SystemInfo.supportsImageEffects)
-            {
-                enabled = false;
-                return;
-            }
-
-            // Disable the image effect if the shader can't
-            // run on the users graphics card
-            if (!shaderDerp || !shaderDerp.isSupported)
-                enabled = false;
-        }
+    void Start()
+    {
+        // Disable the image effect if the shader can't
+        // run on the users graphics card
+        if (!shaderDerp || !shaderDerp.isSupported)
+            enabled = false;
+    }
 
 
-        Material material
+    Material Material
+    {
+        get
         {
             get
             {
-                if (m_Material == null)
+                m_Material = new Material(shaderDerp)
                 {
-                    m_Material = new Material(shaderDerp);
-                    m_Material.hideFlags = HideFlags.HideAndDontSave;
-                }
-                return m_Material;
+                    hideFlags = HideFlags.HideAndDontSave
+                };
             }
         }
 
@@ -53,10 +46,9 @@ namespace MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader
             }
         }
 
-        void OnRenderImage(RenderTexture source, RenderTexture destination)
-        {
-            material.SetFloat("_Brightness", brightness);
-            Graphics.Blit(source, destination, material);
-        }
+    void OnRenderImage(RenderTexture source, RenderTexture destination)
+    {
+        Material.SetFloat("_Brightness", brightness);
+        Graphics.Blit(source, destination, Material);
     }
 }
