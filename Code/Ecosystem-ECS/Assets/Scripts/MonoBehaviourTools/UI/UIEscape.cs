@@ -64,7 +64,7 @@ namespace MonoBehaviourTools.UI
             {
                 Debug.Log("No Path Insert");
             }
-        
+
         }
 
         private void SaveGame(string path)
@@ -600,7 +600,7 @@ namespace MonoBehaviourTools.UI
             fLittersizemin.InnerText = FoxDefaults.litterSizeMin.ToString();
             fLittersizemax.InnerText = FoxDefaults.litterSizeMax.ToString();
             fLittersizeave.InnerText = FoxDefaults.litterSizeAve.ToString();
-            
+
             fPregnancydata.AppendChild(fPregnancystarttime);
             fPregnancydata.AppendChild(fBabiesborn);
             fPregnancydata.AppendChild(fBirthstarttime);

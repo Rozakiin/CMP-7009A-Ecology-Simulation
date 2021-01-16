@@ -646,13 +646,13 @@ namespace MonoBehaviourTools.MenuScripts
             switch (entityToUpdate)
             {
                 case "Rabbit":
-                    SimulationManager.initialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
+                    SimulationManager.InitialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
                     break;
                 case "Fox":
-                    SimulationManager.initialFoxesToSpawn = int.Parse(foxNumberInputField.text);
+                    SimulationManager.InitialFoxesToSpawn = int.Parse(foxNumberInputField.text);
                     break;
                 case "Grass":
-                    SimulationManager.initialGrassToSpawn = int.Parse(grassNumberInputField.text);
+                    SimulationManager.InitialGrassToSpawn = int.Parse(grassNumberInputField.text);
                     break;
                 default:
                     Debug.LogWarning("Attempted to update unknown entity in switch: " + entityToUpdate, this);

@@ -6,6 +6,6 @@ namespace Components
     [Serializable]
     public struct IsGrassTag : IComponentData
     {
-    
+
     }
 }

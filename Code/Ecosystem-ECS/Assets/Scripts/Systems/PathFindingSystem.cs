@@ -1,5 +1,4 @@
-﻿using System;
-using Components;
+﻿using Components;
 using MonoBehaviourTools.Grid;
 using Unity.Burst;
 using Unity.Collections;
@@ -54,7 +53,7 @@ namespace Systems
                     startNode = NodeFromWorldPoint(pathFindingRequestData.startPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                     targetNode = NodeFromWorldPoint(pathFindingRequestData.endPosition, gridWorldSize, gridSize, tmpPathNodeArray),
                     entity = entity,
-                    iterationLimit = 10*(int)targetData.sightRadius,//arbitary decision should have better way to determine how long a path should be
+                    iterationLimit = 10 * (int)targetData.sightRadius,//arbitary decision should have better way to determine how long a path should be
                 };
                 findPathJob.Execute();//execute the find path job
 
@@ -256,38 +255,15 @@ namespace Systems
             }
         }
 
-        //Retrace path through the nodes
-        private static NativeArray<float3> GetFinalPath(PathNode _startNode, PathNode _endNode, NativeArray<PathNode> path)
+        //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
+        private NativeArray<PathNode> CreatePathNodeArray()
         {
-            NativeList<PathNode> finalPath = new NativeList<PathNode>(Allocator.Temp);//List to hold the path sequentially 
-            PathNode currentNode = _endNode;//Node to store the current node being checked
+            GridNode[,] grid = GridSetup.Instance.grid;
+            int2 gridSize = GridSetup.Instance.gridSize;
+            int gridMaxSize = GridSetup.Instance.GridMaxSize;
+            NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
 
-            while (currentNode.index != _startNode.index)//While loop to work through each node going through the parents to the beginning of the path
-            {
-                finalPath.Add(currentNode);//Add that node to the final path
-                currentNode = path[currentNode.cameFromNodeIndex];//Move onto its parent node
-            }
-            if (currentNode.index == _startNode.index)
-            {
-                finalPath.Add(currentNode);
-            }
-
-            float3[] waypoints = SimplifyPath(finalPath).ToArray(); //simplify the final path
-            Array.Reverse(waypoints);//Reverse the path to get the correct order
-            return new NativeArray<float3>(waypoints, Allocator.Temp);//return the simplified final path
-        }
-
-    //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
-    private NativeArray<PathNode> CreatePathNodeArray()
-    {
-        GridNode[,] grid = GridSetup.Instance.grid;
-        int2 gridSize = GridSetup.Instance.gridSize;
-        int gridMaxSize = GridSetup.Instance.GridMaxSize;
-        NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
-
-        for (int x = 0; x < gridSize.x; x++)
-        {
-            for (int y = 0; y < gridSize.y; y++)
+            for (int x = 0; x < gridSize.x; x++)
             {
                 for (int y = 0; y < gridSize.y; y++)
                 {
@@ -331,12 +307,6 @@ namespace Systems
             return pathNodeArray[CalculateIndex(x, y, gridSize.x)];// position of closest node in array
         }
 
-        // if using NESW only
-        private static int GetManhattenDistance(PathNode _nodeA, PathNode _nodeB)
-        {
-            int x = math.abs(_nodeA.x - _nodeB.x);//x1-x2
-            int y = math.abs(_nodeA.y - _nodeB.y);//y1-y2
-
         // if using diagonals
         private static int GetDistance(PathNode _nodeA, PathNode _nodeB)
         {
@@ -348,17 +318,17 @@ namespace Systems
             }
             return MOVE_DIAGONAL_COST * x + MOVE_STRAIGHT_COST * (y - x);
         }
-        
+
         //calc the index in the 1d array from the 2d array
         private static int CalculateIndex(int x, int y, int gridSizeX)
         {
             return x + y * gridSizeX;
         }
-        
+
         private static int GetLowestCostFNodeIndex(NativeList<int> openList, NativeArray<PathNode> pathNodeArray)
         {
             PathNode lowestCostPathNode = pathNodeArray[openList[0]]; //set to first in array
-            //compare all in array to find lowest FCost with lowest hCost
+                                                                      //compare all in array to find lowest FCost with lowest hCost
             for (int i = 1; i < openList.Length; i++)
             {
                 PathNode testPathNode = pathNodeArray[openList[i]];//pathnode to compare to

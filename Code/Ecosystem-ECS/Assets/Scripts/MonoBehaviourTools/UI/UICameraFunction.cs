@@ -61,7 +61,7 @@ namespace MonoBehaviourTools.UI
         {
             return new Vector3(0f, yMax, zInitial);
         }
-        
+
         public float GETCameraSpeed()
         {
             return camSpeed;
@@ -71,7 +71,7 @@ namespace MonoBehaviourTools.UI
         {
             return scrollSpeed;
         }
-        
+
         public float GetYMin()
         {
             return yMin;

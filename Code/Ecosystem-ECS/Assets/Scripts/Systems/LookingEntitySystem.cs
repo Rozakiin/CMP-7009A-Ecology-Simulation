@@ -84,7 +84,7 @@ namespace Systems
                         {
                             EdibleData childEdibleData = GetComponentDataFromEntity<EdibleData>(true)[childEntity];
                             // if foodtype in diet and not same type
-                            if (((childEdibleData.foodType & (EdibleData.FoodType) basicNeedsData.diet) ==
+                            if (((childEdibleData.foodType & (EdibleData.FoodType)basicNeedsData.diet) ==
                                  childEdibleData.foodType) &&
                                 (childEdibleData.canBeEaten) &&
                                 (childEntityNumber != colliderTypeData.colliderType))
@@ -152,7 +152,7 @@ namespace Systems
                             BasicNeedsData.Diet childDiet =
                                 GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].diet;
                             // if child entity has diet that contains this entities foodtype ie predator
-                            if ((((EdibleData.FoodType) childDiet & edibleData.foodType) == edibleData.foodType) &&
+                            if ((((EdibleData.FoodType)childDiet & edibleData.foodType) == edibleData.foodType) &&
                                 (childEntityNumber != colliderTypeData.colliderType))
                             {
                                 if (distanceToEntity < shortestToPredatorDistance)

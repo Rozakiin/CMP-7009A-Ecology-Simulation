@@ -291,7 +291,7 @@ namespace Systems
                             );
 
                             float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
-                            Random randomGen = new Random((uint) seed + 2);
+                            Random randomGen = new Random((uint)seed + 2);
                             BioStatsData.Gender randGender = randomGen.NextInt(0, 2) == 1
                                 ? randGender = BioStatsData.Gender.Female
                                 : randGender = BioStatsData.Gender.Male;
@@ -421,7 +421,7 @@ namespace Systems
                             );
 
                             float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
-                            Random randomGen = new Random((uint) seed + 2);
+                            Random randomGen = new Random((uint)seed + 2);
                             BioStatsData.Gender randGender = randomGen.NextInt(0, 2) == 1
                                 ? randGender = BioStatsData.Gender.Female
                                 : randGender = BioStatsData.Gender.Male;

@@ -41,8 +41,8 @@ namespace MonoBehaviourTools.UI
         private RectTransform dashTemplateX;
         private RectTransform dashTemplateY;
         private RectTransform circleContainer;
-    
-        private readonly List<float> graphRabbitsList = new List<float> ();
+
+        private readonly List<float> graphRabbitsList = new List<float>();
         private readonly List<float> graphFoxesList = new List<float>();
         private readonly List<float> graphGrassList = new List<float>();
 
@@ -99,10 +99,10 @@ namespace MonoBehaviourTools.UI
                 foxNumber = simulationManager.FoxPopulation();
                 grassNumber = simulationManager.GrassPopulation();
 
-                xPos = Time.timeSinceLevelLoad;   
+                xPos = Time.timeSinceLevelLoad;
                 nextTime += 1;
 
-                if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum) 
+                if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
                     inyMaximum = yMaximum;
                     yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10;
@@ -163,10 +163,10 @@ namespace MonoBehaviourTools.UI
                 // Create a new file     
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    sw.WriteLine("Seconds"+","+"Rabbit"+","+"Fox"+","+"Grass");
-                    for (var i = 0; i < graphRabbitsList.Count; i++) 
+                    sw.WriteLine("Seconds" + "," + "Rabbit" + "," + "Fox" + "," + "Grass");
+                    for (var i = 0; i < graphRabbitsList.Count; i++)
                     {
-                        sw.WriteLine((i+1)+","+graphRabbitsList[i]+","+ graphFoxesList[i]+","+ graphGrassList[i]);
+                        sw.WriteLine((i + 1) + "," + graphRabbitsList[i] + "," + graphFoxesList[i] + "," + graphGrassList[i]);
                     }
                     sw.Close();
                 }
@@ -178,7 +178,7 @@ namespace MonoBehaviourTools.UI
 
             uITimeControl.Play();
         }
-        
+
         private void UpdateLabel(string labelName)
         {
             Transform[] allGameObject = (labelName == "X")
@@ -192,14 +192,14 @@ namespace MonoBehaviourTools.UI
                 }
                 int labelNumber = int.Parse(child.name);
                 int labelText = (labelName == "X")
-                    ? (int) (graphRabbitsList.Count / line.x * labelNumber)
-                    : (int) (yMaximum / line.y * labelNumber);
+                    ? (int)(graphRabbitsList.Count / line.x * labelNumber)
+                    : (int)(yMaximum / line.y * labelNumber);
                 child.GetComponent<Text>().text = labelText.ToString();
-                
-                
+
+
             }
         }
-        
+
         private void UpdateGraphListXAxis(int number, int value)
         {
             Transform[] allGameObject = labelXContainer.GetComponentsInChildren<Transform>();
@@ -222,8 +222,8 @@ namespace MonoBehaviourTools.UI
             for (int i = 1; i <= lineNumber.x; i++)
             {
 
-                int xText = (int)(xMaximum/ lineNumber.x * i);
-           
+                int xText = (int)(xMaximum / lineNumber.x * i);
+
                 RectTransform labelX = Instantiate(labelTemplateX, labelXContainer, false);
                 labelX.gameObject.SetActive(true);
                 labelX.anchoredPosition = new Vector2(graphWidth / lineNumber.x * i * 1f, -7f);
@@ -241,17 +241,17 @@ namespace MonoBehaviourTools.UI
                 int yText = (int)(yMaximum / lineNumber.y * i);
                 RectTransform labelY = Instantiate(labelTemplateY, labelYContainer, false);
                 labelY.gameObject.SetActive(true);
-                labelY.anchoredPosition = new Vector2(-7f, graphHeight / lineNumber.y * i );   
+                labelY.anchoredPosition = new Vector2(-7f, graphHeight / lineNumber.y * i);
                 labelY.GetComponent<Text>().text = yText.ToString();
                 labelY.name = i.ToString();
 
                 RectTransform dashX = Instantiate(dashTemplateX, graphContainer, false);
                 dashX.gameObject.SetActive(true);
-                dashX.anchoredPosition = new Vector2(dashTemplateX.anchoredPosition.x, graphHeight / lineNumber.y * i);     
+                dashX.anchoredPosition = new Vector2(dashTemplateX.anchoredPosition.x, graphHeight / lineNumber.y * i);
             }
         }
 
-        private GameObject CreateDots(Vector2 anchoredPosition,string objectName)
+        private GameObject CreateDots(Vector2 anchoredPosition, string objectName)
         {
             GameObject gameObject = new GameObject("circle", typeof(Image));
             gameObject.transform.SetParent(circleContainer, false);
@@ -260,7 +260,7 @@ namespace MonoBehaviourTools.UI
             {
                 gameObject.GetComponent<Image>().color = (objectName == "Fox") ? Color.red : Color.green;
             }
-            gameObject.name = objectName + (Mathf.Round((int) Time.timeSinceLevelLoad));
+            gameObject.name = objectName + (Mathf.Round((int)Time.timeSinceLevelLoad));
             RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = anchoredPosition;
             rectTransform.sizeDelta = new Vector2(5, 5);
@@ -275,36 +275,36 @@ namespace MonoBehaviourTools.UI
             foreach (RectTransform child in allGameObject)
             {
                 var anchoredPosition = child.anchoredPosition;
-                anchoredPosition = new Vector2(anchoredPosition.x, anchoredPosition.y / (yMaximum /inyMaximum));
+                anchoredPosition = new Vector2(anchoredPosition.x, anchoredPosition.y / (yMaximum / inyMaximum));
                 child.anchoredPosition = anchoredPosition;
             }
         }
 
-        private void ShowGraph(float xValue,float yValue,float yValue1, float yValue2)
+        private void ShowGraph(float xValue, float yValue, float yValue1, float yValue2)
         {
             float xPosition = (xValue / xMaximum) * graphWidth;
             float yPosition = (yValue / yMaximum) * graphHeight;
             float yPosition1 = (yValue1 / yMaximum) * graphWidth;
             float yPosition2 = (yValue2 / yMaximum) * graphWidth;
-            CreateDots(new Vector2(xPosition, yPosition),"Rabbit");
-            CreateDots(new Vector2(xPosition, yPosition1),"Fox");
-            CreateDots(new Vector2(xPosition, yPosition2),"Grass");
+            CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+            CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+            CreateDots(new Vector2(xPosition, yPosition2), "Grass");
         }
 
         private void ShowGraphList(int value)
         {
             DestroyPoint();
-            
+
             for (int i = 1; i <= 100; i++)
             {
                 int a = (int)Mathf.Round(value * i / 100);
-                float yPosition = (graphRabbitsList[graphRabbitsList.Count - value + a-1] / yMaximum) * graphHeight;
-                float yPosition1 = (graphFoxesList[graphRabbitsList.Count - value + a-1] / yMaximum) * graphHeight;
+                float yPosition = (graphRabbitsList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition1 = (graphFoxesList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
                 float yPosition2 = (graphGrassList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / 100;
-                CreateDots(new Vector2(xPosition, yPosition),"Rabbit");
-                CreateDots(new Vector2(xPosition, yPosition1),"Fox");
-                CreateDots(new Vector2(xPosition, yPosition2),"Grass");
+                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
             }
             var number = (int)graphRabbitsList.Count - (value / 5 * 4);
             UpdateGraphListXAxis(number, value);
@@ -316,13 +316,13 @@ namespace MonoBehaviourTools.UI
             for (int i = 1; i <= 100; i++)
             {
                 int a = (int)Mathf.Round(graphRabbitsList.Count * i / 100);
-                float yPosition = (graphRabbitsList[a-1] / yMaximum) * graphHeight;
+                float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
                 float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
                 float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / 100;
-                CreateDots(new Vector2(xPosition, yPosition),"Rabbit");
-                CreateDots(new Vector2(xPosition, yPosition1),"Fox");
-                CreateDots(new Vector2(xPosition, yPosition2),"Grass");
+                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
             }
             UpdateLabel("X");
         }
@@ -330,7 +330,7 @@ namespace MonoBehaviourTools.UI
         private void DestroyPoint()
         {
             Transform[] allGameObject = circleContainer.GetComponentsInChildren<Transform>();
-            for (int i=1;i< allGameObject.Length;i++)
+            for (int i = 1; i < allGameObject.Length; i++)
             {
                 Destroy(allGameObject[i].gameObject);
             }

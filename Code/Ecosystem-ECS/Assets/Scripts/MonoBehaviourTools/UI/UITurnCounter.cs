@@ -7,7 +7,7 @@ namespace MonoBehaviourTools.UI
     {
         public Text turnDisplay;
         public float counter = 0f;
-    
+
         private void Start()
         {
             turnDisplay.text = counter.ToString();

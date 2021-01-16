@@ -23,7 +23,7 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private Dropdown dropdownPropertyDropdown;
         [SerializeField] private InputField dropdownInputField;
         #endregion
-        
+
         #region Initialisation
         void Awake()
         {
@@ -31,9 +31,6 @@ namespace MonoBehaviourTools.UI
             OnSelectDropdown();
         }
 
-        private void SetDropDownPropertyValues()
-        {
-            
         private void SetDropDownPropertyValues()
         {
             List<string> propertyOptions = new List<string>

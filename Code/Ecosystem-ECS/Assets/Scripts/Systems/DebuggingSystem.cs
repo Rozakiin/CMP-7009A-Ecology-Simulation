@@ -9,7 +9,7 @@ namespace Systems
     {
         protected override void OnUpdate()
         {
-            if (SimulationManager.instance.isDebugEnabled)
+            if (SimulationManager.Instance.isDebugEnabled)
             {
                 Entities.ForEach((in Translation translation, in TargetData targetData) =>
                 {

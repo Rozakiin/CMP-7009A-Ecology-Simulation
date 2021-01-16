@@ -33,7 +33,7 @@ namespace MonoBehaviourTools.UI
 
         public void UpdateFastForwardSpeed()
         {
-            if (fastForwardSpeed < 0.2f) 
+            if (fastForwardSpeed < 0.2f)
             {
                 fastForwardSpeed = 0f;
             }
@@ -82,6 +82,6 @@ namespace MonoBehaviourTools.UI
         {
             return pause;
         }
-        
+
     }
 }

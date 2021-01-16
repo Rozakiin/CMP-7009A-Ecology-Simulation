@@ -94,20 +94,20 @@ public class SimulationManager : MonoBehaviour
     #region Initialisation
     private void Start()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
         isSetupComplete = false;
         Application.targetFrameRate = 60; // Target 60fps
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        if (initialRabbitsToSpawn != 0)
-            numberOfRabbitsToSpawn = initialRabbitsToSpawn;
-        if (initialFoxesToSpawn != 0)
-            numberOfFoxesToSpawn = initialFoxesToSpawn;
-        if (initialGrassToSpawn != 0)
-            numberOfGrassToSpawn = initialGrassToSpawn;
+        if (InitialRabbitsToSpawn != 0)
+            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
+        if (InitialFoxesToSpawn != 0)
+            numberOfFoxesToSpawn = InitialFoxesToSpawn;
+        if (InitialGrassToSpawn != 0)
+            numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
@@ -140,8 +140,8 @@ public class SimulationManager : MonoBehaviour
             if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
             {
                 secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
-                if(grassPopulation<2*gridHeight*gridHeight)//limit to 2x grass per grid square
-                    CreateEntitiesFromGameObject(grass, grassPopulation/10);
+                if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
+                    CreateEntitiesFromGameObject(grass, grassPopulation / 10);
             }
         }
     }

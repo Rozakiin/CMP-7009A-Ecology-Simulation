@@ -71,5 +71,5 @@ namespace UtilTools
             return (int)math.round((int)randStdNormal);
         }
     }
-    
+
 }

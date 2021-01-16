@@ -16,11 +16,8 @@ namespace Systems
             int rabbitsDeadHunger = 0;
             int rabbitsDeadThirst = 0;
 
-        int rabbitsTotal = 0;
-        Entities.WithAll<IsRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
-        {
-            rabbitsTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            int rabbitsTotal = 0;
+            Entities.WithAll<IsRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
             {
                 rabbitsTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -46,13 +43,13 @@ namespace Systems
                     EntityManager.DestroyEntity(entity);
                 }
             }).WithStructuralChanges().Run();
-            SimulationManager.instance.rabbitPopulation = rabbitsTotal;
-            SimulationManager.instance.rabbitPopulation -= rabbitsDeadTotal;
-            SimulationManager.instance.numberOfRabbitsDeadTotal += rabbitsDeadTotal;
-            SimulationManager.instance.numberOfRabbitsDeadAge += rabbitsDeadAge;
-            SimulationManager.instance.numberOfRabbitsDeadEaten += rabbitsDeadEaten;
-            SimulationManager.instance.numberOfRabbitsDeadHunger += rabbitsDeadHunger;
-            SimulationManager.instance.numberOfRabbitsDeadThirst += rabbitsDeadThirst;
+            SimulationManager.Instance.rabbitPopulation = rabbitsTotal;
+            SimulationManager.Instance.rabbitPopulation -= rabbitsDeadTotal;
+            SimulationManager.Instance.numberOfRabbitsDeadTotal += rabbitsDeadTotal;
+            SimulationManager.Instance.numberOfRabbitsDeadAge += rabbitsDeadAge;
+            SimulationManager.Instance.numberOfRabbitsDeadEaten += rabbitsDeadEaten;
+            SimulationManager.Instance.numberOfRabbitsDeadHunger += rabbitsDeadHunger;
+            SimulationManager.Instance.numberOfRabbitsDeadThirst += rabbitsDeadThirst;
 
 
             int foxesDeadTotal = 0;
@@ -61,11 +58,8 @@ namespace Systems
             int foxesDeadHunger = 0;
             int foxesDeadThirst = 0;
 
-        int foxesTotal = 0;
-        Entities.WithAll<IsFoxTag>().ForEach((Entity entity, in StateData stateData) =>
-        {
-            foxesTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            int foxesTotal = 0;
+            Entities.WithAll<IsFoxTag>().ForEach((Entity entity, in StateData stateData) =>
             {
                 foxesTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -91,22 +85,19 @@ namespace Systems
                     EntityManager.DestroyEntity(entity);
                 }
             }).WithStructuralChanges().Run();
-            SimulationManager.instance.foxPopulation = foxesTotal;
-            SimulationManager.instance.foxPopulation -= foxesDeadTotal;
-            SimulationManager.instance.numberOfFoxesDeadTotal += foxesDeadTotal;
-            SimulationManager.instance.numberOfFoxesDeadAge += foxesDeadAge;
-            SimulationManager.instance.numberOfFoxesDeadEaten += foxesDeadEaten;
-            SimulationManager.instance.numberOfFoxesDeadHunger += foxesDeadHunger;
-            SimulationManager.instance.numberOfFoxesDeadThirst += foxesDeadThirst;
+            SimulationManager.Instance.foxPopulation = foxesTotal;
+            SimulationManager.Instance.foxPopulation -= foxesDeadTotal;
+            SimulationManager.Instance.numberOfFoxesDeadTotal += foxesDeadTotal;
+            SimulationManager.Instance.numberOfFoxesDeadAge += foxesDeadAge;
+            SimulationManager.Instance.numberOfFoxesDeadEaten += foxesDeadEaten;
+            SimulationManager.Instance.numberOfFoxesDeadHunger += foxesDeadHunger;
+            SimulationManager.Instance.numberOfFoxesDeadThirst += foxesDeadThirst;
 
 
             int grassEaten = 0;
             int grassTotal = 0;
 
-        Entities.WithAll<IsGrassTag>().ForEach((Entity entity, in StateData stateData) =>
-        {
-            grassTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            Entities.WithAll<IsGrassTag>().ForEach((Entity entity, in StateData stateData) =>
             {
                 grassTotal++;
                 if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -115,9 +106,9 @@ namespace Systems
                     EntityManager.DestroyEntity(entity);
                 }
             }).WithStructuralChanges().Run();
-            SimulationManager.instance.grassPopulation = grassTotal;
-            SimulationManager.instance.grassPopulation -= grassEaten;
-            SimulationManager.instance.numberOfGrassEaten += grassEaten;
+            SimulationManager.Instance.grassPopulation = grassTotal;
+            SimulationManager.Instance.grassPopulation -= grassEaten;
+            SimulationManager.Instance.numberOfGrassEaten += grassEaten;
         }
     }
 }
