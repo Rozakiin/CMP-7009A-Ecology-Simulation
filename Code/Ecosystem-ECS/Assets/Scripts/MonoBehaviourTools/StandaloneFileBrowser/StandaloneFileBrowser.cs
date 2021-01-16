@@ -12,7 +12,7 @@ namespace SFB {
     }
 
     public class StandaloneFileBrowser {
-        private static IStandaloneFileBrowser _platformWrapper = null;
+        private static readonly IStandaloneFileBrowser _platformWrapper = null;
 
         static StandaloneFileBrowser() {
 #if UNITY_STANDALONE_OSX

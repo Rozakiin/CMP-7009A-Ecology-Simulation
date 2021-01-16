@@ -12,7 +12,7 @@ namespace SFB {
     // - "PlayerSettings/Visible In Background" should be enabled, otherwise when file dialog opened app window minimizes automatically.
 
     public class WindowWrapper : IWin32Window {
-        private IntPtr _hwnd;
+        private readonly IntPtr _hwnd;
         public WindowWrapper(IntPtr handle) { _hwnd = handle; }
         public IntPtr Handle { get { return _hwnd; } }
     }
@@ -22,8 +22,10 @@ namespace SFB {
         private static extern IntPtr GetActiveWindow();
 
         public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect) {
-            var fd = new VistaOpenFileDialog();
-            fd.Title = title;
+            var fd = new VistaOpenFileDialog
+            {
+                Title = title
+            };
             if (extensions != null) {
                 fd.Filter = GetFilterFromFileExtensionList(extensions);
                 fd.FilterIndex = 1;
@@ -46,8 +48,10 @@ namespace SFB {
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect) {
-            var fd = new VistaFolderBrowserDialog();
-            fd.Description = title;
+            var fd = new VistaFolderBrowserDialog
+            {
+                Description = title
+            };
             if (!string.IsNullOrEmpty(directory)) {
                 fd.SelectedPath = GetDirectoryPath(directory);
             }
@@ -62,8 +66,10 @@ namespace SFB {
         }
 
         public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions) {
-            var fd = new VistaSaveFileDialog();
-            fd.Title = title;
+            var fd = new VistaSaveFileDialog
+            {
+                Title = title
+            };
 
             var finalFilename = "";
 
