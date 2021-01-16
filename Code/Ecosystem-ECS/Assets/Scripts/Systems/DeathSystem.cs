@@ -7,6 +7,11 @@ namespace Systems
     {
         protected override void OnUpdate()
         {
+            //catch to not run if paused
+            if (MonoBehaviourTools.UI.UITimeControl.Instance.GetPause())
+            {
+                return;
+            }
             // Checks What entity is dead, increment the dead count, decrement the living count, store how they died and destory the entity
             // Also counts the total number of each entity
 
