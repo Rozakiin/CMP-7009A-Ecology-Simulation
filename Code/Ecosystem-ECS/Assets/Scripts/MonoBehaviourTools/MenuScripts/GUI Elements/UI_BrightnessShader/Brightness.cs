@@ -23,14 +23,16 @@ public class Brightness : MonoBehaviour
     }
 
 
-    Material material
+    Material Material
     {
         get
         {
             if (m_Material == null)
             {
-                m_Material = new Material(shaderDerp);
-                m_Material.hideFlags = HideFlags.HideAndDontSave;
+                m_Material = new Material(shaderDerp)
+                {
+                    hideFlags = HideFlags.HideAndDontSave
+                };
             }
             return m_Material;
         }
@@ -47,7 +49,7 @@ public class Brightness : MonoBehaviour
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        material.SetFloat("_Brightness", brightness);
-        Graphics.Blit(source, destination, material);
+        Material.SetFloat("_Brightness", brightness);
+        Graphics.Blit(source, destination, Material);
     }
 }
