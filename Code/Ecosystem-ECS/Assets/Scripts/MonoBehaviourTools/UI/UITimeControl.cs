@@ -5,6 +5,7 @@ namespace MonoBehaviourTools.UI
 {
     public class UITimeControl : MonoBehaviour
     {
+        public static UITimeControl Instance;
         private bool pause;
         public float fastForwardSpeed;
         [SerializeField] private Text speedDisplay;
@@ -12,6 +13,12 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private Button pauseButton;
         [SerializeField] private Button fastButton;
         [SerializeField] private Button slowButton;
+
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
 
         private void Start()
         {
