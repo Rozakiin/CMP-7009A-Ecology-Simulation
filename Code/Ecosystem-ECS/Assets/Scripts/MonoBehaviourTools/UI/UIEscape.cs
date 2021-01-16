@@ -24,7 +24,7 @@ namespace MonoBehaviourTools.UI
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
-                if (uITimeControl.GetPause())
+                if (escapeMenu.activeSelf)
                 {
                     ResumeGame();
                 }
