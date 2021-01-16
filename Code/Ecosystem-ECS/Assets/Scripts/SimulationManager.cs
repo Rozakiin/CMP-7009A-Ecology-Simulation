@@ -9,7 +9,7 @@ public class SimulationManager : MonoBehaviour
     EntityManager entityManager;
     public GameObjectConversionSettings settings;
     public static SimulationManager Instance;
-    [SerializeField] public bool isDebugEnabled;
+    public bool isDebugEnabled;
     public bool isSetupComplete;
 
     int secondsOfLastGrassSpawn;
@@ -27,22 +27,22 @@ public class SimulationManager : MonoBehaviour
 
     #region GameObjects
     [Header("GameObjects")]
-    [SerializeField] public GameObject grassTile;
-    [SerializeField] public GameObject lightGrassTile;
-    [SerializeField] public GameObject waterTile;
-    [SerializeField] public GameObject sandTile;
-    [SerializeField] public GameObject rockTile;
-    [SerializeField] public GameObject rabbit;
-    [SerializeField] public GameObject fox;
-    [SerializeField] public GameObject grass;
+    [SerializeField] private GameObject grassTile;
+    [SerializeField] private GameObject lightGrassTile;
+    [SerializeField] private GameObject waterTile;
+    [SerializeField] private GameObject sandTile;
+    [SerializeField] private GameObject rockTile;
+    [SerializeField] private GameObject rabbit;
+    [SerializeField] private GameObject fox;
+    [SerializeField] private GameObject grass;
     public GameObject collisionPlaneForMap;
     #endregion
 
     #region Numbers for Entity Spawning 
     [Header("Numbers of Entities Spawning")]
-    [SerializeField] public int numberOfRabbitsToSpawn = 0;
-    [SerializeField] public int numberOfFoxesToSpawn = 0;
-    [SerializeField] public int numberOfGrassToSpawn = 0;
+    public int numberOfRabbitsToSpawn = 0;
+    public int numberOfFoxesToSpawn = 0;
+    public int numberOfGrassToSpawn = 0;
     public static int InitialRabbitsToSpawn = 0;
     public static int InitialFoxesToSpawn = 0;
     public static int InitialGrassToSpawn = 0;
@@ -147,31 +147,6 @@ public class SimulationManager : MonoBehaviour
         //dispose of blobassetstore on destroy
         if (settings != null)
             settings.BlobAssetStore.Dispose();
-
-        //if (conversionGrassTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionGrassTile);
-
-        //if (conversionLightGrassTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionLightGrassTile);
-
-        //if (conversionWaterTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionWaterTile);
-
-        //if (conversionSandTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionSandTile);
-
-        //if (conversionRockTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionRockTile);
-
-        //if (conversionRabbit != Entity.Null)
-        //    entityManager.DestroyEntity(conversionRabbit);
-
-        //if (conversionFox != Entity.Null)
-        //    entityManager.DestroyEntity(conversionFox);
-
-        //if (conversionGrass != Entity.Null)
-        //    entityManager.DestroyEntity(conversionGrass);
-
     }
 
     #region Map Creation Methods
@@ -199,8 +174,10 @@ public class SimulationManager : MonoBehaviour
         }
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
-        collisionPlaneForMap = new GameObject();
-        collisionPlaneForMap.name = "MapCollisionPlaneGO";
+        collisionPlaneForMap = new GameObject
+        {
+            name = "MapCollisionPlaneGO"
+        };
         collisionPlaneForMap.transform.position = transform.position;
         collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
         UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
