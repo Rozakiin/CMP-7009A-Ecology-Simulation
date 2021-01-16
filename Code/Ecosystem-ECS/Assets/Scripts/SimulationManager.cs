@@ -142,7 +142,7 @@ public class SimulationManager : MonoBehaviour
             {
                 secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
                 if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
-                    CreateEntitiesFromGameObject(grass, grassPopulation / 10);
+                    CreateEntitiesFromGameObject(grass, (int)math.ceil(grassPopulation / 10));
             }
         }
     }
