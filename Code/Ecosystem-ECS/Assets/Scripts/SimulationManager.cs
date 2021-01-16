@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
+    public static int MAX_POP = 50000;
+
     EntityManager entityManager;
     public GameObjectConversionSettings settings;
     public static SimulationManager Instance;
@@ -121,6 +123,12 @@ public class SimulationManager : MonoBehaviour
 
     private void Update()
     {
+        //Emergency Pause to stop excessive population explosion that could cause freezing
+        if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
+        {
+            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
+        }
+
         //check if the setup has completed yet, finish setup
         if (!isSetupComplete)
         {

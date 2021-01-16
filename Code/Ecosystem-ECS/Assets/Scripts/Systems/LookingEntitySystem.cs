@@ -24,6 +24,12 @@ namespace Systems
 
         protected override void OnUpdate()
         {
+            //catch to not run if paused
+            if (MonoBehaviourTools.UI.UITimeControl.Instance.GetPause())
+            {
+                return;
+            }
+
             CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
             Entities.ForEach((

@@ -89,6 +89,11 @@ namespace MonoBehaviourTools.UI
         }
         private void Update()
         {
+            //catch to not run if paused
+            if (UITimeControl.Instance.GetPause())
+            {
+                return;
+            }
             if (Time.timeSinceLevelLoad >= nextTime)
             {
                 graphRabbitsList.Add(rabbitNumber);
@@ -100,7 +105,7 @@ namespace MonoBehaviourTools.UI
                 grassNumber = simulationManager.GrassPopulation();
 
                 xPos = Time.timeSinceLevelLoad;
-                nextTime += 1;
+                nextTime = Time.timeSinceLevelLoad + 1;
 
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
