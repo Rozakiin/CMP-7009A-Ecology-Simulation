@@ -253,47 +253,6 @@ public class PathFindingSystem : SystemBase
         }
     }
 
-    //Retrace path through the nodes
-    private static NativeArray<float3> GetFinalPath(PathNode _startNode, PathNode _endNode, NativeArray<PathNode> path)
-    {
-        NativeList<PathNode> finalPath = new NativeList<PathNode>(Allocator.Temp);//List to hold the path sequentially 
-        PathNode currentNode = _endNode;//Node to store the current node being checked
-
-        while (currentNode.index != _startNode.index)//While loop to work through each node going through the parents to the beginning of the path
-        {
-            finalPath.Add(currentNode);//Add that node to the final path
-            currentNode = path[currentNode.cameFromNodeIndex];//Move onto its parent node
-        }
-        if (currentNode.index == _startNode.index)
-        {
-            finalPath.Add(currentNode);
-        }
-
-        float3[] waypoints = SimplifyPath(finalPath).ToArray(); //simplify the final path
-        Array.Reverse(waypoints);//Reverse the path to get the correct order
-        return new NativeArray<float3>(waypoints, Allocator.Temp);//return the simplified final path
-    }
-
-    //Simplifies the path so the path only contains changes to the direction
-    private static NativeArray<float3> SimplifyPath(NativeList<PathNode> path)
-    {
-        NativeList<float3> waypoints = new NativeList<float3>(Allocator.Temp);
-        int2 directionOld = int2.zero; // store the direction of last 2 nodes
-
-        //checks for changes to direction in the path, only adds nodes that have differing direction to previous
-        for (int i = 1; i < path.Length; i++)
-        {
-            int2 directionNew = new int2(path[i - 1].x - path[i].x, path[i - 1].y - path[i].y); // new direction still 0 if no change in direction
-            if (!directionNew.Equals(directionOld))
-            {
-                waypoints.Add(path[i - 1].position);
-            }
-            directionOld = directionNew;
-        }
-
-        return waypoints;
-    }
-
     //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
     private NativeArray<PathNode> CreatePathNodeArray()
     {
@@ -344,15 +303,6 @@ public class PathFindingSystem : SystemBase
         int y = UnityEngine.Mathf.FloorToInt(math.min(gridSize.y * percentY, gridSize.y - 1));
 
         return pathNodeArray[CalculateIndex(x, y, gridSize.x)];// position of closest node in array
-    }
-
-    // if using NESW only
-    private static int GetManhattenDistance(PathNode _nodeA, PathNode _nodeB)
-    {
-        int x = math.abs(_nodeA.x - _nodeB.x);//x1-x2
-        int y = math.abs(_nodeA.y - _nodeB.y);//y1-y2
-
-        return x + y;//Return the sum
     }
 
     // if using diagonals
