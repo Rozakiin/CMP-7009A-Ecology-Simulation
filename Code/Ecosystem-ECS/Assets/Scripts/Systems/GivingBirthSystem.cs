@@ -216,7 +216,7 @@ public class GivingBirthSystem : SystemBase
                     ////give birth
                     #region Setting New Entity's Components
                     // determine if rabbit or fox giving birth - not very scalable
-                    if (HasComponent<isRabbitTag>(entity))
+                    if (HasComponent<IsRabbitTag>(entity))
                     {
                         Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
@@ -338,7 +338,7 @@ public class GivingBirthSystem : SystemBase
                             }
                         );
                     }
-                    else if (HasComponent<isFoxTag>(entity))
+                    else if (HasComponent<IsFoxTag>(entity))
                     {
                         Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 

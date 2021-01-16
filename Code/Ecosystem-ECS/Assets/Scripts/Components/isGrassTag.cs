@@ -2,7 +2,7 @@
 using Unity.Entities;
 
 [Serializable]
-public struct isGrassTag : IComponentData
+public struct IsGrassTag : IComponentData
 {
     
 }

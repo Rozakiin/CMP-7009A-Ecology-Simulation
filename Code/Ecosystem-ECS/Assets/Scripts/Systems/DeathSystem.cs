@@ -16,7 +16,7 @@ public class DeathSystem : SystemBase
         int rabbitsDeadThirst = 0;
 
         int rabbitsTotal = 0;
-        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+        Entities.WithAll<IsRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
         {
             rabbitsTotal++;
             if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -58,7 +58,7 @@ public class DeathSystem : SystemBase
         int foxesDeadThirst = 0;
 
         int foxesTotal = 0;
-        Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
+        Entities.WithAll<IsFoxTag>().ForEach((Entity entity, in StateData stateData) =>
         {
             foxesTotal++;
             if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
@@ -96,7 +96,7 @@ public class DeathSystem : SystemBase
         int grassEaten = 0;
         int grassTotal = 0;
 
-        Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
+        Entities.WithAll<IsGrassTag>().ForEach((Entity entity, in StateData stateData) =>
         {
             grassTotal++;
             if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))

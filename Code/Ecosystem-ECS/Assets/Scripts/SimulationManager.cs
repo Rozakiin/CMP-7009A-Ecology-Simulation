@@ -349,7 +349,7 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
 
-        entityManager.AddComponent<isFoxTag>(prototypeFox);
+        entityManager.AddComponent<IsFoxTag>(prototypeFox);
         entityManager.SetComponentData(prototypeFox,
             new Translation
             {
@@ -515,7 +515,7 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
 
-        entityManager.AddComponent<isGrassTag>(prototypeGrass);
+        entityManager.AddComponent<IsGrassTag>(prototypeGrass);
         entityManager.SetComponentData(prototypeGrass,
             new Translation
             {
@@ -575,7 +575,7 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
 
-        entityManager.AddComponent<isRabbitTag>(prototypeRabbit);
+        entityManager.AddComponent<IsRabbitTag>(prototypeRabbit);
         entityManager.SetComponentData(prototypeRabbit,
             new Translation
             {
