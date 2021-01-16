@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
@@ -32,7 +32,6 @@ public class UIGraph : MonoBehaviour
     private float yMaximum;
     private float xMaximum;
     private float InyMaximum;
-    private float InxMaximum;
     private float graphHeight;
     private float graphWidth;
     private float parentWidth;
@@ -78,7 +77,6 @@ public class UIGraph : MonoBehaviour
         InyMaximum = Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) * 5;
         yMaximum = Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) * 5;
         xMaximum = 100f;
-        InxMaximum = 100f;
         nextTime = 1;
         input = 100;
 
@@ -329,16 +327,6 @@ public class UIGraph : MonoBehaviour
         {
              Child.anchoredPosition = new Vector2(Child.anchoredPosition.x, Child.anchoredPosition.y / (yMaximum /InyMaximum));
         }
-    }
-
-    private void DecreaseX()
-    {
-        RectTransform[] AllGameObject = CircleContainer.GetComponentsInChildren<RectTransform>();
-        foreach (RectTransform Child in AllGameObject)
-        {
-            Child.anchoredPosition = new Vector2(Child.anchoredPosition.x / (xMaximum / InxMaximum), Child.anchoredPosition.y);
-        }
-
     }
 
     private void ShowGraph(float xValue,float yValue,float yValue1, float yValue2)
