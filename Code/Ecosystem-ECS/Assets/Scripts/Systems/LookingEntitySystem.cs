@@ -1,6 +1,6 @@
-﻿using Unity.Collections;
+﻿using Components;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
@@ -8,166 +8,179 @@ using Unity.Transforms;
 
 
 // this system must update in the end of frame
-[UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
-public class LookingEntitySystem : SystemBase
+namespace Systems
 {
-    BuildPhysicsWorld buildPhysicsWorld;
-
-
-    protected override void OnCreate()
+    [UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
+    public class LookingEntitySystem : SystemBase
     {
-        base.OnCreate();
-        buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
-    }
+        BuildPhysicsWorld buildPhysicsWorld;
 
-    protected override void OnUpdate()
-    {
-        CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
-        Entities.ForEach((
-            ref TargetData targetData,
-            in ColliderTypeData colliderTypeData,
-            in BasicNeedsData basicNeedsData,
-            in EdibleData edibleData,
-            in StateData stateData,
-            in Translation translation
-            ) =>
+        protected override void OnCreate()
         {
-            NativeList<int> hitsIndices = new NativeList<int>(Allocator.Temp);
-            uint mask = 1 << 4;
-            CollisionFilter filter = new CollisionFilter
-            {
-                BelongsTo = ~0u,
-                CollidesWith = mask,
-                GroupIndex = 0
-            };
+            base.OnCreate();
+            buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+        }
 
-            // hit certain area 
-            Aabb aabb = new Aabb
-            {
-                Min = translation.Value + new float3(-targetData.sightRadius, 0, -targetData.sightRadius),
-                Max = translation.Value + new float3(targetData.sightRadius, 0, targetData.sightRadius)
-            };
+        protected override void OnUpdate()
+        {
+            CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
-            OverlapAabbInput overlapAabbInput = new OverlapAabbInput
+            Entities.ForEach((
+                ref TargetData targetData,
+                in ColliderTypeData colliderTypeData,
+                in BasicNeedsData basicNeedsData,
+                in EdibleData edibleData,
+                in StateData stateData,
+                in Translation translation
+            ) =>
             {
-                Aabb = aabb,
-                Filter = filter,
-            };
-
-            // input is filter and range, out all entity who has collider, Aabb is very famous in website a way to detect 3D collision world
-            if (collisionWorld.OverlapAabb(overlapAabbInput, ref hitsIndices))
-            {
-                Entity EntityToEat = Entity.Null;
-                Entity EntityToDrink = Entity.Null;
-                Entity EntityToPredator = Entity.Null;
-                Entity EntityToMate = Entity.Null;
-                float shortestToEdibleDistance = float.PositiveInfinity;
-                float shortestToWaterDistance = float.PositiveInfinity;
-                float shortestToPredatorDistance = float.PositiveInfinity;
-                float shortestToMateDistance = float.PositiveInfinity;
-
-                //Foreach detected unitsGroup check we compare the unitsGroup node vs the one of the units
-                for (int i = 0; i < hitsIndices.Length; i++)
+                NativeList<int> hitsIndices = new NativeList<int>(Allocator.Temp);
+                uint mask = 1 << 4;
+                CollisionFilter filter = new CollisionFilter
                 {
-                    Entity childEntity = collisionWorld.Bodies[hitsIndices[i]].Entity;
+                    BelongsTo = ~0u,
+                    CollidesWith = mask,
+                    GroupIndex = 0
+                };
 
-                    float distanceToEntity = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[childEntity].Value);
-                    ColliderTypeData.ColliderType childEntityNumber = GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].colliderType;
+                // hit certain area 
+                Aabb aabb = new Aabb
+                {
+                    Min = translation.Value + new float3(-targetData.sightRadius, 0, -targetData.sightRadius),
+                    Max = translation.Value + new float3(targetData.sightRadius, 0, targetData.sightRadius)
+                };
 
-                    // find food
-                    if (HasComponent<EdibleData>(childEntity))
+                OverlapAabbInput overlapAabbInput = new OverlapAabbInput
+                {
+                    Aabb = aabb,
+                    Filter = filter,
+                };
+
+                // input is filter and range, out all entity who has collider, Aabb is very famous in website a way to detect 3D collision world
+                if (collisionWorld.OverlapAabb(overlapAabbInput, ref hitsIndices))
+                {
+                    Entity EntityToEat = Entity.Null;
+                    Entity EntityToDrink = Entity.Null;
+                    Entity EntityToPredator = Entity.Null;
+                    Entity EntityToMate = Entity.Null;
+                    float shortestToEdibleDistance = float.PositiveInfinity;
+                    float shortestToWaterDistance = float.PositiveInfinity;
+                    float shortestToPredatorDistance = float.PositiveInfinity;
+                    float shortestToMateDistance = float.PositiveInfinity;
+
+                    //Foreach detected unitsGroup check we compare the unitsGroup node vs the one of the units
+                    for (int i = 0; i < hitsIndices.Length; i++)
                     {
-                        EdibleData childEdibleData = GetComponentDataFromEntity<EdibleData>(true)[childEntity];
-                        // if foodtype in diet and not same type
-                        if (((childEdibleData.foodType & (EdibleData.FoodType)basicNeedsData.diet) == childEdibleData.foodType) &&
-                            (childEdibleData.canBeEaten) &&
-                            (childEntityNumber != colliderTypeData.colliderType))
-                        {
-                            if (distanceToEntity < shortestToEdibleDistance)
-                            {
-                                shortestToEdibleDistance = distanceToEntity;
-                                EntityToEat = childEntity;
-                            }
-                        }
-                    }
+                        Entity childEntity = collisionWorld.Bodies[hitsIndices[i]].Entity;
 
-                    //find drink
-                    if (HasComponent<DrinkableData>(childEntity))
-                    {
-                        DrinkableData childDrinkableData = GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
-                        if (childDrinkableData.canBeDrunk)
-                        {
-                            if (distanceToEntity < shortestToWaterDistance)
-                            {
-                                shortestToWaterDistance = distanceToEntity;
-                                EntityToDrink = childEntity;
-                            }
-                        }
-                    }
+                        float distanceToEntity = math.distance(translation.Value,
+                            GetComponentDataFromEntity<Translation>(true)[childEntity].Value);
+                        ColliderTypeData.ColliderType childEntityNumber =
+                            GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].colliderType;
 
-                    //find mate
-                    if (childEntityNumber == colliderTypeData.colliderType)
-                    {
-                        StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
-                        BioStatsData.Gender childGender = GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender;
-                        if ((!childStateData.isPregnant) &&
-                            (childGender == BioStatsData.Gender.Female) &&
-                            (!childStateData.isMating) &&
-                            (!childStateData.isGivingBirth))
+                        // find food
+                        if (HasComponent<EdibleData>(childEntity))
                         {
-                            if (distanceToEntity < shortestToMateDistance)
+                            EdibleData childEdibleData = GetComponentDataFromEntity<EdibleData>(true)[childEntity];
+                            // if foodtype in diet and not same type
+                            if (((childEdibleData.foodType & (EdibleData.FoodType) basicNeedsData.diet) ==
+                                 childEdibleData.foodType) &&
+                                (childEdibleData.canBeEaten) &&
+                                (childEntityNumber != colliderTypeData.colliderType))
                             {
-                                //if not currently mating change to that closer entity, if mating keep current mate
-                                if (!stateData.isMating)
+                                if (distanceToEntity < shortestToEdibleDistance)
                                 {
-                                    shortestToMateDistance = distanceToEntity;
-                                    EntityToMate = childEntity;
+                                    shortestToEdibleDistance = distanceToEntity;
+                                    EntityToEat = childEntity;
                                 }
-                                else
+                            }
+                        }
+
+                        //find drink
+                        if (HasComponent<DrinkableData>(childEntity))
+                        {
+                            DrinkableData childDrinkableData =
+                                GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
+                            if (childDrinkableData.canBeDrunk)
+                            {
+                                if (distanceToEntity < shortestToWaterDistance)
                                 {
-                                    //recalc distance
-                                    if (HasComponent<Translation>(targetData.entityToMate))
+                                    shortestToWaterDistance = distanceToEntity;
+                                    EntityToDrink = childEntity;
+                                }
+                            }
+                        }
+
+                        //find mate
+                        if (childEntityNumber == colliderTypeData.colliderType)
+                        {
+                            StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
+                            BioStatsData.Gender childGender =
+                                GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender;
+                            if ((!childStateData.isPregnant) &&
+                                (childGender == BioStatsData.Gender.Female) &&
+                                (!childStateData.isMating) &&
+                                (!childStateData.isGivingBirth))
+                            {
+                                if (distanceToEntity < shortestToMateDistance)
+                                {
+                                    //if not currently mating change to that closer entity, if mating keep current mate
+                                    if (!stateData.isMating)
                                     {
-                                        shortestToMateDistance = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value);
-                                        EntityToMate = targetData.entityToMate;
+                                        shortestToMateDistance = distanceToEntity;
+                                        EntityToMate = childEntity;
+                                    }
+                                    else
+                                    {
+                                        //recalc distance
+                                        if (HasComponent<Translation>(targetData.entityToMate))
+                                        {
+                                            shortestToMateDistance = math.distance(translation.Value,
+                                                GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate]
+                                                    .Value);
+                                            EntityToMate = targetData.entityToMate;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    //find predator
-                    if (HasComponent<BasicNeedsData>(childEntity))
-                    {
-                        BasicNeedsData.Diet childDiet = GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].diet;
-                        // if child entity has diet that contains this entities foodtype ie predator
-                        if ((((EdibleData.FoodType)childDiet & edibleData.foodType) == edibleData.foodType) &&
-                            (childEntityNumber != colliderTypeData.colliderType))
+                        //find predator
+                        if (HasComponent<BasicNeedsData>(childEntity))
                         {
-                            if (distanceToEntity < shortestToPredatorDistance)
+                            BasicNeedsData.Diet childDiet =
+                                GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].diet;
+                            // if child entity has diet that contains this entities foodtype ie predator
+                            if ((((EdibleData.FoodType) childDiet & edibleData.foodType) == edibleData.foodType) &&
+                                (childEntityNumber != colliderTypeData.colliderType))
                             {
-                                shortestToPredatorDistance = distanceToEntity;
-                                EntityToPredator = childEntity;
+                                if (distanceToEntity < shortestToPredatorDistance)
+                                {
+                                    shortestToPredatorDistance = distanceToEntity;
+                                    EntityToPredator = childEntity;
+                                }
                             }
                         }
                     }
-                }
-                // if some type of entity didn't find in this frame so just set up to entity.null
-                // because statesystem will based on, for example predatorEntity is null or not to get into some states
-                // so if no predatorEntity rabbit will go back to wanfering states something like that
-                targetData.entityToEat = EntityToEat;
-                targetData.entityToDrink = EntityToDrink;
-                targetData.predatorEntity = EntityToPredator;
-                targetData.entityToMate = EntityToMate;
 
-                //just test, delete to user version
-                targetData.shortestToEdibleDistance = shortestToEdibleDistance;
-                targetData.shortestToPredatorDistance = shortestToPredatorDistance;
-                targetData.shortestToWaterDistance = shortestToWaterDistance;
-                targetData.shortestToMateDistance = shortestToMateDistance;
-            }
-            hitsIndices.Dispose();
-        }).ScheduleParallel();
+                    // if some type of entity didn't find in this frame so just set up to entity.null
+                    // because statesystem will based on, for example predatorEntity is null or not to get into some states
+                    // so if no predatorEntity rabbit will go back to wanfering states something like that
+                    targetData.entityToEat = EntityToEat;
+                    targetData.entityToDrink = EntityToDrink;
+                    targetData.predatorEntity = EntityToPredator;
+                    targetData.entityToMate = EntityToMate;
+
+                    //just test, delete to user version
+                    targetData.shortestToEdibleDistance = shortestToEdibleDistance;
+                    targetData.shortestToPredatorDistance = shortestToPredatorDistance;
+                    targetData.shortestToWaterDistance = shortestToWaterDistance;
+                    targetData.shortestToMateDistance = shortestToMateDistance;
+                }
+
+                hitsIndices.Dispose();
+            }).ScheduleParallel();
+        }
     }
 }

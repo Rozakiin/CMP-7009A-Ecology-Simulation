@@ -1,22 +1,25 @@
-﻿using Unity.Entities;
-using Unity.Jobs;
+﻿using Components;
+using Unity.Entities;
 
-public class ThirstSystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class ThirstSystem : SystemBase
     {
-        float deltaTime = Time.DeltaTime;
-
-        Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData) =>
+        protected override void OnUpdate()
         {
-            // Increase thirst
-            basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
+            float deltaTime = Time.DeltaTime;
 
-            //If the entityToDrink exists and entity is drinking
-            if (HasComponent<DrinkableData>(targetData.entityToDrink) && stateData.isDrinking)
+            Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData) =>
             {
-                basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
-            }
-        }).ScheduleParallel();
+                // Increase thirst
+                basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
+
+                //If the entityToDrink exists and entity is drinking
+                if (HasComponent<DrinkableData>(targetData.entityToDrink) && stateData.isDrinking)
+                {
+                    basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets nutritionalValue from entityToEat (GetComponentDataFromEntity gives array like access)
+                }
+            }).ScheduleParallel();
+        }
     }
 }

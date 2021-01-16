@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using Components;
+using EntityDefaults;
+using MonoBehaviourTools.Grid;
+using MonoBehaviourTools.Map;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -6,13 +10,13 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
-    EntityManager entityManager;
-    public GameObjectConversionSettings settings;
-    public static SimulationManager Instance;
+    private EntityManager entityManager;
+    private GameObjectConversionSettings settings;
+    public static SimulationManager instance;
     [SerializeField] public bool isDebugEnabled;
     public bool isSetupComplete;
 
-    int secondsOfLastGrassSpawn;
+    private int secondsOfLastGrassSpawn;
 
     #region Converted Entities
     public Entity conversionGrassTile;
@@ -43,9 +47,9 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] public int numberOfRabbitsToSpawn = 0;
     [SerializeField] public int numberOfFoxesToSpawn = 0;
     [SerializeField] public int numberOfGrassToSpawn = 0;
-    public static int InitialRabbitsToSpawn = 0;
-    public static int InitialFoxesToSpawn = 0;
-    public static int InitialGrassToSpawn = 0;
+    public static int initialRabbitsToSpawn = 0;
+    public static int initialFoxesToSpawn = 0;
+    public static int initialGrassToSpawn = 0;
     #endregion
 
     #region Population Info for Entities
@@ -88,22 +92,22 @@ public class SimulationManager : MonoBehaviour
     public static float downLimit;
     #endregion
     #region Initialisation
-    void Start()
+    private void Start()
     {
-        if (Instance == null)
-            Instance = this;
+        if (instance == null)
+            instance = this;
         isSetupComplete = false;
         Application.targetFrameRate = 60; // Target 60fps
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        if (InitialRabbitsToSpawn != 0)
-            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
-        if (InitialFoxesToSpawn != 0)
-            numberOfFoxesToSpawn = InitialFoxesToSpawn;
-        if (InitialGrassToSpawn != 0)
-            numberOfGrassToSpawn = InitialGrassToSpawn;
+        if (initialRabbitsToSpawn != 0)
+            numberOfRabbitsToSpawn = initialRabbitsToSpawn;
+        if (initialFoxesToSpawn != 0)
+            numberOfFoxesToSpawn = initialFoxesToSpawn;
+        if (initialGrassToSpawn != 0)
+            numberOfGrassToSpawn = initialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
@@ -114,7 +118,7 @@ public class SimulationManager : MonoBehaviour
     }
     #endregion
 
-    void Update()
+    private void Update()
     {
         //check if the setup has completed yet, finish setup
         if (!isSetupComplete)
@@ -822,7 +826,7 @@ public class SimulationManager : MonoBehaviour
         return (float)grassPopulation;
     }
 
-    public Vector2 MapSize()
+    public static Vector2 MapSize()
     {
         return new Vector2(gridWidth, gridHeight);
     }

@@ -1,10 +1,13 @@
-﻿using Unity.Entities;
-using Unity.Jobs;
+﻿using Components;
+using EntityDefaults;
+using Unity.Entities;
 
-public class UIUpdateSystem : SystemBase
+namespace Systems
 {
-    public bool somethingChangedFlag;
-    public static UIUpdateSystem Instance; // public reference to self (singleton)
+    public class UIUpdateSystem : SystemBase
+    {
+        public bool somethingChangedFlag;
+        public static UIUpdateSystem Instance; // public reference to self (singleton)
 
 
     protected override void OnCreate()
@@ -260,7 +263,8 @@ public class UIUpdateSystem : SystemBase
             }).ScheduleParallel();
 
 
-            somethingChangedFlag = false;
+                somethingChangedFlag = false;
+            }
         }
     }
 }

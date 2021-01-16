@@ -1,16 +1,19 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-[GenerateAuthoringComponent]
-public struct ColliderTypeData : IComponentData
+namespace Components
 {
-    public enum ColliderType
+    [Serializable]
+    [GenerateAuthoringComponent]
+    public struct ColliderTypeData : IComponentData
     {
-        Fox,
-        Rabbit,
-        Grass,
-        Water
+        public enum ColliderType
+        {
+            Fox,
+            Rabbit,
+            Grass,
+            Water
+        }
+        public ColliderType colliderType;
     }
-    public ColliderType colliderType;
 }

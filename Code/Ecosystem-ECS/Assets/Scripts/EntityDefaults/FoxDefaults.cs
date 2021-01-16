@@ -1,15 +1,18 @@
-﻿using Unity.Entities;
+﻿using Components;
+using Unity.Entities;
 
 /* Use this class to define all the default values for components related to Fox Entities */
-public static class FoxDefaults
+namespace EntityDefaults
 {
-    //Age
-    public static float age = 0f;
-    public static float ageIncrease = 1f;
-    public static float ageMax = 800f;
-    public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-    public static float adultEntryTimer = 20f;
-    public static float oldEntryTimer = 600f;
+    public static class FoxDefaults
+    {
+        //Age
+        public static float age = 0f;
+        public static float ageIncrease = 1f;
+        public static float ageMax = 800f;
+        public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
+        public static float adultEntryTimer = 20f;
+        public static float oldEntryTimer = 600f;
 
 
     //Edible
@@ -106,6 +109,7 @@ public static class FoxDefaults
     public static float shortestToMateDistance = float.PositiveInfinity;
 
 
-    //ColliderTypeData
-    public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Fox;
+        //ColliderTypeData
+        public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Fox;
+    }
 }

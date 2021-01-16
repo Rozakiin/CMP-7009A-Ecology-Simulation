@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace SFB {
+namespace MonoBehaviourTools.StandaloneFileBrowser {
 
     public class StandaloneFileBrowserLinux : IStandaloneFileBrowser {
         

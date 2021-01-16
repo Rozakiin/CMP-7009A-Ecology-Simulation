@@ -1,6 +1,6 @@
 using System;
 
-namespace SFB {
+namespace MonoBehaviourTools.StandaloneFileBrowser {
     public struct ExtensionFilter {
         public string Name;
         public string[] Extensions;

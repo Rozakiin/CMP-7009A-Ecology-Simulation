@@ -1,44 +1,47 @@
-﻿using Unity.Entities;
-using Unity.Jobs;
+﻿using Components;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public class PathFollowSystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class PathFollowSystem : SystemBase
     {
-        float deltaTime = Time.DeltaTime;
-
-        Entities.ForEach((
-            DynamicBuffer<PathPositionData> pathPositionDataBuffer,
-            ref Translation translation,
-            ref Rotation rotation,
-            ref PathFollowData pathFollowData,
-            in MovementData movementData,
-            in TargetData targetData) =>
+        protected override void OnUpdate()
         {
-            // if currently following a path
-            if (pathFollowData.pathIndex >= 0)
+            float deltaTime = Time.DeltaTime;
+
+            Entities.ForEach((
+                DynamicBuffer<PathPositionData> pathPositionDataBuffer,
+                ref Translation translation,
+                ref Rotation rotation,
+                ref PathFollowData pathFollowData,
+                in MovementData movementData,
+                in TargetData targetData) =>
             {
-                //get the world position of next path node to follow
-                float3 targetPosition = pathPositionDataBuffer[pathFollowData.pathIndex].position;
-
-                //calc the direction to move
-                float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
-                float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)
-
-                //rotate towards the targetPosition
-                rotation.Value = math.slerp(math.normalizesafe(rotation.Value), quaternion.LookRotationSafe(moveDir, math.up()), step);
-                //move towards the targetPosition
-                translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
-
-                //If at the targetPosition
-                if (math.distance(translation.Value, targetPosition) <= targetData.touchRadius)
+                // if currently following a path
+                if (pathFollowData.pathIndex >= 0)
                 {
-                    // Next waypoint
-                    pathFollowData.pathIndex--;
+                    //get the world position of next path node to follow
+                    float3 targetPosition = pathPositionDataBuffer[pathFollowData.pathIndex].position;
+
+                    //calc the direction to move
+                    float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
+                    float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)
+
+                    //rotate towards the targetPosition
+                    rotation.Value = math.slerp(math.normalizesafe(rotation.Value), quaternion.LookRotationSafe(moveDir, math.up()), step);
+                    //move towards the targetPosition
+                    translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
+
+                    //If at the targetPosition
+                    if (math.distance(translation.Value, targetPosition) <= targetData.touchRadius)
+                    {
+                        // Next waypoint
+                        pathFollowData.pathIndex--;
+                    }
                 }
-            }
-        }).ScheduleParallel();
+            }).ScheduleParallel();
+        }
     }
 }

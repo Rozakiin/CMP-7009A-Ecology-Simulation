@@ -1,25 +1,28 @@
-﻿using Unity.Entities;
-using Unity.Jobs;
+﻿using Components;
+using Unity.Entities;
 
-public class AgeingSystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class AgeingSystem : SystemBase
     {
-        float deltaTime = Time.DeltaTime;
-
-        Entities.ForEach((ref BioStatsData bioStatsData) =>
+        protected override void OnUpdate()
         {
-            // Increase age
-            bioStatsData.age += bioStatsData.ageIncrease * deltaTime;
+            float deltaTime = Time.DeltaTime;
 
-            if (bioStatsData.age >= bioStatsData.oldEntryTimer)
+            Entities.ForEach((ref BioStatsData bioStatsData) =>
             {
-                bioStatsData.ageGroup = BioStatsData.AgeGroup.Old;
-            }
-            else if (bioStatsData.age >= bioStatsData.adultEntryTimer)
-            {
-                bioStatsData.ageGroup = BioStatsData.AgeGroup.Adult;
-            }
-        }).ScheduleParallel();
+                // Increase age
+                bioStatsData.age += bioStatsData.ageIncrease * deltaTime;
+
+                if (bioStatsData.age >= bioStatsData.oldEntryTimer)
+                {
+                    bioStatsData.ageGroup = BioStatsData.AgeGroup.Old;
+                }
+                else if (bioStatsData.age >= bioStatsData.adultEntryTimer)
+                {
+                    bioStatsData.ageGroup = BioStatsData.AgeGroup.Adult;
+                }
+            }).ScheduleParallel();
+        }
     }
 }

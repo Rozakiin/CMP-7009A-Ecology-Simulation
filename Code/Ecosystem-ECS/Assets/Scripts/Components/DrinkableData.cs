@@ -1,11 +1,14 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-[GenerateAuthoringComponent]
-
-public struct DrinkableData : IComponentData
+namespace Components
 {
-    public float Value;
-    public bool canBeDrunk;
+    [Serializable]
+    [GenerateAuthoringComponent]
+
+    public struct DrinkableData : IComponentData
+    {
+        public float Value;
+        public bool canBeDrunk;
+    }
 }

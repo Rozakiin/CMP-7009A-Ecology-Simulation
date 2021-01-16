@@ -1,18 +1,21 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-[GenerateAuthoringComponent]
-public struct SizeData : IComponentData
+namespace Components
 {
-    public float size;
-    public float sizeMultiplier;
-    public float ageSizeMultiplier;
-    public float youngSizeMultiplier;
-    public float adultSizeMultiplier;
-    public float oldSizeMultiplier;
-    public float Size
+    [Serializable]
+    [GenerateAuthoringComponent]
+    public struct SizeData : IComponentData
     {
-        get { return size * sizeMultiplier * ageSizeMultiplier; }
+        public float size;
+        public float sizeMultiplier;
+        public float ageSizeMultiplier;
+        public float youngSizeMultiplier;
+        public float adultSizeMultiplier;
+        public float oldSizeMultiplier;
+        public float Size
+        {
+            get { return size * sizeMultiplier * ageSizeMultiplier; }
+        }
     }
 }

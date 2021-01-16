@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using Components;
+using EntityDefaults;
+using MonoBehaviourTools.Map;
+using MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using SFB;
-using System.IO;
-using System.Xml;
-using System;
 
-namespace SpeedTutorMainMenuSystem
+namespace MonoBehaviourTools.MenuScripts
 {
     public class MenuController : MonoBehaviour
     {
@@ -495,7 +497,7 @@ namespace SpeedTutorMainMenuSystem
         #region Loading Map From File
         public void LoadMap()
         {
-            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
+            var paths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
             if (paths.Length > 0)
             {
                 StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
@@ -646,13 +648,13 @@ namespace SpeedTutorMainMenuSystem
             switch (entityToUpdate)
             {
                 case "Rabbit":
-                    SimulationManager.InitialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
+                    SimulationManager.initialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
                     break;
                 case "Fox":
-                    SimulationManager.InitialFoxesToSpawn = int.Parse(foxNumberInputField.text);
+                    SimulationManager.initialFoxesToSpawn = int.Parse(foxNumberInputField.text);
                     break;
                 case "Grass":
-                    SimulationManager.InitialGrassToSpawn = int.Parse(grassNumberInputField.text);
+                    SimulationManager.initialGrassToSpawn = int.Parse(grassNumberInputField.text);
                     break;
                 default:
                     Debug.LogWarning("Attempted to update unknown entity in switch: " + entityToUpdate, this);
@@ -1263,7 +1265,7 @@ namespace SpeedTutorMainMenuSystem
 
         public void LoadGame()
         {
-            string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
+            string[] filePaths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
             string filePath = filePaths[0];
             if (File.Exists(filePath))
             {
@@ -1598,4 +1600,5 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
     }
+
 }

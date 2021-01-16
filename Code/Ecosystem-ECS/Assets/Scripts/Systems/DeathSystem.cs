@@ -1,112 +1,114 @@
-﻿using Unity.Collections;
+﻿using Components;
 using Unity.Entities;
-using Unity.Jobs;
 
-public class DeathSystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class DeathSystem : SystemBase
     {
-        // Checks What entity is dead, increment the dead count, decrement the living count, store how they died and destory the entity
-        // Also counts the total number of each entity
-
-        int rabbitsDeadTotal = 0;
-        int rabbitsDeadAge = 0;
-        int rabbitsDeadEaten = 0;
-        int rabbitsDeadHunger = 0;
-        int rabbitsDeadThirst = 0;
-
-        int rabbitsTotal = 0;
-        Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+        protected override void OnUpdate()
         {
-            rabbitsTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            // Checks What entity is dead, increment the dead count, decrement the living count, store how they died and destory the entity
+            // Also counts the total number of each entity
+
+            int rabbitsDeadTotal = 0;
+            int rabbitsDeadAge = 0;
+            int rabbitsDeadEaten = 0;
+            int rabbitsDeadHunger = 0;
+            int rabbitsDeadThirst = 0;
+
+            int rabbitsTotal = 0;
+            Entities.WithAll<isRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
             {
-                rabbitsDeadTotal++;
-                switch (stateData.deathReason)
+                rabbitsTotal++;
+                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
                 {
-                    case StateData.DeathReason.Age:
-                        rabbitsDeadAge++;
-                        break;
-                    case StateData.DeathReason.Eaten:
-                        rabbitsDeadEaten++;
-                        break;
-                    case StateData.DeathReason.Hunger:
-                        rabbitsDeadHunger++;
-                        break;
-                    case StateData.DeathReason.Thirst:
-                        rabbitsDeadThirst++;
-                        break;
-                    default:
-                        throw new System.NotImplementedException();
+                    rabbitsDeadTotal++;
+                    switch (stateData.deathReason)
+                    {
+                        case StateData.DeathReason.Age:
+                            rabbitsDeadAge++;
+                            break;
+                        case StateData.DeathReason.Eaten:
+                            rabbitsDeadEaten++;
+                            break;
+                        case StateData.DeathReason.Hunger:
+                            rabbitsDeadHunger++;
+                            break;
+                        case StateData.DeathReason.Thirst:
+                            rabbitsDeadThirst++;
+                            break;
+                        default:
+                            throw new System.NotImplementedException();
+                    }
+                    EntityManager.DestroyEntity(entity);
                 }
-                EntityManager.DestroyEntity(entity);
-            }
-        }).WithStructuralChanges().Run();
-        SimulationManager.Instance.rabbitPopulation = rabbitsTotal;
-        SimulationManager.Instance.rabbitPopulation -= rabbitsDeadTotal;
-        SimulationManager.Instance.numberOfRabbitsDeadTotal += rabbitsDeadTotal;
-        SimulationManager.Instance.numberOfRabbitsDeadAge += rabbitsDeadAge;
-        SimulationManager.Instance.numberOfRabbitsDeadEaten += rabbitsDeadEaten;
-        SimulationManager.Instance.numberOfRabbitsDeadHunger += rabbitsDeadHunger;
-        SimulationManager.Instance.numberOfRabbitsDeadThirst += rabbitsDeadThirst;
+            }).WithStructuralChanges().Run();
+            SimulationManager.instance.rabbitPopulation = rabbitsTotal;
+            SimulationManager.instance.rabbitPopulation -= rabbitsDeadTotal;
+            SimulationManager.instance.numberOfRabbitsDeadTotal += rabbitsDeadTotal;
+            SimulationManager.instance.numberOfRabbitsDeadAge += rabbitsDeadAge;
+            SimulationManager.instance.numberOfRabbitsDeadEaten += rabbitsDeadEaten;
+            SimulationManager.instance.numberOfRabbitsDeadHunger += rabbitsDeadHunger;
+            SimulationManager.instance.numberOfRabbitsDeadThirst += rabbitsDeadThirst;
 
 
-        int foxesDeadTotal = 0;
-        int foxesDeadAge = 0;
-        int foxesDeadEaten = 0;
-        int foxesDeadHunger = 0;
-        int foxesDeadThirst = 0;
+            int foxesDeadTotal = 0;
+            int foxesDeadAge = 0;
+            int foxesDeadEaten = 0;
+            int foxesDeadHunger = 0;
+            int foxesDeadThirst = 0;
 
-        int foxesTotal = 0;
-        Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
-        {
-            foxesTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            int foxesTotal = 0;
+            Entities.WithAll<isFoxTag>().ForEach((Entity entity, in StateData stateData) =>
             {
-                foxesDeadTotal++;
-                switch (stateData.deathReason)
+                foxesTotal++;
+                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
                 {
-                    case StateData.DeathReason.Age:
-                        foxesDeadAge++;
-                        break;
-                    case StateData.DeathReason.Eaten:
-                        foxesDeadEaten++;
-                        break;
-                    case StateData.DeathReason.Hunger:
-                        foxesDeadHunger++;
-                        break;
-                    case StateData.DeathReason.Thirst:
-                        foxesDeadThirst++;
-                        break;
-                    default:
-                        throw new System.NotImplementedException();
+                    foxesDeadTotal++;
+                    switch (stateData.deathReason)
+                    {
+                        case StateData.DeathReason.Age:
+                            foxesDeadAge++;
+                            break;
+                        case StateData.DeathReason.Eaten:
+                            foxesDeadEaten++;
+                            break;
+                        case StateData.DeathReason.Hunger:
+                            foxesDeadHunger++;
+                            break;
+                        case StateData.DeathReason.Thirst:
+                            foxesDeadThirst++;
+                            break;
+                        default:
+                            throw new System.NotImplementedException();
+                    }
+                    EntityManager.DestroyEntity(entity);
                 }
-                EntityManager.DestroyEntity(entity);
-            }
-        }).WithStructuralChanges().Run();
-        SimulationManager.Instance.foxPopulation = foxesTotal;
-        SimulationManager.Instance.foxPopulation -= foxesDeadTotal;
-        SimulationManager.Instance.numberOfFoxesDeadTotal += foxesDeadTotal;
-        SimulationManager.Instance.numberOfFoxesDeadAge += foxesDeadAge;
-        SimulationManager.Instance.numberOfFoxesDeadEaten += foxesDeadEaten;
-        SimulationManager.Instance.numberOfFoxesDeadHunger += foxesDeadHunger;
-        SimulationManager.Instance.numberOfFoxesDeadThirst += foxesDeadThirst;
+            }).WithStructuralChanges().Run();
+            SimulationManager.instance.foxPopulation = foxesTotal;
+            SimulationManager.instance.foxPopulation -= foxesDeadTotal;
+            SimulationManager.instance.numberOfFoxesDeadTotal += foxesDeadTotal;
+            SimulationManager.instance.numberOfFoxesDeadAge += foxesDeadAge;
+            SimulationManager.instance.numberOfFoxesDeadEaten += foxesDeadEaten;
+            SimulationManager.instance.numberOfFoxesDeadHunger += foxesDeadHunger;
+            SimulationManager.instance.numberOfFoxesDeadThirst += foxesDeadThirst;
 
 
-        int grassEaten = 0;
-        int grassTotal = 0;
+            int grassEaten = 0;
+            int grassTotal = 0;
 
-        Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
-        {
-            grassTotal++;
-            if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+            Entities.WithAll<isGrassTag>().ForEach((Entity entity, in StateData stateData) =>
             {
-                grassEaten++;
-                EntityManager.DestroyEntity(entity);
-            }
-        }).WithStructuralChanges().Run();
-        SimulationManager.Instance.grassPopulation = grassTotal;
-        SimulationManager.Instance.grassPopulation -= grassEaten;
-        SimulationManager.Instance.numberOfGrassEaten += grassEaten;
+                grassTotal++;
+                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.flagState))
+                {
+                    grassEaten++;
+                    EntityManager.DestroyEntity(entity);
+                }
+            }).WithStructuralChanges().Run();
+            SimulationManager.instance.grassPopulation = grassTotal;
+            SimulationManager.instance.grassPopulation -= grassEaten;
+            SimulationManager.instance.numberOfGrassEaten += grassEaten;
+        }
     }
 }

@@ -1,60 +1,62 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[ExecuteInEditMode]
-[AddComponentMenu("Image Effects/Color Adjustments/Brightness")]
-public class Brightness : MonoBehaviour
+namespace MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader
 {
-
-    /// Provides a shader property that is set in the inspector
-    /// and a material instantiated from the shader
-    public Shader shaderDerp;
-    Material m_Material;
-
-    [Range(0.5f, 2f)]
-    public float brightness = 1f;
-
-    void Start()
+    [ExecuteInEditMode]
+    [AddComponentMenu("Image Effects/Color Adjustments/Brightness")]
+    public class Brightness : MonoBehaviour
     {
-        // Disable if we don't support image effects
-        if (!SystemInfo.supportsImageEffects)
+
+        /// Provides a shader property that is set in the inspector
+        /// and a material instantiated from the shader
+        public Shader shaderDerp;
+        Material m_Material;
+
+        [Range(0.5f, 2f)]
+        public float brightness = 1f;
+
+        void Start()
         {
-            enabled = false;
-            return;
-        }
-
-        // Disable the image effect if the shader can't
-        // run on the users graphics card
-        if (!shaderDerp || !shaderDerp.isSupported)
-            enabled = false;
-    }
-
-
-    Material material
-    {
-        get
-        {
-            if (m_Material == null)
+            // Disable if we don't support image effects
+            if (!SystemInfo.supportsImageEffects)
             {
-                m_Material = new Material(shaderDerp);
-                m_Material.hideFlags = HideFlags.HideAndDontSave;
+                enabled = false;
+                return;
             }
-            return m_Material;
+
+            // Disable the image effect if the shader can't
+            // run on the users graphics card
+            if (!shaderDerp || !shaderDerp.isSupported)
+                enabled = false;
         }
-    }
 
 
-    void OnDisable()
-    {
-        if (m_Material)
+        Material material
         {
-            DestroyImmediate(m_Material);
+            get
+            {
+                if (m_Material == null)
+                {
+                    m_Material = new Material(shaderDerp);
+                    m_Material.hideFlags = HideFlags.HideAndDontSave;
+                }
+                return m_Material;
+            }
         }
-    }
 
-    void OnRenderImage(RenderTexture source, RenderTexture destination)
-    {
-        material.SetFloat("_Brightness", brightness);
-        Graphics.Blit(source, destination, material);
+
+        void OnDisable()
+        {
+            if (m_Material)
+            {
+                DestroyImmediate(m_Material);
+            }
+        }
+
+        void OnRenderImage(RenderTexture source, RenderTexture destination)
+        {
+            material.SetFloat("_Brightness", brightness);
+            Graphics.Blit(source, destination, material);
+        }
     }
 }
