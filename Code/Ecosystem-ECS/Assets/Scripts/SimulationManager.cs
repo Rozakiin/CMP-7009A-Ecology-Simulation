@@ -47,9 +47,9 @@ public class SimulationManager : MonoBehaviour
     public int numberOfRabbitsToSpawn = 0;
     public int numberOfFoxesToSpawn = 0;
     public int numberOfGrassToSpawn = 0;
-    public static int InitialRabbitsToSpawn = 0;
-    public static int InitialFoxesToSpawn = 0;
-    public static int InitialGrassToSpawn = 0;
+    public static int InitialRabbitsToSpawn = -1;
+    public static int InitialFoxesToSpawn = -1;
+    public static int InitialGrassToSpawn = -1;
     #endregion
 
     #region Population Info for Entities
@@ -102,18 +102,19 @@ public class SimulationManager : MonoBehaviour
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        if (InitialRabbitsToSpawn != 0)
+        if (InitialRabbitsToSpawn >= 0)
             numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
-        if (InitialFoxesToSpawn != 0)
+        if (InitialFoxesToSpawn >= 0)
             numberOfFoxesToSpawn = InitialFoxesToSpawn;
-        if (InitialGrassToSpawn != 0)
+        if (InitialGrassToSpawn >= 0)
             numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
         if (!CreateMap())
         {
-            Debug.Log("Error Loading Map");
+            Debug.LogError("Error Loading Map");
+            Application.Quit();
         }
     }
     #endregion
