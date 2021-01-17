@@ -121,7 +121,7 @@ namespace MonoBehaviourTools.UI
                 graphGrassList.Add(grassNumber);
 
                 int graphLength = graphRabbitsList.Count;
-                print(graphLength);
+             
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
                     inyMaximum = yMaximum;
