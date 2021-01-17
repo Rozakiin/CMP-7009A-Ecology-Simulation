@@ -105,7 +105,7 @@ namespace MonoBehaviourTools.UI
                 grassNumber = simulationManager.GrassPopulation();
 
                 xPos = Time.timeSinceLevelLoad;
-                nextTime = Time.timeSinceLevelLoad + 1;
+                nextTime += 1;
 
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
