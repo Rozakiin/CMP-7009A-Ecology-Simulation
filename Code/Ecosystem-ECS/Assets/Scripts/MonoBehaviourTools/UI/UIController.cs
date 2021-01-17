@@ -51,6 +51,8 @@ namespace MonoBehaviourTools.UI
             "RabbitThirstIncreaseBase",
             "RabbitDrinkingSpeed",
             "RabbitMatingDuration",
+            "RabbitMatingThreshold",
+            "RabbitReproductiveUrgeIncrease",
             "RabbitPregnancyLength",
             "RabbitBirthDuration",
             "RabbitLitterSizeMin",
@@ -82,6 +84,8 @@ namespace MonoBehaviourTools.UI
             "FoxThirstIncreaseBase",
             "FoxDrinkingSpeed",
             "FoxMatingDuration",
+            "FoxMatingThreshold",
+            "FoxReproductiveUrgeIncrease",
             "FoxPregnancyLength",
             "FoxBirthDuration",
             "FoxLitterSizeMin",
@@ -179,6 +183,12 @@ namespace MonoBehaviourTools.UI
                 case "RabbitMatingDuration":
                     dropdownInputField.text = RabbitDefaults.matingDuration.ToString();
                     break;
+                case "RabbitMatingThreshold":
+                    dropdownInputField.text = RabbitDefaults.matingThreshold.ToString();
+                    break;
+                case "RabbitReproductiveUrgeIncrease":
+                    dropdownInputField.text = RabbitDefaults.reproductiveUrgeIncreaseMale.ToString();
+                    break;
                 case "RabbitPregnancyLength":
                     dropdownInputField.text = RabbitDefaults.pregnancyLength.ToString();
                     break;
@@ -274,6 +284,12 @@ namespace MonoBehaviourTools.UI
                     break;
                 case "FoxMatingDuration":
                     dropdownInputField.text = FoxDefaults.matingDuration.ToString();
+                    break;
+                case "FoxMatingThreshold":
+                    dropdownInputField.text = FoxDefaults.matingThreshold.ToString();
+                    break;
+                case "FoxReproductiveUrgeIncrease":
+                    dropdownInputField.text = FoxDefaults.reproductiveUrgeIncreaseMale.ToString();
                     break;
                 case "FoxPregnancyLength":
                     dropdownInputField.text = FoxDefaults.pregnancyLength.ToString();
@@ -397,6 +413,12 @@ namespace MonoBehaviourTools.UI
                 case "RabbitMatingDuration":
                     RabbitDefaults.matingDuration = float.Parse(dropdownInputField.text);
                     break;
+                case "RabbitMatingThreshold":
+                    RabbitDefaults.matingThreshold = float.Parse(dropdownInputField.text);
+                    break;
+                case "RabbitReproductiveUrgeIncrease":
+                    RabbitDefaults.reproductiveUrgeIncreaseMale = float.Parse(dropdownInputField.text);
+                    break;
                 case "RabbitPregnancyLength":
                     RabbitDefaults.pregnancyLength = float.Parse(dropdownInputField.text);
                     break;
@@ -495,6 +517,12 @@ namespace MonoBehaviourTools.UI
                     break;
                 case "FoxMatingDuration":
                     FoxDefaults.matingDuration = float.Parse(dropdownInputField.text);
+                    break;
+                case "FoxMatingThreshold":
+                    FoxDefaults.matingThreshold = float.Parse(dropdownInputField.text);
+                    break;
+                case "FoxReproductiveUrgeIncrease":
+                    FoxDefaults.reproductiveUrgeIncreaseMale = float.Parse(dropdownInputField.text);
                     break;
                 case "FoxPregnancyLength":
                     FoxDefaults.pregnancyLength = float.Parse(dropdownInputField.text);

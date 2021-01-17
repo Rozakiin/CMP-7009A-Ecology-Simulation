@@ -92,6 +92,8 @@ namespace Systems
 
                 //Update ReproductiveData
                 float RmatingDuration = RabbitDefaults.matingDuration;
+                float RmatingThreshold = RabbitDefaults.matingThreshold;
+                float RreproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncreaseMale;
                 float RpregnancyLength = RabbitDefaults.pregnancyLength;
                 float RbirthDuration = RabbitDefaults.birthDuration;
                 int RlitterSizeMin = RabbitDefaults.litterSizeMin;
@@ -100,6 +102,9 @@ namespace Systems
                 Entities.WithAll<IsRabbitTag>().ForEach((ref ReproductiveData reproductiveData) =>
                 {
                     reproductiveData.matingDuration = RmatingDuration;
+                    reproductiveData.matingThreshold = RmatingThreshold;
+                    reproductiveData.reproductiveUrgeIncrease = RreproductiveUrgeIncrease;
+                    reproductiveData.defaultRepoductiveIncrease = RreproductiveUrgeIncrease;
                     reproductiveData.pregnancyLengthBase = RpregnancyLength;
                     reproductiveData.birthDuration = RbirthDuration;
                     reproductiveData.litterSizeMin = RlitterSizeMin;
@@ -202,6 +207,8 @@ namespace Systems
 
                 //Update ReproductiveData
                 float FmatingDuration = FoxDefaults.matingDuration;
+                float FmatingThreshold = FoxDefaults.matingThreshold;
+                float FreproductiveUrgeIncrease = FoxDefaults.reproductiveUrgeIncreaseMale;
                 float FpregnancyLength = FoxDefaults.pregnancyLength;
                 float FbirthDuration = FoxDefaults.birthDuration;
                 int FlitterSizeMin = FoxDefaults.litterSizeMin;
@@ -210,6 +217,9 @@ namespace Systems
                 Entities.WithAll<IsFoxTag>().ForEach((ref ReproductiveData reproductiveData) =>
                 {
                     reproductiveData.matingDuration = FmatingDuration;
+                    reproductiveData.matingThreshold = FmatingThreshold;
+                    reproductiveData.reproductiveUrgeIncrease = FreproductiveUrgeIncrease;
+                    reproductiveData.defaultRepoductiveIncrease = FreproductiveUrgeIncrease;
                     reproductiveData.pregnancyLengthBase = FpregnancyLength;
                     reproductiveData.birthDuration = FbirthDuration;
                     reproductiveData.litterSizeMin = FlitterSizeMin;
