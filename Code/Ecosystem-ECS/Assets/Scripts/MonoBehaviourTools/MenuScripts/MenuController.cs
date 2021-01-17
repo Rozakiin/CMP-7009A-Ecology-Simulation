@@ -1327,6 +1327,9 @@ namespace MonoBehaviourTools.MenuScripts
         {
             if (ButtonType == "Yes")
             {
+                //if no map loaded set to default map
+                if (fileContents == null)
+                    SimulationManager.mapPath = Application.dataPath + "/MapDefault.txt";
                 SceneManager.LoadScene(_newGameButtonLevel);
             }
 

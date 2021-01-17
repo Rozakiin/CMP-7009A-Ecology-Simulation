@@ -109,9 +109,9 @@ namespace MonoBehaviourTools.Map
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     string output = "";
-                    for (int i = 0; i < map.GetUpperBound(0); i++)
+                    for (int j = map.GetUpperBound(1); j > 0; j--)
                     {
-                        for (int j = 0; j < map.GetUpperBound(1); j++)
+                        for (int i = 0; i < map.GetUpperBound(0); i++)
                         {
                             output += map[i, j].ToString();
                         }
@@ -240,10 +240,10 @@ namespace MonoBehaviourTools.Map
 
                 float tileWidth = tilePrefab.GetComponent<RectTransform>().rect.width;
                 float tileHeight = tilePrefab.GetComponent<RectTransform>().rect.height;
-
-                for (int x = 0; x < width; x++)
+          
+                for (int x = 0; x < map.GetUpperBound(0); x++)
                 {
-                    for (int y = 0; y < height; y++)
+                    for (int y = 0; y < map.GetUpperBound(1); y++)
                     {
                         var pos = new Vector3(x * tileWidth, y * tileHeight, 0);
                         tiles[x, y] = Instantiate(tilePrefab); //Instantiate tile

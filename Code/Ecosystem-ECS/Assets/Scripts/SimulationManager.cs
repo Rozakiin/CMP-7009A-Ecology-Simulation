@@ -81,7 +81,7 @@ public class SimulationManager : MonoBehaviour
 
     #region Map Data 
     [Header("Map Data")]
-    public static string mapPath = "Assets/Scripts/MonoBehaviourTools/Map/MapExample.txt";
+    public static string mapPath;
     public static string mapString;
     public static int gridWidth;
     public static int gridHeight;
@@ -116,7 +116,10 @@ public class SimulationManager : MonoBehaviour
         if (!CreateMap())
         {
             Debug.LogError("Error Loading Map");
+
+            //TODO: Should display error to user that Error loading map: maybe default map is missing
             Application.Quit();
+            Destroy(this);
         }
     }
     #endregion
@@ -127,6 +130,7 @@ public class SimulationManager : MonoBehaviour
         if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
         {
             MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
+            //TODO: should display message to user saying sim is paused due to excessive population
         }
 
         //check if the setup has completed yet, finish setup
@@ -183,7 +187,12 @@ public class SimulationManager : MonoBehaviour
         }
         else
         {
-            return false;
+            //Last resort try default map location
+            mapPath = Application.dataPath + "/MapDefault.txt";
+            if (MapReader.ReadInMapFromFile(mapPath, ref mapList))
+                CreateEntityTilesFromMapList(in mapList);
+            else
+                return false;
         }
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
