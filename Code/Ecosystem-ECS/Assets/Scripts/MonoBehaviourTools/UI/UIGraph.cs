@@ -20,8 +20,7 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private UITimeControl uITimeControl;
 
         private int input;
-        private int lastTime;
-        private float nextTime2;
+        private float nextTime;
         private float rabbitNumber;
         private float foxNumber;
         private float grassNumber;
@@ -49,9 +48,9 @@ namespace MonoBehaviourTools.UI
         private void Awake()
         {
             graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-            var rect = graphContainer.rect;
-            parentWidth = rect.width;
-            parentHeight = rect.height;
+            var sizeDelta = graphContainer.sizeDelta;
+            graphHeight = sizeDelta.y;
+            graphWidth = sizeDelta.x;
 
             labelXContainer = graphContainer.Find("LabelXContainer").GetComponent<RectTransform>();
             labelYContainer = graphContainer.Find("LabelYContainer").GetComponent<RectTransform>();
@@ -63,8 +62,8 @@ namespace MonoBehaviourTools.UI
 
             circleContainer = graphContainer.Find("CircleContainer").GetComponent<RectTransform>();
 
-            dashTemplateX.sizeDelta = new Vector2(parentWidth, 3f);
-            dashTemplateY.sizeDelta = new Vector2(parentHeight, 3f);
+            dashTemplateX.sizeDelta = new Vector2(graphWidth, 3f);
+            dashTemplateY.sizeDelta = new Vector2(graphHeight, 3f);
         }
         private void Start()
         {
@@ -83,15 +82,10 @@ namespace MonoBehaviourTools.UI
             xMaximum = 100f;
             input = 100;
 
-            var sizeDelta = graphContainer.sizeDelta;
-            graphHeight = sizeDelta.y;
-            graphWidth = sizeDelta.x;
-
             // create line in awake based on vector2 Line input from inspector
             Create(line);
             submit.onClick.AddListener(ShowTime);
             save.onClick.AddListener(SaveFile);
-            
         }
         private void Update()
         {
@@ -148,12 +142,12 @@ namespace MonoBehaviourTools.UI
                     }
                     else
                     {
-                        if (Time.timeSinceLevelLoad >= nextTime2)
+                        if (Time.timeSinceLevelLoad >= nextTime)
                         {
                             ShowAllGraph(graphLength);
 
                             int updateSecond = (int)Mathf.Floor(graphRabbitsList.Count / 100);
-                            nextTime2 += updateSecond;
+                            nextTime += updateSecond;
                         }
                     }
                 }
@@ -163,7 +157,7 @@ namespace MonoBehaviourTools.UI
         private void ShowTime()
         {
             int lastInput = int.Parse(inputField.text);
-            nextTime2 = Time.timeSinceLevelLoad;
+            nextTime = Time.timeSinceLevelLoad;
 
             // only GraphRabbitList.Count must high than 100, input will work
             if (graphRabbitsList.Count > 100)
