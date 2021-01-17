@@ -129,7 +129,7 @@ public class SimulationManager : MonoBehaviour
         //Emergency Pause to stop excessive population explosion that could cause freezing
         if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
         {
-            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
+            MonoBehaviourTools.UI.UITimeControl.instance.Pause();
             //TODO: should display message to user saying sim is paused due to excessive population
         }
 
@@ -150,9 +150,9 @@ public class SimulationManager : MonoBehaviour
             SpawnFoxAtPosOnRClick();
             SpawnGrassAtPosOnMClick();
             /* Spawn grass entity at random location once every 10 in game seconds */
-            if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
+            if ((int)Time.timeSinceLevelLoad % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.timeSinceLevelLoad)
             {
-                secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
+                secondsOfLastGrassSpawn = (int)Time.timeSinceLevelLoad; //update the time in seconds the code was ran
                 if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
                     CreateEntitiesFromGameObject(grass, (int)math.ceil(grassPopulation / 10));
             }
