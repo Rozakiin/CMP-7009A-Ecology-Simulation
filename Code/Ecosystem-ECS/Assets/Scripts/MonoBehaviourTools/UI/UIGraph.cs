@@ -1,421 +1,344 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using Unity.Collections;
-using UnityEngine;
-using Unity.Entities;
-using UnityEngine.UI;
-using SFB;
 using System.IO;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 //maybe we need these function later on, this function can modify the number of red line in the graph
 //now only apply in 5 line in X aixs and 5 line in y axis not sure need to updata,discuss monday
-public class UIGraph : MonoBehaviour
+namespace MonoBehaviourTools.UI
 {
-    public SimulationManager simulationManager;
-
-    [SerializeField] private Sprite circleSprite;
-    [SerializeField] Vector2 Line = new Vector2(5, 5);
-
-    [SerializeField] InputField inputField;
-    [SerializeField] Button Submit;
-    [SerializeField] Button Save;
-
-    public TimeControlSystem timeControlSystem;
-
-    private float nextTime;
-    private float nextTime2;
-    private float XPos;
-    private float RabbitNumber;
-    private float FoxNumber;
-    private float GrassNumber;
-    private float yMaximum;
-    private float xMaximum;
-    private float InyMaximum;
-    private float InxMaximum;
-    private float graphHeight;
-    private float graphWidth;
-    private float parentWidth;
-    private float parentHeight;
-    private int input;
-    private RectTransform graphContainer;
-    private RectTransform labelTemplateX;
-    private RectTransform LabelXContainer;
-    private RectTransform LabelYContainer;
-    private RectTransform labelTemplateY;
-    private RectTransform dashTemplateX;
-    private RectTransform dashTemplateY;
-    private RectTransform CircleContainer;
-    private readonly List<float> GraphRabbitsList = new List<float> ();
-    private readonly List<float> GraphFoxesList = new List<float>();
-    private readonly List<float> GraphGrassList = new List<float>();
-
-    private void Awake()
+    public class UIGraph : MonoBehaviour
     {
-        graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-        parentWidth = graphContainer.rect.width;
-        parentHeight = graphContainer.rect.height;
+        [SerializeField] private SimulationManager simulationManager;
+        [SerializeField] private Sprite circleSprite;
+        [SerializeField] private Vector2 line = new Vector2(5, 5);
+        [SerializeField] private InputField inputField;
+        [SerializeField] private Button submit;
+        [SerializeField] private Button save;
+        [SerializeField] private UITimeControl uITimeControl;
 
-        LabelXContainer = graphContainer.Find("LabelXContainer").GetComponent<RectTransform>();
-        LabelYContainer = graphContainer.Find("LabelYContainer").GetComponent<RectTransform>();
-        labelTemplateX = LabelXContainer.Find("labelTemplateX").GetComponent<RectTransform>();
-        labelTemplateY = LabelYContainer.Find("labelTemplateY").GetComponent<RectTransform>();
+        private int input;
+        private float nextTime;
+        private float nextTime2;
+        private float xPos;
+        private float rabbitNumber;
+        private float foxNumber;
+        private float grassNumber;
+        private float yMaximum;
+        private float xMaximum;
+        private float inyMaximum;
+        private float graphHeight;
+        private float graphWidth;
+        private float parentWidth;
+        private float parentHeight;
 
-        dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
-        dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
+        private RectTransform graphContainer;
+        private RectTransform labelTemplateX;
+        private RectTransform labelXContainer;
+        private RectTransform labelYContainer;
+        private RectTransform labelTemplateY;
+        private RectTransform dashTemplateX;
+        private RectTransform dashTemplateY;
+        private RectTransform circleContainer;
 
-        CircleContainer = graphContainer.Find("CircleContainer").GetComponent<RectTransform>();
+        private readonly List<float> graphRabbitsList = new List<float>();
+        private readonly List<float> graphFoxesList = new List<float>();
+        private readonly List<float> graphGrassList = new List<float>();
 
-        dashTemplateX.sizeDelta = new Vector2(parentWidth, 3f);
-        dashTemplateY.sizeDelta = new Vector2(parentHeight, 3f);
-    }
-    private void Start()
-    {
-        RabbitNumber = simulationManager.RabbitSpawn();
-        FoxNumber = simulationManager.FoxSpawn();
-        GrassNumber = simulationManager.GrassSpawn();
-
-        InyMaximum = Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) * 5;
-        yMaximum = Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) * 5;
-        xMaximum = 100f;
-        InxMaximum = 100f;
-        nextTime = 1;
-        input = 100;
-
-        graphHeight = graphContainer.sizeDelta.y;
-        graphWidth = graphContainer.sizeDelta.x;
-
-        // create line in awake based on vector2 Line input from inspector
-        Create(Line);
-        Submit.onClick.AddListener(ShowTime);
-        Save.onClick.AddListener(SaveFile);
-    }
-    private void Update()
-    {
-        if (Time.timeSinceLevelLoad >= nextTime)
+        private void Awake()
         {
-            GraphRabbitsList.Add(RabbitNumber);
-            GraphFoxesList.Add(FoxNumber);
-            GraphGrassList.Add(GrassNumber);
+            graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
+            var rect = graphContainer.rect;
+            parentWidth = rect.width;
+            parentHeight = rect.height;
 
-            RabbitNumber = simulationManager.RabbitPopulation();
-            FoxNumber = simulationManager.FoxPopulation();
-            GrassNumber = simulationManager.GrassPopulation();
+            labelXContainer = graphContainer.Find("LabelXContainer").GetComponent<RectTransform>();
+            labelYContainer = graphContainer.Find("LabelYContainer").GetComponent<RectTransform>();
+            labelTemplateX = labelXContainer.Find("labelTemplateX").GetComponent<RectTransform>();
+            labelTemplateY = labelYContainer.Find("labelTemplateY").GetComponent<RectTransform>();
 
-            XPos = Time.timeSinceLevelLoad;   
-            nextTime += 1;
+            dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
+            dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
 
-            if (Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) / 8 * 10 > yMaximum) 
+            circleContainer = graphContainer.Find("CircleContainer").GetComponent<RectTransform>();
+
+            dashTemplateX.sizeDelta = new Vector2(parentWidth, 3f);
+            dashTemplateY.sizeDelta = new Vector2(parentHeight, 3f);
+        }
+        private void Start()
+        {
+            rabbitNumber = simulationManager.RabbitSpawn();
+            foxNumber = simulationManager.FoxSpawn();
+            grassNumber = simulationManager.GrassSpawn();
+
+            inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
+            yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
+            xMaximum = 100f;
+            nextTime = 1;
+            input = 100;
+
+            var sizeDelta = graphContainer.sizeDelta;
+            graphHeight = sizeDelta.y;
+            graphWidth = sizeDelta.x;
+
+            // create line in awake based on vector2 Line input from inspector
+            Create(line);
+            submit.onClick.AddListener(ShowTime);
+            save.onClick.AddListener(SaveFile);
+        }
+        private void Update()
+        {
+            //catch to not run if paused
+            if (UITimeControl.Instance.GetPause())
             {
-                InyMaximum = yMaximum;
-                yMaximum = Mathf.Max(RabbitNumber, FoxNumber, GrassNumber) / 8 * 10;
-                UpdataYAxis();
-                DecreaseY();
+                return;
             }
+            if (Time.timeSinceLevelLoad >= nextTime)
+            {
+                graphRabbitsList.Add(rabbitNumber);
+                graphFoxesList.Add(foxNumber);
+                graphGrassList.Add(grassNumber);
 
-            if (GraphRabbitsList.Count <= 100)
-            {
-                ShowGraph(XPos, RabbitNumber, FoxNumber, GrassNumber);
-            }
-            else if (GraphRabbitsList.Count > 100)
-            {
-                if (input >= 100)
+                rabbitNumber = simulationManager.RabbitPopulation();
+                foxNumber = simulationManager.FoxPopulation();
+                grassNumber = simulationManager.GrassPopulation();
+
+                xPos = Time.timeSinceLevelLoad;
+                nextTime = Time.timeSinceLevelLoad + 1;
+
+                if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
-                    ShowGraphList(input);
+                    inyMaximum = yMaximum;
+                    yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10;
+                    UpdateLabel("Y");
+                    DecreaseY();
                 }
-                else
-                {
-                    if (Time.timeSinceLevelLoad >= nextTime2)
-                    {
-                        ShowAllGraph();
 
-                        int a = (int)Mathf.Floor(GraphRabbitsList.Count / 100);
-                        nextTime2 += a;
+                if (graphRabbitsList.Count <= 100)
+                {
+                    ShowGraph(xPos, rabbitNumber, foxNumber, grassNumber);
+                }
+                else if (graphRabbitsList.Count > 100)
+                {
+                    if (input >= 100)
+                    {
+                        ShowGraphList(input);
+                    }
+                    else
+                    {
+                        if (Time.timeSinceLevelLoad >= nextTime2)
+                        {
+                            ShowAllGraph();
+
+                            int a = (int)Mathf.Floor(graphRabbitsList.Count / 100);
+                            nextTime2 += a;
+                        }
                     }
                 }
             }
         }
-    }
 
-    void ShowTime()
-    {
-        int lastInput = int.Parse(inputField.text);
-        nextTime2 = Time.timeSinceLevelLoad;
-
-        // only GraphRabbitList.Count must high than 100, input will work
-        if (GraphRabbitsList.Count > 100)
+        private void ShowTime()
         {
-            if (lastInput < GraphRabbitsList.Count)
-            {
-                input = lastInput;
-            }
-            else
-            {
-                input = 1;
-            }
-        }
-    }
+            int lastInput = int.Parse(inputField.text);
+            nextTime2 = Time.timeSinceLevelLoad;
 
-    void SaveFile()
-    {
-        timeControlSystem.Pause();
-
-        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "csv");
-        try
-        {
-            // Create a new file     
-            using (StreamWriter sw = File.CreateText(path))
+            // only GraphRabbitList.Count must high than 100, input will work
+            if (graphRabbitsList.Count > 100)
             {
-                sw.WriteLine("Seconds"+","+"Rabbit"+","+"Fox"+","+"Grass");
-                for (int i = 0; i < GraphRabbitsList.Count; i++) 
+                if (lastInput < graphRabbitsList.Count)
                 {
-                    sw.WriteLine((i+1)+","+GraphRabbitsList[i]+","+ GraphFoxesList[i]+","+ GraphGrassList[i]);
+                    input = lastInput;
                 }
-                sw.Close();
-            }
-        }
-        catch (Exception Ex)
-        {
-            Console.WriteLine(Ex.ToString());
-        }
-
-        timeControlSystem.Play();
-    }
-
-    void UpdataYAxis()
-    {
-        Transform[] AllGameObject = LabelYContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform Child in AllGameObject)
-        {
-            if (Child.name.Contains("Label"))
-            {
-                continue;
-            }
-            else
-            {
-                int labelNumber = int.Parse(Child.name.ToString());
-                int YText = (int)(yMaximum / Line.y * labelNumber);
-                Child.GetComponent<Text>().text = YText.ToString();
-            }
-        }
-    }
-
-
-    void UpdataXAxis()
-    {
-        Transform[] AllGameObject = LabelXContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform Child in AllGameObject)
-        {
-            if (Child.name.Contains("Label"))
-            {
-                continue;
-            }
-            else
-            {
-                int labelNumber = int.Parse(Child.name.ToString());
-                int XText = (int)(GraphRabbitsList.Count / Line.x * labelNumber);
-                Child.GetComponent<Text>().text = XText.ToString();
-            }
-        }
-    }
-
-
-    void UpdataGraphListXAxis(int number, int value)
-    {
-        Transform[] AllGameObject = LabelXContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform Child in AllGameObject)
-        {
-            if (Child.name.Contains("Label"))
-            {
-                continue;
-            }
-            else
-            { 
-                int labelNumber = int.Parse(Child.name.ToString());
-                int b = (labelNumber - 1) * (value / (int)Line.x) + number;
-                Child.GetComponent<Text>().text = b.ToString();
-            }
-        }
-    }
-
-    void Create(Vector2 Line)
-    {
-
-        for (int i = 1; i <= Line.x; i++)
-        {
-
-            int XText = (int)(xMaximum/ Line.x * i);
-           
-            RectTransform labelX = Instantiate(labelTemplateX);
-            labelX.SetParent(LabelXContainer, false);
-            labelX.gameObject.SetActive(true);
-            labelX.anchoredPosition = new Vector2(graphWidth / Line.x * i * 1f, -7f);
-            labelX.GetComponent<Text>().text = XText.ToString();
-            labelX.name = i.ToString();
-
-            RectTransform DashY = Instantiate(dashTemplateY);
-            DashY.SetParent(graphContainer, false);
-            DashY.gameObject.SetActive(true);
-            
-            DashY.anchoredPosition = new Vector2(graphWidth / Line.x * i * 1f, dashTemplateY.anchoredPosition.y);
-        }
-
-
-        for (int i = 1; i <= Line.y; i++)
-        {
-            int YText = (int)(yMaximum / Line.y * i);
-            RectTransform labelY = Instantiate(labelTemplateY);
-            labelY.SetParent(LabelYContainer, false);
-            labelY.gameObject.SetActive(true);
-            labelY.anchoredPosition = new Vector2(-7f, graphHeight / Line.y * i );   
-            labelY.GetComponent<Text>().text = YText.ToString();
-            labelY.name = i.ToString();
-
-            RectTransform DashX = Instantiate(dashTemplateX);
-            DashX.SetParent(graphContainer, false);
-            DashX.gameObject.SetActive(true);
-            DashX.anchoredPosition = new Vector2(dashTemplateX.anchoredPosition.x, graphHeight / Line.y * i);     
-        }
-    }
-
-    private GameObject CreateRabbit(Vector2 anchoredPosition)
-    {
-        GameObject gameObject = new GameObject("circle", typeof(Image));
-        gameObject.transform.SetParent(CircleContainer, false);
-        gameObject.GetComponent<Image>().sprite = circleSprite;
-        gameObject.name = "Rabbit" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
-        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(5, 5);
-        rectTransform.anchorMin = new Vector2(0, 0);
-        rectTransform.anchorMax = new Vector2(0, 0);
-        return gameObject;
-    }
-
-    private GameObject CreateFox(Vector2 anchoredPosition)
-    {
-        GameObject gameObject = new GameObject("circle", typeof(Image));
-        gameObject.transform.SetParent(CircleContainer, false);
-        gameObject.GetComponent<Image>().sprite = circleSprite;
-        gameObject.GetComponent<Image>().color = Color.red;
-        gameObject.name = "Fox" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
-        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(5, 5);
-        rectTransform.anchorMin = new Vector2(0, 0);
-        rectTransform.anchorMax = new Vector2(0, 0);
-        return gameObject;
-    }
-
-    private GameObject CreateGrass(Vector2 anchoredPosition)
-    {
-        GameObject gameObject = new GameObject("circle", typeof(Image));
-        gameObject.transform.SetParent(CircleContainer, false);
-        gameObject.GetComponent<Image>().sprite = circleSprite;
-        gameObject.GetComponent<Image>().color = Color.green;
-        gameObject.name = "Grass" + (Mathf.Round((int)Time.timeSinceLevelLoad)).ToString();
-        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(5, 5);
-        rectTransform.anchorMin = new Vector2(0, 0);
-        rectTransform.anchorMax = new Vector2(0, 0);
-        return gameObject;
-    }
-
-    private void DecreaseY()
-    {
-        RectTransform[] AllGameObject = CircleContainer.GetComponentsInChildren<RectTransform>();
-        foreach (RectTransform Child in AllGameObject)
-        {
-             Child.anchoredPosition = new Vector2(Child.anchoredPosition.x, Child.anchoredPosition.y / (yMaximum /InyMaximum));
-        }
-    }
-
-    private void DecreaseX()
-    {
-        RectTransform[] AllGameObject = CircleContainer.GetComponentsInChildren<RectTransform>();
-        foreach (RectTransform Child in AllGameObject)
-        {
-            Child.anchoredPosition = new Vector2(Child.anchoredPosition.x / (xMaximum / InxMaximum), Child.anchoredPosition.y);
-        }
-
-    }
-
-    private void ShowGraph(float xValue,float yValue,float yValue1, float yValue2)
-    {
-        float xPosition = (xValue / xMaximum) * graphWidth;
-        float yPosition = (yValue / yMaximum) * graphHeight;
-        float yPosition1 = (yValue1 / yMaximum) * graphWidth;
-        float yPosition2 = (yValue2 / yMaximum) * graphWidth;
-        CreateRabbit(new Vector2(xPosition, yPosition));
-        CreateFox(new Vector2(xPosition, yPosition1));
-        CreateGrass(new Vector2(xPosition, yPosition2));
-    }
-
-    private void ShowGraphList(int value)
-    {
-        DestoryPoint();
-        if (value <= 100 && value >= 60)
-        {
-            int number;
-            for (int i = 1; i <= value; i++)
-            {
-                float yPosition = (GraphRabbitsList[GraphRabbitsList.Count - value + i - 1] / yMaximum) * graphHeight;
-                float yPosition1 = (GraphFoxesList[GraphRabbitsList.Count - value + i - 1] / yMaximum) * graphHeight;
-                float yPosition2 = (GraphGrassList[GraphRabbitsList.Count - value + i - 1] / yMaximum) * graphHeight;
-                float xPosition = i * graphWidth / value;
-                CreateRabbit(new Vector2(xPosition, yPosition));
-                CreateFox(new Vector2(xPosition, yPosition1));
-                CreateGrass(new Vector2(xPosition, yPosition2));
-                if (i == (int)Mathf.Round(value / Line.x))
+                else
                 {
-                    number = GraphRabbitsList.Count - value + i - 1;
-                    UpdataGraphListXAxis(number, value);
+                    input = 1;
                 }
             }
         }
-        else if (value > 100) 
+
+        private void SaveFile()
         {
-            int number;
+            uITimeControl.Pause();
+
+            string path = StandaloneFileBrowser.StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "csv");
+            try
+            {
+                // Create a new file     
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine("Seconds" + "," + "Rabbit" + "," + "Fox" + "," + "Grass");
+                    for (var i = 0; i < graphRabbitsList.Count; i++)
+                    {
+                        sw.WriteLine((i + 1) + "," + graphRabbitsList[i] + "," + graphFoxesList[i] + "," + graphGrassList[i]);
+                    }
+                    sw.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            uITimeControl.Play();
+        }
+
+        private void UpdateLabel(string labelName)
+        {
+            Transform[] allGameObject = (labelName == "X")
+                ? labelXContainer.GetComponentsInChildren<Transform>()
+                : labelYContainer.GetComponentsInChildren<Transform>();
+            foreach (Transform child in allGameObject)
+            {
+                if (child.name.Contains("Label"))
+                {
+                    continue;
+                }
+                int labelNumber = int.Parse(child.name);
+                int labelText = (labelName == "X")
+                    ? (int)(graphRabbitsList.Count / line.x * labelNumber)
+                    : (int)(yMaximum / line.y * labelNumber);
+                child.GetComponent<Text>().text = labelText.ToString();
+
+
+            }
+        }
+
+        private void UpdateGraphListXAxis(int number, int value)
+        {
+            Transform[] allGameObject = labelXContainer.GetComponentsInChildren<Transform>();
+            foreach (Transform child in allGameObject)
+            {
+                if (child.name.Contains("Label"))
+                {
+                    continue;
+                }
+
+                int labelNumber = int.Parse(child.name.ToString());
+                int labelText = (labelNumber - 1) * (value / (int)line.x) + number;
+                child.GetComponent<Text>().text = labelText.ToString();
+            }
+        }
+
+        private void Create(Vector2 lineNumber)
+        {
+
+            for (int i = 1; i <= lineNumber.x; i++)
+            {
+
+                int xText = (int)(xMaximum / lineNumber.x * i);
+
+                RectTransform labelX = Instantiate(labelTemplateX, labelXContainer, false);
+                labelX.gameObject.SetActive(true);
+                labelX.anchoredPosition = new Vector2(graphWidth / lineNumber.x * i * 1f, -7f);
+                labelX.GetComponent<Text>().text = xText.ToString();
+                labelX.name = i.ToString();
+
+                RectTransform dashY = Instantiate(dashTemplateY, graphContainer, false);
+                dashY.gameObject.SetActive(true);
+                dashY.anchoredPosition = new Vector2(graphWidth / lineNumber.x * i * 1f, dashTemplateY.anchoredPosition.y);
+            }
+
+
+            for (int i = 1; i <= lineNumber.y; i++)
+            {
+                int yText = (int)(yMaximum / lineNumber.y * i);
+                RectTransform labelY = Instantiate(labelTemplateY, labelYContainer, false);
+                labelY.gameObject.SetActive(true);
+                labelY.anchoredPosition = new Vector2(-7f, graphHeight / lineNumber.y * i);
+                labelY.GetComponent<Text>().text = yText.ToString();
+                labelY.name = i.ToString();
+
+                RectTransform dashX = Instantiate(dashTemplateX, graphContainer, false);
+                dashX.gameObject.SetActive(true);
+                dashX.anchoredPosition = new Vector2(dashTemplateX.anchoredPosition.x, graphHeight / lineNumber.y * i);
+            }
+        }
+
+        private GameObject CreateDots(Vector2 anchoredPosition, string objectName)
+        {
+            GameObject gameObject = new GameObject("circle", typeof(Image));
+            gameObject.transform.SetParent(circleContainer, false);
+            gameObject.GetComponent<Image>().sprite = circleSprite;
+            if (objectName != "Rabbit")
+            {
+                gameObject.GetComponent<Image>().color = (objectName == "Fox") ? Color.red : Color.green;
+            }
+            gameObject.name = objectName + (Mathf.Round((int)Time.timeSinceLevelLoad));
+            RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = anchoredPosition;
+            rectTransform.sizeDelta = new Vector2(5, 5);
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMax = new Vector2(0, 0);
+            return gameObject;
+        }
+
+        private void DecreaseY()
+        {
+            RectTransform[] allGameObject = circleContainer.GetComponentsInChildren<RectTransform>();
+            foreach (RectTransform child in allGameObject)
+            {
+                var anchoredPosition = child.anchoredPosition;
+                anchoredPosition = new Vector2(anchoredPosition.x, anchoredPosition.y / (yMaximum / inyMaximum));
+                child.anchoredPosition = anchoredPosition;
+            }
+        }
+
+        private void ShowGraph(float xValue, float yValue, float yValue1, float yValue2)
+        {
+            float xPosition = (xValue / xMaximum) * graphWidth;
+            float yPosition = (yValue / yMaximum) * graphHeight;
+            float yPosition1 = (yValue1 / yMaximum) * graphWidth;
+            float yPosition2 = (yValue2 / yMaximum) * graphWidth;
+            CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+            CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+            CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+        }
+
+        private void ShowGraphList(int value)
+        {
+            DestroyPoint();
+
             for (int i = 1; i <= 100; i++)
             {
                 int a = (int)Mathf.Round(value * i / 100);
-                float yPosition = (GraphRabbitsList[GraphRabbitsList.Count - value + a-1] / yMaximum) * graphHeight;
-                float yPosition1 = (GraphFoxesList[GraphRabbitsList.Count - value + a-1] / yMaximum) * graphHeight;
-                float yPosition2 = (GraphGrassList[GraphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition = (graphRabbitsList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition1 = (graphFoxesList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition2 = (graphGrassList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / 100;
-                CreateRabbit(new Vector2(xPosition, yPosition));
-                CreateFox(new Vector2(xPosition, yPosition1));
-                CreateGrass(new Vector2(xPosition, yPosition2));
+                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
             }
-            number = (int)GraphRabbitsList.Count - (value / 5 * 4);
-            UpdataGraphListXAxis(number, value);
+            var number = (int)graphRabbitsList.Count - (value / 5 * 4);
+            UpdateGraphListXAxis(number, value);
         }
-    }
 
-    private void ShowAllGraph()
-    {
-        DestoryPoint();
-        for (int i = 1; i <= 100; i++)
+        private void ShowAllGraph()
         {
-            int a = (int)Mathf.Round(GraphRabbitsList.Count * i / 100);
-            float yPosition = (GraphRabbitsList[a-1] / yMaximum) * graphHeight;
-            float yPosition1 = (GraphFoxesList[a - 1] / yMaximum) * graphHeight;
-            float yPosition2 = (GraphGrassList[a - 1] / yMaximum) * graphHeight;
-            float xPosition = i * graphWidth / 100;
-            CreateRabbit(new Vector2(xPosition, yPosition));
-            CreateFox(new Vector2(xPosition, yPosition1));
-            CreateGrass(new Vector2(xPosition, yPosition2));
+            DestroyPoint();
+            for (int i = 1; i <= 100; i++)
+            {
+                int a = (int)Mathf.Round(graphRabbitsList.Count * i / 100);
+                float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
+                float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
+                float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
+                float xPosition = i * graphWidth / 100;
+                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+            }
+            UpdateLabel("X");
         }
-        UpdataXAxis();
-    }
 
-    private void DestoryPoint()
-    {
-        Transform[] AllGameObject = CircleContainer.GetComponentsInChildren<Transform>();
-        for (int i=1;i< AllGameObject.Length;i++)
+        private void DestroyPoint()
         {
-                Destroy(AllGameObject[i].gameObject);
+            Transform[] allGameObject = circleContainer.GetComponentsInChildren<Transform>();
+            for (int i = 1; i < allGameObject.Length; i++)
+            {
+                Destroy(allGameObject[i].gameObject);
+            }
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace SpeedTutorMainMenuSystem
+namespace MonoBehaviourTools.MenuScripts
 {
     public class Init_LoadPreferences : MonoBehaviour
     {
@@ -16,15 +17,6 @@ namespace SpeedTutorMainMenuSystem
         [Space(20)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
-
-        //SENSITIVITY
-        [Space(20)]
-        [SerializeField] private Text controllerText;
-        [SerializeField] private Slider controllerSlider;
-
-        //INVERT Y
-        [Space(20)]
-        [SerializeField] private Toggle invertYToggle;
 
         [Space(20)]
         [SerializeField] private bool canUse = false;
@@ -72,11 +64,6 @@ namespace SpeedTutorMainMenuSystem
                 //CONTROLLER SENSITIVITY
                 if (PlayerPrefs.HasKey("masterSen"))
                 {
-                    float localSensitivity = PlayerPrefs.GetFloat("masterSen");
-
-                    controllerText.text = localSensitivity.ToString("0");
-                    controllerSlider.value = localSensitivity;
-                    menuController.controlSenFloat = localSensitivity;
                 }
                 else
                 {
@@ -88,13 +75,11 @@ namespace SpeedTutorMainMenuSystem
                 {
                     if (PlayerPrefs.GetInt("masterInvertY") == 1)
                     {
-                        invertYToggle.isOn = true;
 
                     }
 
                     else
                     {
-                        invertYToggle.isOn = false;
                     }
                 }
             }

@@ -1,8 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct isRabbitTag : IComponentData
+namespace Components
 {
+    [Serializable]
+    public struct IsRabbitTag : IComponentData
+    {
 
+    }
 }

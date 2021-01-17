@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using Components;
+using EntityDefaults;
+using MonoBehaviourTools.Map;
+using MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using SFB;
-using System.IO;
-using System.Xml;
-using System;
 
-namespace SpeedTutorMainMenuSystem
+namespace MonoBehaviourTools.MenuScripts
 {
     public class MenuController : MonoBehaviour
     {
@@ -34,17 +36,13 @@ namespace SpeedTutorMainMenuSystem
         [Header("Default Menu Values")]
         [SerializeField] private float defaultBrightness;
         [SerializeField] private float defaultVolume;
-        [SerializeField] private int defaultSen;
-        [SerializeField] private bool defaultInvertY;
 
 
 
         [Header("Levels To Load")]
         public string _newGameButtonLevel;
-        private string levelToLoad;
-
         private MenuNumber menuNumber;
-
+        #endregion
         #region Entity Default Values For Reset
         float rabbitAgeMaxReset;
         float rabbitNutritionalValueReset;
@@ -64,6 +62,8 @@ namespace SpeedTutorMainMenuSystem
         //float rabbitThirstIncreaseOldReset;
         float rabbitDrinkingSpeedReset;
         float rabbitMatingDurationReset;
+        float rabbitMatingThresholdReset;
+        float rabbitReproductiveUrgeIncreaseReset;
         float rabbitPregnancyLengthReset;
         float rabbitBirthDurationReset;
         float rabbitLitterSizeMinReset;
@@ -98,6 +98,8 @@ namespace SpeedTutorMainMenuSystem
         //float foxThirstIncreaseOldReset;
         float foxDrinkingSpeedReset;
         float foxMatingDurationReset;
+        float foxMatingThresholdReset;
+        float foxReproductiveUrgeIncreaseReset;
         float foxPregnancyLengthReset;
         float foxBirthDurationReset;
         float foxLitterSizeMinReset;
@@ -121,7 +123,6 @@ namespace SpeedTutorMainMenuSystem
 
         #endregion
 
-        #endregion
 
         #region Menu Dialogs
         [Header("Main Menu Components")]
@@ -144,18 +145,12 @@ namespace SpeedTutorMainMenuSystem
         #region Slider Linking
         #region Options
         [Header("Menu Sliders")]
-        [SerializeField] private Text controllerSenText;
-        [SerializeField] private Slider controllerSenSlider;
-        public float controlSenFloat = 2f;
-        [Space(10)]
         [SerializeField] private Brightness brightnessEffect;
         [SerializeField] private Slider brightnessSlider;
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
-        [Space(10)]
-        [SerializeField] private Toggle invertYToggle;
         #endregion
         #region Initial Properties
         [Header("Initial Numbers InputFields")]
@@ -223,6 +218,12 @@ namespace SpeedTutorMainMenuSystem
         [Header("Mate")]
         [SerializeField] private Text rabbitMatingDurationText;
         [SerializeField] private Slider rabbitMatingDurationSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitMatingThresholdText;
+        [SerializeField] private Slider rabbitMatingThresholdSlider;
+        [Space(5)]
+        [SerializeField] private Text rabbitReproductiveUrgeIncreaseText;
+        [SerializeField] private Slider rabbitReproductiveUrgeIncreaseSlider;
 
         [Header("Pregnancy")]
         [SerializeField] private Text rabbitPregnancyLengthText;
@@ -329,6 +330,12 @@ namespace SpeedTutorMainMenuSystem
         [Header("Mate")]
         [SerializeField] private Text foxMatingDurationText;
         [SerializeField] private Slider foxMatingDurationSlider;
+        [Space(5)]
+        [SerializeField] private Text foxMatingThresholdText;
+        [SerializeField] private Slider foxMatingThresholdSlider;
+        [Space(5)]
+        [SerializeField] private Text foxReproductiveUrgeIncreaseText;
+        [SerializeField] private Slider foxReproductiveUrgeIncreaseSlider;
 
         [Header("Pregnancy")]
         [SerializeField] private Text foxPregnancyLengthText;
@@ -503,7 +510,7 @@ namespace SpeedTutorMainMenuSystem
         #region Loading Map From File
         public void LoadMap()
         {
-            var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
+            var paths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
             if (paths.Length > 0)
             {
                 StartCoroutine(OutputRoutine(new System.Uri(paths[0]).AbsoluteUri));
@@ -563,25 +570,11 @@ namespace SpeedTutorMainMenuSystem
 
         public void ControllerSen()
         {
-            controllerSenText.text = controllerSenSlider.value.ToString("0");
-            controlSenFloat = controllerSenSlider.value;
+
         }
 
         public void GameplayApply()
         {
-            if (invertYToggle.isOn) //Invert Y ON
-            {
-                PlayerPrefs.SetInt("masterInvertY", 1);
-                Debug.Log("Invert" + " " + PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            else if (!invertYToggle.isOn) //Invert Y OFF
-            {
-                PlayerPrefs.SetInt("masterInvertY", 0);
-                Debug.Log(PlayerPrefs.GetInt("masterInvertY"));
-            }
-
-            PlayerPrefs.SetFloat("masterSen", controlSenFloat);
             Debug.Log("Sensitivity" + " " + PlayerPrefs.GetFloat("masterSen"));
 
             StartCoroutine(ConfirmationBox());
@@ -593,6 +586,7 @@ namespace SpeedTutorMainMenuSystem
         {
             Debug.Log("Apply Initial Properties");
             RabbitDefaults.ageMax = rabbitAgeMaxSlider.value;
+
             RabbitDefaults.nutritionalValue = rabbitNutritionalValueSlider.value;
             RabbitDefaults.canBeEaten = rabbitCanBeEaten.isOn;
 
@@ -603,6 +597,7 @@ namespace SpeedTutorMainMenuSystem
             RabbitDefaults.adultHungerIncrease = rabbitHungerIncreaseAdultSlider.value;
             RabbitDefaults.oldHungerIncrease = rabbitHungerIncreaseOldSlider.value;
             RabbitDefaults.eatingSpeed = rabbitEatingSpeedSlider.value;
+
             RabbitDefaults.thirstMax = rabbitThirstMaxSlider.value;
             RabbitDefaults.thirstyThreshold = rabbitThirstThresholdSlider.value;
             RabbitDefaults.thirstIncrease = rabbitThirstIncreaseBaseSlider.value;
@@ -610,24 +605,35 @@ namespace SpeedTutorMainMenuSystem
             //RabbitDefaults. = rabbitThirstIncreaseAdultSlider.value;
             //RabbitDefaults. = rabbitThirstIncreaseOldSlider.value;
             RabbitDefaults.drinkingSpeed = rabbitDrinkingSpeedSlider.value;
+
             RabbitDefaults.matingDuration = rabbitMatingDurationSlider.value;
+            RabbitDefaults.matingThreshold = rabbitMatingThresholdSlider.value;
+            RabbitDefaults.reproductiveUrgeIncreaseMale = rabbitReproductiveUrgeIncreaseSlider.value;
+
+
             RabbitDefaults.pregnancyLength = rabbitPregnancyLengthSlider.value;
             RabbitDefaults.birthDuration = rabbitBirthDurationSlider.value;
             RabbitDefaults.litterSizeMin = (int)rabbitLitterSizeMinSlider.value;
             RabbitDefaults.litterSizeMax = (int)rabbitLitterSizeMaxSlider.value;
             RabbitDefaults.litterSizeAve = (int)rabbitLitterSizeAveSlider.value;
+
             RabbitDefaults.moveSpeed = rabbitMovementSpeedSlider.value;
             RabbitDefaults.originalMoveMultiplier = rabbitMovementMultiplierBaseSlider.value;
             RabbitDefaults.youngMoveMultiplier = rabbitMovementMultiplierYoungSlider.value;
             RabbitDefaults.adultMoveMultiplier = rabbitMovementMultiplierAdultSlider.value;
             RabbitDefaults.oldMoveMultiplier = rabbitMovementMultiplierOldSlider.value;
             RabbitDefaults.pregnancyMoveMultiplier = rabbitMovementMultiplierPregnantSlider.value;
+            
             RabbitDefaults.sightRadius = rabbitSightRadiusSlider.value;
+
             RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
             RabbitDefaults.scaleFemale = rabbitSizeFemaleSlider.value;
+
             FoxDefaults.ageMax = foxAgeMaxSlider.value;
+
             FoxDefaults.canBeEaten = foxCanBeEaten.isOn;
             FoxDefaults.nutritionalValue = foxNutritionalValueSlider.value;
+
             FoxDefaults.hungerMax = foxHungerMaxSlider.value;
             FoxDefaults.hungryThreshold = foxHungerThresholdSlider.value;
             FoxDefaults.hungerIncrease = foxHungerIncreaseBaseSlider.value;
@@ -635,6 +641,7 @@ namespace SpeedTutorMainMenuSystem
             FoxDefaults.adultHungerIncrease = foxHungerIncreaseAdultSlider.value;
             FoxDefaults.oldHungerIncrease = foxHungerIncreaseOldSlider.value;
             FoxDefaults.eatingSpeed = foxEatingSpeedSlider.value;
+
             FoxDefaults.thirstMax = foxThirstMaxSlider.value;
             FoxDefaults.thirstyThreshold = foxThirstThresholdSlider.value;
             FoxDefaults.thirstIncrease = foxThirstIncreaseBaseSlider.value;
@@ -642,21 +649,29 @@ namespace SpeedTutorMainMenuSystem
             //FoxDefaults. = foxThirstIncreaseAdultSlider.value;
             //FoxDefaults. = foxThirstIncreaseOldSlider.value;
             FoxDefaults.drinkingSpeed = foxDrinkingSpeedSlider.value;
+
             FoxDefaults.matingDuration = foxMatingDurationSlider.value;
+            FoxDefaults.matingThreshold = foxMatingThresholdSlider.value;
+            FoxDefaults.reproductiveUrgeIncreaseMale = foxReproductiveUrgeIncreaseSlider.value;
+
             FoxDefaults.pregnancyLength = foxPregnancyLengthSlider.value;
             FoxDefaults.birthDuration = foxBirthDurationSlider.value;
             FoxDefaults.litterSizeMin = (int)foxLitterSizeMinSlider.value;
             FoxDefaults.litterSizeMax = (int)foxLitterSizeMaxSlider.value;
             FoxDefaults.litterSizeAve = (int)foxLitterSizeAveSlider.value;
+
             FoxDefaults.moveSpeed = foxMovementSpeedSlider.value;
             FoxDefaults.originalMoveMultiplier = foxMovementMultiplierBaseSlider.value;
             FoxDefaults.youngMoveMultiplier = foxMovementMultiplierYoungSlider.value;
             FoxDefaults.adultMoveMultiplier = foxMovementMultiplierAdultSlider.value;
             FoxDefaults.oldMoveMultiplier = foxMovementMultiplierOldSlider.value;
             FoxDefaults.pregnancyMoveMultiplier = foxMovementMultiplierPregnantSlider.value;
+
             FoxDefaults.sightRadius = foxSightRadiusSlider.value;
+
             FoxDefaults.scaleMale = foxSizeMaleSlider.value;
             FoxDefaults.scaleFemale = foxSizeFemaleSlider.value;
+
             GrassDefaults.nutritionalValue = grassNutritionalValueSlider.value;
             GrassDefaults.canBeEaten = grassCanBeEaten.isOn;
             GrassDefaults.scale = grassSizeSlider.value;
@@ -668,13 +683,19 @@ namespace SpeedTutorMainMenuSystem
             switch (entityToUpdate)
             {
                 case "Rabbit":
-                    SimulationManager.InitialRabbitsToSpawn = int.Parse(rabbitNumberInputField.text);
+                    //limit to 0 or above
+                    int rabbitNumber = int.Parse(rabbitNumberInputField.text);
+                    SimulationManager.InitialRabbitsToSpawn = rabbitNumber < 0 ? 0 : rabbitNumber;
                     break;
                 case "Fox":
-                    SimulationManager.InitialFoxesToSpawn = int.Parse(foxNumberInputField.text);
+                    //limit to 0 or above
+                    int foxNumber = int.Parse(foxNumberInputField.text);
+                    SimulationManager.InitialFoxesToSpawn = foxNumber < 0 ? 0 : foxNumber;
                     break;
                 case "Grass":
-                    SimulationManager.InitialGrassToSpawn = int.Parse(grassNumberInputField.text);
+                    //limit to 0 or above
+                    int grassNumber = int.Parse(rabbitNumberInputField.text);
+                    SimulationManager.InitialGrassToSpawn = grassNumber < 0 ? 0 : grassNumber;
                     break;
                 default:
                     Debug.LogWarning("Attempted to update unknown entity in switch: " + entityToUpdate, this);
@@ -739,6 +760,12 @@ namespace SpeedTutorMainMenuSystem
                     break;
                 case "RabbitMatingDuration":
                     rabbitMatingDurationText.text = rabbitMatingDurationSlider.value.ToString();
+                    break;
+                case "RabbitMatingThreshold":
+                    rabbitMatingThresholdText.text = rabbitMatingThresholdSlider.value.ToString();
+                    break;
+                case "RabbitReproductiveUrgeIncrease":
+                    rabbitReproductiveUrgeIncreaseText.text = rabbitReproductiveUrgeIncreaseSlider.value.ToString();
                     break;
                 case "RabbitPregnancyLength":
                     rabbitPregnancyLengthText.text = rabbitPregnancyLengthSlider.value.ToString();
@@ -835,6 +862,12 @@ namespace SpeedTutorMainMenuSystem
                     break;
                 case "FoxMatingDuration":
                     foxMatingDurationText.text = foxMatingDurationSlider.value.ToString();
+                    break;
+                case "FoxMatingThreshold":
+                    foxMatingThresholdText.text = foxMatingThresholdSlider.value.ToString();
+                    break;
+                case "FoxReproductiveUrgeIncrease":
+                    foxReproductiveUrgeIncreaseText.text = foxReproductiveUrgeIncreaseSlider.value.ToString();
                     break;
                 case "FoxPregnancyLength":
                     foxPregnancyLengthText.text = foxPregnancyLengthSlider.value.ToString();
@@ -935,6 +968,10 @@ namespace SpeedTutorMainMenuSystem
 
             rabbitMatingDurationReset = RabbitDefaults.matingDuration;
 
+            rabbitMatingThresholdReset = RabbitDefaults.matingThreshold;
+
+            rabbitReproductiveUrgeIncreaseReset = RabbitDefaults.reproductiveUrgeIncreaseMale;
+
             rabbitPregnancyLengthReset = RabbitDefaults.pregnancyLength;
 
             rabbitBirthDurationReset = RabbitDefaults.birthDuration;
@@ -1001,6 +1038,10 @@ namespace SpeedTutorMainMenuSystem
 
             foxMatingDurationReset = FoxDefaults.matingDuration;
 
+            foxMatingThresholdReset = FoxDefaults.matingThreshold;
+
+            foxReproductiveUrgeIncreaseReset = FoxDefaults.reproductiveUrgeIncreaseMale;
+
             foxPregnancyLengthReset = FoxDefaults.pregnancyLength;
 
             foxBirthDurationReset = FoxDefaults.birthDuration;
@@ -1055,11 +1096,6 @@ namespace SpeedTutorMainMenuSystem
                     VolumeApply();
                     break;
                 case "Graphics":
-                    controllerSenText.text = defaultSen.ToString("0");
-                    controllerSenSlider.value = defaultSen;
-                    controlSenFloat = defaultSen;
-
-                    invertYToggle.isOn = false;
                     GameplayApply();
                     break;
                 case "InitialProperties":
@@ -1115,6 +1151,12 @@ namespace SpeedTutorMainMenuSystem
 
                     rabbitMatingDurationText.text = rabbitMatingDurationReset.ToString();
                     rabbitMatingDurationSlider.value = rabbitMatingDurationReset;
+
+                    rabbitMatingThresholdText.text = rabbitMatingThresholdReset.ToString();
+                    rabbitMatingThresholdSlider.value = rabbitMatingThresholdReset;
+
+                    rabbitReproductiveUrgeIncreaseText.text = rabbitReproductiveUrgeIncreaseReset.ToString();
+                    rabbitReproductiveUrgeIncreaseSlider.value = rabbitReproductiveUrgeIncreaseReset;
 
                     rabbitPregnancyLengthText.text = rabbitPregnancyLengthReset.ToString();
                     rabbitPregnancyLengthSlider.value = rabbitPregnancyLengthReset;
@@ -1213,6 +1255,12 @@ namespace SpeedTutorMainMenuSystem
                     foxMatingDurationText.text = foxMatingDurationReset.ToString();
                     foxMatingDurationSlider.value = foxMatingDurationReset;
 
+                    foxMatingThresholdText.text = foxMatingThresholdReset.ToString();
+                    foxMatingThresholdSlider.value = foxMatingThresholdReset;
+
+                    foxReproductiveUrgeIncreaseText.text = foxReproductiveUrgeIncreaseReset.ToString();
+                    foxReproductiveUrgeIncreaseSlider.value = foxReproductiveUrgeIncreaseReset;
+
                     foxPregnancyLengthText.text = foxPregnancyLengthReset.ToString();
                     foxPregnancyLengthSlider.value = foxPregnancyLengthReset;
 
@@ -1290,7 +1338,7 @@ namespace SpeedTutorMainMenuSystem
 
         public void LoadGame()
         {
-            string[] filePaths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
+            string[] filePaths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
             string filePath = filePaths[0];
             if (File.Exists(filePath))
             {
@@ -1331,7 +1379,6 @@ namespace SpeedTutorMainMenuSystem
                 XmlNodeList reproductiveUrgeIncreaseFemale = xmlDocument.GetElementsByTagName("reproductiveUrgeIncreaseFemale");
                 XmlNodeList matingThreshold = xmlDocument.GetElementsByTagName("matingThreshold");
                 XmlNodeList pregnancyStartTime = xmlDocument.GetElementsByTagName("pregnancyStartTime");
-                XmlNodeList pregnant = xmlDocument.GetElementsByTagName("pregnant");
                 XmlNodeList babiesBorn = xmlDocument.GetElementsByTagName("babiesBorn");
                 XmlNodeList birthStartTime = xmlDocument.GetElementsByTagName("birthStartTime");
                 XmlNodeList currentLitterSize = xmlDocument.GetElementsByTagName("currentLitterSize");
@@ -1402,11 +1449,10 @@ namespace SpeedTutorMainMenuSystem
                 RabbitDefaults.mateStartTime = float.Parse(mateStartTime[0].InnerText);
                 rabbitMatingDurationSlider.value = float.Parse(matingDuration[0].InnerText);
                 RabbitDefaults.reproductiveUrge = float.Parse(reproductiveUrge[0].InnerText);
-                RabbitDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[0].InnerText);
+                rabbitReproductiveUrgeIncreaseSlider.value = float.Parse(reproductiveUrgeIncreaseMale[0].InnerText);
                 RabbitDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[0].InnerText);
-                RabbitDefaults.matingThreshold = float.Parse(matingThreshold[0].InnerText);
+                rabbitMatingThresholdSlider.value = float.Parse(matingThreshold[0].InnerText);
                 RabbitDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[0].InnerText);
-                RabbitDefaults.pregnant = bool.Parse(pregnant[0].InnerText);
                 RabbitDefaults.babiesBorn = int.Parse(babiesBorn[0].InnerText);
                 RabbitDefaults.birthStartTime = float.Parse(birthStartTime[0].InnerText);
                 RabbitDefaults.currentLitterSize = int.Parse(currentLitterSize[0].InnerText);
@@ -1475,11 +1521,10 @@ namespace SpeedTutorMainMenuSystem
                 FoxDefaults.mateStartTime = float.Parse(mateStartTime[1].InnerText);
                 foxMatingDurationSlider.value = float.Parse(matingDuration[1].InnerText);
                 FoxDefaults.reproductiveUrge = float.Parse(reproductiveUrge[1].InnerText);
-                FoxDefaults.reproductiveUrgeIncreaseMale = float.Parse(reproductiveUrgeIncreaseMale[1].InnerText);
+                foxReproductiveUrgeIncreaseSlider.value = float.Parse(reproductiveUrgeIncreaseMale[1].InnerText);
                 FoxDefaults.reproductiveUrgeIncreaseFemale = float.Parse(reproductiveUrgeIncreaseFemale[1].InnerText);
-                FoxDefaults.matingThreshold = float.Parse(matingThreshold[1].InnerText);
+                foxMatingThresholdSlider.value = float.Parse(matingThreshold[1].InnerText);
                 FoxDefaults.pregnancyStartTime = float.Parse(pregnancyStartTime[1].InnerText);
-                FoxDefaults.pregnant = bool.Parse(pregnant[1].InnerText);
                 FoxDefaults.babiesBorn = int.Parse(babiesBorn[1].InnerText);
                 FoxDefaults.birthStartTime = float.Parse(birthStartTime[1].InnerText);
                 FoxDefaults.currentLitterSize = int.Parse(currentLitterSize[1].InnerText);
@@ -1628,4 +1673,5 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
     }
+
 }

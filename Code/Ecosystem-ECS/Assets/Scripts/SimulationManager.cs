@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using Components;
+using EntityDefaults;
+using MonoBehaviourTools.Grid;
+using MonoBehaviourTools.Map;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -6,13 +10,15 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
+    public static int MAX_POP = 50000;
+
     EntityManager entityManager;
     public GameObjectConversionSettings settings;
     public static SimulationManager Instance;
-    [SerializeField] public bool isDebugEnabled;
+    public bool isDebugEnabled;
     public bool isSetupComplete;
 
-    int secondsOfLastGrassSpawn;
+    private int secondsOfLastGrassSpawn;
 
     #region Converted Entities
     public Entity conversionGrassTile;
@@ -27,25 +33,25 @@ public class SimulationManager : MonoBehaviour
 
     #region GameObjects
     [Header("GameObjects")]
-    [SerializeField] public GameObject grassTile;
-    [SerializeField] public GameObject lightGrassTile;
-    [SerializeField] public GameObject waterTile;
-    [SerializeField] public GameObject sandTile;
-    [SerializeField] public GameObject rockTile;
-    [SerializeField] public GameObject rabbit;
-    [SerializeField] public GameObject fox;
-    [SerializeField] public GameObject grass;
+    [SerializeField] private GameObject grassTile;
+    [SerializeField] private GameObject lightGrassTile;
+    [SerializeField] private GameObject waterTile;
+    [SerializeField] private GameObject sandTile;
+    [SerializeField] private GameObject rockTile;
+    [SerializeField] private GameObject rabbit;
+    [SerializeField] private GameObject fox;
+    [SerializeField] private GameObject grass;
     public GameObject collisionPlaneForMap;
     #endregion
 
     #region Numbers for Entity Spawning 
     [Header("Numbers of Entities Spawning")]
-    [SerializeField] public int numberOfRabbitsToSpawn = 0;
-    [SerializeField] public int numberOfFoxesToSpawn = 0;
-    [SerializeField] public int numberOfGrassToSpawn = 0;
-    public static int InitialRabbitsToSpawn = 0;
-    public static int InitialFoxesToSpawn = 0;
-    public static int InitialGrassToSpawn = 0;
+    public int numberOfRabbitsToSpawn = 0;
+    public int numberOfFoxesToSpawn = 0;
+    public int numberOfGrassToSpawn = 0;
+    public static int InitialRabbitsToSpawn = -1;
+    public static int InitialFoxesToSpawn = -1;
+    public static int InitialGrassToSpawn = -1;
     #endregion
 
     #region Population Info for Entities
@@ -88,7 +94,7 @@ public class SimulationManager : MonoBehaviour
     public static float downLimit;
     #endregion
     #region Initialisation
-    void Start()
+    private void Start()
     {
         if (Instance == null)
             Instance = this;
@@ -98,24 +104,31 @@ public class SimulationManager : MonoBehaviour
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        if (InitialRabbitsToSpawn != 0)
+        if (InitialRabbitsToSpawn >= 0)
             numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
-        if (InitialFoxesToSpawn != 0)
+        if (InitialFoxesToSpawn >= 0)
             numberOfFoxesToSpawn = InitialFoxesToSpawn;
-        if (InitialGrassToSpawn != 0)
+        if (InitialGrassToSpawn >= 0)
             numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
 
         // Only continue if no errors creating the map
         if (!CreateMap())
         {
-            Debug.Log("Error Loading Map");
+            Debug.LogError("Error Loading Map");
+            Application.Quit();
         }
     }
     #endregion
 
-    void Update()
+    private void Update()
     {
+        //Emergency Pause to stop excessive population explosion that could cause freezing
+        if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
+        {
+            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
+        }
+
         //check if the setup has completed yet, finish setup
         if (!isSetupComplete)
         {
@@ -136,8 +149,8 @@ public class SimulationManager : MonoBehaviour
             if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
             {
                 secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
-                if(grassPopulation<2*gridHeight*gridHeight)//limit to 2x grass per grid square
-                    CreateEntitiesFromGameObject(grass, grassPopulation/10);
+                if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
+                    CreateEntitiesFromGameObject(grass, (int)math.ceil(grassPopulation / 10));
             }
         }
     }
@@ -147,31 +160,6 @@ public class SimulationManager : MonoBehaviour
         //dispose of blobassetstore on destroy
         if (settings != null)
             settings.BlobAssetStore.Dispose();
-
-        //if (conversionGrassTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionGrassTile);
-
-        //if (conversionLightGrassTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionLightGrassTile);
-
-        //if (conversionWaterTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionWaterTile);
-
-        //if (conversionSandTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionSandTile);
-
-        //if (conversionRockTile != Entity.Null)
-        //    entityManager.DestroyEntity(conversionRockTile);
-
-        //if (conversionRabbit != Entity.Null)
-        //    entityManager.DestroyEntity(conversionRabbit);
-
-        //if (conversionFox != Entity.Null)
-        //    entityManager.DestroyEntity(conversionFox);
-
-        //if (conversionGrass != Entity.Null)
-        //    entityManager.DestroyEntity(conversionGrass);
-
     }
 
     #region Map Creation Methods
@@ -199,8 +187,10 @@ public class SimulationManager : MonoBehaviour
         }
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
-        collisionPlaneForMap = new GameObject();
-        collisionPlaneForMap.name = "MapCollisionPlaneGO";
+        collisionPlaneForMap = new GameObject
+        {
+            name = "MapCollisionPlaneGO"
+        };
         collisionPlaneForMap.transform.position = transform.position;
         collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
         UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
@@ -349,14 +339,13 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         //entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
 
-        entityManager.AddComponent<isFoxTag>(prototypeFox);
+        entityManager.AddComponent<IsFoxTag>(prototypeFox);
         entityManager.SetComponentData(prototypeFox,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
-
 
         entityManager.SetComponentData(prototypeFox,
             new EdibleData
@@ -364,9 +353,10 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = FoxDefaults.canBeEaten,
                 nutritionalValueBase = FoxDefaults.nutritionalValue,
                 nutritionalValueMultiplier = FoxDefaults.nutritionalValueMultiplier,
-                foodType = FoxDefaults.foodType
+                foodType = FoxDefaults.foodType,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new MovementData
             {
@@ -377,18 +367,20 @@ public class SimulationManager : MonoBehaviour
                 originalMoveMultiplier = FoxDefaults.originalMoveMultiplier,
                 youngMoveMultiplier = FoxDefaults.youngMoveMultiplier,
                 adultMoveMultiplier = FoxDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier
+                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new StateData
             {
                 flagState = FoxDefaults.flagState,
                 previousFlagState = FoxDefaults.previousFlagState,
                 deathReason = FoxDefaults.deathReason,
-                beenEaten = FoxDefaults.beenEaten
+                beenEaten = FoxDefaults.beenEaten,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new TargetData
             {
@@ -398,6 +390,7 @@ public class SimulationManager : MonoBehaviour
 
                 sightRadius = FoxDefaults.sightRadius,
                 touchRadius = FoxDefaults.touchRadius,
+                mateRadius = FoxDefaults.mateRadius,
 
                 predatorEntity = FoxDefaults.predatorEntity,
                 entityToEat = FoxDefaults.entityToEat,
@@ -406,15 +399,17 @@ public class SimulationManager : MonoBehaviour
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
                 shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new PathFollowData
             {
-                pathIndex = -1
+                pathIndex = -1,
             }
         );
+
         entityManager.SetComponentData(prototypeFox,
             new BasicNeedsData
             {
@@ -434,12 +429,11 @@ public class SimulationManager : MonoBehaviour
                 thirstMax = FoxDefaults.thirstMax,
                 thirstIncrease = FoxDefaults.thirstIncrease,
                 drinkingSpeed = FoxDefaults.drinkingSpeed,
-
             }
         );
 
         //randomise gender of fox - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
         //set gender differing components
 
         entityManager.SetComponentData(prototypeFox,
@@ -451,9 +445,10 @@ public class SimulationManager : MonoBehaviour
                 ageGroup = FoxDefaults.ageGroup,
                 adultEntryTimer = FoxDefaults.adultEntryTimer,
                 oldEntryTimer = FoxDefaults.oldEntryTimer,
-                gender = randGender
+                gender = randGender,
             }
         );
+
         //set reproductive data differing on gender
         entityManager.SetComponentData(prototypeFox,
                 new ReproductiveData
@@ -465,8 +460,6 @@ public class SimulationManager : MonoBehaviour
                     defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
                     matingThreshold = FoxDefaults.matingThreshold,
 
-
-                    pregnant = FoxDefaults.pregnant,
                     birthDuration = FoxDefaults.birthDuration,
                     babiesBorn = FoxDefaults.babiesBorn,
                     birthStartTime = FoxDefaults.birthStartTime,
@@ -476,7 +469,7 @@ public class SimulationManager : MonoBehaviour
                     litterSizeAve = FoxDefaults.litterSizeAve,
                     pregnancyLengthBase = FoxDefaults.pregnancyLength,
                     pregnancyLengthModifier = FoxDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = FoxDefaults.pregnancyStartTime
+                    pregnancyStartTime = FoxDefaults.pregnancyStartTime,
                 }
             );
 
@@ -489,14 +482,14 @@ public class SimulationManager : MonoBehaviour
                 ageSizeMultiplier = FoxDefaults.ageSizeMultiplier,
                 youngSizeMultiplier = FoxDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = FoxDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier
+                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier,
             }
         );
         // set ColliderTypeData to Fox entity
         entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
-                colliderType = FoxDefaults.colliderType
+                colliderType = FoxDefaults.colliderType,
             }
         );
 
@@ -512,11 +505,11 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         //entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
 
-        entityManager.AddComponent<isGrassTag>(prototypeGrass);
+        entityManager.AddComponent<IsGrassTag>(prototypeGrass);
         entityManager.SetComponentData(prototypeGrass,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
 
@@ -526,7 +519,7 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = GrassDefaults.canBeEaten,
                 nutritionalValueBase = GrassDefaults.nutritionalValue,
                 nutritionalValueMultiplier = GrassDefaults.nutritionalValueMultiplier,
-                foodType = GrassDefaults.foodType
+                foodType = GrassDefaults.foodType,
             }
         );
 
@@ -536,7 +529,7 @@ public class SimulationManager : MonoBehaviour
                 flagState = GrassDefaults.flagState,
                 previousFlagState = GrassDefaults.previousFlagState,
                 deathReason = GrassDefaults.deathReason,
-                beenEaten = GrassDefaults.beenEaten
+                beenEaten = GrassDefaults.beenEaten,
             }
         );
 
@@ -545,14 +538,16 @@ public class SimulationManager : MonoBehaviour
             new SizeData
             {
                 size = GrassDefaults.scale,
-                sizeMultiplier = GrassDefaults.sizeMultiplier
+                sizeMultiplier = GrassDefaults.sizeMultiplier,
+                ageSizeMultiplier = 1f,
             }
         );
+
         // set ColliderTypeData to Grass entity
         entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
-                colliderType = GrassDefaults.GrassColliderType
+                colliderType = GrassDefaults.GrassColliderType,
             }
         );
 
@@ -570,11 +565,11 @@ public class SimulationManager : MonoBehaviour
         //set name of entity
         //entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
 
-        entityManager.AddComponent<isRabbitTag>(prototypeRabbit);
+        entityManager.AddComponent<IsRabbitTag>(prototypeRabbit);
         entityManager.SetComponentData(prototypeRabbit,
             new Translation
             {
-                Value = worldPoint
+                Value = worldPoint,
             }
         );
 
@@ -585,9 +580,10 @@ public class SimulationManager : MonoBehaviour
                 canBeEaten = RabbitDefaults.canBeEaten,
                 nutritionalValueBase = RabbitDefaults.nutritionalValue,
                 nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier,
-                foodType = RabbitDefaults.foodType
+                foodType = RabbitDefaults.foodType,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new MovementData
             {
@@ -598,9 +594,10 @@ public class SimulationManager : MonoBehaviour
                 originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
                 youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
                 adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier
+                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new StateData
             {
@@ -610,6 +607,7 @@ public class SimulationManager : MonoBehaviour
                 beenEaten = RabbitDefaults.beenEaten,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new TargetData
             {
@@ -628,15 +626,17 @@ public class SimulationManager : MonoBehaviour
                 shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
                 shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
                 shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance
+                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new PathFollowData
             {
-                pathIndex = -1
+                pathIndex = -1,
             }
         );
+
         entityManager.SetComponentData(prototypeRabbit,
             new BasicNeedsData
             {
@@ -661,7 +661,7 @@ public class SimulationManager : MonoBehaviour
         );
 
         //randomise gender of rabbit - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? randGender = BioStatsData.Gender.Female : randGender = BioStatsData.Gender.Male;
+        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
         //set gender differing components
 
         entityManager.SetComponentData(prototypeRabbit,
@@ -673,9 +673,10 @@ public class SimulationManager : MonoBehaviour
                 ageGroup = RabbitDefaults.ageGroup,
                 adultEntryTimer = RabbitDefaults.adultEntryTimer,
                 oldEntryTimer = RabbitDefaults.oldEntryTimer,
-                gender = randGender
+                gender = randGender,
             }
         );
+
         //set reproductive data differing on gender
         entityManager.SetComponentData(prototypeRabbit,
                 new ReproductiveData
@@ -688,7 +689,6 @@ public class SimulationManager : MonoBehaviour
                     matingThreshold = RabbitDefaults.matingThreshold,
 
 
-                    pregnant = RabbitDefaults.pregnant,
                     birthDuration = RabbitDefaults.birthDuration,
                     babiesBorn = RabbitDefaults.babiesBorn,
                     birthStartTime = RabbitDefaults.birthStartTime,
@@ -698,7 +698,7 @@ public class SimulationManager : MonoBehaviour
                     litterSizeAve = RabbitDefaults.litterSizeAve,
                     pregnancyLengthBase = RabbitDefaults.pregnancyLength,
                     pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime
+                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime,
                 }
             );
 
@@ -711,14 +711,15 @@ public class SimulationManager : MonoBehaviour
                 ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
                 youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
                 adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier
+                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier,
             }
         );
+
         // set ColliderTypeData to Rabbit entity
         entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
-                colliderType = RabbitDefaults.colliderType
+                colliderType = RabbitDefaults.colliderType,
             }
         );
 
@@ -811,7 +812,7 @@ public class SimulationManager : MonoBehaviour
         return (float)grassPopulation;
     }
 
-    public Vector2 MapSize()
+    public static Vector2 MapSize()
     {
         return new Vector2(gridWidth, gridHeight);
     }

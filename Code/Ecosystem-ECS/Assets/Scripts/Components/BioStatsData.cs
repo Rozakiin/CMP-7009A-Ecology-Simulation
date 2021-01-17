@@ -1,28 +1,31 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-[GenerateAuthoringComponent]
-public struct BioStatsData : IComponentData
+namespace Components
 {
-    //Age data
-    public float age;
-    public float ageIncrease;
-    public float ageMax;
-    public AgeGroup ageGroup;
-
-    public float adultEntryTimer;
-    public float oldEntryTimer;
-
-    public enum AgeGroup
+    [Serializable]
+    [GenerateAuthoringComponent]
+    public struct BioStatsData : IComponentData
     {
-        Young, Adult, Old
-    }
+        //Age data
+        public float age;
+        public float ageIncrease;
+        public float ageMax;
+        public AgeGroup ageGroup;
 
-    //Gender data
-    public enum Gender
-    {
-        Male, Female
+        public float adultEntryTimer;
+        public float oldEntryTimer;
+
+        public enum AgeGroup
+        {
+            Young, Adult, Old
+        }
+
+        //Gender data
+        public enum Gender
+        {
+            Male, Female
+        }
+        public Gender gender;
     }
-    public Gender gender;
 }

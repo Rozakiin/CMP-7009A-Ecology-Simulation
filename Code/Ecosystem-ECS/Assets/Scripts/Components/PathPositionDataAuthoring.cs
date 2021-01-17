@@ -3,10 +3,13 @@ using UnityEngine;
 
 //[DisallowMultipleComponent]
 //[RequiresEntityConversion]
-public class PathPositionDataAuthoring : MonoBehaviour, IConvertGameObjectToEntity
+namespace Components
 {
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+    public class PathPositionDataAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     {
-        dstManager.AddBuffer<PathPositionData>(entity);
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
+        {
+            dstManager.AddBuffer<PathPositionData>(entity);
+        }
     }
 }

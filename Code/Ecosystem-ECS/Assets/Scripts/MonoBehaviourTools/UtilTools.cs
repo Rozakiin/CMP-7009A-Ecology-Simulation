@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Components;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
@@ -60,15 +61,15 @@ namespace UtilTools
         // mu is average, max = sigma + mu; min = sigma-mu
         public static int GaussianDistribution(int sigma, int mu, float randomSeed)
         {
-            double x1, x2;
             Random randomGen = new Random((uint)randomSeed + 1);
 
-            x1 = 1f - randomGen.NextDouble();
-            x2 = 1f - randomGen.NextDouble();
+            double x1 = 1f - randomGen.NextDouble();
+            double x2 = 1f - randomGen.NextDouble();
 
             double randStdNormal = (math.sqrt(-2.0 * math.log(x1)) * math.sin(2.0 * math.PI * x2)) * sigma + mu;
 
             return (int)math.round((int)randStdNormal);
         }
     }
+
 }

@@ -1,41 +1,44 @@
-﻿using Unity.Entities;
-using Unity.Jobs;
+﻿using Components;
+using Unity.Entities;
 
-public class MovementDataSystem : SystemBase
+namespace Systems
 {
-    protected override void OnUpdate()
+    public class MovementDataSystem : SystemBase
     {
-        Entities.ForEach((
-            ref MovementData movementData,
-            in BioStatsData bioStatsData,
-            in StateData stateData
-            ) =>
+        protected override void OnUpdate()
         {
-            if (!stateData.isPregnant)
+            Entities.ForEach((
+                ref MovementData movementData,
+                in BioStatsData bioStatsData,
+                in StateData stateData
+            ) =>
             {
-                if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                if (!stateData.isPregnant)
                 {
-                    movementData.moveMultiplier = movementData.youngMoveMultiplier;
+                    if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                    {
+                        movementData.moveMultiplier = movementData.youngMoveMultiplier;
+                    }
+                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                    {
+                        movementData.moveMultiplier = movementData.adultMoveMultiplier;
+                    }
+                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
+                    {
+                        movementData.moveMultiplier = movementData.oldMoveMultiplier;
+                    }
                 }
-                else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                else
                 {
-                    movementData.moveMultiplier = movementData.adultMoveMultiplier;
+                    movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
                 }
-                else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
-                {
-                    movementData.moveMultiplier = movementData.oldMoveMultiplier;
-                }
-            }
-            else
-            {
-                movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
-            }
 
-            //temp fix set movement to 0 when mating
-            if (stateData.isMating)
-            {
-                movementData.moveMultiplier = 0;
-            }
-        }).ScheduleParallel();
+                //temp fix set movement to 0 when mating
+                if (stateData.isMating)
+                {
+                    movementData.moveMultiplier = 0;
+                }
+            }).ScheduleParallel();
+        }
     }
 }
