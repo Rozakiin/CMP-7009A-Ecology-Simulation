@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 //maybe we need these function later on, this function can modify the number of red line in the graph
-//now only apply in 5 line in X aixs and 5 line in y axis not sure need to updata,discuss monday
+//now only apply in 5 line in X aixs and 5 line in y axis not sure need to update,discuss monday
 namespace MonoBehaviourTools.UI
 {
     public class UIGraph : MonoBehaviour
@@ -19,9 +20,8 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private UITimeControl uITimeControl;
 
         private int input;
-        private float nextTime;
+        private int lastTime;
         private float nextTime2;
-        private float xPos;
         private float rabbitNumber;
         private float foxNumber;
         private float grassNumber;
@@ -71,11 +71,16 @@ namespace MonoBehaviourTools.UI
             rabbitNumber = simulationManager.RabbitSpawn();
             foxNumber = simulationManager.FoxSpawn();
             grassNumber = simulationManager.GrassSpawn();
-
+            
+            graphRabbitsList.Add(rabbitNumber);
+            graphFoxesList.Add(foxNumber);
+            graphGrassList.Add(grassNumber);
+            
+            ShowGraph(1, 1);
+            
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             xMaximum = 100f;
-            nextTime = 1;
             input = 100;
 
             var sizeDelta = graphContainer.sizeDelta;
@@ -86,6 +91,7 @@ namespace MonoBehaviourTools.UI
             Create(line);
             submit.onClick.AddListener(ShowTime);
             save.onClick.AddListener(SaveFile);
+            
         }
         private void Update()
         {
@@ -94,19 +100,34 @@ namespace MonoBehaviourTools.UI
             {
                 return;
             }
-            if (Time.timeSinceLevelLoad >= nextTime)
+            
+            if ((int)Time.timeSinceLevelLoad > graphRabbitsList.Count)
             {
-                graphRabbitsList.Add(rabbitNumber);
-                graphFoxesList.Add(foxNumber);
-                graphGrassList.Add(grassNumber);
-
                 rabbitNumber = simulationManager.RabbitPopulation();
                 foxNumber = simulationManager.FoxPopulation();
                 grassNumber = simulationManager.GrassPopulation();
 
-                xPos = Time.timeSinceLevelLoad;
-                nextTime += 1;
+                var numberOfNew = (int) Time.timeSinceLevelLoad - graphRabbitsList.Count;
 
+                if (numberOfNew>1)
+                {
+                    var rabbit = (rabbitNumber - graphRabbitsList.Last()) / numberOfNew;
+                    var fox = (foxNumber - graphFoxesList.Last()) / numberOfNew;
+                    var grass = (grassNumber - graphGrassList.Last()) / numberOfNew;
+                    for (var i = 1; i < numberOfNew; i++)
+                    {
+                        graphRabbitsList.Add(graphRabbitsList.Last()+rabbit*i);
+                        graphFoxesList.Add(graphFoxesList.Last()+fox*i);
+                        graphGrassList.Add(graphGrassList.Last()+grass*i);
+                    }
+                }
+                
+                graphRabbitsList.Add(rabbitNumber);
+                graphFoxesList.Add(foxNumber);
+                graphGrassList.Add(grassNumber);
+
+                int graphLength = graphRabbitsList.Count;
+                print(graphLength);
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
                     inyMaximum = yMaximum;
@@ -114,25 +135,25 @@ namespace MonoBehaviourTools.UI
                     UpdateLabel("Y");
                     DecreaseY();
                 }
-
+                
                 if (graphRabbitsList.Count <= 100)
                 {
-                    ShowGraph(xPos, rabbitNumber, foxNumber, grassNumber);
+                    ShowGraph(graphLength,numberOfNew);
                 }
                 else if (graphRabbitsList.Count > 100)
                 {
                     if (input >= 100)
                     {
-                        ShowGraphList(input);
+                        ShowGraphList(input,graphLength);
                     }
                     else
                     {
                         if (Time.timeSinceLevelLoad >= nextTime2)
                         {
-                            ShowAllGraph();
+                            ShowAllGraph(graphLength);
 
-                            int a = (int)Mathf.Floor(graphRabbitsList.Count / 100);
-                            nextTime2 += a;
+                            int updateSecond = (int)Mathf.Floor(graphRabbitsList.Count / 100);
+                            nextTime2 += updateSecond;
                         }
                     }
                 }
@@ -200,8 +221,6 @@ namespace MonoBehaviourTools.UI
                     ? (int)(graphRabbitsList.Count / line.x * labelNumber)
                     : (int)(yMaximum / line.y * labelNumber);
                 child.GetComponent<Text>().text = labelText.ToString();
-
-
             }
         }
 
@@ -256,7 +275,7 @@ namespace MonoBehaviourTools.UI
             }
         }
 
-        private GameObject CreateDots(Vector2 anchoredPosition, string objectName)
+        private void CreateDots(Vector2 anchoredPosition, string objectName)
         {
             GameObject gameObject = new GameObject("circle", typeof(Image));
             gameObject.transform.SetParent(circleContainer, false);
@@ -265,13 +284,12 @@ namespace MonoBehaviourTools.UI
             {
                 gameObject.GetComponent<Image>().color = (objectName == "Fox") ? Color.red : Color.green;
             }
-            gameObject.name = objectName + (Mathf.Round((int)Time.timeSinceLevelLoad));
+            gameObject.name = objectName + graphRabbitsList.Count;
             RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = anchoredPosition;
             rectTransform.sizeDelta = new Vector2(5, 5);
             rectTransform.anchorMin = new Vector2(0, 0);
             rectTransform.anchorMax = new Vector2(0, 0);
-            return gameObject;
         }
 
         private void DecreaseY()
@@ -285,42 +303,45 @@ namespace MonoBehaviourTools.UI
             }
         }
 
-        private void ShowGraph(float xValue, float yValue, float yValue1, float yValue2)
+        private void ShowGraph(int listLength,int addNumber)
         {
-            float xPosition = (xValue / xMaximum) * graphWidth;
-            float yPosition = (yValue / yMaximum) * graphHeight;
-            float yPosition1 = (yValue1 / yMaximum) * graphWidth;
-            float yPosition2 = (yValue2 / yMaximum) * graphWidth;
-            CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
-            CreateDots(new Vector2(xPosition, yPosition1), "Fox");
-            CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+            for (var i = addNumber; i >= 1; i--)
+            {
+                float xPosition = (listLength-i+1) * graphWidth / 100;
+                float yPosition = (graphRabbitsList[listLength-i] / yMaximum) * graphHeight;
+                float yPosition1 = (graphFoxesList[listLength-i] / yMaximum) * graphHeight;
+                float yPosition2 = (graphGrassList[listLength-i] / yMaximum) * graphHeight;
+                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+            }
         }
 
-        private void ShowGraphList(int value)
+        private void ShowGraphList(int value,int listLength)
         {
             DestroyPoint();
 
             for (int i = 1; i <= 100; i++)
             {
                 int a = (int)Mathf.Round(value * i / 100);
-                float yPosition = (graphRabbitsList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
-                float yPosition1 = (graphFoxesList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
-                float yPosition2 = (graphGrassList[graphRabbitsList.Count - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition = (graphRabbitsList[listLength - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition1 = (graphFoxesList[listLength - value + a - 1] / yMaximum) * graphHeight;
+                float yPosition2 = (graphGrassList[listLength - value + a - 1] / yMaximum) * graphHeight;
                 float xPosition = i * graphWidth / 100;
                 CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
                 CreateDots(new Vector2(xPosition, yPosition1), "Fox");
                 CreateDots(new Vector2(xPosition, yPosition2), "Grass");
             }
-            var number = (int)graphRabbitsList.Count - (value / 5 * 4);
+            var number = listLength - (value / 5 * 4);
             UpdateGraphListXAxis(number, value);
         }
 
-        private void ShowAllGraph()
+        private void ShowAllGraph(int listLength)
         {
             DestroyPoint();
             for (int i = 1; i <= 100; i++)
             {
-                int a = (int)Mathf.Round(graphRabbitsList.Count * i / 100);
+                int a = (int)Mathf.Round(listLength * i / 100);
                 float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
                 float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
                 float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
@@ -339,11 +360,6 @@ namespace MonoBehaviourTools.UI
             {
                 Destroy(allGameObject[i].gameObject);
             }
-        }
-
-        public int GetGraphListCount()
-        {
-            return graphRabbitsList.Count;
         }
     }
 }

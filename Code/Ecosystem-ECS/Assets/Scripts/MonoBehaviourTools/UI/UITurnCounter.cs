@@ -17,7 +17,7 @@ namespace MonoBehaviourTools.UI
 
         private void Update()
         {
-            counter = uiGraph.GetGraphListCount();
+            counter = Time.timeSinceLevelLoad;
             turnDisplay.text = string.Format("Turn {0}:", Mathf.RoundToInt(counter).ToString());
         }
     }
