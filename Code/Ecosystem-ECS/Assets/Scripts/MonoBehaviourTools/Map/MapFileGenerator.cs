@@ -109,7 +109,7 @@ namespace MonoBehaviourTools.Map
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     string output = "";
-                    for (int j = 0; j < map.GetUpperBound(1); j++)
+                    for (int j = map.GetUpperBound(1); j > 0; j--)
                     {
                         for (int i = 0; i < map.GetUpperBound(0); i++)
                         {
