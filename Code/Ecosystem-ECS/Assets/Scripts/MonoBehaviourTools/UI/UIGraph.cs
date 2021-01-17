@@ -340,5 +340,10 @@ namespace MonoBehaviourTools.UI
                 Destroy(allGameObject[i].gameObject);
             }
         }
+
+        public int GetGraphListCount()
+        {
+            return graphRabbitsList.Count;
+        }
     }
 }
