@@ -25,7 +25,7 @@ namespace Systems
         protected override void OnUpdate()
         {
             //catch to not run if paused
-            if (MonoBehaviourTools.UI.UITimeControl.Instance.GetPause())
+            if (MonoBehaviourTools.UI.UITimeControl.instance.GetPause())
             {
                 return;
             }
