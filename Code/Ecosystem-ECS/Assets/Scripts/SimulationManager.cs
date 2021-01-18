@@ -794,31 +794,31 @@ public class SimulationManager : MonoBehaviour
     }
     #endregion
 
-    public float RabbitSpawn()
+    public int RabbitSpawn()
     {
-        return (float)numberOfRabbitsToSpawn;
+        return numberOfRabbitsToSpawn;
     }
-    public float RabbitPopulation()
+    public int RabbitPopulation()
     {
-        return (float)rabbitPopulation;
-    }
-
-    public float FoxSpawn()
-    {
-        return (float)numberOfFoxesToSpawn;
-    }
-    public float FoxPopulation()
-    {
-        return (float)foxPopulation;
+        return rabbitPopulation;
     }
 
-    public float GrassSpawn()
+    public int FoxSpawn()
     {
-        return (float)numberOfGrassToSpawn;
+        return numberOfFoxesToSpawn;
     }
-    public float GrassPopulation()
+    public int FoxPopulation()
     {
-        return (float)grassPopulation;
+        return foxPopulation;
+    }
+
+    public int GrassSpawn()
+    {
+        return numberOfGrassToSpawn;
+    }
+    public int GrassPopulation()
+    {
+        return grassPopulation;
     }
 
     public static Vector2 MapSize()

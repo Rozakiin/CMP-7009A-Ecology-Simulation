@@ -20,17 +20,16 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private UITimeControl uITimeControl;
 
         private int input;
+        private int rabbitNumber;
+        private int foxNumber;
+        private int grassNumber;
+        
         private float nextTime;
-        private float rabbitNumber;
-        private float foxNumber;
-        private float grassNumber;
         private float yMaximum;
         private float xMaximum;
         private float inyMaximum;
         private float graphHeight;
         private float graphWidth;
-        private float parentWidth;
-        private float parentHeight;
 
         private RectTransform graphContainer;
         private RectTransform labelTemplateX;
@@ -41,9 +40,9 @@ namespace MonoBehaviourTools.UI
         private RectTransform dashTemplateY;
         private RectTransform circleContainer;
 
-        private readonly List<float> graphRabbitsList = new List<float>();
-        private readonly List<float> graphFoxesList = new List<float>();
-        private readonly List<float> graphGrassList = new List<float>();
+        private readonly List<int> graphRabbitsList = new List<int>();
+        private readonly List<int> graphFoxesList = new List<int>();
+        private readonly List<int> graphGrassList = new List<int>();
 
         private void Awake()
         {
@@ -59,7 +58,7 @@ namespace MonoBehaviourTools.UI
 
             dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
             dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
-
+            
             circleContainer = graphContainer.Find("CircleContainer").GetComponent<RectTransform>();
 
             dashTemplateX.sizeDelta = new Vector2(graphWidth, 3f);
@@ -75,6 +74,7 @@ namespace MonoBehaviourTools.UI
             graphFoxesList.Add(foxNumber);
             graphGrassList.Add(grassNumber);
             
+            //draw initial dot in graph
             ShowGraph(1, 1);
             
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
@@ -101,21 +101,25 @@ namespace MonoBehaviourTools.UI
                 foxNumber = simulationManager.FoxPopulation();
                 grassNumber = simulationManager.GrassPopulation();
 
+                // for example three seconds per frame, so just add three number in this frame
                 var numberOfNew = (int) Time.timeSinceLevelLoad - graphRabbitsList.Count;
-
                 if (numberOfNew>1)
                 {
+                    //I didn't use data interpolation, I use for example, the first frame is first second(100 rabbit)
+                    //the second frame is fifth second(200 rabbits), so graphRabbitList will like this [100,125,150,175,200].
+                    // rabbit fox grass mean 25 in this situation. Add 4 number in the second frame. add three in here. add one in line 122
                     var rabbit = (rabbitNumber - graphRabbitsList.Last()) / numberOfNew;
                     var fox = (foxNumber - graphFoxesList.Last()) / numberOfNew;
                     var grass = (grassNumber - graphGrassList.Last()) / numberOfNew;
                     for (var i = 1; i < numberOfNew; i++)
                     {
-                        graphRabbitsList.Add(graphRabbitsList.Last()+rabbit*i);
-                        graphFoxesList.Add(graphFoxesList.Last()+fox*i);
-                        graphGrassList.Add(graphGrassList.Last()+grass*i);
+                        graphRabbitsList.Add(graphRabbitsList.Last()+Mathf.RoundToInt(rabbit*i));
+                        graphFoxesList.Add(graphFoxesList.Last()+Mathf.RoundToInt(fox*i));
+                        graphGrassList.Add(graphGrassList.Last()+Mathf.RoundToInt(grass*i));
                     }
                 }
                 
+                // add last one to graphList or, in just add one number every second in normal situation
                 graphRabbitsList.Add(rabbitNumber);
                 graphFoxesList.Add(foxNumber);
                 graphGrassList.Add(grassNumber);
@@ -146,7 +150,7 @@ namespace MonoBehaviourTools.UI
                         {
                             ShowAllGraph(graphLength);
 
-                            int updateSecond = (int)Mathf.Floor(graphRabbitsList.Count / 100);
+                            int updateSecond = Mathf.FloorToInt(graphRabbitsList.Count / 100);
                             nextTime += updateSecond;
                         }
                     }
@@ -160,17 +164,8 @@ namespace MonoBehaviourTools.UI
             nextTime = Time.timeSinceLevelLoad;
 
             // only GraphRabbitList.Count must high than 100, input will work
-            if (graphRabbitsList.Count > 100)
-            {
-                if (lastInput < graphRabbitsList.Count)
-                {
-                    input = lastInput;
-                }
-                else
-                {
-                    input = 1;
-                }
-            }
+            if (graphRabbitsList.Count <= 100) return;
+            input = lastInput < graphRabbitsList.Count ? lastInput : 1;
         }
 
         private void SaveFile()
@@ -237,10 +232,10 @@ namespace MonoBehaviourTools.UI
         private void Create(Vector2 lineNumber)
         {
 
-            for (int i = 1; i <= lineNumber.x; i++)
+            for (var i = 1; i <= lineNumber.x; i++)
             {
 
-                int xText = (int)(xMaximum / lineNumber.x * i);
+                var xText = (int)(xMaximum / lineNumber.x * i);
 
                 RectTransform labelX = Instantiate(labelTemplateX, labelXContainer, false);
                 labelX.gameObject.SetActive(true);
@@ -254,9 +249,9 @@ namespace MonoBehaviourTools.UI
             }
 
 
-            for (int i = 1; i <= lineNumber.y; i++)
+            for (var i = 1; i <= lineNumber.y; i++)
             {
-                int yText = (int)(yMaximum / lineNumber.y * i);
+                var yText = (int)(yMaximum / lineNumber.y * i);
                 RectTransform labelY = Instantiate(labelTemplateY, labelYContainer, false);
                 labelY.gameObject.SetActive(true);
                 labelY.anchoredPosition = new Vector2(-7f, graphHeight / lineNumber.y * i);
