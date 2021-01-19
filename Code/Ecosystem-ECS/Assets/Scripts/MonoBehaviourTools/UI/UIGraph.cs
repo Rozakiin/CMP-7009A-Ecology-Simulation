@@ -308,37 +308,113 @@ namespace MonoBehaviourTools.UI
 
         private void ShowGraphList(int value,int listLength)
         {
-            DestroyPoint();
-
-            for (int i = 1; i <= 100; i++)
+            // Dont understand the logic behind the position calculation but objects are moved now rather than deleted and recreated
+            RectTransform[] allGameObject = circleContainer.GetComponentsInChildren<RectTransform>();
+            int iR = 1;
+            int iF = 1;
+            int iG = 1;
+            
+            foreach (RectTransform child in allGameObject)
             {
-                int a = (int)Mathf.Round(value * i / 100);
-                float yPosition = (graphRabbitsList[listLength - value + a - 1] / yMaximum) * graphHeight;
-                float yPosition1 = (graphFoxesList[listLength - value + a - 1] / yMaximum) * graphHeight;
-                float yPosition2 = (graphGrassList[listLength - value + a - 1] / yMaximum) * graphHeight;
-                float xPosition = i * graphWidth / 100;
-                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
-                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
-                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+                if (child.gameObject.name.Contains("Rabbit"))
+                {
+                    int a = Mathf.RoundToInt(value * iR / 100);
+                    float yPosition = (graphRabbitsList[listLength - value + a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iR * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition);
+                    iR++;
+                }
+                else if(child.gameObject.name.Contains("Fox"))
+                {
+                    int a = Mathf.RoundToInt(value * iF / 100);
+                    float yPosition1 = (graphFoxesList[listLength - value + a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iF * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition1);
+                    iF++;
+                }
+                else if(child.gameObject.name.Contains("Grass"))
+                {
+                    int a = Mathf.RoundToInt(value * iG / 100);
+                    float yPosition2 = (graphGrassList[listLength - value + a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iG * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition2);
+                    iG++;
+                }
             }
+
+
+            //DestroyPoint();
+
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    int a = (int)Mathf.Round(value * i / 100);
+            //    float yPosition = (graphRabbitsList[listLength - value + a - 1] / yMaximum) * graphHeight;
+            //    float yPosition1 = (graphFoxesList[listLength - value + a - 1] / yMaximum) * graphHeight;
+            //    float yPosition2 = (graphGrassList[listLength - value + a - 1] / yMaximum) * graphHeight;
+            //    float xPosition = i * graphWidth / 100;
+            //    CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+            //    CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+            //    CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+            //}
             var number = listLength - (value / 5 * 4);
             UpdateGraphListXAxis(number, value);
         }
 
         private void ShowAllGraph(int listLength)
         {
-            DestroyPoint();
-            for (int i = 1; i <= 100; i++)
+            // Dont understand the logic behind the position calculation but objects are moved now rather than deleted and recreated
+            RectTransform[] allGameObject = circleContainer.GetComponentsInChildren<RectTransform>();
+            int iR = 1;
+            int iF = 1;
+            int iG = 1;
+
+            foreach (RectTransform child in allGameObject)
             {
-                int a = (int)Mathf.Round(listLength * i / 100);
-                float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
-                float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
-                float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
-                float xPosition = i * graphWidth / 100;
-                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
-                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
-                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+                if (child.gameObject.name.Contains("Rabbit"))
+                {
+                    int a = Mathf.RoundToInt(listLength * iR / 100);
+                    float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iR * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition);
+                    iR++;
+                }
+                else if (child.gameObject.name.Contains("Fox"))
+                {
+                    int a = Mathf.RoundToInt(listLength * iF / 100);
+                    float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iF * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition1);
+                    iF++;
+                }
+                else if (child.gameObject.name.Contains("Grass"))
+                {
+                    int a = Mathf.RoundToInt(listLength * iG / 100);
+                    float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
+                    float xPosition = iG * graphWidth / 100;
+
+                    child.anchoredPosition = new Vector2(xPosition, yPosition2);
+                    iG++;
+                }
             }
+
+
+            //DestroyPoint();
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    int a = (int)Mathf.Round(listLength * i / 100);
+            //    float yPosition = (graphRabbitsList[a - 1] / yMaximum) * graphHeight;
+            //    float yPosition1 = (graphFoxesList[a - 1] / yMaximum) * graphHeight;
+            //    float yPosition2 = (graphGrassList[a - 1] / yMaximum) * graphHeight;
+            //    float xPosition = i * graphWidth / 100;
+            //    CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+            //    CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+            //    CreateDots(new Vector2(xPosition, yPosition2), "Grass");
+            //}
             UpdateLabel("X");
         }
 
