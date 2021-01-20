@@ -43,7 +43,7 @@ namespace MonoBehaviourTools.UI
         private readonly List<int> graphRabbitsList = new List<int>();
         private readonly List<int> graphFoxesList = new List<int>();
         private readonly List<int> graphGrassList = new List<int>();
-        private readonly List<int> graphTime = new List<int>();
+        private readonly List<float> graphTime = new List<float>();
 
         private void Awake()
         {
@@ -75,8 +75,6 @@ namespace MonoBehaviourTools.UI
             graphFoxesList.Add(foxNumber);
             graphGrassList.Add(grassNumber);
             graphTime.Add(1);
-            
-            //draw initial dot in graph
             ShowGraph(1, 1);
             
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
@@ -125,7 +123,7 @@ namespace MonoBehaviourTools.UI
                 graphRabbitsList.Add(rabbitNumber);
                 graphFoxesList.Add(foxNumber);
                 graphGrassList.Add(grassNumber);
-                graphTime.Add((int)Time.timeSinceLevelLoad);
+                graphTime.Add(Time.timeSinceLevelLoad);
                 
                 int graphLength = graphRabbitsList.Count;
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
@@ -183,7 +181,7 @@ namespace MonoBehaviourTools.UI
                     sw.WriteLine("Seconds" + "," + "Rabbit" + "," + "Fox" + "," + "Grass");
                     foreach (var t in graphTime)
                     {
-                        sw.WriteLine(t + "," + graphRabbitsList[t] + "," + graphFoxesList[t] + "," + graphGrassList[t]);
+                        sw.WriteLine(t + "," + graphRabbitsList[(int)t] + "," + graphFoxesList[(int)t] + "," + graphGrassList[(int)t]);
                     }
                     sw.Close();
                 }
