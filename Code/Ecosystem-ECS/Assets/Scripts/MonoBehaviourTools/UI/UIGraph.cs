@@ -75,7 +75,7 @@ namespace MonoBehaviourTools.UI
             graphFoxesList.Add(foxNumber);
             graphGrassList.Add(grassNumber);
             graphTime.Add(1);
-            ShowGraph(1, 1);
+            ShowGraph(1);
             
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
@@ -94,68 +94,48 @@ namespace MonoBehaviourTools.UI
             {
                 return;
             }
+            
+            rabbitNumber = simulationManager.RabbitPopulation();
+            foxNumber = simulationManager.FoxPopulation();
+            grassNumber = simulationManager.GrassPopulation();
 
-            if ((int) Time.timeSinceLevelLoad > graphRabbitsList.Count)
+            // add last one to graphList or, in just add one number every second in normal situation
+            graphRabbitsList.Add(rabbitNumber);
+            graphFoxesList.Add(foxNumber);
+            graphGrassList.Add(grassNumber);
+            graphTime.Add(Time.timeSinceLevelLoad);
+            
+            int graphLength = graphRabbitsList.Count;
+            if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
             {
-                rabbitNumber = simulationManager.RabbitPopulation();
-                foxNumber = simulationManager.FoxPopulation();
-                grassNumber = simulationManager.GrassPopulation();
+                inyMaximum = yMaximum;
+                yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10;
+                UpdateYAxis();
+                DecreaseY();
+            }
+            
+            if (graphRabbitsList.Count <= 100)
+            {
+                ShowGraph(graphLength);
+            }
+            else if (graphRabbitsList.Count > 100)
+            {
+                if (input >= 100)
+                {
+                    ShowInputGraph(input,graphLength);
+                }
+                else
+                {
+                    if (Time.timeSinceLevelLoad >= nextTime)
+                    {
+                        ShowAllGraph(graphLength);
 
-                // for example three seconds per frame, so just add three number in this frame
-                var numberOfNew = (int) Time.timeSinceLevelLoad - graphRabbitsList.Count;
-                if (numberOfNew>1)
-                {
-                    //I didn't use data interpolation, I use for example, the first frame is first second(100 rabbit)
-                    //the second frame is fifth second(200 rabbits), so graphRabbitList will like this [100,125,150,175,200].
-                    // rabbit fox grass mean 25 in this situation. Add 4 number in the second frame. add three in here. add one in line 122
-                    var rabbit = (rabbitNumber - graphRabbitsList.Last()) / numberOfNew;
-                    var fox = (foxNumber - graphFoxesList.Last()) / numberOfNew;
-                    var grass = (grassNumber - graphGrassList.Last()) / numberOfNew;
-                    for (var i = 1; i < numberOfNew; i++)
-                    {
-                        graphRabbitsList.Add(graphRabbitsList.Last()+Mathf.RoundToInt(rabbit*i));
-                        graphFoxesList.Add(graphFoxesList.Last()+Mathf.RoundToInt(fox*i));
-                        graphGrassList.Add(graphGrassList.Last()+Mathf.RoundToInt(grass*i));
-                    }
-                }
-                
-                // add last one to graphList or, in just add one number every second in normal situation
-                graphRabbitsList.Add(rabbitNumber);
-                graphFoxesList.Add(foxNumber);
-                graphGrassList.Add(grassNumber);
-                graphTime.Add(Time.timeSinceLevelLoad);
-                
-                int graphLength = graphRabbitsList.Count;
-                if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
-                {
-                    inyMaximum = yMaximum;
-                    yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10;
-                    UpdateYAxis();
-                    DecreaseY();
-                }
-                
-                if (graphRabbitsList.Count <= 100)
-                {
-                    ShowGraph(graphLength,numberOfNew);
-                }
-                else if (graphRabbitsList.Count > 100)
-                {
-                    if (input >= 100)
-                    {
-                        ShowInputGraph(input,graphLength);
-                    }
-                    else
-                    {
-                        if (Time.timeSinceLevelLoad >= nextTime)
-                        {
-                            ShowAllGraph(graphLength);
-
-                            int updateSecond = Mathf.FloorToInt(graphRabbitsList.Count / 100);
-                            nextTime += updateSecond;
-                        }
+                        int updateSecond = Mathf.FloorToInt(graphRabbitsList.Count / 100);
+                        nextTime += updateSecond;
                     }
                 }
             }
+            
         }
 
         private void ShowTime()
@@ -179,9 +159,9 @@ namespace MonoBehaviourTools.UI
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     sw.WriteLine("Seconds" + "," + "Rabbit" + "," + "Fox" + "," + "Grass");
-                    foreach (var t in graphTime)
+                    for (var i = 0; i < graphTime.Count; i++) 
                     {
-                        sw.WriteLine(t + "," + graphRabbitsList[(int)t] + "," + graphFoxesList[(int)t] + "," + graphGrassList[(int)t]);
+                        sw.WriteLine(graphTime[i] + "," + graphRabbitsList[i] + "," + graphFoxesList[i] + "," + graphGrassList[i]);
                     }
                     sw.Close();
                 }
@@ -285,18 +265,15 @@ namespace MonoBehaviourTools.UI
             }
         }
 
-        private void ShowGraph(int listLength,int addNumber)
+        private void ShowGraph(int listLength)
         {
-            for (var i = addNumber; i >= 1; i--)
-            {
-                float xPosition = (listLength-i+1) * graphWidth / 100;
-                float yPosition = (graphRabbitsList[listLength-i] / yMaximum) * graphHeight;
-                float yPosition1 = (graphFoxesList[listLength-i] / yMaximum) * graphHeight;
-                float yPosition2 = (graphGrassList[listLength-i] / yMaximum) * graphHeight;
-                CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
-                CreateDots(new Vector2(xPosition, yPosition1), "Fox");
-                CreateDots(new Vector2(xPosition, yPosition2), "Grass");
-            }
+            float xPosition = (listLength) * graphWidth / 100;
+            float yPosition = (graphRabbitsList[listLength-1] / yMaximum) * graphHeight;
+            float yPosition1 = (graphFoxesList[listLength-1] / yMaximum) * graphHeight;
+            float yPosition2 = (graphGrassList[listLength-1] / yMaximum) * graphHeight;
+            CreateDots(new Vector2(xPosition, yPosition), "Rabbit");
+            CreateDots(new Vector2(xPosition, yPosition1), "Fox");
+            CreateDots(new Vector2(xPosition, yPosition2), "Grass");
         }
 
         private void ShowInputGraph(int value, int listLength)
