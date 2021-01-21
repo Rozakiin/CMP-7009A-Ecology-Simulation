@@ -8,7 +8,6 @@ namespace MonoBehaviourTools.UI
     public class UIEscape : MonoBehaviour
     {
         [SerializeField] private GameObject escapeMenu;
-        [SerializeField] private UITimeControl uITimeControl;
         [SerializeField] private Button resume;
         [SerializeField] private Button save;
         [SerializeField] private Button quit;
@@ -38,13 +37,13 @@ namespace MonoBehaviourTools.UI
         private void ResumeGame()
         {
             escapeMenu.SetActive(false);
-            uITimeControl.Play();
+            UITimeControl.Instance.Play();
         }
 
         private void PauseGame()
         {
             escapeMenu.SetActive(true);
-            uITimeControl.Pause();
+            UITimeControl.Instance.Pause();
         }
 
         private void QuitGame()

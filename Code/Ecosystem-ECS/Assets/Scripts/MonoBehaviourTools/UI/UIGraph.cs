@@ -68,9 +68,9 @@ namespace MonoBehaviourTools.UI
         }
         private void Start()
         {
-            rabbitNumber = simulationManager.RabbitSpawn();
-            foxNumber = simulationManager.FoxSpawn();
-            grassNumber = simulationManager.GrassSpawn();
+            rabbitNumber = SimulationManager.Instance.numberOfRabbitsToSpawn;
+            foxNumber = SimulationManager.Instance.numberOfFoxesToSpawn;
+            grassNumber = SimulationManager.Instance.numberOfGrassToSpawn;
 
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
@@ -100,9 +100,9 @@ namespace MonoBehaviourTools.UI
                 graphFoxesList.Add(foxNumber);
                 graphGrassList.Add(grassNumber);
 
-                rabbitNumber = simulationManager.RabbitPopulation();
-                foxNumber = simulationManager.FoxPopulation();
-                grassNumber = simulationManager.GrassPopulation();
+                rabbitNumber = SimulationManager.Instance.rabbitPopulation;
+                foxNumber = SimulationManager.Instance.foxPopulation;
+                grassNumber = SimulationManager.Instance.grassPopulation;
 
                 xPos = Time.timeSinceLevelLoad;
                 nextTime = Time.timeSinceLevelLoad + 1;
