@@ -694,7 +694,7 @@ namespace MonoBehaviourTools.MenuScripts
                     break;
                 case "Grass":
                     //limit to 0 or above
-                    int grassNumber = int.Parse(rabbitNumberInputField.text);
+                    int grassNumber = int.Parse(grassNumberInputField.text);
                     SimulationManager.InitialGrassToSpawn = grassNumber < 0 ? 0 : grassNumber;
                     break;
                 default:
