@@ -10,7 +10,8 @@ namespace MonoBehaviourTools.UI
         private void Start()
         {
             Vector2 mapSize = SimulationManager.MapSize();
-            cameraFunction = new UICameraFunction(mapSize);
+            float tileSize = simulationManager.GetTileSize();
+            cameraFunction = new UICameraFunction(mapSize,tileSize);
             transform.position = cameraFunction.GetInitialPosition();
         }
         private void Update()
@@ -33,12 +34,10 @@ namespace MonoBehaviourTools.UI
             {
                 pos.x -= cameraFunction.GETCameraSpeed();
             }
-
+            
             float scroll = Input.GetAxis("Mouse ScrollWheel");
-            pos.y -= scroll * cameraFunction.GETScrollSpeed();
-            transform.position = cameraFunction.CheckCameraBorder(pos, lastPosY);
+            pos.y -= scroll * UICameraFunction.GETScrollSpeed();
+            transform.position = cameraFunction.GetNewCameraPosition(pos, lastPosY);
         }
-
-
     }
 }

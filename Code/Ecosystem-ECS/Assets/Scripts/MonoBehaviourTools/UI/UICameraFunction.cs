@@ -11,24 +11,28 @@ namespace MonoBehaviourTools.UI
         private Vector3 pos;
         private Vector2 mapSize;
 
-        private readonly float yMin = 30f;
-        private readonly float camSpeedMax = 2f;
-        private readonly float scrollSpeed = 200f;
+        private static float yMin = 30f;
+        private static float camSpeedMax = 2f;
+        private static float scrollSpeed = 200f;
+        private static float cameraYMultiplier = 8.5f;
+        private static float cameraZMultiplier = -3f;
 
         private float camSpeed;
+        private float lastPosY;
         private readonly float xMax;
         private readonly float yMax;
         private readonly float zMax;
         private readonly float zInitial;
-        private float lastPosY;
+        
 
-        public UICameraFunction(Vector2 mapSize)
+        public UICameraFunction(Vector2 mapSize,float tileSize)
         {
             var maxMapSize = Mathf.Max(mapSize.x, mapSize.y);
-            xMax = mapSize.x * 5;
-            zMax = mapSize.y * 5;
-            yMax = 8.5f * maxMapSize;
-            zInitial = -3 * maxMapSize;
+            xMax = mapSize.x * tileSize / 2;
+            zMax = mapSize.y * tileSize / 2;
+            
+            yMax = cameraYMultiplier * maxMapSize;
+            zInitial = cameraZMultiplier * maxMapSize;
 
             camYLimit = new Vector2(yMin, yMax);
 
@@ -36,11 +40,12 @@ namespace MonoBehaviourTools.UI
             camXLimit = new Vector2(0f, 0f);
             camZLimit = new Vector2(zInitial, zInitial);
         }
-        public Vector3 CheckCameraBorder(Vector3 cameraPosition, float cameraLastPositionY)
+        public Vector3 GetNewCameraPosition(Vector3 cameraPosition, float cameraLastPositionY)
         {
             cameraPosition.y = Mathf.Clamp(cameraPosition.y, camYLimit.x, camYLimit.y);
 
-            //camSpeed and X,Z limit will increase as camera zoom in
+            //camSpeed and the limitation of Camera.x, and Camera.z (Camera boundary) will increase as camera zoom in
+            // only update camera border when the movement of Camera.Y more than 5f or camera zoom in more than 5f
             if (Math.Abs(cameraPosition.y - cameraLastPositionY) >= 5f)
             {
                 float rate = (yMax - cameraPosition.y) / (yMax - yMin);
@@ -67,12 +72,12 @@ namespace MonoBehaviourTools.UI
             return camSpeed;
         }
 
-        public float GETScrollSpeed()
+        public static float GETScrollSpeed()
         {
             return scrollSpeed;
         }
 
-        public float GetYMin()
+        public static float GetYMin()
         {
             return yMin;
         }
