@@ -33,8 +33,8 @@ namespace Systems
                     movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
                 }
 
-                //temp fix set movement to 0 when mating
-                if (stateData.isMating)
+                //temp fix set movement to 0 when mating or giving birth
+                if (stateData.isMating | stateData.isGivingBirth)
                 {
                     movementData.moveMultiplier = 0;
                 }
