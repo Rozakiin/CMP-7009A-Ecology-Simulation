@@ -6,8 +6,15 @@ namespace EntityDefaults
 {
     public static class GrassDefaults
     {
+        //time periods in hours
+        private const int YEAR = 8766;
+        private const int MONTH = 730;
+        private const int WEEK = 168;
+        private const int DAY = 24;
+        private const int HOUR = 1;
+
         //Edible
-        public static float nutritionalValue = 10f;
+        public static float nutritionalValue = 25f;
         public static bool canBeEaten = true;
         public static float nutritionalValueMultiplier = 1f;
         public static EdibleData.FoodType foodType = EdibleData.FoodType.Plant;
