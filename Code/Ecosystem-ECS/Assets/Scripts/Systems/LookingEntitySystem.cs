@@ -122,10 +122,10 @@ namespace Systems
                         if (childEntityNumber == colliderTypeData.colliderType)
                         {
                             StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
-                            BioStatsData.Gender childGender =
-                                GetComponentDataFromEntity<BioStatsData>(true)[childEntity].gender;
-                            if ((!childStateData.isPregnant) &&
-                                (childGender == BioStatsData.Gender.Female) &&
+                            BioStatsData childBioStatsData = GetComponentDataFromEntity<BioStatsData>(true)[childEntity];
+                            if ((childBioStatsData.gender == BioStatsData.Gender.Female) &&
+                                (childBioStatsData.ageGroup == BioStatsData.AgeGroup.Adult) &&
+                                (!childStateData.isPregnant) &&
                                 (!childStateData.isMating) &&
                                 (!childStateData.isGivingBirth))
                             {
