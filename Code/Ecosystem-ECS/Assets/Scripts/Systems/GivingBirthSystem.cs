@@ -19,6 +19,10 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /*
+         * Gives birth (spawns) to a child entity of the same type as the entity giving birth
+         * sets some inherited values from the parent
+         */
         protected override void OnUpdate()
         {
             var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
