@@ -72,9 +72,9 @@ namespace MonoBehaviourTools.UI
         }
         private void Start()
         {
-            rabbitNumber = simulationManager.RabbitSpawn();
-            foxNumber = simulationManager.FoxSpawn();
-            grassNumber = simulationManager.GrassSpawn();
+            rabbitNumber = SimulationManager.Instance.numberOfRabbitsToSpawn;
+            foxNumber = SimulationManager.Instance.numberOfFoxesToSpawn;
+            grassNumber = SimulationManager.Instance.numberOfGrassToSpawn;
 
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
