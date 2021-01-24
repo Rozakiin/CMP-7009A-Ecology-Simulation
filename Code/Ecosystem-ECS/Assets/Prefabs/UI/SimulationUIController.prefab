@@ -986,13 +986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0a4d2a013d0a418a86f092050ebd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulationManager: {fileID: 0}
-  circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
-  line: {x: 5, y: 5}
-  inputField: {fileID: 7173791672388236274}
-  submit: {fileID: 2881723290549940684}
   save: {fileID: 500298135160070407}
+  submit: {fileID: 2881723290549940684}
+  circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
+  inputField: {fileID: 7173791672388236274}
   uITimeControl: {fileID: 0}
+  simulationManager: {fileID: 0}
 --- !u!212 &4626331884982613217
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5171,7 +5170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -196.1294, y: -190.14542}
+  m_AnchoredPosition: {x: -255.9, y: -190.14542}
   m_SizeDelta: {x: 128, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2238166100201807867

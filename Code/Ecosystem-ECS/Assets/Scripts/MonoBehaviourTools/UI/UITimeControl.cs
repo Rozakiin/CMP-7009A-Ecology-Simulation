@@ -7,7 +7,10 @@ namespace MonoBehaviourTools.UI
     {
         public static UITimeControl Instance;
         private bool pause;
+        private float maxSpeed;
+        private float minSpeed;
         public float fastForwardSpeed;
+        
         [SerializeField] private Text speedDisplay;
         [SerializeField] private Button playButton;
         [SerializeField] private Button pauseButton;
@@ -30,6 +33,8 @@ namespace MonoBehaviourTools.UI
             slowButton.onClick.AddListener(DecreaseSpeed);
             //start playing at start
             pause = false;
+            maxSpeed = 20f;
+            minSpeed = 0.2f;
         }
 
         private void Update()
@@ -40,13 +45,13 @@ namespace MonoBehaviourTools.UI
 
         public void UpdateFastForwardSpeed()
         {
-            if (fastForwardSpeed < 0.2f)
+            if (fastForwardSpeed < minSpeed)
             {
-                fastForwardSpeed = 0f;
+                fastForwardSpeed = minSpeed;
             }
-            else if (fastForwardSpeed > 20f)
+            else if (fastForwardSpeed > maxSpeed)
             {
-                fastForwardSpeed = 20f;
+                fastForwardSpeed = maxSpeed;
             }
             Time.timeScale = pause ? 0f : fastForwardSpeed;
         }
@@ -63,6 +68,7 @@ namespace MonoBehaviourTools.UI
 
         public void IncreaseSpeed()
         {
+            // if speed less than 1f, will increase 0.2f every time
             if (fastForwardSpeed < 1f)
             {
                 fastForwardSpeed += 0.2f;
@@ -75,7 +81,8 @@ namespace MonoBehaviourTools.UI
 
         public void DecreaseSpeed()
         {
-            if (fastForwardSpeed <= 1f && fastForwardSpeed > 0.2f)
+            // if speed less than 1f, will decrease 0.2f every time
+            if (fastForwardSpeed <= 1f && fastForwardSpeed > minSpeed)
             {
                 fastForwardSpeed -= 0.2f;
             }
