@@ -11,11 +11,11 @@ namespace MonoBehaviourTools.UI
         private Vector3 pos;
         private Vector2 mapSize;
 
-        private static float yMin = 30f;
-        private static float camSpeedMax = 2f;
-        private static float scrollSpeed = 200f;
-        private static float cameraYMultiplier = 8.5f;
-        private static float cameraZMultiplier = -3f;
+        private float yMin = 30f;
+        private float camSpeedMax = 2f;
+        private float scrollSpeed = 200f;
+        private float cameraYMultiplier = 8.5f;
+        private float cameraZMultiplier = -3f;
 
         private float camSpeed;
         private float lastPosY;
@@ -72,12 +72,12 @@ namespace MonoBehaviourTools.UI
             return camSpeed;
         }
 
-        public static float GETScrollSpeed()
+        public float GETScrollSpeed()
         {
             return scrollSpeed;
         }
 
-        public static float GetYMin()
+        public float GetYMin()
         {
             return yMin;
         }

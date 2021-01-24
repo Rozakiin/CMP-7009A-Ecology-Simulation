@@ -6,13 +6,15 @@ namespace MonoBehaviourTools.UI
     {
         [SerializeField] private SimulationManager simulationManager;
         private UICameraFunction cameraFunction;
-
+        private float scrollSpeed;
+        
         private void Start()
         {
             Vector2 mapSize = SimulationManager.MapSize();
             float tileSize = simulationManager.GetTileSize();
             cameraFunction = new UICameraFunction(mapSize,tileSize);
             transform.position = cameraFunction.GetInitialPosition();
+            scrollSpeed = cameraFunction.GETScrollSpeed();
         }
         private void Update()
         {
@@ -36,7 +38,7 @@ namespace MonoBehaviourTools.UI
             }
             
             float scroll = Input.GetAxis("Mouse ScrollWheel");
-            pos.y -= scroll * UICameraFunction.GETScrollSpeed();
+            pos.y -= scroll * scrollSpeed;
             transform.position = cameraFunction.GetNewCameraPosition(pos, lastPosY);
         }
     }

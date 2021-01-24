@@ -18,7 +18,7 @@ namespace Tests
         [Test]
         public void CheckCameraBorder()
         {
-            var yMin = UICameraFunction.GetYMin();
+            var yMin = cameraFunction.GetYMin();
             
             Vector3 pos1 = new Vector3(float.PositiveInfinity, yMin, float.PositiveInfinity);
             Vector3 pos2 = new Vector3(float.NegativeInfinity, yMin, float.NegativeInfinity);

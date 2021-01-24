@@ -390,6 +390,16 @@ PrefabInstance:
       propertyPath: simulationManager
       value: 
       objectReference: {fileID: 508030573}
+    - target: {fileID: 265633833014814715, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: uITimeControl
+      value: 
+      objectReference: {fileID: 1323496899}
+    - target: {fileID: 2281046952876205020, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6942748427998680664, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -452,6 +462,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da6900d68d9224b4380a6d87d5d77c62, type: 3}
+--- !u!114 &1323496899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 964520025276837570, guid: da6900d68d9224b4380a6d87d5d77c62,
+    type: 3}
+  m_PrefabInstance: {fileID: 1063346120}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729a183ebb97c419f832a81638146f6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1457398186
 GameObject:
   m_ObjectHideFlags: 0
