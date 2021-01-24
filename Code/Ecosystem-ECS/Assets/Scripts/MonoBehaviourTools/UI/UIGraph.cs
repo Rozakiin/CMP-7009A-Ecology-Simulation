@@ -18,18 +18,19 @@ namespace MonoBehaviourTools.UI
         [SerializeField] private UITimeControl uITimeControl;
         [SerializeField] private SimulationManager simulationManager;
         
-        private int input;
+        private int input = 100;
         private int rabbitNumber;
         private int foxNumber;
         private int grassNumber;
-        private int plotNumber;
+        private readonly int plotNumber = 100;
+        private readonly int yMaximumMultiplier = 2;
         
         private float nextTime;
         private float yMaximum;
-        private float xMaximum;
+        private readonly float xMaximum = 100f;
         private float lastYMaximum;
-    
-        private Vector2 line; 
+
+        private readonly Vector2 line = new Vector2(5, 5); 
         private Vector2 graphContainerSize;
 
         private RectTransform graphContainer;
@@ -74,12 +75,8 @@ namespace MonoBehaviourTools.UI
             foxNumber = SimulationManager.Instance.numberOfFoxesToSpawn;
             grassNumber = SimulationManager.Instance.numberOfGrassToSpawn;
 
-            yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
-            xMaximum = 100f;
-            input = 100;
-            plotNumber = 100;
+            yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * yMaximumMultiplier;
             
-            line= new Vector2(5, 5);
             // create line in awake based on vector2 line
             Create(line);
             
