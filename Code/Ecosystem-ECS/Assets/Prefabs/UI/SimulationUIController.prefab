@@ -986,13 +986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0a4d2a013d0a418a86f092050ebd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulationManager: {fileID: 0}
-  circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
-  line: {x: 5, y: 5}
-  inputField: {fileID: 7173791672388236274}
-  submit: {fileID: 2881723290549940684}
   save: {fileID: 500298135160070407}
+  submit: {fileID: 2881723290549940684}
+  circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
+  inputField: {fileID: 7173791672388236274}
   uITimeControl: {fileID: 0}
+  simulationManager: {fileID: 0}
 --- !u!212 &4626331884982613217
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1443,7 +1442,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4992,7 +4991,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiGraph: {fileID: 265633833014814715}
   turnDisplay: {fileID: 8732237489688312611}
-  counter: 0
 --- !u!114 &964520025276837570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5024,7 +5022,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   escapeMenu: {fileID: 2281046952876205020}
-  uITimeControl: {fileID: 0}
   resume: {fileID: 4933575748973551778}
   save: {fileID: 500298135160070407}
   quit: {fileID: 5328973228511363711}
@@ -5173,7 +5170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -196.1294, y: -190.14542}
+  m_AnchoredPosition: {x: -255.9, y: -190.14542}
   m_SizeDelta: {x: 128, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2238166100201807867

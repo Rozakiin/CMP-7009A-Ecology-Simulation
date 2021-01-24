@@ -831,4 +831,9 @@ public class SimulationManager : MonoBehaviour
     {
         return new Vector2(gridWidth, gridHeight);
     }
+
+    public float GetTileSize()
+    {
+        return tileSize;
+    }
 }
