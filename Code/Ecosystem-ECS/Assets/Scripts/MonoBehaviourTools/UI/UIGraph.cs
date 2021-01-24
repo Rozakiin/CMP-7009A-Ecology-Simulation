@@ -89,7 +89,7 @@ namespace MonoBehaviourTools.UI
         private void Update()
         {
             //catch to not run if paused
-            if (UITimeControl.instance.GetPause())
+            if (UITimeControl.Instance.GetPause())
             {
                 return;
             }

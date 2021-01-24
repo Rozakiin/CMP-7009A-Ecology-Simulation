@@ -135,7 +135,7 @@ public class SimulationManager : MonoBehaviour
         //Emergency Pause to stop excessive population explosion that could cause freezing
         if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
         {
-            MonoBehaviourTools.UI.UITimeControl.instance.Pause();
+            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
             //TODO: should display message to user saying sim is paused due to excessive population
         }
 
