@@ -373,3 +373,10 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 Report/CMP-7009A_Project_Report.pdf
+
+# StandaloneFileBrowser Exceptions
+!**/Ookii.Dialogs.dll
+!**/StandaloneFileBrowser.jslib
+!**/System.Windows.Forms.dll
+!**/libStandaloneFileBrowser.so
+Code/Ecosystem-ECS/Assets/Prefabs/Test.meta
