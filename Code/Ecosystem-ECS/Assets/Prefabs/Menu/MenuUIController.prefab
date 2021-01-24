@@ -3641,8 +3641,8 @@ MonoBehaviour:
   foxThirstMaxSlider: {fileID: 4001713634304844977}
   foxThirstThresholdText: {fileID: 1249395533501222145}
   foxThirstThresholdSlider: {fileID: 8459222413315075129}
-  foxThirstIncreaseBaseText: {fileID: 5060542399969945311}
-  foxThirstIncreaseBaseSlider: {fileID: 738042467755066951}
+  foxThirstIncreaseBaseText: {fileID: 1562254795510972616}
+  foxThirstIncreaseBaseSlider: {fileID: 6620962862185418908}
   foxThirstIncreaseYoungText: {fileID: 0}
   foxThirstIncreaseYoungSlider: {fileID: 0}
   foxThirstIncreaseAdultText: {fileID: 0}
