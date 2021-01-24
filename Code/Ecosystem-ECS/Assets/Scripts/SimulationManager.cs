@@ -94,15 +94,11 @@ public class SimulationManager : MonoBehaviour
     public static float downLimit;
     #endregion
     #region Initialisation
-    private void Start()
+    private void Awake()
     {
         if (Instance == null)
             Instance = this;
         isSetupComplete = false;
-        Application.targetFrameRate = 60; // Target 60fps
-
-        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         if (InitialRabbitsToSpawn >= 0)
             numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
@@ -111,6 +107,16 @@ public class SimulationManager : MonoBehaviour
         if (InitialGrassToSpawn >= 0)
             numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
+    }
+    private void Start()
+    {
+        
+        Application.targetFrameRate = 60; // Target 60fps
+
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
+
+        
 
         // Only continue if no errors creating the map
         if (!CreateMap())
@@ -129,7 +135,7 @@ public class SimulationManager : MonoBehaviour
         //Emergency Pause to stop excessive population explosion that could cause freezing
         if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
         {
-            MonoBehaviourTools.UI.UITimeControl.instance.Pause();
+            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
             //TODO: should display message to user saying sim is paused due to excessive population
         }
 

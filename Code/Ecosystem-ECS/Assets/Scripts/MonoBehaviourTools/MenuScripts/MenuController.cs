@@ -623,7 +623,7 @@ namespace MonoBehaviourTools.MenuScripts
             RabbitDefaults.adultMoveMultiplier = rabbitMovementMultiplierAdultSlider.value;
             RabbitDefaults.oldMoveMultiplier = rabbitMovementMultiplierOldSlider.value;
             RabbitDefaults.pregnancyMoveMultiplier = rabbitMovementMultiplierPregnantSlider.value;
-            
+
             RabbitDefaults.sightRadius = rabbitSightRadiusSlider.value;
 
             RabbitDefaults.scaleMale = rabbitSizeMaleSlider.value;
@@ -694,7 +694,7 @@ namespace MonoBehaviourTools.MenuScripts
                     break;
                 case "Grass":
                     //limit to 0 or above
-                    int grassNumber = int.Parse(rabbitNumberInputField.text);
+                    int grassNumber = int.Parse(grassNumberInputField.text);
                     SimulationManager.InitialGrassToSpawn = grassNumber < 0 ? 0 : grassNumber;
                     break;
                 default:
@@ -1100,41 +1100,77 @@ namespace MonoBehaviourTools.MenuScripts
                     break;
                 case "InitialProperties":
                     rabbitAgeMaxText.text = rabbitAgeMaxReset.ToString();
+                    rabbitAgeMaxSlider.wholeNumbers = true;
+                    rabbitAgeMaxSlider.minValue = 0;
+                    rabbitAgeMaxSlider.maxValue = rabbitAgeMaxReset * 10;
                     rabbitAgeMaxSlider.value = rabbitAgeMaxReset;
 
                     rabbitNutritionalValueText.text = rabbitNutritionalValueReset.ToString();
+                    rabbitNutritionalValueSlider.wholeNumbers = true;
+                    rabbitNutritionalValueSlider.minValue = 0;
+                    rabbitNutritionalValueSlider.maxValue = rabbitNutritionalValueReset * 10;
                     rabbitNutritionalValueSlider.value = rabbitNutritionalValueReset;
 
                     rabbitCanBeEaten.isOn = rabbitCanBeEatenReset;
 
                     rabbitHungerMaxText.text = rabbitHungerMaxReset.ToString();
+                    rabbitHungerMaxSlider.wholeNumbers = true;
+                    rabbitHungerMaxSlider.minValue = 0;
+                    rabbitHungerMaxSlider.maxValue = rabbitHungerMaxReset * 10;
                     rabbitHungerMaxSlider.value = rabbitHungerMaxReset;
 
                     rabbitHungerThresholdText.text = rabbitHungerThresholdReset.ToString();
+                    rabbitHungerThresholdSlider.wholeNumbers = true;
+                    rabbitHungerThresholdSlider.minValue = 0;
+                    rabbitHungerThresholdSlider.maxValue = rabbitHungerThresholdReset * 10;
                     rabbitHungerThresholdSlider.value = rabbitHungerThresholdReset;
 
                     rabbitHungerIncreaseBaseText.text = rabbitHungerIncreaseBaseReset.ToString();
+                    rabbitHungerIncreaseBaseSlider.wholeNumbers = false;
+                    rabbitHungerIncreaseBaseSlider.minValue = 0;
+                    rabbitHungerIncreaseBaseSlider.maxValue = rabbitHungerIncreaseBaseReset * 10;
                     rabbitHungerIncreaseBaseSlider.value = rabbitHungerIncreaseBaseReset;
 
                     rabbitHungerIncreaseYoungText.text = rabbitHungerIncreaseYoungReset.ToString();
+                    rabbitHungerIncreaseYoungSlider.wholeNumbers = false;
+                    rabbitHungerIncreaseYoungSlider.minValue = 0;
+                    rabbitHungerIncreaseYoungSlider.maxValue = rabbitHungerIncreaseYoungReset * 10;
                     rabbitHungerIncreaseYoungSlider.value = rabbitHungerIncreaseYoungReset;
 
                     rabbitHungerIncreaseAdultText.text = rabbitHungerIncreaseAdultReset.ToString();
+                    rabbitHungerIncreaseAdultSlider.wholeNumbers = false;
+                    rabbitHungerIncreaseAdultSlider.minValue = 0;
+                    rabbitHungerIncreaseAdultSlider.maxValue = rabbitHungerIncreaseAdultReset * 10;
                     rabbitHungerIncreaseAdultSlider.value = rabbitHungerIncreaseAdultReset;
 
                     rabbitHungerIncreaseOldText.text = rabbitHungerIncreaseOldReset.ToString();
+                    rabbitHungerIncreaseOldSlider.wholeNumbers = false;
+                    rabbitHungerIncreaseOldSlider.minValue = 0;
+                    rabbitHungerIncreaseOldSlider.maxValue = rabbitHungerIncreaseOldReset * 10;
                     rabbitHungerIncreaseOldSlider.value = rabbitHungerIncreaseOldReset;
 
                     rabbitEatingSpeedText.text = rabbitEatingSpeedReset.ToString();
+                    rabbitEatingSpeedSlider.wholeNumbers = true;
+                    rabbitEatingSpeedSlider.minValue = 0;
+                    rabbitEatingSpeedSlider.maxValue = rabbitEatingSpeedReset * 10;
                     rabbitEatingSpeedSlider.value = rabbitEatingSpeedReset;
 
                     rabbitThirstMaxText.text = rabbitThirstMaxReset.ToString();
+                    rabbitThirstMaxSlider.wholeNumbers = true;
+                    rabbitThirstMaxSlider.minValue = 0;
+                    rabbitThirstMaxSlider.maxValue = rabbitThirstMaxReset * 10;
                     rabbitThirstMaxSlider.value = rabbitThirstMaxReset;
 
                     rabbitThirstThresholdText.text = rabbitThirstThresholdReset.ToString();
+                    rabbitThirstThresholdSlider.wholeNumbers = true;
+                    rabbitThirstThresholdSlider.minValue = 0;
+                    rabbitThirstThresholdSlider.maxValue = rabbitThirstThresholdReset * 10;
                     rabbitThirstThresholdSlider.value = rabbitThirstThresholdReset;
 
                     rabbitThirstIncreaseBaseText.text = rabbitThirstIncreaseBaseReset.ToString();
+                    rabbitThirstIncreaseBaseSlider.wholeNumbers = false;
+                    rabbitThirstIncreaseBaseSlider.minValue = 0;
+                    rabbitThirstIncreaseBaseSlider.maxValue = rabbitThirstIncreaseBaseReset * 10;
                     rabbitThirstIncreaseBaseSlider.value = rabbitThirstIncreaseBaseReset;
 
                     //rabbitThirstIncreaseYoungText.text = rabbiReset.ToString(); 
@@ -1147,97 +1183,187 @@ namespace MonoBehaviourTools.MenuScripts
                     //rabbitThirstIncreaseOldSlider.value = rabbit ;
 
                     rabbitDrinkingSpeedText.text = rabbitDrinkingSpeedReset.ToString();
+                    rabbitDrinkingSpeedSlider.wholeNumbers = true;
+                    rabbitDrinkingSpeedSlider.minValue = 0;
+                    rabbitDrinkingSpeedSlider.maxValue = rabbitDrinkingSpeedReset * 10;
                     rabbitDrinkingSpeedSlider.value = rabbitDrinkingSpeedReset;
 
                     rabbitMatingDurationText.text = rabbitMatingDurationReset.ToString();
+                    rabbitMatingDurationSlider.wholeNumbers = true;
+                    rabbitMatingDurationSlider.minValue = 0;
+                    rabbitMatingDurationSlider.maxValue = rabbitMatingDurationReset * 10;
                     rabbitMatingDurationSlider.value = rabbitMatingDurationReset;
 
                     rabbitMatingThresholdText.text = rabbitMatingThresholdReset.ToString();
+                    rabbitMatingThresholdSlider.wholeNumbers = true;
+                    rabbitMatingThresholdSlider.minValue = 0;
+                    rabbitMatingThresholdSlider.maxValue = rabbitMatingThresholdReset * 10;
                     rabbitMatingThresholdSlider.value = rabbitMatingThresholdReset;
 
                     rabbitReproductiveUrgeIncreaseText.text = rabbitReproductiveUrgeIncreaseReset.ToString();
+                    rabbitReproductiveUrgeIncreaseSlider.wholeNumbers = false;
+                    rabbitReproductiveUrgeIncreaseSlider.minValue = 0;
+                    rabbitReproductiveUrgeIncreaseSlider.maxValue = rabbitReproductiveUrgeIncreaseReset * 10;
                     rabbitReproductiveUrgeIncreaseSlider.value = rabbitReproductiveUrgeIncreaseReset;
 
                     rabbitPregnancyLengthText.text = rabbitPregnancyLengthReset.ToString();
+                    rabbitPregnancyLengthSlider.wholeNumbers = true;
+                    rabbitPregnancyLengthSlider.minValue = 0;
+                    rabbitPregnancyLengthSlider.maxValue = rabbitPregnancyLengthReset * 10;
                     rabbitPregnancyLengthSlider.value = rabbitPregnancyLengthReset;
 
                     rabbitBirthDurationText.text = rabbitBirthDurationReset.ToString();
+                    rabbitBirthDurationSlider.wholeNumbers = true;
+                    rabbitBirthDurationSlider.minValue = 0;
+                    rabbitBirthDurationSlider.maxValue = rabbitBirthDurationReset * 10;
                     rabbitBirthDurationSlider.value = rabbitBirthDurationReset;
 
                     rabbitLitterSizeMinText.text = rabbitLitterSizeMinReset.ToString();
+                    rabbitLitterSizeMinSlider.wholeNumbers = true;
+                    rabbitLitterSizeMinSlider.minValue = 0;
+                    rabbitLitterSizeMinSlider.maxValue = rabbitLitterSizeMinReset * 10;
                     rabbitLitterSizeMinSlider.value = rabbitLitterSizeMinReset;
 
                     rabbitLitterSizeMaxText.text = rabbitLitterSizeMaxReset.ToString();
+                    rabbitLitterSizeMaxSlider.wholeNumbers = true;
+                    rabbitLitterSizeMaxSlider.minValue = 0;
+                    rabbitLitterSizeMaxSlider.maxValue = rabbitLitterSizeMaxReset * 10;
                     rabbitLitterSizeMaxSlider.value = rabbitLitterSizeMaxReset;
 
                     rabbitLitterSizeAveText.text = rabbitLitterSizeAveReset.ToString();
+                    rabbitLitterSizeAveSlider.wholeNumbers = true;
+                    rabbitLitterSizeAveSlider.minValue = 0;
+                    rabbitLitterSizeAveSlider.maxValue = rabbitLitterSizeAveReset * 10;
                     rabbitLitterSizeAveSlider.value = rabbitLitterSizeAveReset;
 
                     rabbitMovementSpeedText.text = rabbitMovementSpeedReset.ToString();
+                    rabbitMovementSpeedSlider.wholeNumbers = true;
+                    rabbitMovementSpeedSlider.minValue = 0;
+                    rabbitMovementSpeedSlider.maxValue = rabbitMovementSpeedReset * 10;
                     rabbitMovementSpeedSlider.value = rabbitMovementSpeedReset;
 
                     rabbitMovementMultiplierBaseText.text = rabbitMovementMultiplierBaseReset.ToString();
+                    rabbitMovementMultiplierBaseSlider.wholeNumbers = false;
+                    rabbitMovementMultiplierBaseSlider.minValue = 0;
+                    rabbitMovementMultiplierBaseSlider.maxValue = rabbitMovementMultiplierBaseReset * 10;
                     rabbitMovementMultiplierBaseSlider.value = rabbitMovementMultiplierBaseReset;
 
                     rabbitMovementMultiplierYoungText.text = rabbitMovementMultiplierYoungReset.ToString();
+                    rabbitMovementMultiplierYoungSlider.wholeNumbers = false;
+                    rabbitMovementMultiplierYoungSlider.minValue = 0;
+                    rabbitMovementMultiplierYoungSlider.maxValue = rabbitMovementMultiplierYoungReset * 10;
                     rabbitMovementMultiplierYoungSlider.value = rabbitMovementMultiplierYoungReset;
 
                     rabbitMovementMultiplierAdultText.text = rabbitMovementMultiplierAdultReset.ToString();
+                    rabbitMovementMultiplierAdultSlider.wholeNumbers = false;
+                    rabbitMovementMultiplierAdultSlider.minValue = 0;
+                    rabbitMovementMultiplierAdultSlider.maxValue = rabbitMovementMultiplierAdultReset * 10;
                     rabbitMovementMultiplierAdultSlider.value = rabbitMovementMultiplierAdultReset;
 
                     rabbitMovementMultiplierOldText.text = rabbitMovementMultiplierOldReset.ToString();
+                    rabbitMovementMultiplierOldSlider.wholeNumbers = false;
+                    rabbitMovementMultiplierOldSlider.minValue = 0;
+                    rabbitMovementMultiplierOldSlider.maxValue = rabbitMovementMultiplierOldReset * 10;
                     rabbitMovementMultiplierOldSlider.value = rabbitMovementMultiplierOldReset;
 
                     rabbitMovementMultiplierPregnantText.text = rabbitMovementMultiplierPregnantReset.ToString();
+                    rabbitMovementMultiplierPregnantSlider.wholeNumbers = false;
+                    rabbitMovementMultiplierPregnantSlider.minValue = 0;
+                    rabbitMovementMultiplierPregnantSlider.maxValue = rabbitMovementMultiplierPregnantReset * 10;
                     rabbitMovementMultiplierPregnantSlider.value = rabbitMovementMultiplierPregnantReset;
 
                     rabbitSightRadiusText.text = rabbitSightRadiusReset.ToString();
+                    rabbitSightRadiusSlider.wholeNumbers = true;
+                    rabbitSightRadiusSlider.minValue = 0;
+                    rabbitSightRadiusSlider.maxValue = rabbitSightRadiusReset * 10;
                     rabbitSightRadiusSlider.value = rabbitSightRadiusReset;
 
                     rabbitSizeMaleText.text = rabbitSizeMaleReset.ToString();
+                    rabbitSizeMaleSlider.wholeNumbers = true;
+                    rabbitSizeMaleSlider.minValue = 0;
+                    rabbitSizeMaleSlider.maxValue = rabbitSizeMaleReset * 10;
                     rabbitSizeMaleSlider.value = rabbitSizeMaleReset;
 
                     rabbitSizeFemaleText.text = rabbitSizeFemaleReset.ToString();
+                    rabbitSizeFemaleSlider.wholeNumbers = true;
+                    rabbitSizeFemaleSlider.minValue = 0;
+                    rabbitSizeFemaleSlider.maxValue = rabbitSizeFemaleReset * 10;
                     rabbitSizeFemaleSlider.value = rabbitSizeFemaleReset;
 
 
 
                     foxAgeMaxText.text = foxAgeMaxReset.ToString();
+                    foxAgeMaxSlider.wholeNumbers = true;
+                    foxAgeMaxSlider.minValue = 0;
+                    foxAgeMaxSlider.maxValue = foxAgeMaxReset * 10;
                     foxAgeMaxSlider.value = foxAgeMaxReset;
 
                     foxNutritionalValueText.text = foxNutritionalValueReset.ToString();
+                    foxNutritionalValueSlider.wholeNumbers = true;
+                    foxNutritionalValueSlider.minValue = 0;
+                    foxNutritionalValueSlider.maxValue = foxNutritionalValueReset * 10;
                     foxNutritionalValueSlider.value = foxNutritionalValueReset;
 
                     foxCanBeEaten.isOn = foxCanBeEatenReset;
 
                     foxHungerMaxText.text = foxHungerMaxReset.ToString();
+                    foxHungerMaxSlider.wholeNumbers = true;
+                    foxHungerMaxSlider.minValue = 0;
+                    foxHungerMaxSlider.maxValue = foxHungerMaxReset * 10;
                     foxHungerMaxSlider.value = foxHungerMaxReset;
 
                     foxHungerThresholdText.text = foxHungerThresholdReset.ToString();
+                    foxHungerThresholdSlider.wholeNumbers = true;
+                    foxHungerThresholdSlider.minValue = 0;
+                    foxHungerThresholdSlider.maxValue = foxHungerThresholdReset * 10;
                     foxHungerThresholdSlider.value = foxHungerThresholdReset;
 
                     foxHungerIncreaseBaseText.text = foxHungerIncreaseBaseReset.ToString();
+                    foxHungerIncreaseBaseSlider.wholeNumbers = false;
+                    foxHungerIncreaseBaseSlider.minValue = 0;
+                    foxHungerIncreaseBaseSlider.maxValue = foxHungerIncreaseBaseReset * 10;
                     foxHungerIncreaseBaseSlider.value = foxHungerIncreaseBaseReset;
 
                     foxHungerIncreaseYoungText.text = foxHungerIncreaseYoungReset.ToString();
+                    foxHungerIncreaseYoungSlider.wholeNumbers = false;
+                    foxHungerIncreaseYoungSlider.minValue = 0;
+                    foxHungerIncreaseYoungSlider.maxValue = foxHungerIncreaseYoungReset * 10;
                     foxHungerIncreaseYoungSlider.value = foxHungerIncreaseYoungReset;
 
                     foxHungerIncreaseAdultText.text = foxHungerIncreaseAdultReset.ToString();
+                    foxHungerIncreaseAdultSlider.wholeNumbers = false;
+                    foxHungerIncreaseAdultSlider.minValue = 0;
+                    foxHungerIncreaseAdultSlider.maxValue = foxHungerIncreaseAdultReset * 10;
                     foxHungerIncreaseAdultSlider.value = foxHungerIncreaseAdultReset;
 
                     foxHungerIncreaseOldText.text = foxHungerIncreaseOldReset.ToString();
+                    foxHungerIncreaseOldSlider.wholeNumbers = false;
+                    foxHungerIncreaseOldSlider.minValue = 0;
+                    foxHungerIncreaseOldSlider.maxValue = foxHungerIncreaseOldReset * 10;
                     foxHungerIncreaseOldSlider.value = foxHungerIncreaseOldReset;
 
                     foxEatingSpeedText.text = foxEatingSpeedReset.ToString();
+                    foxEatingSpeedSlider.wholeNumbers = true;
+                    foxEatingSpeedSlider.minValue = 0;
+                    foxEatingSpeedSlider.maxValue = foxEatingSpeedReset * 10;
                     foxEatingSpeedSlider.value = foxEatingSpeedReset;
 
                     foxThirstMaxText.text = foxThirstMaxReset.ToString();
+                    foxThirstMaxSlider.wholeNumbers = true;
+                    foxThirstMaxSlider.minValue = 0;
+                    foxThirstMaxSlider.maxValue = foxThirstMaxReset * 10;
                     foxThirstMaxSlider.value = foxThirstMaxReset;
 
                     foxThirstThresholdText.text = foxThirstThresholdReset.ToString();
+                    foxThirstThresholdSlider.wholeNumbers = true;
+                    foxThirstThresholdSlider.minValue = 0;
+                    foxThirstThresholdSlider.maxValue = foxThirstThresholdReset * 10;
                     foxThirstThresholdSlider.value = foxThirstThresholdReset;
 
                     foxThirstIncreaseBaseText.text = foxThirstIncreaseBaseReset.ToString();
+                    foxThirstIncreaseBaseSlider.wholeNumbers = false;
+                    foxThirstIncreaseBaseSlider.minValue = 0;
+                    foxThirstIncreaseBaseSlider.maxValue = foxThirstIncreaseBaseReset * 10;
                     foxThirstIncreaseBaseSlider.value = foxThirstIncreaseBaseReset;
 
                     //foxThirstIncreaseYoungText.text = foxEset.ToString(); 
@@ -1250,57 +1376,111 @@ namespace MonoBehaviourTools.MenuScripts
                     //foxThirstIncreaseOldSlider.value = fox ;
 
                     foxDrinkingSpeedText.text = foxDrinkingSpeedReset.ToString();
+                    foxDrinkingSpeedSlider.wholeNumbers = true;
+                    foxDrinkingSpeedSlider.minValue = 0;
+                    foxDrinkingSpeedSlider.maxValue = foxDrinkingSpeedReset * 10;
                     foxDrinkingSpeedSlider.value = foxDrinkingSpeedReset;
 
                     foxMatingDurationText.text = foxMatingDurationReset.ToString();
+                    foxMatingDurationSlider.wholeNumbers = true;
+                    foxMatingDurationSlider.minValue = 0;
+                    foxMatingDurationSlider.maxValue = foxMatingDurationReset * 10;
                     foxMatingDurationSlider.value = foxMatingDurationReset;
 
                     foxMatingThresholdText.text = foxMatingThresholdReset.ToString();
+                    foxMatingThresholdSlider.wholeNumbers = true;
+                    foxMatingThresholdSlider.minValue = 0;
+                    foxMatingThresholdSlider.maxValue = foxMatingThresholdReset * 10;
                     foxMatingThresholdSlider.value = foxMatingThresholdReset;
 
                     foxReproductiveUrgeIncreaseText.text = foxReproductiveUrgeIncreaseReset.ToString();
+                    foxReproductiveUrgeIncreaseSlider.wholeNumbers = false;
+                    foxReproductiveUrgeIncreaseSlider.minValue = 0;
+                    foxReproductiveUrgeIncreaseSlider.maxValue = foxReproductiveUrgeIncreaseReset * 10;
                     foxReproductiveUrgeIncreaseSlider.value = foxReproductiveUrgeIncreaseReset;
 
                     foxPregnancyLengthText.text = foxPregnancyLengthReset.ToString();
+                    foxPregnancyLengthSlider.wholeNumbers = true;
+                    foxPregnancyLengthSlider.minValue = 0;
+                    foxPregnancyLengthSlider.maxValue = foxPregnancyLengthReset * 10;
                     foxPregnancyLengthSlider.value = foxPregnancyLengthReset;
 
                     foxBirthDurationText.text = foxBirthDurationReset.ToString();
+                    foxBirthDurationSlider.wholeNumbers = true;
+                    foxBirthDurationSlider.minValue = 0;
+                    foxBirthDurationSlider.maxValue = foxBirthDurationReset * 10;
                     foxBirthDurationSlider.value = foxBirthDurationReset;
 
                     foxLitterSizeMinText.text = foxLitterSizeMinReset.ToString();
+                    foxLitterSizeMinSlider.wholeNumbers = true;
+                    foxLitterSizeMinSlider.minValue = 0;
+                    foxLitterSizeMinSlider.maxValue = foxLitterSizeMinReset * 10;
                     foxLitterSizeMinSlider.value = foxLitterSizeMinReset;
 
                     foxLitterSizeMaxText.text = foxLitterSizeMaxReset.ToString();
+                    foxLitterSizeMaxSlider.wholeNumbers = true;
+                    foxLitterSizeMaxSlider.minValue = 0;
+                    foxLitterSizeMaxSlider.maxValue = foxLitterSizeMaxReset * 10;
                     foxLitterSizeMaxSlider.value = foxLitterSizeMaxReset;
 
                     foxLitterSizeAveText.text = foxLitterSizeAveReset.ToString();
+                    foxLitterSizeAveSlider.wholeNumbers = true;
+                    foxLitterSizeAveSlider.minValue = 0;
+                    foxLitterSizeAveSlider.maxValue = foxLitterSizeAveReset * 10;
                     foxLitterSizeAveSlider.value = foxLitterSizeAveReset;
 
                     foxMovementSpeedText.text = foxMovementSpeedReset.ToString();
+                    foxMovementSpeedSlider.wholeNumbers = true;
+                    foxMovementSpeedSlider.minValue = 0;
+                    foxMovementSpeedSlider.maxValue = foxMovementSpeedReset * 10;
                     foxMovementSpeedSlider.value = foxMovementSpeedReset;
 
                     foxMovementMultiplierBaseText.text = foxMovementMultiplierBaseReset.ToString();
+                    foxMovementMultiplierBaseSlider.wholeNumbers = false;
+                    foxMovementMultiplierBaseSlider.minValue = 0;
+                    foxMovementMultiplierBaseSlider.maxValue = foxMovementMultiplierBaseReset * 10;
                     foxMovementMultiplierBaseSlider.value = foxMovementMultiplierBaseReset;
 
                     foxMovementMultiplierYoungText.text = foxMovementMultiplierYoungReset.ToString();
+                    foxMovementMultiplierYoungSlider.wholeNumbers = false;
+                    foxMovementMultiplierYoungSlider.minValue = 0;
+                    foxMovementMultiplierYoungSlider.maxValue = foxMovementMultiplierYoungReset * 10;
                     foxMovementMultiplierYoungSlider.value = foxMovementMultiplierYoungReset;
 
                     foxMovementMultiplierAdultText.text = foxMovementMultiplierAdultReset.ToString();
+                    foxMovementMultiplierAdultSlider.wholeNumbers = false;
+                    foxMovementMultiplierAdultSlider.minValue = 0;
+                    foxMovementMultiplierAdultSlider.maxValue = foxMovementMultiplierAdultReset * 10;
                     foxMovementMultiplierAdultSlider.value = foxMovementMultiplierAdultReset;
 
                     foxMovementMultiplierOldText.text = foxMovementMultiplierOldReset.ToString();
+                    foxMovementMultiplierOldSlider.wholeNumbers = false;
+                    foxMovementMultiplierOldSlider.minValue = 0;
+                    foxMovementMultiplierOldSlider.maxValue = foxMovementMultiplierOldReset * 10;
                     foxMovementMultiplierOldSlider.value = foxMovementMultiplierOldReset;
 
                     foxMovementMultiplierPregnantText.text = foxMovementMultiplierPregnantReset.ToString();
+                    foxMovementMultiplierPregnantSlider.wholeNumbers = false;
+                    foxMovementMultiplierPregnantSlider.minValue = 0;
+                    foxMovementMultiplierPregnantSlider.maxValue = foxMovementMultiplierPregnantReset * 10;
                     foxMovementMultiplierPregnantSlider.value = foxMovementMultiplierPregnantReset;
 
                     foxSightRadiusText.text = foxSightRadiusReset.ToString();
+                    foxSightRadiusSlider.wholeNumbers = true;
+                    foxSightRadiusSlider.minValue = 0;
+                    foxSightRadiusSlider.maxValue = foxSightRadiusReset * 10;
                     foxSightRadiusSlider.value = foxSightRadiusReset;
 
                     foxSizeMaleText.text = foxSizeMaleReset.ToString();
+                    foxSizeMaleSlider.wholeNumbers = true;
+                    foxSizeMaleSlider.minValue = 0;
+                    foxSizeMaleSlider.maxValue = foxSizeMaleReset * 10;
                     foxSizeMaleSlider.value = foxSizeMaleReset;
 
                     foxSizeFemaleText.text = foxSizeFemaleReset.ToString();
+                    foxSizeFemaleSlider.wholeNumbers = true;
+                    foxSizeFemaleSlider.minValue = 0;
+                    foxSizeFemaleSlider.maxValue = foxSizeFemaleReset * 10;
                     foxSizeFemaleSlider.value = foxSizeFemaleReset;
 
 

@@ -70,10 +70,10 @@ namespace MonoBehaviourTools.UI
         }
         private void Start()
         {
-            rabbitNumber = simulationManager.RabbitSpawn();
-            foxNumber = simulationManager.FoxSpawn();
-            grassNumber = simulationManager.GrassSpawn();
-            
+            rabbitNumber = SimulationManager.Instance.numberOfRabbitsToSpawn;
+            foxNumber = SimulationManager.Instance.numberOfFoxesToSpawn;
+            grassNumber = SimulationManager.Instance.numberOfGrassToSpawn;
+
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             xMaximum = 100f;
             input = 100;
@@ -89,7 +89,7 @@ namespace MonoBehaviourTools.UI
         private void Update()
         {
             //catch to not run if paused
-            if (UITimeControl.instance.GetPause())
+            if (UITimeControl.Instance.GetPause())
             {
                 return;
             }

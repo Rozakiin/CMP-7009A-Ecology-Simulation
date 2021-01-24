@@ -5,7 +5,7 @@ namespace MonoBehaviourTools.UI
 {
     public class UITimeControl : MonoBehaviour
     {
-        public static UITimeControl instance;
+        public static UITimeControl Instance;
         private bool pause;
         private float maxSpeed;
         private float minSpeed;
@@ -19,8 +19,8 @@ namespace MonoBehaviourTools.UI
 
         private void Awake()
         {
-            if (instance == null)
-                instance = this;
+            if (Instance == null)
+                Instance = this;
         }
 
         private void Start()
