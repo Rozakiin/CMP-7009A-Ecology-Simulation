@@ -27,12 +27,24 @@ namespace Systems
 
                     //calc the direction to move
                     float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
-                    float step = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation (not just implemented)
+                    float rotationStep = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation
+                    float movementStep = movementData.MoveSpeed * deltaTime;// to be used to smoothly change movement
 
-                    //rotate towards the targetPosition
-                    rotation.Value = math.slerp(math.normalizesafe(rotation.Value), quaternion.LookRotationSafe(moveDir, math.up()), step);
-                    //move towards the targetPosition
-                    translation.Value += moveDir * movementData.MoveSpeed * deltaTime;
+                    // if you have moved further away from target (ie overshot target)
+                    if (math.distance(translation.Value, targetPosition) <= math.distance(translation.Value + moveDir * movementStep, targetPosition))
+                    {
+                        //look at targetPosition
+                        rotation.Value = quaternion.LookRotationSafe(moveDir, math.up());
+                        //move to targetposition
+                        translation.Value = targetPosition;
+                    }
+                    else
+                    {
+                        //rotate towards the targetPosition
+                        rotation.Value = math.slerp(math.normalizesafe(rotation.Value), quaternion.LookRotationSafe(moveDir, math.up()), rotationStep);
+                        //move towards the targetPosition
+                        translation.Value += moveDir * movementStep;
+                    }
 
                     //If at the targetPosition
                     if (math.distance(translation.Value, targetPosition) <= targetData.touchRadius)

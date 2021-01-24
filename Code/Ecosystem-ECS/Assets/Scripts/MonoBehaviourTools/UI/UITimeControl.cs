@@ -44,9 +44,9 @@ namespace MonoBehaviourTools.UI
             {
                 fastForwardSpeed = 0f;
             }
-            else if (fastForwardSpeed > 100f)
+            else if (fastForwardSpeed > 20f)
             {
-                fastForwardSpeed = 100f;
+                fastForwardSpeed = 20f;
             }
             Time.timeScale = pause ? 0f : fastForwardSpeed;
         }

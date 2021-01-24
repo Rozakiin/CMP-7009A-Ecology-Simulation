@@ -94,15 +94,11 @@ public class SimulationManager : MonoBehaviour
     public static float downLimit;
     #endregion
     #region Initialisation
-    private void Start()
+    private void Awake()
     {
         if (Instance == null)
             Instance = this;
         isSetupComplete = false;
-        Application.targetFrameRate = 60; // Target 60fps
-
-        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
         if (InitialRabbitsToSpawn >= 0)
             numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
@@ -111,6 +107,16 @@ public class SimulationManager : MonoBehaviour
         if (InitialGrassToSpawn >= 0)
             numberOfGrassToSpawn = InitialGrassToSpawn;
         secondsOfLastGrassSpawn = 0;
+    }
+    private void Start()
+    {
+        
+        Application.targetFrameRate = 60; // Target 60fps
+
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
+
+        
 
         // Only continue if no errors creating the map
         if (!CreateMap())
@@ -150,9 +156,9 @@ public class SimulationManager : MonoBehaviour
             SpawnFoxAtPosOnRClick();
             SpawnGrassAtPosOnMClick();
             /* Spawn grass entity at random location once every 10 in game seconds */
-            if ((int)Time.time % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.time)
+            if ((int)Time.timeSinceLevelLoad % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.timeSinceLevelLoad)
             {
-                secondsOfLastGrassSpawn = (int)Time.time; //update the time in seconds the code was ran
+                secondsOfLastGrassSpawn = (int)Time.timeSinceLevelLoad; //update the time in seconds the code was ran
                 if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
                     CreateEntitiesFromGameObject(grass, (int)math.ceil(grassPopulation / 10));
             }
@@ -794,31 +800,31 @@ public class SimulationManager : MonoBehaviour
     }
     #endregion
 
-    public float RabbitSpawn()
+    public int RabbitSpawn()
     {
-        return (float)numberOfRabbitsToSpawn;
+        return numberOfRabbitsToSpawn;
     }
-    public float RabbitPopulation()
+    public int RabbitPopulation()
     {
-        return (float)rabbitPopulation;
-    }
-
-    public float FoxSpawn()
-    {
-        return (float)numberOfFoxesToSpawn;
-    }
-    public float FoxPopulation()
-    {
-        return (float)foxPopulation;
+        return rabbitPopulation;
     }
 
-    public float GrassSpawn()
+    public int FoxSpawn()
     {
-        return (float)numberOfGrassToSpawn;
+        return numberOfFoxesToSpawn;
     }
-    public float GrassPopulation()
+    public int FoxPopulation()
     {
-        return (float)grassPopulation;
+        return foxPopulation;
+    }
+
+    public int GrassSpawn()
+    {
+        return numberOfGrassToSpawn;
+    }
+    public int GrassPopulation()
+    {
+        return grassPopulation;
     }
 
     public static Vector2 MapSize()
