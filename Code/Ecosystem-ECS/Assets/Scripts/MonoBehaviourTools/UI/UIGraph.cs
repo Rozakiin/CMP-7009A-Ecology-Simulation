@@ -39,11 +39,16 @@ namespace MonoBehaviourTools.UI
         private RectTransform dashTemplateX;
         private RectTransform dashTemplateY;
         private RectTransform circleContainer;
-
+        
         private readonly List<int> graphRabbitsList = new List<int>();
         private readonly List<int> graphFoxesList = new List<int>();
         private readonly List<int> graphGrassList = new List<int>();
-        private readonly List<int> graphTime = new List<int>();
+        
+        private readonly List<int> graphNewRabbitsList = new List<int>();
+        private readonly List<int> graphNewFoxesList = new List<int>();
+        private readonly List<int> graphNewGrassList = new List<int>();
+        
+        private readonly List<float> graphTime = new List<float>();
 
         private void Awake()
         {
@@ -70,15 +75,7 @@ namespace MonoBehaviourTools.UI
             rabbitNumber = simulationManager.RabbitSpawn();
             foxNumber = simulationManager.FoxSpawn();
             grassNumber = simulationManager.GrassSpawn();
-            
-            graphRabbitsList.Add(rabbitNumber);
-            graphFoxesList.Add(foxNumber);
-            graphGrassList.Add(grassNumber);
-            graphTime.Add(1);
-            
-            //draw initial dot in graph
-            ShowGraph(1, 1);
-            
+
             inyMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) * 5;
             xMaximum = 100f;
@@ -97,12 +94,17 @@ namespace MonoBehaviourTools.UI
                 return;
             }
 
+            rabbitNumber = simulationManager.RabbitPopulation();
+            foxNumber = simulationManager.FoxPopulation();
+            grassNumber = simulationManager.GrassPopulation();
+            
+            graphNewRabbitsList.Add(rabbitNumber);
+            graphNewFoxesList.Add(foxNumber);
+            graphNewGrassList.Add(grassNumber);
+            graphTime.Add(Time.timeSinceLevelLoad);
+            
             if ((int) Time.timeSinceLevelLoad > graphRabbitsList.Count)
             {
-                rabbitNumber = simulationManager.RabbitPopulation();
-                foxNumber = simulationManager.FoxPopulation();
-                grassNumber = simulationManager.GrassPopulation();
-
                 // for example three seconds per frame, so just add three number in this frame
                 var numberOfNew = (int) Time.timeSinceLevelLoad - graphRabbitsList.Count;
                 if (numberOfNew>1)
@@ -125,9 +127,9 @@ namespace MonoBehaviourTools.UI
                 graphRabbitsList.Add(rabbitNumber);
                 graphFoxesList.Add(foxNumber);
                 graphGrassList.Add(grassNumber);
-                graphTime.Add((int)Time.timeSinceLevelLoad);
-                
+
                 int graphLength = graphRabbitsList.Count;
+                
                 if (Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 8 * 10 > yMaximum)
                 {
                     inyMaximum = yMaximum;
@@ -148,10 +150,12 @@ namespace MonoBehaviourTools.UI
                     }
                     else
                     {
+                        // update rate increase as time goes by
                         if (Time.timeSinceLevelLoad >= nextTime)
                         {
                             ShowAllGraph(graphLength);
-
+                            
+                            //updateSecond must be 2s, 3s, 4s, increase by graphRabbitsList.Count
                             int updateSecond = Mathf.FloorToInt(graphRabbitsList.Count / 100);
                             nextTime += updateSecond;
                         }
@@ -181,9 +185,9 @@ namespace MonoBehaviourTools.UI
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     sw.WriteLine("Seconds" + "," + "Rabbit" + "," + "Fox" + "," + "Grass");
-                    foreach (var t in graphTime)
+                    for (var i = 0; i< graphTime.Count;i++)
                     {
-                        sw.WriteLine(t + "," + graphRabbitsList[t] + "," + graphFoxesList[t] + "," + graphGrassList[t]);
+                        sw.WriteLine(graphTime[i] + "," + graphNewRabbitsList[i] + "," + graphNewFoxesList[i] + "," + graphNewGrassList[i]);
                     }
                     sw.Close();
                 }
@@ -242,8 +246,7 @@ namespace MonoBehaviourTools.UI
                 dashY.gameObject.SetActive(true);
                 dashY.anchoredPosition = new Vector2(graphWidth / lineNumber.x * i * 1f, dashTemplateY.anchoredPosition.y);
             }
-
-
+            
             for (var i = 1; i <= lineNumber.y; i++)
             {
                 var yText = (int)(yMaximum / lineNumber.y * i);
