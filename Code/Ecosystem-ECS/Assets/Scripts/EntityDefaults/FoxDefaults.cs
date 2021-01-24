@@ -6,13 +6,21 @@ namespace EntityDefaults
 {
     public static class FoxDefaults
     {
+        //time periods in hours
+        private const int YEAR = 8766;
+        private const int MONTH = 730;
+        private const int WEEK = 168;
+        private const int DAY = 24;
+        private const int HOUR = 1;
+
+
         //Age
         public static float age = 0f;
         public static float ageIncrease = 1f;
-        public static float ageMax = 800f;
+        public static float ageMax = 7*YEAR;
         public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-        public static float adultEntryTimer = 20f;
-        public static float oldEntryTimer = 600f;
+        public static float adultEntryTimer = 1*YEAR;
+        public static float oldEntryTimer = 5*YEAR;
 
 
         //Edible
@@ -24,8 +32,8 @@ namespace EntityDefaults
 
         //Hunger
         public static float hunger = 0f;
-        public static float hungerMax = 100f;
-        public static float hungryThreshold = 20f;
+        public static float hungerMax = 2*WEEK;
+        public static float hungryThreshold = 3*DAY;
         public static float hungerIncrease = 0.5f;
         public static float pregnancyHungerIncrease = 0.7f;
         public static float youngHungerIncrease = 0.3f;
@@ -37,19 +45,19 @@ namespace EntityDefaults
 
         //Thirst
         public static float thirst = 0f;
-        public static float thirstMax = 100f;
-        public static float thirstyThreshold = 10f;
-        public static float thirstIncrease = 0.5f;
+        public static float thirstMax = 3*DAY;
+        public static float thirstyThreshold = 0.5f*DAY;
+        public static float thirstIncrease = 1f;
         public static float drinkingSpeed = 2f;
 
 
         //Mate
         public static float mateStartTime = 0f;
-        public static float matingDuration = 5f;
+        public static float matingDuration = 1*HOUR;
         public static float reproductiveUrge = 0f;
-        public static float reproductiveUrgeIncreaseMale = 0.3f;
+        public static float reproductiveUrgeIncreaseMale = 1f;
         public static float reproductiveUrgeIncreaseFemale = 0f;
-        public static float matingThreshold = 50f;
+        public static float matingThreshold = 1*DAY;
 
 
         //Pregnancy
@@ -58,8 +66,8 @@ namespace EntityDefaults
         public static float birthStartTime = 0f;
         public static int currentLitterSize = 0;
         public static float pregnancyLengthModifier = 1f;
-        public static float pregnancyLength = 10f;
-        public static float birthDuration = 10f;
+        public static float pregnancyLength = 2*MONTH;
+        public static float birthDuration = 1*HOUR;
         public static int litterSizeMin = 1;
         public static int litterSizeMax = 14;
         public static int litterSizeAve = 5;
