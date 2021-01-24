@@ -34,7 +34,7 @@ namespace EntityDefaults
         public static float hunger = 0f;
         public static float hungerMax = 2*WEEK;
         public static float hungryThreshold = 3*DAY;
-        public static float hungerIncrease = 0.5f;
+        public static float hungerIncrease = 1f;
         public static float pregnancyHungerIncrease = 0.7f;
         public static float youngHungerIncrease = 0.3f;
         public static float adultHungerIncrease = 1f;
