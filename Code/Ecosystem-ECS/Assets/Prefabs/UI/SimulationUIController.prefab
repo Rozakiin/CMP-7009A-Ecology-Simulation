@@ -1443,7 +1443,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4992,7 +4992,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiGraph: {fileID: 265633833014814715}
   turnDisplay: {fileID: 8732237489688312611}
-  counter: 0
 --- !u!114 &964520025276837570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5024,7 +5023,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   escapeMenu: {fileID: 2281046952876205020}
-  uITimeControl: {fileID: 0}
   resume: {fileID: 4933575748973551778}
   save: {fileID: 500298135160070407}
   quit: {fileID: 5328973228511363711}
