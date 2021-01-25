@@ -12,7 +12,8 @@ namespace MonoBehaviourTools.UI
         private Vector2 mapSize;
 
         private float yMin = 30f;
-        private float camSpeedMax = 2f;
+        private float camSpeedInitial = 1f;
+        private float camSpeedMultiplier = 1f;
         private float scrollSpeed = 200f;
         private float cameraYMultiplier = 8.5f;
         private float cameraZMultiplier = -3f;
@@ -54,7 +55,7 @@ namespace MonoBehaviourTools.UI
                 float xLimit = xMax * rate;
                 camXLimit = new Vector2(-xLimit, xLimit);
                 camZLimit = new Vector2(zLimitMin, zLimitMax);
-                camSpeed = camSpeedMax * rate;
+                camSpeed = camSpeedInitial + (camSpeedMultiplier * rate);
             }
 
             cameraPosition.x = Mathf.Clamp(cameraPosition.x, camXLimit.x, camXLimit.y);

@@ -16,6 +16,7 @@ namespace MonoBehaviourTools.UI
             transform.position = cameraFunction.GetInitialPosition();
             scrollSpeed = cameraFunction.GETScrollSpeed();
         }
+        
         private void Update()
         {
             Vector3 pos = transform.position;
