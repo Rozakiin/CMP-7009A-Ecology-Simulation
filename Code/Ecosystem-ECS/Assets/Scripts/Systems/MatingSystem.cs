@@ -42,12 +42,15 @@ namespace Systems
                     reproductiveData.reproductiveUrgeIncrease = 0f;
                 }
 
+                //If it's in a state of looking for a mate
                 if (stateData.isSexuallyActive)
                 {
                     if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
                     {
+                        //If it has found an entity to mate with
                         if (HasComponent<Translation>(targetData.entityToMate))
                         {
+                            //If the mate is close enough to mate with
                             if (targetData.shortestToMateDistance <= targetData.mateRadius)
                             {
                                 reproductiveData.mateStartTime = bioStatsData.age;
