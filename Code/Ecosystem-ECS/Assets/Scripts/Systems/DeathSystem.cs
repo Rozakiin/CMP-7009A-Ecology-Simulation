@@ -5,6 +5,11 @@ namespace Systems
 {
     public class DeathSystem : SystemBase
     {
+        /*
+         * Counts the number of entities that have died,
+         * tallies the ways they died and updates the count
+         * in SimulationController. Then deletes the entity.
+         */
         protected override void OnUpdate()
         {
             //catch to not run if paused

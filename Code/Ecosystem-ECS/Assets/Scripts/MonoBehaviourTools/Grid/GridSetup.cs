@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Components;
+﻿using Components;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -39,6 +39,7 @@ namespace MonoBehaviourTools.Grid
             gridNodeDiameter = gridNodeRadius * 2;//Double the radius to get diameter
         }
 
+        /*Methods to create the pathfinding grid from the map, asigns a movement penalty based on if is walkable and terrainpenalty*/
         public bool CreateGrid()
         {
             gridWorldSize = SimulationManager.worldSize;
@@ -81,7 +82,7 @@ namespace MonoBehaviourTools.Grid
             return true;
         }
 
-        //Function that draws the wireframe, and the nodes
+        /*Function that draws the wireframe, and the nodes*/
         private void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));//Draw a wire cube with the given dimensions from the Unity inspector
@@ -100,8 +101,10 @@ namespace MonoBehaviourTools.Grid
             }
         }
 
-        //Blurs a map of the movement penalty for each node using a box blur,
-        //this is used to smooth the penalty weights for more natural pathfinding
+        /*
+         * Blurs a map of the movement penalty for each node using a box blur,
+         * this is used to smooth the penalty weights for more natural pathfinding
+         */
         private void BlurMovementPenaltyMap(int blurSize)
         {
             int kernelSize = blurSize * 2 + 1; //must be odd number
@@ -168,7 +171,7 @@ namespace MonoBehaviourTools.Grid
         }
 
 
-        //Function that gets the neighboring nodes of the given node.
+        /*Function that gets the neighboring nodes of the given node.*/
         public List<GridNode> GetNeighboringNodes(GridNode _neighbourNode)
         {
             List<GridNode> neighbourList = new List<GridNode>();//Make a new list of all available neighbors.
@@ -208,7 +211,7 @@ namespace MonoBehaviourTools.Grid
         }
 
 
-        //Gets the closest node to the given world position.
+        /*Gets the closest node to the given world position.*/
         public GridNode NodeFromWorldPoint(float3 _worldPos)
         {
             // how far along the grid the position is (left 0, middle 0.5, right 1)
@@ -226,14 +229,14 @@ namespace MonoBehaviourTools.Grid
         }
 
 
-        // returns if the given world point is in a walkable tile
+        /* returns if the given world point is in a walkable tile*/
         public bool IsWorldPointWalkable(float3 _worldPos)
         {
             return NodeFromWorldPoint(_worldPos).isWalkable;
         }
 
 
-        // static version combines NodeFromWorldPoint and IsWorldPointWalkable
+        /* static version combines NodeFromWorldPoint and IsWorldPointWalkable*/
         public static bool IsWorldPointWalkableFromGrid(float3 _worldPos, float2 _worldSize, int2 _gridSize, GridNode[,] grid)
         {
             // how far along the grid the position is (left 0, middle 0.5, right 1)

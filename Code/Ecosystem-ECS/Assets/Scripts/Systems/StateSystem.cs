@@ -8,6 +8,9 @@ namespace Systems
 {
     public class StateSystem : SystemBase
     {
+        /*
+         * determines the states the entity is in, also determines death reason
+         */
         protected override void OnUpdate()
         {
             float tileSize = SimulationManager.tileSize;

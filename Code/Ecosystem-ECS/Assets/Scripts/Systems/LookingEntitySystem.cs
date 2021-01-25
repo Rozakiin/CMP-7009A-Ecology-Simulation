@@ -22,6 +22,9 @@ namespace Systems
             buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
         }
 
+        /*
+         * finds closest entity of edible, drinkable, same animal type, and predator
+         */
         protected override void OnUpdate()
         {
             //catch to not run if paused

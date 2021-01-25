@@ -5,6 +5,9 @@ namespace Systems
 {
     public class MovementDataSystem : SystemBase
     {
+        /*
+         * changes the entities' movement multiplier based on agegroup or state
+         */
         protected override void OnUpdate()
         {
             Entities.ForEach((

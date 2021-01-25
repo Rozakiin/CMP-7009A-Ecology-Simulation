@@ -508,6 +508,7 @@ namespace MonoBehaviourTools.MenuScripts
         #endregion
 
         #region Loading Map From File
+        /*Opens file browser to load in the map*/
         public void LoadMap()
         {
             var paths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
@@ -517,6 +518,7 @@ namespace MonoBehaviourTools.MenuScripts
             }
         }
 
+        /*returns the text representation of the file at url*/
         private IEnumerator OutputRoutine(string url)
         {
             UnityWebRequest webRequest = UnityWebRequest.Get(url);
@@ -533,7 +535,7 @@ namespace MonoBehaviourTools.MenuScripts
             }
         }
 
-        // attempts to load the given file into the MapReader
+        /* attempts to load the given file into the MapReader */
         private bool MapFileValid()
         {
             List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
@@ -582,6 +584,7 @@ namespace MonoBehaviourTools.MenuScripts
         #endregion
 
         #region Initial Properties
+        /*Saves the initial properties slider and toggle values to respective Defaults field */
         public void InitialPropertiesApply()
         {
             Debug.Log("Apply Initial Properties");
@@ -678,6 +681,7 @@ namespace MonoBehaviourTools.MenuScripts
             StartCoroutine(ConfirmationBox());
         }
 
+        /*Update inital animal to spawn count in SimulationManager*/
         public void OnSetNumberToSpawn(string entityToUpdate)
         {
             switch (entityToUpdate)
@@ -703,6 +707,7 @@ namespace MonoBehaviourTools.MenuScripts
             }
         }
 
+        /*Updates the value text of the slider when the slider is moved, calls InitialPropertiesApply after*/
         public void InitialPropertiesUpdate(string propertyToUpdate)
         {
             switch (propertyToUpdate)
@@ -929,7 +934,7 @@ namespace MonoBehaviourTools.MenuScripts
         #endregion
 
         #region ResetButton
-
+        /*stores the starting value of the defaults before they are changed so they can be reset*/
         private void StoreInitialEntityDefaults()
         {
             rabbitAgeMaxReset = RabbitDefaults.ageMax;
@@ -1079,6 +1084,7 @@ namespace MonoBehaviourTools.MenuScripts
             grassSizeReset = GrassDefaults.scale;
         }
 
+        /*Resets the menu item values that are for the given menu*/
         public void ResetButton(string menuToReset)
         {
             switch (menuToReset)
@@ -1503,6 +1509,7 @@ namespace MonoBehaviourTools.MenuScripts
         #endregion
 
         #region Dialog Options - This is where we load what has been saved in player prefs!
+        /*Confirmation of if the user wants to load simulation with the current options*/
         public void ClickNewGameDialog(string ButtonType)
         {
             if (ButtonType == "Yes")
@@ -1519,6 +1526,7 @@ namespace MonoBehaviourTools.MenuScripts
             }
         }
 
+        /*loads the selected xml of the defaults, sets the slider values where applicable*/
         public void LoadGame()
         {
             string[] filePaths = StandaloneFileBrowser.StandaloneFileBrowser.OpenFilePanel("Open File", "", "xml", false);
@@ -1777,6 +1785,7 @@ namespace MonoBehaviourTools.MenuScripts
                 Debug.Log("NOT FOUNDED");
             }
         }
+        /*confirmation of if the user wants to try and load the selected maps*/
         public void ClickLoadGameDialog(string ButtonType)
         {
             if (ButtonType == "Yes")

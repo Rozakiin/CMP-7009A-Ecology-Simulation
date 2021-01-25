@@ -31,6 +31,7 @@ namespace MonoBehaviourTools.UI
             OnSelectDropdown();
         }
 
+        /*Sets the list of property options available in the dropdown*/
         private void SetDropDownPropertyValues()
         {
             List<string> propertyOptions = new List<string>
@@ -121,6 +122,7 @@ namespace MonoBehaviourTools.UI
 
         #endregion
 
+        /*change the input field text to the current value of the selected property from the dropdown*/
         public void OnSelectDropdown()
         {
             string selectedOption = dropdownPropertyDropdown.options[dropdownPropertyDropdown.value].text;
@@ -348,10 +350,10 @@ namespace MonoBehaviourTools.UI
             }
         }
 
+        /*Set the respective default to the value of the input field, sets the somethingchanged flag to false so existing entities also get updated */
         public void DropdownPropertiesUpdate()
         {
             string selectedOption = dropdownPropertyDropdown.options[dropdownPropertyDropdown.value].text;
-            //Debug.Log($"{selectedOption}: {float.Parse(dropdownInputField.text)}");
             switch (selectedOption)
             {
                 case "None":

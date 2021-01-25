@@ -8,7 +8,10 @@ namespace UtilTools
 {
     public static class PhysicsTools
     {
-        // Adapted From https://docs.unity3d.com/Packages/com.unity.physics@0.5/manual/collision_queries.html
+        /*
+         * Adapted From https://docs.unity3d.com/Packages/com.unity.physics@0.5/manual/collision_queries.html
+         * Casts ray and returns an entity it hits
+         */
         public static Entity GetEntityFromRaycast(float3 RayFrom, float3 RayTo, CollisionFilter filter)
         {
             BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
@@ -32,7 +35,7 @@ namespace UtilTools
 
     public static class GridTools
     {
-        // Returns false is collides with unwalkabletile or doesnt collide with a tile
+        /* Returns false is collides with unwalkabletile or doesnt collide with a tile*/
         public static bool IsWorldPointOnWalkableTile(float3 worldPoint, EntityManager entityManager)
         {
             float3 tempUp = worldPoint + math.up() * 10000;

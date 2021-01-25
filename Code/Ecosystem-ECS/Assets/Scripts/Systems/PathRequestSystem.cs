@@ -15,6 +15,9 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /*
+         * Adds a path request data component to entities with a target that are not currently moving 
+         */
         protected override void OnUpdate()
         {
             var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
