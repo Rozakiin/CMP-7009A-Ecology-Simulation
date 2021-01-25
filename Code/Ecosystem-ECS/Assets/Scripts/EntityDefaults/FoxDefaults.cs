@@ -19,7 +19,7 @@ namespace EntityDefaults
         public static float ageIncrease = 1f;
         public static float ageMax = 7*YEAR;
         public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-        public static float adultEntryTimer = 1*YEAR;
+        public static float adultEntryTimer = 1*WEEK;
         public static float oldEntryTimer = 5*YEAR;
 
 
@@ -66,7 +66,7 @@ namespace EntityDefaults
         public static float birthStartTime = 0f;
         public static int currentLitterSize = 0;
         public static float pregnancyLengthModifier = 1f;
-        public static float pregnancyLength = 2*MONTH;
+        public static float pregnancyLength = 2*DAY;
         public static float birthDuration = 1*HOUR;
         public static int litterSizeMin = 1;
         public static int litterSizeMax = 14;

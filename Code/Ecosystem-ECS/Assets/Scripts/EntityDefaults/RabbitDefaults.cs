@@ -19,7 +19,7 @@ namespace EntityDefaults
         public static float ageIncrease = 1f;
         public static float ageMax = 10 * YEAR;
         public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-        public static float adultEntryTimer = 1 * MONTH;
+        public static float adultEntryTimer = 1 * DAY;
         public static float oldEntryTimer = 6 * YEAR;
 
 
