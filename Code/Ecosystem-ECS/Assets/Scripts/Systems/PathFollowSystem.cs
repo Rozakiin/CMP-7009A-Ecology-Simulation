@@ -7,6 +7,10 @@ namespace Systems
 {
     public class PathFollowSystem : SystemBase
     {
+        /*
+         * makes entity follow the path stored in pathpositiondatabuffer,
+         * entity rotates towards the target node
+         */
         protected override void OnUpdate()
         {
             float deltaTime = Time.DeltaTime;

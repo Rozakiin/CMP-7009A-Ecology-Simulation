@@ -16,8 +16,10 @@ namespace MonoBehaviourTools.Map
         }
 
 
-        // Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
-        // This is stored in mapList which is a List of lists passed by reference.
+        /*
+         * Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
+         * This is stored in mapList which is a List of lists passed by reference.
+         */
         public static bool ReadInMapFromFile(string filePath, ref List<List<TerrainCost>> mapList)
         {
             try
@@ -54,8 +56,10 @@ namespace MonoBehaviourTools.Map
             return false;
         }
 
-        // Reads in from string a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
-        // This is stored in mapList which is a List of lists passed by reference.
+        /*
+         * Reads in from string a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
+         * This is stored in mapList which is a List of lists passed by reference.
+         */
         public static bool ReadInMapFromString(string map, ref List<List<TerrainCost>> mapList)
         {
             try

@@ -136,7 +136,6 @@ namespace MonoBehaviourTools.UI
                     lastYMaximum = yMaximum;
                     yMaximum = Mathf.Max(rabbitNumber, foxNumber, grassNumber) / 0.8f;
                     UpdateYAxis();
-                    DecreaseY();
                 }
                 
                 // every second plot one dot
@@ -167,6 +166,7 @@ namespace MonoBehaviourTools.UI
             }
         }
 
+        //button onclick method
         private void ShowTime()
         {
             int lastInput = int.Parse(inputField.text);
@@ -177,6 +177,7 @@ namespace MonoBehaviourTools.UI
             input = lastInput < graphRabbitsList.Count ? lastInput : 1;
         }
 
+        //save fox,rabbit,grass number to csv file
         private void SaveFile()
         {
             uITimeControl.Pause();
@@ -204,10 +205,11 @@ namespace MonoBehaviourTools.UI
             uITimeControl.Play();
         }
 
+        //Decrease Y position when Y value more than 80 percent of Y maximum
         private void UpdateYAxis()
         {
-            Transform[] allGameObject = labelYContainer.GetComponentsInChildren<Transform>();
-            foreach (Transform child in allGameObject)
+            Transform[] allLabel = labelYContainer.GetComponentsInChildren<Transform>();
+            foreach (Transform child in allLabel)
             {
                 if (child.name.Contains("Label"))
                 {
@@ -217,8 +219,17 @@ namespace MonoBehaviourTools.UI
                 int labelText = (int)(yMaximum / line.y * labelNumber);
                 child.GetComponent<Text>().text = labelText.ToString();
             }
+            
+            RectTransform[] allDots = circleContainer.GetComponentsInChildren<RectTransform>();
+            foreach (RectTransform child in allDots)
+            {
+                var anchoredPosition = child.anchoredPosition;
+                anchoredPosition = new Vector2(anchoredPosition.x, anchoredPosition.y / (yMaximum / lastYMaximum));
+                child.anchoredPosition = anchoredPosition;
+            }
         }
 
+        //update X label value based on different user input and time
         private void UpdateXAxis(int number, int value)
         {
             Transform[] allGameObject = labelXContainer.GetComponentsInChildren<Transform>();
@@ -235,6 +246,7 @@ namespace MonoBehaviourTools.UI
             }
         }
 
+        //Create the line and label of X and Y
         private void Create(Vector2 lineNumber)
         {
             for (var i = 1; i <= lineNumber.x; i++)
@@ -265,7 +277,7 @@ namespace MonoBehaviourTools.UI
                 dashX.anchoredPosition = new Vector2(dashTemplateX.anchoredPosition.x, graphContainerSize.y / lineNumber.y * i);
             }
         }
-
+        
         private void CreateDots(Vector2 anchoredPosition, string objectName)
         {
             GameObject gameObject = new GameObject("circle", typeof(Image));
@@ -284,17 +296,7 @@ namespace MonoBehaviourTools.UI
             rectTransform.anchorMax = new Vector2(0, 0);
         }
 
-        private void DecreaseY()
-        {
-            RectTransform[] allGameObject = circleContainer.GetComponentsInChildren<RectTransform>();
-            foreach (RectTransform child in allGameObject)
-            {
-                var anchoredPosition = child.anchoredPosition;
-                anchoredPosition = new Vector2(anchoredPosition.x, anchoredPosition.y / (yMaximum / lastYMaximum));
-                child.anchoredPosition = anchoredPosition;
-            }
-        }
-
+        // draw dots between 0s and 100s
         private void ShowGraph(int listLength,int addNumber)
         {
             for (var i = addNumber; i >= 1; i--)
@@ -309,9 +311,9 @@ namespace MonoBehaviourTools.UI
             }
         }
 
+        // Update Dots Position by user input
         private void UpdateDotsPositionByInput(int value, int listLength)
         {
-            // Dont understand the logic behind the position calculation but objects are moved now rather than deleted and recreated
             RectTransform[] allGameObject = circleContainer.GetComponentsInChildren<RectTransform>();
             int iR = 1;
             int iF = 1;
@@ -352,6 +354,7 @@ namespace MonoBehaviourTools.UI
             UpdateXAxis(number, value);
         }
 
+        // Update all Dots Position
         private void UpdateAllDotsPosition(int listLength)
         {
             // Dont understand the logic behind the position calculation but objects are moved now rather than deleted and recreated

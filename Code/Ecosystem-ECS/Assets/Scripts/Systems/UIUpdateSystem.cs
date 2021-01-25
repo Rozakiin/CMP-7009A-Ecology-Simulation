@@ -17,6 +17,12 @@ namespace Systems
             somethingChangedFlag = false;
         }
 
+        /*
+         * When somethingChangedFlag is true,
+         * the entities' properties are updated from Defaults.
+         * This is used when the defaults are updated when entities could exist
+         * in the sim.
+         */
         protected override void OnUpdate()
         {
             //only update entities if something has changed

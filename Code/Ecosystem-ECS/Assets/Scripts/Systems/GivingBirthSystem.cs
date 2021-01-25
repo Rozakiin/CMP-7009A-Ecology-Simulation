@@ -19,6 +19,10 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /*
+         * Gives birth (spawns) to a child entity of the same type as the entity giving birth
+         * sets some inherited values from the parent
+         */
         protected override void OnUpdate()
         {
             var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
@@ -215,6 +219,7 @@ namespace Systems
             {
                 if (stateData.isGivingBirth)
                 {
+                    //Determine if enough time has passed since the last baby was born and if there are still babies to be born
                     if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
                         reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                     {
@@ -482,6 +487,7 @@ namespace Systems
 
                         #endregion
 
+                        //Set the birthStartTime to the current age, so that it can count time towards the next baby
                         reproductiveData.birthStartTime = bioStatsData.age;
                         reproductiveData.babiesBorn++;
                     }

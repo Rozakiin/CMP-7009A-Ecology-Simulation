@@ -8,6 +8,9 @@ namespace Systems
 {
     public class StateSystem : SystemBase
     {
+        /*
+         * determines the states the entity is in, also determines death reason
+         */
         protected override void OnUpdate()
         {
             float tileSize = SimulationManager.tileSize;
@@ -21,6 +24,7 @@ namespace Systems
                 in BioStatsData bioStatsData
             ) =>
             {
+                // determine if the entity shouldn't be dead
                 if (stateData.beenEaten)
                 {
                     stateData.previousFlagState = stateData.flagState;
@@ -191,7 +195,7 @@ namespace Systems
                             stateData.flagState &= ~StateData.FlagStates.Drinking;
                         }
 
-                        //thirst quenched, disable hungry and eating, enable wandering
+                        //thirst quenched, disable thirsty and drinking, enable wandering
                         if (basicNeedsData.thirst <= 0)
                         {
                             stateData.previousFlagState = stateData.flagState;
@@ -249,6 +253,7 @@ namespace Systems
                     }
                 }
 
+                //Update states at the end
                 stateData.isWandering = ((stateData.flagState & StateData.FlagStates.Wandering) ==
                                          StateData.FlagStates.Wandering);
                 stateData.isHungry =

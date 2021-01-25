@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Systems
 {
+    /* 
+     * Used for any visual debugging or logging.
+     * can be enabled and disabled in the inspector so it only runs when needed
+     */
     public class DebuggingSystem : SystemBase
     {
         protected override void OnUpdate()
