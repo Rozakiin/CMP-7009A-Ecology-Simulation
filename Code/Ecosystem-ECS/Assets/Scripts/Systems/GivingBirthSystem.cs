@@ -215,6 +215,7 @@ namespace Systems
             {
                 if (stateData.isGivingBirth)
                 {
+                    //Determine if enough time has passed since the last baby was born and if there are still babies to be born
                     if ((bioStatsData.age - reproductiveData.birthStartTime >= reproductiveData.birthDuration) &&
                         reproductiveData.babiesBorn < reproductiveData.currentLitterSize)
                     {
@@ -482,6 +483,7 @@ namespace Systems
 
                         #endregion
 
+                        //Set the birthStartTime to the current age, so that it can count time towards the next baby
                         reproductiveData.birthStartTime = bioStatsData.age;
                         reproductiveData.babiesBorn++;
                     }
