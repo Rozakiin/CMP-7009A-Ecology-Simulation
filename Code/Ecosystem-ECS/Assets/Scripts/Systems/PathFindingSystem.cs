@@ -22,6 +22,10 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /*
+         * calculates the shortest path of grid nodes between two points
+         * using A-Star algorithm
+         */
         protected override void OnUpdate()
         {
             //catch to not run if paused

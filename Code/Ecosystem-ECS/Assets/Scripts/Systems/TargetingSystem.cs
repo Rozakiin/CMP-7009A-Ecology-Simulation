@@ -13,7 +13,10 @@ namespace Systems
     {
         private NativeArray<GridNode> gridNodeArray;
 
-
+        /*
+         * The system determines the target to move to based primarily on the current state 
+         * Grid nativearray is created to be used when checking if worldpoint is walkable
+         */
         protected override void OnUpdate()
         {
             // only run if grid has a size aka it has been created

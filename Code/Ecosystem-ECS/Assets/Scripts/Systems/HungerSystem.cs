@@ -13,6 +13,11 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /* 
+         * increases entities' hunger and adjusts how much it increases
+         * by various factors. Eats entities (sets their state to dead + eaten
+         * when hunger is over threshold and is state Eating
+         */
         protected override void OnUpdate()
         {
             var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();

@@ -5,6 +5,10 @@ namespace Systems
 {
     public class AgeingSystem : SystemBase
     {
+        /* 
+         * increases the age of the entities by ageIncrease * deltaTime,
+         * changes the ageGroup of the entity if they have reached the required age
+         */
         protected override void OnUpdate()
         {
             float deltaTime = Time.DeltaTime;
