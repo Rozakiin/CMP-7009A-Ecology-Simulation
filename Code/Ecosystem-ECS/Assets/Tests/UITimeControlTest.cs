@@ -52,24 +52,11 @@ namespace Tests
             
             uITimeControl.fastForwardSpeed = 0.2f;
             uITimeControl.DecreaseSpeed();
-            Assert.AreEqual(0.2f,uITimeControl.fastForwardSpeed);
+            Assert.AreEqual(0f,uITimeControl.fastForwardSpeed);
             
             uITimeControl.fastForwardSpeed = 0.4f;
             uITimeControl.DecreaseSpeed();
             Assert.AreEqual(0.2f,uITimeControl.fastForwardSpeed);
-        }
-        
-        [Test]
-        public void UpdateFastForwardSpeedTest()
-        {
-            uITimeControl.fastForwardSpeed = 1000f;
-            uITimeControl.Play();
-            uITimeControl.UpdateFastForwardSpeed();
-            Assert.AreEqual(100f,Time.timeScale);
-            
-            uITimeControl.fastForwardSpeed = -10f;
-            uITimeControl.UpdateFastForwardSpeed();
-            Assert.AreEqual(0f,Time.timeScale);
         }
     }
 }
