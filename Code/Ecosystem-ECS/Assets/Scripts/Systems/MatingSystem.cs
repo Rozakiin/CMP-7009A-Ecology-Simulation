@@ -16,6 +16,11 @@ namespace Systems
             ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
+        /*
+         * increases reproductive urge for adult males
+         * mates with females and sets females state to mating
+         * female becomes pregnant after mating has finished
+         */
         protected override void OnUpdate()
         {
             var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
