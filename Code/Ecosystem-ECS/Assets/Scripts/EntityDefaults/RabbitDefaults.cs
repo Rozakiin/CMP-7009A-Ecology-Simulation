@@ -7,118 +7,118 @@ namespace EntityDefaults
     public static class RabbitDefaults
     {
         //time periods in hours
-        private const int YEAR = 8766;
-        private const int MONTH = 730;
-        private const int WEEK = 168;
-        private const int DAY = 24;
-        private const int HOUR = 1;
+        private const int Year = 8766;
+        private const int Month = 730;
+        private const int Week = 168;
+        private const int Day = 24;
+        private const int Hour = 1;
 
 
         //Age
-        public static float age = 0f;
-        public static float ageIncrease = 1f;
-        public static float ageMax = 10 * YEAR;
-        public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-        public static float adultEntryTimer = 1 * MONTH;
-        public static float oldEntryTimer = 6 * YEAR;
+        public static float Age = 0f;
+        public static float AgeIncrease = 1f;
+        public static float AgeMax = 10 * Year;
+        public static BioStatsData.AgeGroups AgeGroup = BioStatsData.AgeGroups.Young;
+        public static float AdultEntryTimer = 1 * Month;
+        public static float OldEntryTimer = 6 * Year;
 
 
         //Edible
-        public static float nutritionalValue = 50f;
-        public static bool canBeEaten = true;
-        public static float nutritionalValueMultiplier = 1f;
-        public static EdibleData.FoodType foodType = EdibleData.FoodType.Meat;
+        public static float NutritionalValue = 50f;
+        public static bool CanBeEaten = true;
+        public static float NutritionalValueMultiplier = 1f;
+        public static EdibleData.FoodTypes FoodType = EdibleData.FoodTypes.Meat;
 
 
         //Hunger
-        public static float hunger = 0f;
-        public static float hungerMax = 4*DAY;
-        public static float hungryThreshold = 1 * DAY;
-        public static float hungerIncrease = 1f;
-        public static float pregnancyHungerIncrease = 0.7f;
-        public static float youngHungerIncrease = 0.3f;
-        public static float adultHungerIncrease = 1f;
-        public static float oldHungerIncrease = 0.5f;
-        public static float eatingSpeed = 1f;
-        public static BasicNeedsData.Diet diet = BasicNeedsData.Diet.Herbivore;
+        public static float Hunger = 0f;
+        public static float HungerMax = 4 * Day;
+        public static float HungryThreshold = 1 * Day;
+        public static float HungerIncrease = 1f;
+        public static float PregnancyHungerIncrease = 0.7f;
+        public static float YoungHungerIncrease = 0.3f;
+        public static float AdultHungerIncrease = 1f;
+        public static float OldHungerIncrease = 0.5f;
+        public static float EatingSpeed = 1f;
+        public static BasicNeedsData.DietType Diet = BasicNeedsData.DietType.Herbivore;
 
 
         //Thirst
-        public static float thirst = 0f;
-        public static float thirstMax = 100f;
-        public static float thirstyThreshold = 0.5f * DAY;
-        public static float thirstIncrease = 1f;
-        public static float drinkingSpeed = 2f;
+        public static float Thirst = 0f;
+        public static float ThirstMax = 100f;
+        public static float ThirstyThreshold = 0.5f * Day;
+        public static float ThirstIncrease = 1f;
+        public static float DrinkingSpeed = 2f;
 
 
         //Mate
-        public static float mateStartTime = 0f;
-        public static float matingDuration = 1*HOUR;
-        public static float reproductiveUrge = 0f;
-        public static float reproductiveUrgeIncreaseMale = 1f;
-        public static float reproductiveUrgeIncreaseFemale = 0f;
-        public static float matingThreshold = 1*DAY;
+        public static float MateStartTime = 0f;
+        public static float MatingDuration = 1 * Hour;
+        public static float ReproductiveUrge = 0f;
+        public static float ReproductiveUrgeIncreaseMale = 1f;
+        public static float ReproductiveUrgeIncreaseFemale = 0f;
+        public static float MatingThreshold = 1 * Day;
 
 
         //Pregnancy
-        public static float pregnancyStartTime = 0f;
-        public static int babiesBorn = 0;
-        public static float birthStartTime = 0f;
-        public static int currentLitterSize = 0;
-        public static float pregnancyLengthModifier = 1f;
-        public static float pregnancyLength = 1*MONTH;
-        public static float birthDuration = 1*HOUR;
-        public static int litterSizeMin = 1;
-        public static int litterSizeMax = 13;
-        public static int litterSizeAve = 7;
+        public static float PregnancyStartTime = 0f;
+        public static int BabiesBorn = 0;
+        public static float BirthStartTime = 0f;
+        public static int CurrentLitterSize = 0;
+        public static float PregnancyLengthModifier = 1f;
+        public static float PregnancyLength = 1 * Month;
+        public static float BirthDuration = 1 * Hour;
+        public static int LitterSizeMin = 1;
+        public static int LitterSizeMax = 13;
+        public static int LitterSizeAve = 7;
 
 
         //Movement
-        public static float moveSpeed = 25f;
-        public static float rotationSpeed = 10f;
-        public static float moveMultiplier = 1f;
-        public static float pregnancyMoveMultiplier = 0.5f;
-        public static float originalMoveMultiplier = 1f;
-        public static float youngMoveMultiplier = 0.4f;
-        public static float adultMoveMultiplier = 1f;
-        public static float oldMoveMultiplier = 0.4f;
+        public static float MoveSpeed = 25f;
+        public static float RotationSpeed = 10f;
+        public static float MoveMultiplier = 1f;
+        public static float PregnancyMoveMultiplier = 0.5f;
+        public static float OriginalMoveMultiplier = 1f;
+        public static float YoungMoveMultiplier = 0.4f;
+        public static float AdultMoveMultiplier = 1f;
+        public static float OldMoveMultiplier = 0.4f;
 
 
         //Size
-        public static float sizeMultiplier = 1f;
-        public static float scaleMale = 2f;
-        public static float scaleFemale = 3f;
-        public static float youngSizeMultiplier = 0.6f;
-        public static float adultSizeMultiplier = 1f;
-        public static float oldSizeMultiplier = 0.75f;
-        public static float ageSizeMultiplier = youngSizeMultiplier;
+        public static float SizeMultiplier = 1f;
+        public static float ScaleMale = 2f;
+        public static float ScaleFemale = 3f;
+        public static float YoungSizeMultiplier = 0.6f;
+        public static float AdultSizeMultiplier = 1f;
+        public static float OldSizeMultiplier = 0.75f;
+        public static float AgeSizeMultiplier = YoungSizeMultiplier;
 
 
         //State
-        public static StateData.FlagStates flagState = StateData.FlagStates.Wandering;
-        public static StateData.FlagStates previousFlagState = StateData.FlagStates.Wandering;
-        public static StateData.DeathReason deathReason = StateData.DeathReason.Eaten;
-        public static bool beenEaten = false;
+        public static StateData.FlagStates FlagState = StateData.FlagStates.Wandering;
+        public static StateData.FlagStates FlagStatePrevious = StateData.FlagStates.Wandering;
+        public static StateData.DeathReasons DeathReason = StateData.DeathReasons.Eaten;
+        public static bool BeenEaten = false;
 
 
         //Target
-        public static float touchRadius = 1f;
-        public static float sightRadius = 20f;
-        public static float mateRadius = 5f;
+        public static float TouchRadius = 1f;
+        public static float SightRadius = 20f;
+        public static float MateRadius = 5f;
 
 
         //lookingEntityData
-        public static Entity predatorEntity = Entity.Null;
-        public static Entity entityToEat = Entity.Null;
-        public static Entity entityToDrink = Entity.Null;
-        public static Entity entityToMate = Entity.Null;
-        public static float shortestToEdibleDistance = float.PositiveInfinity;
-        public static float shortestToWaterDistance = float.PositiveInfinity;
-        public static float shortestToPredatorDistance = float.PositiveInfinity;
-        public static float shortestToMateDistance = float.PositiveInfinity;
+        public static Entity PredatorEntity = Entity.Null;
+        public static Entity EntityToEat = Entity.Null;
+        public static Entity EntityToDrink = Entity.Null;
+        public static Entity EntityToMate = Entity.Null;
+        public static float ShortestToEdibleDistance = float.PositiveInfinity;
+        public static float ShortestToWaterDistance = float.PositiveInfinity;
+        public static float ShortestToPredatorDistance = float.PositiveInfinity;
+        public static float ShortestToMateDistance = float.PositiveInfinity;
 
 
         //ColliderTypeData
-        public static ColliderTypeData.ColliderType colliderType = ColliderTypeData.ColliderType.Rabbit;
+        public static ColliderTypeData.ColliderType Collider = ColliderTypeData.ColliderType.Rabbit;
     }
 }

@@ -5,12 +5,12 @@ namespace Systems
 {
     public class HungerSystem : SystemBase
     {
-        private EndSimulationEntityCommandBufferSystem ecbSystem;
+        private EndSimulationEntityCommandBufferSystem _ecbSystem;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            _ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         /* 
@@ -20,7 +20,7 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
+            var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
             float deltaTime = Time.DeltaTime;
 
@@ -32,44 +32,44 @@ namespace Systems
                 in BioStatsData bioStatsData
             ) =>
             {
-                if (!stateData.isPregnant)
+                if (!stateData.IsPregnant)
                 {
-                    if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                    if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
                     {
-                        basicNeedsData.hungerIncrease = basicNeedsData.youngHungerIncrease;
+                        basicNeedsData.HungerIncrease = basicNeedsData.YoungHungerIncrease;
                     }
-                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                    else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
                     {
-                        basicNeedsData.hungerIncrease = basicNeedsData.adultHungerIncrease;
+                        basicNeedsData.HungerIncrease = basicNeedsData.AdultHungerIncrease;
                     }
-                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
+                    else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
                     {
-                        basicNeedsData.hungerIncrease = basicNeedsData.oldHungerIncrease;
+                        basicNeedsData.HungerIncrease = basicNeedsData.OldHungerIncrease;
                     }
                 }
                 else
                 {
-                    basicNeedsData.hungerIncrease = basicNeedsData.pregnancyHungerIncrease;
+                    basicNeedsData.HungerIncrease = basicNeedsData.PregnancyHungerIncrease;
                 }
 
                 // Increase hunger
-                basicNeedsData.hunger += basicNeedsData.hungerIncrease * deltaTime;
+                basicNeedsData.Hunger += basicNeedsData.HungerIncrease * deltaTime;
 
                 //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
-                if (HasComponent<EdibleData>(targetData.entityToEat) && stateData.isEating)
+                if (HasComponent<EdibleData>(targetData.EntityToEat) && stateData.IsEating)
                 {
-                    basicNeedsData.hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.entityToEat]
+                    basicNeedsData.Hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.EntityToEat]
                         .NutritionalValue;
-                    if (basicNeedsData.hunger < 0) basicNeedsData.hunger = 0;
+                    if (basicNeedsData.Hunger < 0) basicNeedsData.Hunger = 0;
                     //set beenEaten to true in entityToEat
-                    if (HasComponent<StateData>(targetData.entityToEat))
+                    if (HasComponent<StateData>(targetData.EntityToEat))
                     {
-                        ecb.SetComponent(entityInQueryIndex, targetData.entityToEat,
+                        ecb.SetComponent(entityInQueryIndex, targetData.EntityToEat,
                             new StateData
                             {
-                                deathReason = StateData.DeathReason.Eaten,
+                                DeathReason = StateData.DeathReasons.Eaten,
 
-                                flagState = StateData.FlagStates.Dead
+                                FlagStateCurrent = StateData.FlagStates.Dead
                             }
                         );
                     }
@@ -77,7 +77,7 @@ namespace Systems
             }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(this.Dependency);
         }
     }
 }

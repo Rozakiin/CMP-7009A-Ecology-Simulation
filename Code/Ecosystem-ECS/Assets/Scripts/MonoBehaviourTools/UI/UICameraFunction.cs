@@ -5,82 +5,79 @@ namespace MonoBehaviourTools.UI
 {
     public class UICameraFunction
     {
-        private Vector2 camXLimit;
-        private readonly Vector2 camYLimit;
-        private Vector2 camZLimit;
-        private Vector3 pos;
-        private Vector2 mapSize;
+        private Vector2 _camXLimit;
+        private readonly Vector2 _camYLimit;
+        private Vector2 _camZLimit;
 
-        private float yMin = 30f;
-        private float camSpeedInitial = 1f;
-        private float camSpeedMultiplier = 1f;
-        private float scrollSpeed = 200f;
-        private float cameraYMultiplier = 8.5f;
-        private float cameraZMultiplier = -3f;
+        private float _yMin = 30f;
+        private float _camSpeedInitial = 1f;
+        private float _camSpeedMultiplier = 1f;
+        private float _scrollSpeed = 200f;
+        private float _cameraYMultiplier = 8.5f;
+        private float _cameraZMultiplier = -3f;
 
-        private float camSpeed;
-        private float lastPosY;
-        private readonly float xMax;
-        private readonly float yMax;
-        private readonly float zMax;
-        private readonly float zInitial;
-        
+        private float _camSpeed;
+        private readonly float _xMax;
+        private readonly float _yMax;
+        private readonly float _zMax;
+        private readonly float _zInitial;
 
-        public UICameraFunction(Vector2 mapSize,float tileSize)
+
+        public UICameraFunction(Vector2 mapSize, float tileSize)
         {
             var maxMapSize = Mathf.Max(mapSize.x, mapSize.y);
-            xMax = mapSize.x * tileSize / 2;
-            zMax = mapSize.y * tileSize / 2;
-            
-            yMax = cameraYMultiplier * maxMapSize;
-            zInitial = cameraZMultiplier * maxMapSize;
+            _xMax = mapSize.x * tileSize / 2;
+            _zMax = mapSize.y * tileSize / 2;
 
-            camYLimit = new Vector2(yMin, yMax);
+            _yMax = _cameraYMultiplier * maxMapSize;
+            _zInitial = _cameraZMultiplier * maxMapSize;
+
+            _camYLimit = new Vector2(_yMin, _yMax);
 
             //just set you can't move camera if user didn't zoom in
-            camXLimit = new Vector2(0f, 0f);
-            camZLimit = new Vector2(zInitial, zInitial);
+            _camXLimit = new Vector2(0f, 0f);
+            _camZLimit = new Vector2(_zInitial, _zInitial);
         }
         public Vector3 GetNewCameraPosition(Vector3 cameraPosition, float cameraLastPositionY)
         {
-            cameraPosition.y = Mathf.Clamp(cameraPosition.y, camYLimit.x, camYLimit.y);
+            cameraPosition.y = Mathf.Clamp(cameraPosition.y, _camYLimit.x, _camYLimit.y);
 
             //camSpeed and the limitation of Camera.x, and Camera.z (Camera boundary) will increase as camera zoom in
             // only update camera border when the movement of Camera.Y more than 5f or camera zoom in more than 5f
             if (Math.Abs(cameraPosition.y - cameraLastPositionY) >= 5f)
             {
-                float rate = (yMax - cameraPosition.y) / (yMax - yMin);
-                float zLimitMax = (zMax - zInitial) * rate + zInitial;
-                float zLimitMin = zInitial - (zMax + zInitial) * rate;
-                float xLimit = xMax * rate;
-                camXLimit = new Vector2(-xLimit, xLimit);
-                camZLimit = new Vector2(zLimitMin, zLimitMax);
-                camSpeed = camSpeedInitial + (camSpeedMultiplier * rate);
+                float rate = (_yMax - cameraPosition.y) / (_yMax - _yMin);
+                float zLimitMax = (_zMax - _zInitial) * rate + _zInitial;
+                float zLimitMin = _zInitial - (_zMax + _zInitial) * rate;
+                float xLimit = _xMax * rate;
+                _camXLimit = new Vector2(-xLimit, xLimit);
+                _camZLimit = new Vector2(zLimitMin, zLimitMax);
+                _camSpeed = _camSpeedInitial + (_camSpeedMultiplier * rate);
             }
 
-            cameraPosition.x = Mathf.Clamp(cameraPosition.x, camXLimit.x, camXLimit.y);
-            cameraPosition.z = Mathf.Clamp(cameraPosition.z, camZLimit.x, camZLimit.y);
+            cameraPosition.x = Mathf.Clamp(cameraPosition.x, _camXLimit.x, _camXLimit.y);
+            cameraPosition.z = Mathf.Clamp(cameraPosition.z, _camZLimit.x, _camZLimit.y);
             return cameraPosition;
         }
 
         public Vector3 GetInitialPosition()
         {
-            return new Vector3(0f, yMax, zInitial);
+            return new Vector3(0f, _yMax, _zInitial);
         }
 
-        public float GETCameraSpeed()
+        public float GetCameraSpeed()
         {
-            return camSpeed;
+            return _camSpeed;
         }
 
-        public float GETScrollSpeed()
+        public float GetScrollSpeed()
         {
-            return scrollSpeed;
+            return _scrollSpeed;
         }
 
         public float GetYMin()
         {
-            return yMin;
+            return _yMin;
         }
     }
 }

@@ -12,24 +12,19 @@ namespace UtilTools
          * Adapted From https://docs.unity3d.com/Packages/com.unity.physics@0.5/manual/collision_queries.html
          * Casts ray and returns an entity it hits
          */
-        public static Entity GetEntityFromRaycast(float3 RayFrom, float3 RayTo, CollisionFilter filter)
+        public static Entity GetEntityFromRaycast(float3 rayFrom, float3 rayTo, CollisionFilter filter)
         {
-            BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
-            PhysicsWorld physicsWorld = buildPhysicsWorld.PhysicsWorld;
-            CollisionWorld world = physicsWorld.CollisionWorld;
-            RaycastInput input = new RaycastInput()
+            var buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
+            var physicsWorld = buildPhysicsWorld.PhysicsWorld;
+            var world = physicsWorld.CollisionWorld;
+            var input = new RaycastInput()
             {
-                Start = RayFrom,
-                End = RayTo,
+                Start = rayFrom,
+                End = rayTo,
                 Filter = filter
             };
 
-            if (world.CastRay(input, out Unity.Physics.RaycastHit hit))
-            {
-                return physicsWorld.Bodies[hit.RigidBodyIndex].Entity;
-            }
-
-            return Entity.Null;
+            return world.CastRay(input, out RaycastHit hit) ? physicsWorld.Bodies[hit.RigidBodyIndex].Entity : Entity.Null;
         }
     }
 
@@ -40,16 +35,11 @@ namespace UtilTools
         {
             float3 tempUp = worldPoint + math.up() * 10000;
             float3 tempDown = worldPoint + math.up() * -10000;
-            CollisionFilter tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
+            var tempTileFilter = new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1 >> 0, GroupIndex = 0 }; //filter to only collide with tiles
             //raycast from positive 10,000 to negative 10,000, colliding with only tiles
-            Entity collidedEntity = PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
+            var collidedEntity = PhysicsTools.GetEntityFromRaycast(tempUp, tempDown, tempTileFilter);
 
-            if (entityManager.HasComponent<TerrainTypeData>(collidedEntity))
-            {
-                return entityManager.GetComponentData<TerrainTypeData>(collidedEntity).isWalkable;
-            }
-
-            return false;
+            return entityManager.HasComponent<TerrainTypeData>(collidedEntity) && entityManager.GetComponentData<TerrainTypeData>(collidedEntity).IsWalkable;
         }
     }
 

@@ -17,17 +17,17 @@ namespace Systems
                 in BioStatsData bioStatsData
             ) =>
             {
-                if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
+                if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
                 {
-                    sizeData.ageSizeMultiplier = sizeData.oldSizeMultiplier;
+                    sizeData.AgeSizeMultiplier = sizeData.OldSizeMultiplier;
                 }
-                else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
                 {
-                    sizeData.ageSizeMultiplier = sizeData.adultSizeMultiplier;
+                    sizeData.AgeSizeMultiplier = sizeData.AdultSizeMultiplier;
                 }
-                else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
                 {
-                    sizeData.ageSizeMultiplier = sizeData.youngSizeMultiplier;
+                    sizeData.AgeSizeMultiplier = sizeData.YoungSizeMultiplier;
                 }
 
                 scale.Value.c0.x = sizeData.Size;

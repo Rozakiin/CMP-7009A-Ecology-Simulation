@@ -10,45 +10,45 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
-    public static int MAX_POP = 50000;
+    private const int MaxPopulation = 50000;
 
-    EntityManager entityManager;
-    public GameObjectConversionSettings settings;
+    EntityManager _entityManager;
+    public GameObjectConversionSettings Settings;
     public static SimulationManager Instance;
-    public bool isDebugEnabled;
-    public bool isSetupComplete;
+    public bool IsDebugEnabled;
+    public bool IsSetupComplete;
 
-    private int secondsOfLastGrassSpawn;
+    private int _secondsOfLastGrassSpawn;
 
     #region Converted Entities
-    public Entity conversionGrassTile;
-    public Entity conversionLightGrassTile;
-    public Entity conversionWaterTile;
-    public Entity conversionSandTile;
-    public Entity conversionRockTile;
-    public Entity conversionRabbit;
-    public Entity conversionFox;
-    public Entity conversionGrass;
+    public Entity ConversionGrassTile;
+    public Entity ConversionLightGrassTile;
+    public Entity ConversionWaterTile;
+    public Entity ConversionSandTile;
+    public Entity ConversionRockTile;
+    public Entity ConversionRabbit;
+    public Entity ConversionFox;
+    public Entity ConversionGrass;
     #endregion
 
     #region GameObjects
     [Header("GameObjects")]
-    [SerializeField] private GameObject grassTile;
-    [SerializeField] private GameObject lightGrassTile;
-    [SerializeField] private GameObject waterTile;
-    [SerializeField] private GameObject sandTile;
-    [SerializeField] private GameObject rockTile;
-    [SerializeField] private GameObject rabbit;
-    [SerializeField] private GameObject fox;
-    [SerializeField] private GameObject grass;
-    public GameObject collisionPlaneForMap;
+    [SerializeField] private GameObject _grassTile;
+    [SerializeField] private GameObject _lightGrassTile;
+    [SerializeField] private GameObject _waterTile;
+    [SerializeField] private GameObject _sandTile;
+    [SerializeField] private GameObject _rockTile;
+    [SerializeField] private GameObject _rabbit;
+    [SerializeField] private GameObject _fox;
+    [SerializeField] private GameObject _grass;
+    public GameObject MapCollisionPlane;
     #endregion
 
     #region Numbers for Entity Spawning 
     [Header("Numbers of Entities Spawning")]
-    public int numberOfRabbitsToSpawn = 0;
-    public int numberOfFoxesToSpawn = 0;
-    public int numberOfGrassToSpawn = 0;
+    public int NumberOfRabbitsToSpawn;
+    public int NumberOfFoxesToSpawn;
+    public int NumberOfGrassToSpawn;
     public static int InitialRabbitsToSpawn = -1;
     public static int InitialFoxesToSpawn = -1;
     public static int InitialGrassToSpawn = -1;
@@ -56,67 +56,67 @@ public class SimulationManager : MonoBehaviour
 
     #region Population Info for Entities
     [Header("Population Data")]
-    public int rabbitPopulation = 0;
-    public int foxPopulation = 0;
-    public int grassPopulation = 0;
+    public int RabbitPopulation;
+    public int FoxPopulation;
+    public int GrassPopulation;
     #endregion
 
     #region Death Info for Entities
     [Header("Death Data")]
-    public int numberOfGrassEaten = 0;
+    public int NumberOfGrassEaten = 0;
 
-    public int numberOfRabbitsDeadTotal = 0;
-    public int numberOfRabbitsDeadHunger = 0;
-    public int numberOfRabbitsDeadThirst = 0;
-    public int numberOfRabbitsDeadEaten = 0;
-    public int numberOfRabbitsDeadAge = 0;
+    public int NumberOfRabbitsDeadTotal = 0;
+    public int NumberOfRabbitsDeadHunger = 0;
+    public int NumberOfRabbitsDeadThirst = 0;
+    public int NumberOfRabbitsDeadEaten = 0;
+    public int NumberOfRabbitsDeadAge = 0;
 
-    public int numberOfFoxesDeadTotal = 0;
-    public int numberOfFoxesDeadHunger = 0;
-    public int numberOfFoxesDeadThirst = 0;
-    public int numberOfFoxesDeadEaten = 0;
-    public int numberOfFoxesDeadAge = 0;
+    public int NumberOfFoxesDeadTotal = 0;
+    public int NumberOfFoxesDeadHunger = 0;
+    public int NumberOfFoxesDeadThirst = 0;
+    public int NumberOfFoxesDeadEaten = 0;
+    public int NumberOfFoxesDeadAge = 0;
 
     #endregion
 
     #region Map Data 
     [Header("Map Data")]
-    public static string mapPath;
-    public static string mapString;
-    public static int gridWidth;
-    public static int gridHeight;
-    public static float2 worldSize;
-    public static Vector3 worldBottomLeft;
-    public static float tileSize;
-    public static float leftLimit;
-    public static float upLimit;
-    public static float rightLimit;
-    public static float downLimit;
+    public static string MapPath;
+    public static string MapString;
+    public static int GridWidth;
+    public static int GridHeight;
+    public static float2 WorldSize;
+    public static Vector3 WorldBottomLeft;
+    public static float TileSize;
+    public static float LeftLimit;
+    public static float UpLimit;
+    public static float RightLimit;
+    public static float DownLimit;
     #endregion
     #region Initialisation
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
-        isSetupComplete = false;
+        IsSetupComplete = false;
 
         if (InitialRabbitsToSpawn >= 0)
-            numberOfRabbitsToSpawn = InitialRabbitsToSpawn;
+            NumberOfRabbitsToSpawn = InitialRabbitsToSpawn;
         if (InitialFoxesToSpawn >= 0)
-            numberOfFoxesToSpawn = InitialFoxesToSpawn;
+            NumberOfFoxesToSpawn = InitialFoxesToSpawn;
         if (InitialGrassToSpawn >= 0)
-            numberOfGrassToSpawn = InitialGrassToSpawn;
-        secondsOfLastGrassSpawn = 0;
+            NumberOfGrassToSpawn = InitialGrassToSpawn;
+        _secondsOfLastGrassSpawn = 0;
     }
     private void Start()
     {
-        
+
         Application.targetFrameRate = 60; // Target 60fps
 
-        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
+        _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        Settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore());
 
-        
+
 
         // Only continue if no errors creating the map
         if (!CreateMap())
@@ -133,21 +133,21 @@ public class SimulationManager : MonoBehaviour
     private void Update()
     {
         //Emergency Pause to stop excessive population explosion that could cause freezing
-        if (rabbitPopulation > MAX_POP || foxPopulation > MAX_POP)
+        if (RabbitPopulation > MaxPopulation || FoxPopulation > MaxPopulation)
         {
             MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
             //TODO: should display message to user saying sim is paused due to excessive population
         }
 
         //check if the setup has completed yet, finish setup
-        if (!isSetupComplete)
+        if (!IsSetupComplete)
         {
             if (GridSetup.Instance.CreateGrid())
             {
-                CreateEntitiesFromGameObject(grass, numberOfGrassToSpawn);
-                CreateEntitiesFromGameObject(rabbit, numberOfRabbitsToSpawn);
-                CreateEntitiesFromGameObject(fox, numberOfFoxesToSpawn);
-                isSetupComplete = true;
+                CreateEntitiesFromGameObject(_grass, NumberOfGrassToSpawn);
+                CreateEntitiesFromGameObject(_rabbit, NumberOfRabbitsToSpawn);
+                CreateEntitiesFromGameObject(_fox, NumberOfFoxesToSpawn);
+                IsSetupComplete = true;
             }
         }
         else
@@ -156,11 +156,11 @@ public class SimulationManager : MonoBehaviour
             SpawnFoxAtPosOnRClick();
             SpawnGrassAtPosOnMClick();
             /* Spawn grass entity at random location once every 10 in game seconds */
-            if ((int)Time.timeSinceLevelLoad % 10 == 0 && secondsOfLastGrassSpawn != (int)Time.timeSinceLevelLoad)
+            if ((int)Time.timeSinceLevelLoad % 10 == 0 && _secondsOfLastGrassSpawn != (int)Time.timeSinceLevelLoad)
             {
-                secondsOfLastGrassSpawn = (int)Time.timeSinceLevelLoad; //update the time in seconds the code was ran
-                if (grassPopulation < 2 * gridHeight * gridHeight)//limit to 2x grass per grid square
-                    CreateEntitiesFromGameObject(grass, (int)math.ceil(grassPopulation / 10));
+                _secondsOfLastGrassSpawn = (int)Time.timeSinceLevelLoad; //update the time in seconds the code was ran
+                if (GrassPopulation < 2 * GridHeight * GridHeight)//limit to 2x grass per grid square
+                    CreateEntitiesFromGameObject(_grass, (int)math.ceil(GrassPopulation / 10));
             }
         }
     }
@@ -168,8 +168,8 @@ public class SimulationManager : MonoBehaviour
     private void OnDestroy()
     {
         //dispose of blobassetstore on destroy
-        if (settings != null)
-            settings.BlobAssetStore.Dispose();
+        if (Settings != null)
+            Settings.BlobAssetStore.Dispose();
     }
 
     #region Map Creation Methods
@@ -177,16 +177,16 @@ public class SimulationManager : MonoBehaviour
     private bool CreateMap()
     {
         List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
-        if (mapPath != null)
+        if (MapPath != null)
         {
-            if (MapReader.ReadInMapFromFile(mapPath, ref mapList))
+            if (MapReader.ReadInMapFromFile(MapPath, ref mapList))
                 CreateEntityTilesFromMapList(in mapList);
             else
                 return false;
         }
-        else if (mapString != null)
+        else if (MapString != null)
         {
-            if (MapReader.ReadInMapFromString(mapString, ref mapList))
+            if (MapReader.ReadInMapFromString(MapString, ref mapList))
                 CreateEntityTilesFromMapList(in mapList);
             else
                 return false;
@@ -194,22 +194,22 @@ public class SimulationManager : MonoBehaviour
         else
         {
             //Last resort try default map location
-            mapPath = Application.dataPath + "/MapDefault.txt";
-            if (MapReader.ReadInMapFromFile(mapPath, ref mapList))
+            MapPath = Application.dataPath + "/MapDefault.txt";
+            if (MapReader.ReadInMapFromFile(MapPath, ref mapList))
                 CreateEntityTilesFromMapList(in mapList);
             else
                 return false;
         }
 
         // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
-        collisionPlaneForMap = new GameObject
+        MapCollisionPlane = new GameObject
         {
-            name = "MapCollisionPlaneGO"
+            name = "MapCollisionPlane"
         };
-        collisionPlaneForMap.transform.position = transform.position;
-        collisionPlaneForMap.AddComponent<UnityEngine.BoxCollider>();
-        UnityEngine.BoxCollider collider = collisionPlaneForMap.GetComponent<UnityEngine.BoxCollider>();
-        collider.size = new Vector3(worldSize.x, 0, worldSize.y);
+        MapCollisionPlane.transform.position = transform.position;
+        MapCollisionPlane.AddComponent<BoxCollider>();
+        var collisionPlaneCollider = MapCollisionPlane.GetComponent<BoxCollider>();
+        collisionPlaneCollider.size = new Vector3(WorldSize.x, 0, WorldSize.y);
 
         SetLimits();
         return true;
@@ -218,84 +218,84 @@ public class SimulationManager : MonoBehaviour
     private void CreateEntityTilesFromMapList(in List<List<MapReader.TerrainCost>> mapList)
     {
         // Set world map data
-        gridWidth = mapList[0].Count;
-        gridHeight = mapList.Count;
-        tileSize = grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
-        worldSize.x = gridWidth * tileSize;
-        worldSize.y = gridHeight * tileSize;
-        worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;//Get the real world position of the bottom left of the grid.
+        GridWidth = mapList[0].Count;
+        GridHeight = mapList.Count;
+        TileSize = _grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
+        WorldSize.x = GridWidth * TileSize;
+        WorldSize.y = GridHeight * TileSize;
+        WorldBottomLeft = transform.position - Vector3.right * WorldSize.x / 2 - Vector3.forward * WorldSize.y / 2;//Get the real world position of the bottom left of the grid.
 
         // Create entity prefabs from the game objects hierarchy once
-        if (conversionGrassTile == Entity.Null)
-            conversionGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
-        if (conversionLightGrassTile == Entity.Null)
-            conversionLightGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(grassTile, settings);
-        if (conversionWaterTile == Entity.Null)
-            conversionWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(waterTile, settings);
-        if (conversionSandTile == Entity.Null)
-            conversionSandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(sandTile, settings);
-        if (conversionRockTile == Entity.Null)
-            conversionRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(rockTile, settings);
+        if (ConversionGrassTile == Entity.Null)
+            ConversionGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_grassTile, Settings);
+        if (ConversionLightGrassTile == Entity.Null)
+            ConversionLightGrassTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_grassTile, Settings);
+        if (ConversionWaterTile == Entity.Null)
+            ConversionWaterTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_waterTile, Settings);
+        if (ConversionSandTile == Entity.Null)
+            ConversionSandTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_sandTile, Settings);
+        if (ConversionRockTile == Entity.Null)
+            ConversionRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_rockTile, Settings);
 
 
-        for (int y = 0; y < gridHeight; y++)
+        for (int y = 0; y < GridHeight; y++)
         {
-            for (int x = 0; x < gridWidth; x++)
+            for (int x = 0; x < GridWidth; x++)
             {
-                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * tileSize + tileSize / 2) + Vector3.forward * (y * tileSize + tileSize / 2);//Get the world co ordinates of the tile from the bottom left of the graph
+                Vector3 worldPoint = WorldBottomLeft + Vector3.right * (x * TileSize + TileSize / 2) + Vector3.forward * (y * TileSize + TileSize / 2);//Get the world co ordinates of the tile from the bottom left of the graph
                 Entity prototypeTile;
 
                 switch (mapList[y][x])
                 {
                     case MapReader.TerrainCost.Water:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(conversionWaterTile);
+                        prototypeTile = _entityManager.Instantiate(ConversionWaterTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
-                        entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
-                        entityManager.SetComponentData(prototypeTile,
-                            new ColliderTypeData
-                            {
-                                colliderType = ColliderTypeData.ColliderType.Water
-                            }
-                        );
+                        _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
+                        _entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
+                        //_entityManager.SetComponentData(prototypeTile,
+                        //    new ColliderTypeData
+                        //    {
+                        //        Collider = ColliderTypeData.ColliderType.Water
+                        //    }
+                        //);
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
+                        prototypeTile = _entityManager.Instantiate(ConversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
+                        _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        _entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
                         break;
                     case MapReader.TerrainCost.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(conversionSandTile);
+                        prototypeTile = _entityManager.Instantiate(ConversionSandTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
+                        _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        _entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
                         break;
                     case MapReader.TerrainCost.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(conversionRockTile);
+                        prototypeTile = _entityManager.Instantiate(ConversionRockTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
-                        entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
+                        _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        _entityManager.SetName(prototypeTile, "RockTile " + y + "," + x);
                         break;
                     default:
                         // Efficiently instantiate an entity from the already converted entity prefab
-                        prototypeTile = entityManager.Instantiate(conversionGrassTile);
+                        prototypeTile = _entityManager.Instantiate(ConversionGrassTile);
 
                         // Place the instantiated entity in position on the map
                         //Set Component Data for the entity
-                        entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
+                        _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         Debug.Log("Unknown TerrainCost value");
                         break;
                 }
@@ -305,16 +305,16 @@ public class SimulationManager : MonoBehaviour
 
     private void SetLimits()
     {
-        leftLimit = -worldSize.x / 2;
-        rightLimit = worldSize.x / 2;
-        downLimit = -worldSize.y / 2;
-        upLimit = worldSize.y / 2;
+        LeftLimit = -WorldSize.x / 2;
+        RightLimit = WorldSize.x / 2;
+        DownLimit = -WorldSize.y / 2;
+        UpLimit = WorldSize.y / 2;
     }
     #endregion
 
     #region Entity Spawning
     // Creates entities from a gameobject in a given quantity
-    private void CreateEntitiesFromGameObject(GameObject gameObject, int quantity)
+    private void CreateEntitiesFromGameObject(Object objectToCreate, int quantity)
     {
         for (int i = 0; i < quantity; i++)
         {
@@ -323,22 +323,22 @@ public class SimulationManager : MonoBehaviour
             do
             {
                 // Calc random point on map
-                int randWidth = UnityEngine.Random.Range(0, (int)gridWidth);
-                int randHeight = UnityEngine.Random.Range(0, (int)gridHeight);
-                worldPoint = worldBottomLeft + Vector3.right * (randWidth * tileSize + tileSize / 2) + Vector3.forward * (randHeight * tileSize + tileSize / 2);
-            } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, entityManager));
+                int randWidth = UnityEngine.Random.Range(0, GridWidth);
+                int randHeight = UnityEngine.Random.Range(0, GridHeight);
+                worldPoint = WorldBottomLeft + Vector3.right * (randWidth * TileSize + TileSize / 2) + Vector3.forward * (randHeight * TileSize + TileSize / 2);
+            } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, _entityManager));
 
             // Place the instantiated entity in a random point on the map
-            //set default variables based on gameObject name - not great solution but works for now
-            if (gameObject.name.Contains("Rabbit"))
+            //set default variables based on objectToCreate name - not great solution but works for now
+            if (objectToCreate.name.Contains("Rabbit"))
             {
                 CreateRabbitAtWorldPoint(worldPoint);
             }
-            else if (gameObject.name.Contains("Fox"))
+            else if (objectToCreate.name.Contains("Fox"))
             {
                 CreateFoxAtWorldPoint(worldPoint);
             }
-            else if (gameObject.name.Contains("Grass"))
+            else if (objectToCreate.name.Contains("Grass"))
             {
                 CreateGrassAtWorldPoint(worldPoint);
             }
@@ -347,241 +347,241 @@ public class SimulationManager : MonoBehaviour
 
     private void CreateFoxAtWorldPoint(in float3 worldPoint)
     {
-        if (conversionFox == Entity.Null)
-            conversionFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(fox, settings);
-        Entity prototypeFox = entityManager.Instantiate(conversionFox);
+        if (ConversionFox == Entity.Null)
+            ConversionFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(_fox, Settings);
+        Entity prototypeFox = _entityManager.Instantiate(ConversionFox);
 
         //set name of entity
-        entityManager.SetName(prototypeFox, $"Fox {foxPopulation}");
+        _entityManager.SetName(prototypeFox, $"Fox {FoxPopulation}");
 
-        entityManager.AddComponent<IsFoxTag>(prototypeFox);
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.AddComponent<IsFoxTag>(prototypeFox);
+        _entityManager.SetComponentData(prototypeFox,
             new Translation
             {
                 Value = worldPoint,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new EdibleData
             {
-                canBeEaten = FoxDefaults.canBeEaten,
-                nutritionalValueBase = FoxDefaults.nutritionalValue,
-                nutritionalValueMultiplier = FoxDefaults.nutritionalValueMultiplier,
-                foodType = FoxDefaults.foodType,
+                CanBeEaten = FoxDefaults.CanBeEaten,
+                NutritionalValueBase = FoxDefaults.NutritionalValue,
+                NutritionalValueMultiplier = FoxDefaults.NutritionalValueMultiplier,
+                FoodType = FoxDefaults.FoodType,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new MovementData
             {
-                rotationSpeed = FoxDefaults.rotationSpeed,
-                moveSpeedBase = FoxDefaults.moveSpeed,
-                moveMultiplier = FoxDefaults.moveMultiplier,
-                pregnancyMoveMultiplier = FoxDefaults.pregnancyMoveMultiplier,
-                originalMoveMultiplier = FoxDefaults.originalMoveMultiplier,
-                youngMoveMultiplier = FoxDefaults.youngMoveMultiplier,
-                adultMoveMultiplier = FoxDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = FoxDefaults.oldMoveMultiplier,
+                RotationSpeed = FoxDefaults.RotationSpeed,
+                MoveSpeedBase = FoxDefaults.MoveSpeed,
+                MoveMultiplier = FoxDefaults.MoveMultiplier,
+                PregnancyMoveMultiplier = FoxDefaults.PregnancyMoveMultiplier,
+                OriginalMoveMultiplier = FoxDefaults.OriginalMoveMultiplier,
+                YoungMoveMultiplier = FoxDefaults.YoungMoveMultiplier,
+                AdultMoveMultiplier = FoxDefaults.AdultMoveMultiplier,
+                OldMoveMultiplier = FoxDefaults.OldMoveMultiplier,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new StateData
             {
-                flagState = FoxDefaults.flagState,
-                previousFlagState = FoxDefaults.previousFlagState,
-                deathReason = FoxDefaults.deathReason,
-                beenEaten = FoxDefaults.beenEaten,
+                FlagStateCurrent = FoxDefaults.FlagState,
+                FlagStatePrevious = FoxDefaults.PreviousFlagState,
+                DeathReason = FoxDefaults.DeathReason,
+                BeenEaten = FoxDefaults.BeenEaten,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new TargetData
             {
-                atTarget = true,
-                currentTarget = worldPoint,
-                oldTarget = worldPoint,
+                AtTarget = true,
+                Target = worldPoint,
+                TargetOld = worldPoint,
 
-                sightRadius = FoxDefaults.sightRadius,
-                touchRadius = FoxDefaults.touchRadius,
-                mateRadius = FoxDefaults.mateRadius,
+                SightRadius = FoxDefaults.SightRadius,
+                TouchRadius = FoxDefaults.TouchRadius,
+                MateRadius = FoxDefaults.MateRadius,
 
-                predatorEntity = FoxDefaults.predatorEntity,
-                entityToEat = FoxDefaults.entityToEat,
-                entityToDrink = FoxDefaults.entityToDrink,
-                entityToMate = FoxDefaults.entityToMate,
-                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
-                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
-                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
+                PredatorEntity = FoxDefaults.PredatorEntity,
+                EntityToEat = FoxDefaults.EntityToEat,
+                EntityToDrink = FoxDefaults.EntityToDrink,
+                EntityToMate = FoxDefaults.EntityToMate,
+                ShortestDistanceToEdible = FoxDefaults.ShortestToEdibleDistance,
+                ShortestDistanceToWater = FoxDefaults.ShortestToWaterDistance,
+                ShortestDistanceToPredator = FoxDefaults.ShortestToPredatorDistance,
+                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new PathFollowData
             {
-                pathIndex = -1,
+                PathIndex = -1,
             }
         );
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new BasicNeedsData
             {
-                hunger = FoxDefaults.hunger,
-                hungryThreshold = FoxDefaults.hungryThreshold,
-                hungerMax = FoxDefaults.hungerMax,
-                hungerIncrease = FoxDefaults.hungerIncrease,
-                pregnancyHungerIncrease = FoxDefaults.pregnancyHungerIncrease,
-                youngHungerIncrease = FoxDefaults.youngHungerIncrease,
-                adultHungerIncrease = FoxDefaults.adultHungerIncrease,
-                oldHungerIncrease = FoxDefaults.oldHungerIncrease,
-                eatingSpeed = FoxDefaults.eatingSpeed,
+                Hunger = FoxDefaults.Hunger,
+                HungryThreshold = FoxDefaults.HungryThreshold,
+                HungerMax = FoxDefaults.HungerMax,
+                HungerIncrease = FoxDefaults.HungerIncrease,
+                PregnancyHungerIncrease = FoxDefaults.PregnancyHungerIncrease,
+                YoungHungerIncrease = FoxDefaults.YoungHungerIncrease,
+                AdultHungerIncrease = FoxDefaults.AdultHungerIncrease,
+                OldHungerIncrease = FoxDefaults.OldHungerIncrease,
+                EatingSpeed = FoxDefaults.EatingSpeed,
 
-                diet = FoxDefaults.diet,
-                thirst = FoxDefaults.thirst,
-                thirstyThreshold = FoxDefaults.thirstyThreshold,
-                thirstMax = FoxDefaults.thirstMax,
-                thirstIncrease = FoxDefaults.thirstIncrease,
-                drinkingSpeed = FoxDefaults.drinkingSpeed,
+                Diet = FoxDefaults.Diet,
+                Thirst = FoxDefaults.Thirst,
+                ThirstyThreshold = FoxDefaults.ThirstyThreshold,
+                ThirstMax = FoxDefaults.ThirstMax,
+                ThirstIncrease = FoxDefaults.ThirstIncrease,
+                DrinkingSpeed = FoxDefaults.DrinkingSpeed,
             }
         );
 
         //randomise gender of fox - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
+        BioStatsData.Genders randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
         //set gender differing components
 
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new BioStatsData
             {
-                age = FoxDefaults.age,
-                ageIncrease = FoxDefaults.ageIncrease,
-                ageMax = FoxDefaults.ageMax,
-                ageGroup = FoxDefaults.ageGroup,
-                adultEntryTimer = FoxDefaults.adultEntryTimer,
-                oldEntryTimer = FoxDefaults.oldEntryTimer,
-                gender = randGender,
+                Age = FoxDefaults.Age,
+                AgeIncrease = FoxDefaults.AgeIncrease,
+                AgeMax = FoxDefaults.AgeMax,
+                AgeGroup = FoxDefaults.AgeGroup,
+                AdultEntryTimer = FoxDefaults.AdultEntryTimer,
+                OldEntryTimer = FoxDefaults.OldEntryTimer,
+                Gender = randGender,
             }
         );
 
         //set reproductive data differing on gender
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
                 new ReproductiveData
                 {
-                    matingDuration = FoxDefaults.matingDuration,
-                    mateStartTime = FoxDefaults.mateStartTime,
-                    reproductiveUrge = FoxDefaults.reproductiveUrge,
-                    reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
-                    defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? FoxDefaults.reproductiveUrgeIncreaseFemale : FoxDefaults.reproductiveUrgeIncreaseMale),
-                    matingThreshold = FoxDefaults.matingThreshold,
+                    MatingDuration = FoxDefaults.MatingDuration,
+                    MateStartTime = FoxDefaults.MateStartTime,
+                    ReproductiveUrge = FoxDefaults.ReproductiveUrge,
+                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale),
+                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale),
+                    MatingThreshold = FoxDefaults.MatingThreshold,
 
-                    birthDuration = FoxDefaults.birthDuration,
-                    babiesBorn = FoxDefaults.babiesBorn,
-                    birthStartTime = FoxDefaults.birthStartTime,
-                    currentLitterSize = FoxDefaults.currentLitterSize,
-                    litterSizeMin = FoxDefaults.litterSizeMin,
-                    litterSizeMax = FoxDefaults.litterSizeMax,
-                    litterSizeAve = FoxDefaults.litterSizeAve,
-                    pregnancyLengthBase = FoxDefaults.pregnancyLength,
-                    pregnancyLengthModifier = FoxDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = FoxDefaults.pregnancyStartTime,
+                    BirthDuration = FoxDefaults.BirthDuration,
+                    BabiesBorn = FoxDefaults.BabiesBorn,
+                    BirthStartTime = FoxDefaults.BirthStartTime,
+                    CurrentLitterSize = FoxDefaults.CurrentLitterSize,
+                    LitterSizeMin = FoxDefaults.LitterSizeMin,
+                    LitterSizeMax = FoxDefaults.LitterSizeMax,
+                    LitterSizeAve = FoxDefaults.LitterSizeAve,
+                    PregnancyLengthBase = FoxDefaults.PregnancyLength,
+                    PregnancyLengthModifier = FoxDefaults.PregnancyLengthModifier,
+                    PregnancyStartTime = FoxDefaults.PregnancyStartTime,
                 }
             );
 
         //set size differing on gender
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new SizeData
             {
-                size = (randGender == BioStatsData.Gender.Female ? FoxDefaults.scaleFemale : FoxDefaults.scaleMale),
-                sizeMultiplier = FoxDefaults.sizeMultiplier,
-                ageSizeMultiplier = FoxDefaults.ageSizeMultiplier,
-                youngSizeMultiplier = FoxDefaults.youngSizeMultiplier,
-                adultSizeMultiplier = FoxDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = FoxDefaults.oldSizeMultiplier,
+                size = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ScaleFemale : FoxDefaults.ScaleMale),
+                SizeMultiplier = FoxDefaults.SizeMultiplier,
+                AgeSizeMultiplier = FoxDefaults.AgeSizeMultiplier,
+                YoungSizeMultiplier = FoxDefaults.YoungSizeMultiplier,
+                AdultSizeMultiplier = FoxDefaults.AdultSizeMultiplier,
+                OldSizeMultiplier = FoxDefaults.OldSizeMultiplier,
             }
         );
         // set ColliderTypeData to Fox entity
-        entityManager.SetComponentData(prototypeFox,
+        _entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
-                colliderType = FoxDefaults.colliderType,
+                Collider = FoxDefaults.Collider,
             }
         );
 
-        foxPopulation++;
+        FoxPopulation++;
     }
 
     private void CreateGrassAtWorldPoint(in float3 worldPoint)
     {
-        if (conversionGrass == Entity.Null)
-            conversionGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(grass, settings);
-        Entity prototypeGrass = entityManager.Instantiate(conversionGrass);
+        if (ConversionGrass == Entity.Null)
+            ConversionGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(_grass, Settings);
+        Entity prototypeGrass = _entityManager.Instantiate(ConversionGrass);
 
         //set name of entity
-        entityManager.SetName(prototypeGrass, $"Grass {grassPopulation}");
+        _entityManager.SetName(prototypeGrass, $"Grass {GrassPopulation}");
 
-        entityManager.AddComponent<IsGrassTag>(prototypeGrass);
-        entityManager.SetComponentData(prototypeGrass,
+        _entityManager.AddComponent<IsGrassTag>(prototypeGrass);
+        _entityManager.SetComponentData(prototypeGrass,
             new Translation
             {
                 Value = worldPoint,
             }
         );
 
-        entityManager.SetComponentData(prototypeGrass,
+        _entityManager.SetComponentData(prototypeGrass,
             new EdibleData
             {
-                canBeEaten = GrassDefaults.canBeEaten,
-                nutritionalValueBase = GrassDefaults.nutritionalValue,
-                nutritionalValueMultiplier = GrassDefaults.nutritionalValueMultiplier,
-                foodType = GrassDefaults.foodType,
+                CanBeEaten = GrassDefaults.CanBeEaten,
+                NutritionalValueBase = GrassDefaults.NutritionalValue,
+                NutritionalValueMultiplier = GrassDefaults.NutritionalValueMultiplier,
+                FoodType = GrassDefaults.FoodType,
             }
         );
 
-        entityManager.SetComponentData(prototypeGrass,
+        _entityManager.SetComponentData(prototypeGrass,
             new StateData
             {
-                flagState = GrassDefaults.flagState,
-                previousFlagState = GrassDefaults.previousFlagState,
-                deathReason = GrassDefaults.deathReason,
-                beenEaten = GrassDefaults.beenEaten,
+                FlagStateCurrent = GrassDefaults.FlagState,
+                FlagStatePrevious = GrassDefaults.PreviousFlagState,
+                DeathReason = GrassDefaults.DeathReason,
+                BeenEaten = GrassDefaults.BeenEaten,
             }
         );
 
         //set size differing on gender
-        entityManager.SetComponentData(prototypeGrass,
+        _entityManager.SetComponentData(prototypeGrass,
             new SizeData
             {
-                size = GrassDefaults.scale,
-                sizeMultiplier = GrassDefaults.sizeMultiplier,
-                ageSizeMultiplier = 1f,
+                size = GrassDefaults.Scale,
+                SizeMultiplier = GrassDefaults.SizeMultiplier,
+                AgeSizeMultiplier = 1f,
             }
         );
 
         // set ColliderTypeData to Grass entity
-        entityManager.SetComponentData(prototypeGrass,
+        _entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
-                colliderType = GrassDefaults.GrassColliderType,
+                Collider = GrassDefaults.Collider,
             }
         );
 
 
-        grassPopulation++;
+        GrassPopulation++;
 
     }
 
     private void CreateRabbitAtWorldPoint(in float3 worldPoint)
     {
-        if (conversionRabbit == Entity.Null)
-            conversionRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(rabbit, settings);
-        Entity prototypeRabbit = entityManager.Instantiate(conversionRabbit);
+        if (ConversionRabbit == Entity.Null)
+            ConversionRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(_rabbit, Settings);
+        Entity prototypeRabbit = _entityManager.Instantiate(ConversionRabbit);
 
         //set name of entity
-        entityManager.SetName(prototypeRabbit, $"Rabbit {rabbitPopulation}");
+        _entityManager.SetName(prototypeRabbit, $"Rabbit {RabbitPopulation}");
 
-        entityManager.AddComponent<IsRabbitTag>(prototypeRabbit);
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.AddComponent<IsRabbitTag>(prototypeRabbit);
+        _entityManager.SetComponentData(prototypeRabbit,
             new Translation
             {
                 Value = worldPoint,
@@ -589,156 +589,156 @@ public class SimulationManager : MonoBehaviour
         );
 
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new EdibleData
             {
-                canBeEaten = RabbitDefaults.canBeEaten,
-                nutritionalValueBase = RabbitDefaults.nutritionalValue,
-                nutritionalValueMultiplier = RabbitDefaults.nutritionalValueMultiplier,
-                foodType = RabbitDefaults.foodType,
+                CanBeEaten = RabbitDefaults.CanBeEaten,
+                NutritionalValueBase = RabbitDefaults.NutritionalValue,
+                NutritionalValueMultiplier = RabbitDefaults.NutritionalValueMultiplier,
+                FoodType = RabbitDefaults.FoodType,
             }
         );
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new MovementData
             {
-                rotationSpeed = RabbitDefaults.rotationSpeed,
-                moveSpeedBase = RabbitDefaults.moveSpeed,
-                moveMultiplier = RabbitDefaults.moveMultiplier,
-                pregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier,
-                originalMoveMultiplier = RabbitDefaults.originalMoveMultiplier,
-                youngMoveMultiplier = RabbitDefaults.youngMoveMultiplier,
-                adultMoveMultiplier = RabbitDefaults.adultMoveMultiplier,
-                oldMoveMultiplier = RabbitDefaults.oldMoveMultiplier,
+                RotationSpeed = RabbitDefaults.RotationSpeed,
+                MoveSpeedBase = RabbitDefaults.MoveSpeed,
+                MoveMultiplier = RabbitDefaults.MoveMultiplier,
+                PregnancyMoveMultiplier = RabbitDefaults.PregnancyMoveMultiplier,
+                OriginalMoveMultiplier = RabbitDefaults.OriginalMoveMultiplier,
+                YoungMoveMultiplier = RabbitDefaults.YoungMoveMultiplier,
+                AdultMoveMultiplier = RabbitDefaults.AdultMoveMultiplier,
+                OldMoveMultiplier = RabbitDefaults.OldMoveMultiplier,
             }
         );
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new StateData
             {
-                flagState = RabbitDefaults.flagState,
-                previousFlagState = RabbitDefaults.previousFlagState,
-                deathReason = RabbitDefaults.deathReason,
-                beenEaten = RabbitDefaults.beenEaten,
+                FlagStateCurrent = RabbitDefaults.FlagState,
+                FlagStatePrevious = RabbitDefaults.FlagStatePrevious,
+                DeathReason = RabbitDefaults.DeathReason,
+                BeenEaten = RabbitDefaults.BeenEaten,
             }
         );
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new TargetData
             {
-                atTarget = true,
-                currentTarget = worldPoint,
-                oldTarget = worldPoint,
+                AtTarget = true,
+                Target = worldPoint,
+                TargetOld = worldPoint,
 
-                sightRadius = RabbitDefaults.sightRadius,
-                touchRadius = RabbitDefaults.touchRadius,
-                mateRadius = RabbitDefaults.mateRadius,
+                SightRadius = RabbitDefaults.SightRadius,
+                TouchRadius = RabbitDefaults.TouchRadius,
+                MateRadius = RabbitDefaults.MateRadius,
 
-                predatorEntity = FoxDefaults.predatorEntity,
-                entityToEat = FoxDefaults.entityToEat,
-                entityToDrink = FoxDefaults.entityToDrink,
-                entityToMate = FoxDefaults.entityToMate,
-                shortestToEdibleDistance = FoxDefaults.shortestToEdibleDistance,
-                shortestToWaterDistance = FoxDefaults.shortestToWaterDistance,
-                shortestToPredatorDistance = FoxDefaults.shortestToPredatorDistance,
-                shortestToMateDistance = FoxDefaults.shortestToMateDistance,
+                PredatorEntity = FoxDefaults.PredatorEntity,
+                EntityToEat = FoxDefaults.EntityToEat,
+                EntityToDrink = FoxDefaults.EntityToDrink,
+                EntityToMate = FoxDefaults.EntityToMate,
+                ShortestDistanceToEdible = FoxDefaults.ShortestToEdibleDistance,
+                ShortestDistanceToWater = FoxDefaults.ShortestToWaterDistance,
+                ShortestDistanceToPredator = FoxDefaults.ShortestToPredatorDistance,
+                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance,
             }
         );
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new PathFollowData
             {
-                pathIndex = -1,
+                PathIndex = -1,
             }
         );
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new BasicNeedsData
             {
-                hunger = RabbitDefaults.hunger,
-                hungryThreshold = RabbitDefaults.hungryThreshold,
-                hungerMax = RabbitDefaults.hungerMax,
-                hungerIncrease = RabbitDefaults.hungerIncrease,
-                pregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease,
-                youngHungerIncrease = RabbitDefaults.youngHungerIncrease,
-                adultHungerIncrease = RabbitDefaults.adultHungerIncrease,
-                oldHungerIncrease = RabbitDefaults.oldHungerIncrease,
-                eatingSpeed = RabbitDefaults.eatingSpeed,
+                Hunger = RabbitDefaults.Hunger,
+                HungryThreshold = RabbitDefaults.HungryThreshold,
+                HungerMax = RabbitDefaults.HungerMax,
+                HungerIncrease = RabbitDefaults.HungerIncrease,
+                PregnancyHungerIncrease = RabbitDefaults.PregnancyHungerIncrease,
+                YoungHungerIncrease = RabbitDefaults.YoungHungerIncrease,
+                AdultHungerIncrease = RabbitDefaults.AdultHungerIncrease,
+                OldHungerIncrease = RabbitDefaults.OldHungerIncrease,
+                EatingSpeed = RabbitDefaults.EatingSpeed,
 
-                diet = RabbitDefaults.diet,
-                thirst = RabbitDefaults.thirst,
-                thirstyThreshold = RabbitDefaults.thirstyThreshold,
-                thirstMax = RabbitDefaults.thirstMax,
-                thirstIncrease = RabbitDefaults.thirstIncrease,
-                drinkingSpeed = RabbitDefaults.drinkingSpeed,
+                Diet = RabbitDefaults.Diet,
+                Thirst = RabbitDefaults.Thirst,
+                ThirstyThreshold = RabbitDefaults.ThirstyThreshold,
+                ThirstMax = RabbitDefaults.ThirstMax,
+                ThirstIncrease = RabbitDefaults.ThirstIncrease,
+                DrinkingSpeed = RabbitDefaults.DrinkingSpeed,
 
             }
         );
 
         //randomise gender of rabbit - equal distribution
-        BioStatsData.Gender randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Gender.Female : BioStatsData.Gender.Male;
+        BioStatsData.Genders randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
         //set gender differing components
 
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new BioStatsData
             {
-                age = RabbitDefaults.age,
-                ageIncrease = RabbitDefaults.ageIncrease,
-                ageMax = RabbitDefaults.ageMax,
-                ageGroup = RabbitDefaults.ageGroup,
-                adultEntryTimer = RabbitDefaults.adultEntryTimer,
-                oldEntryTimer = RabbitDefaults.oldEntryTimer,
-                gender = randGender,
+                Age = RabbitDefaults.Age,
+                AgeIncrease = RabbitDefaults.AgeIncrease,
+                AgeMax = RabbitDefaults.AgeMax,
+                AgeGroup = RabbitDefaults.AgeGroup,
+                AdultEntryTimer = RabbitDefaults.AdultEntryTimer,
+                OldEntryTimer = RabbitDefaults.OldEntryTimer,
+                Gender = randGender,
             }
         );
 
         //set reproductive data differing on gender
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
                 new ReproductiveData
                 {
-                    matingDuration = RabbitDefaults.matingDuration,
-                    mateStartTime = RabbitDefaults.mateStartTime,
-                    reproductiveUrge = RabbitDefaults.reproductiveUrge,
-                    reproductiveUrgeIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
-                    defaultRepoductiveIncrease = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.reproductiveUrgeIncreaseFemale : RabbitDefaults.reproductiveUrgeIncreaseMale),
-                    matingThreshold = RabbitDefaults.matingThreshold,
+                    MatingDuration = RabbitDefaults.MatingDuration,
+                    MateStartTime = RabbitDefaults.MateStartTime,
+                    ReproductiveUrge = RabbitDefaults.ReproductiveUrge,
+                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale),
+                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale),
+                    MatingThreshold = RabbitDefaults.MatingThreshold,
 
 
-                    birthDuration = RabbitDefaults.birthDuration,
-                    babiesBorn = RabbitDefaults.babiesBorn,
-                    birthStartTime = RabbitDefaults.birthStartTime,
-                    currentLitterSize = RabbitDefaults.currentLitterSize,
-                    litterSizeMin = RabbitDefaults.litterSizeMin,
-                    litterSizeMax = RabbitDefaults.litterSizeMax,
-                    litterSizeAve = RabbitDefaults.litterSizeAve,
-                    pregnancyLengthBase = RabbitDefaults.pregnancyLength,
-                    pregnancyLengthModifier = RabbitDefaults.pregnancyLengthModifier,
-                    pregnancyStartTime = RabbitDefaults.pregnancyStartTime,
+                    BirthDuration = RabbitDefaults.BirthDuration,
+                    BabiesBorn = RabbitDefaults.BabiesBorn,
+                    BirthStartTime = RabbitDefaults.BirthStartTime,
+                    CurrentLitterSize = RabbitDefaults.CurrentLitterSize,
+                    LitterSizeMin = RabbitDefaults.LitterSizeMin,
+                    LitterSizeMax = RabbitDefaults.LitterSizeMax,
+                    LitterSizeAve = RabbitDefaults.LitterSizeAve,
+                    PregnancyLengthBase = RabbitDefaults.PregnancyLength,
+                    PregnancyLengthModifier = RabbitDefaults.PregnancyLengthModifier,
+                    PregnancyStartTime = RabbitDefaults.PregnancyStartTime,
                 }
             );
 
         //set size differing on gender
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new SizeData
             {
-                size = (randGender == BioStatsData.Gender.Female ? RabbitDefaults.scaleFemale : RabbitDefaults.scaleMale),
-                sizeMultiplier = RabbitDefaults.sizeMultiplier,
-                ageSizeMultiplier = RabbitDefaults.ageSizeMultiplier,
-                youngSizeMultiplier = RabbitDefaults.youngSizeMultiplier,
-                adultSizeMultiplier = RabbitDefaults.adultSizeMultiplier,
-                oldSizeMultiplier = RabbitDefaults.oldSizeMultiplier,
+                size = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ScaleFemale : RabbitDefaults.ScaleMale),
+                SizeMultiplier = RabbitDefaults.SizeMultiplier,
+                AgeSizeMultiplier = RabbitDefaults.AgeSizeMultiplier,
+                YoungSizeMultiplier = RabbitDefaults.YoungSizeMultiplier,
+                AdultSizeMultiplier = RabbitDefaults.AdultSizeMultiplier,
+                OldSizeMultiplier = RabbitDefaults.OldSizeMultiplier,
             }
         );
 
         // set ColliderTypeData to Rabbit entity
-        entityManager.SetComponentData(prototypeRabbit,
+        _entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
-                colliderType = RabbitDefaults.colliderType,
+                Collider = RabbitDefaults.Collider,
             }
         );
 
-        rabbitPopulation++;
+        RabbitPopulation++;
     }
 
     private void SpawnRabbitAtPosOnLClick()
@@ -749,12 +749,12 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     Vector3 targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
-                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateRabbitAtWorldPoint(targetPosition);
                 }
             }
@@ -768,12 +768,12 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     Vector3 targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
-                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateFoxAtWorldPoint(targetPosition);
                 }
             }
@@ -787,12 +787,12 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out UnityEngine.RaycastHit hit))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     Vector3 targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
-                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, entityManager))
+                    if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateGrassAtWorldPoint(targetPosition);
                 }
             }
@@ -800,40 +800,8 @@ public class SimulationManager : MonoBehaviour
     }
     #endregion
 
-    public int RabbitSpawn()
-    {
-        return numberOfRabbitsToSpawn;
-    }
-    public int RabbitPopulation()
-    {
-        return rabbitPopulation;
-    }
-
-    public int FoxSpawn()
-    {
-        return numberOfFoxesToSpawn;
-    }
-    public int FoxPopulation()
-    {
-        return foxPopulation;
-    }
-
-    public int GrassSpawn()
-    {
-        return numberOfGrassToSpawn;
-    }
-    public int GrassPopulation()
-    {
-        return grassPopulation;
-    }
-
     public static Vector2 MapSize()
     {
-        return new Vector2(gridWidth, gridHeight);
-    }
-
-    public float GetTileSize()
-    {
-        return tileSize;
+        return new Vector2(GridWidth, GridHeight);
     }
 }

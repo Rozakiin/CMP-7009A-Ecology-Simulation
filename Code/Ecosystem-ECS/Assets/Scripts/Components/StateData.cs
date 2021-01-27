@@ -7,15 +7,15 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct StateData : IComponentData
     {
-        public enum DeathReason
+        public enum DeathReasons
         {
             Eaten,
             Hunger,
             Thirst,
             Age,
         }
-        public DeathReason deathReason;
-        public bool beenEaten;
+        public DeathReasons DeathReason;
+        public bool BeenEaten;
 
         [Flags]
         public enum FlagStates
@@ -33,19 +33,19 @@ namespace Components
             Pregnant = 512,         // 001000000000
             GivingBirth = 1024,     // 010000000000
         }
-        public FlagStates flagState;
-        public FlagStates previousFlagState;
+        public FlagStates FlagStateCurrent;
+        public FlagStates FlagStatePrevious;
 
-        public bool isWandering;
-        public bool isHungry;
-        public bool isThirsty;
-        public bool isEating;
-        public bool isDrinking;
-        public bool isSexuallyActive;
-        public bool isMating;
-        public bool isFleeing;
-        public bool isDead;
-        public bool isPregnant;
-        public bool isGivingBirth;
+        public bool IsWandering;
+        public bool IsHungry;
+        public bool IsThirsty;
+        public bool IsEating;
+        public bool IsDrinking;
+        public bool IsSexuallyActive;
+        public bool IsMating;
+        public bool IsFleeing;
+        public bool IsDead;
+        public bool IsPregnant;
+        public bool IsGivingBirth;
     }
 }

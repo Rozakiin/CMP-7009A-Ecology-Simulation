@@ -7,17 +7,17 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct MovementData : IComponentData
     {
-        public float rotationSpeed;
-        public float moveSpeedBase;
-        public float moveMultiplier;
-        public float pregnancyMoveMultiplier;
-        public float originalMoveMultiplier;
-        public float youngMoveMultiplier;
-        public float adultMoveMultiplier;
-        public float oldMoveMultiplier;
+        public float RotationSpeed;
+        public float MoveSpeedBase;
+        public float MoveMultiplier;
+        public float PregnancyMoveMultiplier;
+        public float OriginalMoveMultiplier;
+        public float YoungMoveMultiplier;
+        public float AdultMoveMultiplier;
+        public float OldMoveMultiplier;
         public float MoveSpeed
         {
-            get { return moveSpeedBase * moveMultiplier; }
+            get { return MoveSpeedBase * MoveMultiplier; }
         }
     }
 }

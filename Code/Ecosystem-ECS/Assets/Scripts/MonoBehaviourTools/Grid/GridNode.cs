@@ -4,20 +4,20 @@ namespace MonoBehaviourTools.Grid
 {
     public struct GridNode
     {
-        public bool isWalkable;
-        public int movementPenalty;
+        public bool IsWalkable;
+        public int MovementPenalty;
 
-        public float3 worldPosition;
-        public int x;
-        public int y;
+        public float3 WorldPosition;
+        public int X;
+        public int Y;
 
-        public GridNode(bool _isWalkable, float3 _worldPosition, int _x, int _y, int _movementPenalty)
+        public GridNode(bool isWalkable, float3 worldPosition, int x, int y, int movementPenalty)
         {
-            isWalkable = _isWalkable;
-            worldPosition = _worldPosition;
-            x = _x;
-            y = _y;
-            movementPenalty = _movementPenalty;
+            IsWalkable = isWalkable;
+            WorldPosition = worldPosition;
+            X = x;
+            Y = y;
+            MovementPenalty = movementPenalty;
         }
     }
 }

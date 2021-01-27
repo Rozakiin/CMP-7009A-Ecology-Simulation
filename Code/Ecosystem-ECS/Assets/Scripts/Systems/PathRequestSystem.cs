@@ -6,13 +6,13 @@ namespace Systems
 {
     public class PathRequestSystem : SystemBase
     {
-        private EndSimulationEntityCommandBufferSystem ecbSystem;
+        private EndSimulationEntityCommandBufferSystem _ecbSystem;
 
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            _ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         /*
@@ -20,7 +20,7 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
+            var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
             // Makes a path request using the current target in TargetData 
             Entities
@@ -34,16 +34,16 @@ namespace Systems
                 ) =>
                 {
                     //if not following a path and not at target
-                    if (pathFollowData.pathIndex < 0 && targetData.atTarget == false)
+                    if (pathFollowData.PathIndex < 0 && targetData.AtTarget == false)
                     {
                         // make a path finding request
                         ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                        ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { startPosition = translation.Value, endPosition = targetData.currentTarget });
+                        ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { StartPosition = translation.Value, EndPosition = targetData.Target });
                     }
                 }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(this.Dependency);
         }
     }
 }

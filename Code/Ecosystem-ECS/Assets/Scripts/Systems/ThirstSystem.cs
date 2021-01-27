@@ -12,17 +12,17 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            float deltaTime = Time.DeltaTime;
+            var deltaTime = Time.DeltaTime;
 
             Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData) =>
             {
                 // Increase thirst
-                basicNeedsData.thirst += basicNeedsData.thirstIncrease * deltaTime;
+                basicNeedsData.Thirst += basicNeedsData.ThirstIncrease * deltaTime;
 
                 //If the entityToDrink exists and entity is drinking
-                if (HasComponent<DrinkableData>(targetData.entityToDrink) && stateData.isDrinking)
+                if (HasComponent<DrinkableData>(targetData.EntityToDrink) && stateData.IsDrinking)
                 {
-                    basicNeedsData.thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.entityToDrink].Value * basicNeedsData.drinkingSpeed * deltaTime; //gets drink Value from entityToDrink
+                    basicNeedsData.Thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.EntityToDrink].Value * basicNeedsData.DrinkingSpeed * deltaTime; //gets drink Value from entityToDrink
                 }
             }).ScheduleParallel();
         }

@@ -6,7 +6,7 @@ namespace Systems
     public class MovementDataSystem : SystemBase
     {
         /*
-         * changes the entities' movement multiplier based on agegroup or state
+         * changes the entities' movement multiplier based on age group or state
          */
         protected override void OnUpdate()
         {
@@ -16,30 +16,30 @@ namespace Systems
                 in StateData stateData
             ) =>
             {
-                if (!stateData.isPregnant)
+                if (!stateData.IsPregnant)
                 {
-                    if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Young)
+                    if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
                     {
-                        movementData.moveMultiplier = movementData.youngMoveMultiplier;
+                        movementData.MoveMultiplier = movementData.YoungMoveMultiplier;
                     }
-                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                    else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
                     {
-                        movementData.moveMultiplier = movementData.adultMoveMultiplier;
+                        movementData.MoveMultiplier = movementData.AdultMoveMultiplier;
                     }
-                    else if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Old)
+                    else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
                     {
-                        movementData.moveMultiplier = movementData.oldMoveMultiplier;
+                        movementData.MoveMultiplier = movementData.OldMoveMultiplier;
                     }
                 }
                 else
                 {
-                    movementData.moveMultiplier = movementData.pregnancyMoveMultiplier;
+                    movementData.MoveMultiplier = movementData.PregnancyMoveMultiplier;
                 }
 
                 //temp fix set movement to 0 when mating or giving birth
-                if (stateData.isMating | stateData.isGivingBirth)
+                if (stateData.IsMating | stateData.IsGivingBirth)
                 {
-                    movementData.moveMultiplier = 0;
+                    movementData.MoveMultiplier = 0;
                 }
             }).ScheduleParallel();
         }

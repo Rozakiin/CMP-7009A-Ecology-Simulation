@@ -12,8 +12,8 @@ namespace Components
         {
             Water, Grass, Sand, Rock
         }
-        public TerrainType terrainType;
-        public int terrainPenalty;
-        public bool isWalkable;
+        public TerrainType Terrain;
+        public int TerrainPenalty;
+        public bool IsWalkable;
     }
 }

@@ -1,12 +1,14 @@
 ﻿using Components;
 using EntityDefaults;
 using Unity.Entities;
+using UnityEngine;
+using Hash128 = UnityEngine.Hash128;
 
 namespace Systems
 {
     public class UIUpdateSystem : SystemBase
     {
-        public bool somethingChangedFlag;
+        public bool SomethingChangedFlag;
         public static UIUpdateSystem Instance; // public reference to self (singleton)
 
 
@@ -14,7 +16,7 @@ namespace Systems
         {
             base.OnCreate();
             Instance = this;
-            somethingChangedFlag = false;
+            SomethingChangedFlag = false;
         }
 
         /*
@@ -26,121 +28,121 @@ namespace Systems
         protected override void OnUpdate()
         {
             //only update entities if something has changed
-            if (somethingChangedFlag)
+            if (SomethingChangedFlag)
             {
                 // updates each component individually that has default values associated with it
 
                 /*RABBIT*/
 
                 //Update BasicNeedsData
-                float RthirstThreshold = RabbitDefaults.thirstyThreshold;
-                float RthirstMax = RabbitDefaults.thirstMax;
-                float RthirstIncrease = RabbitDefaults.thirstIncrease;
-                float RdrinkingSpeed = RabbitDefaults.drinkingSpeed;
+                float RthirstThreshold = RabbitDefaults.ThirstyThreshold;
+                float RthirstMax = RabbitDefaults.ThirstMax;
+                float RthirstIncrease = RabbitDefaults.ThirstIncrease;
+                float RdrinkingSpeed = RabbitDefaults.DrinkingSpeed;
 
-                float RhungerThreshold = RabbitDefaults.hungryThreshold;
-                float RhungerMax = RabbitDefaults.hungerMax;
-                float RhunderIncrease = RabbitDefaults.hungerIncrease;
-                float RpregnancyHungerIncrease = RabbitDefaults.pregnancyHungerIncrease;
-                float RyoungHungerIncrease = RabbitDefaults.youngHungerIncrease;
-                float RadultHungerIncrease = RabbitDefaults.adultHungerIncrease;
-                float RoldHungerIncrease = RabbitDefaults.oldHungerIncrease;
-                float ReatingSpeed = RabbitDefaults.eatingSpeed;
+                float RhungerThreshold = RabbitDefaults.HungryThreshold;
+                float RhungerMax = RabbitDefaults.HungerMax;
+                float RhunderIncrease = RabbitDefaults.HungerIncrease;
+                float RpregnancyHungerIncrease = RabbitDefaults.PregnancyHungerIncrease;
+                float RyoungHungerIncrease = RabbitDefaults.YoungHungerIncrease;
+                float RadultHungerIncrease = RabbitDefaults.AdultHungerIncrease;
+                float RoldHungerIncrease = RabbitDefaults.OldHungerIncrease;
+                float ReatingSpeed = RabbitDefaults.EatingSpeed;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
                 {
-                    basicNeedsData.thirstyThreshold = RthirstThreshold;
-                    basicNeedsData.thirstMax = RthirstMax;
-                    basicNeedsData.thirstIncrease = RthirstIncrease;
-                    basicNeedsData.drinkingSpeed = RdrinkingSpeed;
+                    basicNeedsData.ThirstyThreshold = RthirstThreshold;
+                    basicNeedsData.ThirstMax = RthirstMax;
+                    basicNeedsData.ThirstIncrease = RthirstIncrease;
+                    basicNeedsData.DrinkingSpeed = RdrinkingSpeed;
 
-                    basicNeedsData.hungryThreshold = RhungerThreshold;
-                    basicNeedsData.hungerMax = RhungerMax;
-                    basicNeedsData.hungerIncrease = RhunderIncrease;
-                    basicNeedsData.pregnancyHungerIncrease = RpregnancyHungerIncrease;
-                    basicNeedsData.youngHungerIncrease = RyoungHungerIncrease;
-                    basicNeedsData.adultHungerIncrease = RadultHungerIncrease;
-                    basicNeedsData.oldHungerIncrease = RoldHungerIncrease;
-                    basicNeedsData.eatingSpeed = ReatingSpeed;
+                    basicNeedsData.HungryThreshold = RhungerThreshold;
+                    basicNeedsData.HungerMax = RhungerMax;
+                    basicNeedsData.HungerIncrease = RhunderIncrease;
+                    basicNeedsData.PregnancyHungerIncrease = RpregnancyHungerIncrease;
+                    basicNeedsData.YoungHungerIncrease = RyoungHungerIncrease;
+                    basicNeedsData.AdultHungerIncrease = RadultHungerIncrease;
+                    basicNeedsData.OldHungerIncrease = RoldHungerIncrease;
+                    basicNeedsData.EatingSpeed = ReatingSpeed;
                 }).ScheduleParallel();
 
                 //Update BioStatsData
-                float RageIncrease = RabbitDefaults.ageIncrease;
-                float RageMax = RabbitDefaults.ageMax;
+                float RageIncrease = RabbitDefaults.AgeIncrease;
+                float RageMax = RabbitDefaults.AgeMax;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref BioStatsData bioStatsData) =>
                 {
-                    bioStatsData.ageIncrease = RageIncrease;
-                    bioStatsData.ageMax = RageMax;
+                    bioStatsData.AgeIncrease = RageIncrease;
+                    bioStatsData.AgeMax = RageMax;
                 }).ScheduleParallel();
 
                 //Update EdibleData
-                float RnutritionalValueBase = RabbitDefaults.nutritionalValue;
-                bool RcanBeEaten = RabbitDefaults.canBeEaten;
+                float RnutritionalValueBase = RabbitDefaults.NutritionalValue;
+                bool RcanBeEaten = RabbitDefaults.CanBeEaten;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref EdibleData edibleData) =>
                 {
-                    edibleData.canBeEaten = RcanBeEaten;
-                    edibleData.nutritionalValueBase = RnutritionalValueBase;
+                    edibleData.CanBeEaten = RcanBeEaten;
+                    edibleData.NutritionalValueBase = RnutritionalValueBase;
                 }).ScheduleParallel();
 
                 //Update MovementData
-                float RmoveSpeed = RabbitDefaults.moveSpeed;
-                float RpregnancyMoveMultiplier = RabbitDefaults.pregnancyMoveMultiplier;
-                float RyoungMoveMultiplier = RabbitDefaults.youngMoveMultiplier;
-                float RadultMoveMultiplier = RabbitDefaults.adultMoveMultiplier;
-                float RoldMoveMultiplier = RabbitDefaults.oldMoveMultiplier;
+                float RmoveSpeed = RabbitDefaults.MoveSpeed;
+                float RpregnancyMoveMultiplier = RabbitDefaults.PregnancyMoveMultiplier;
+                float RyoungMoveMultiplier = RabbitDefaults.YoungMoveMultiplier;
+                float RadultMoveMultiplier = RabbitDefaults.AdultMoveMultiplier;
+                float RoldMoveMultiplier = RabbitDefaults.OldMoveMultiplier;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref MovementData movementData) =>
                 {
-                    movementData.moveSpeedBase = RmoveSpeed;
-                    movementData.pregnancyMoveMultiplier = RpregnancyMoveMultiplier;
-                    movementData.youngMoveMultiplier = RyoungMoveMultiplier;
-                    movementData.adultMoveMultiplier = RadultMoveMultiplier;
-                    movementData.oldMoveMultiplier = RadultMoveMultiplier;
+                    movementData.MoveSpeedBase = RmoveSpeed;
+                    movementData.PregnancyMoveMultiplier = RpregnancyMoveMultiplier;
+                    movementData.YoungMoveMultiplier = RyoungMoveMultiplier;
+                    movementData.AdultMoveMultiplier = RadultMoveMultiplier;
+                    movementData.OldMoveMultiplier = RadultMoveMultiplier;
                 }).ScheduleParallel();
 
                 //Update ReproductiveData
-                float RmatingDuration = RabbitDefaults.matingDuration;
-                float RmatingThreshold = RabbitDefaults.matingThreshold;
-                float RreproductiveUrgeIncrease = RabbitDefaults.reproductiveUrgeIncreaseMale;
-                float RpregnancyLength = RabbitDefaults.pregnancyLength;
-                float RbirthDuration = RabbitDefaults.birthDuration;
-                int RlitterSizeMin = RabbitDefaults.litterSizeMin;
-                int RlitterSizeMax = RabbitDefaults.litterSizeMax;
-                int RlitterSizeAve = RabbitDefaults.litterSizeAve;
+                float RmatingDuration = RabbitDefaults.MatingDuration;
+                float RmatingThreshold = RabbitDefaults.MatingThreshold;
+                float RreproductiveUrgeIncrease = RabbitDefaults.ReproductiveUrgeIncreaseMale;
+                float RpregnancyLength = RabbitDefaults.PregnancyLength;
+                float RbirthDuration = RabbitDefaults.BirthDuration;
+                int RlitterSizeMin = RabbitDefaults.LitterSizeMin;
+                int RlitterSizeMax = RabbitDefaults.LitterSizeMax;
+                int RlitterSizeAve = RabbitDefaults.LitterSizeAve;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref ReproductiveData reproductiveData) =>
                 {
-                    reproductiveData.matingDuration = RmatingDuration;
-                    reproductiveData.matingThreshold = RmatingThreshold;
-                    reproductiveData.reproductiveUrgeIncrease = RreproductiveUrgeIncrease;
-                    reproductiveData.defaultRepoductiveIncrease = RreproductiveUrgeIncrease;
-                    reproductiveData.pregnancyLengthBase = RpregnancyLength;
-                    reproductiveData.birthDuration = RbirthDuration;
-                    reproductiveData.litterSizeMin = RlitterSizeMin;
-                    reproductiveData.litterSizeMax = RlitterSizeMax;
-                    reproductiveData.litterSizeAve = RlitterSizeAve;
+                    reproductiveData.MatingDuration = RmatingDuration;
+                    reproductiveData.MatingThreshold = RmatingThreshold;
+                    reproductiveData.ReproductiveUrgeIncrease = RreproductiveUrgeIncrease;
+                    reproductiveData.DefaultReproductiveIncrease = RreproductiveUrgeIncrease;
+                    reproductiveData.PregnancyLengthBase = RpregnancyLength;
+                    reproductiveData.BirthDuration = RbirthDuration;
+                    reproductiveData.LitterSizeMin = RlitterSizeMin;
+                    reproductiveData.LitterSizeMax = RlitterSizeMax;
+                    reproductiveData.LitterSizeAve = RlitterSizeAve;
                 }).ScheduleParallel();
 
                 //Update SizeData
                 //Update Scale dependent on gender
-                float RmaleSize = RabbitDefaults.scaleMale;
-                float RfemaleSize = RabbitDefaults.scaleFemale;
-                float RyoungSizeMultiplier = RabbitDefaults.youngSizeMultiplier;
-                float RadultSizeMultiplier = RabbitDefaults.adultSizeMultiplier;
-                float RoldSizeMultiplier = RabbitDefaults.oldSizeMultiplier;
+                float RmaleSize = RabbitDefaults.ScaleMale;
+                float RfemaleSize = RabbitDefaults.ScaleFemale;
+                float RyoungSizeMultiplier = RabbitDefaults.YoungSizeMultiplier;
+                float RadultSizeMultiplier = RabbitDefaults.AdultSizeMultiplier;
+                float RoldSizeMultiplier = RabbitDefaults.OldSizeMultiplier;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
                 {
-                    if (bioStatsData.gender == BioStatsData.Gender.Male)
+                    if (bioStatsData.Gender == BioStatsData.Genders.Male)
                         sizeData.size = RmaleSize;
-                    else if (bioStatsData.gender == BioStatsData.Gender.Female)
+                    else if (bioStatsData.Gender == BioStatsData.Genders.Female)
                         sizeData.size = RfemaleSize;
-                    sizeData.youngSizeMultiplier = RyoungSizeMultiplier;
-                    sizeData.adultSizeMultiplier = RadultSizeMultiplier;
-                    sizeData.oldSizeMultiplier = RoldSizeMultiplier;
+                    sizeData.YoungSizeMultiplier = RyoungSizeMultiplier;
+                    sizeData.AdultSizeMultiplier = RadultSizeMultiplier;
+                    sizeData.OldSizeMultiplier = RoldSizeMultiplier;
                 }).ScheduleParallel();
 
                 //Update TargetData
-                float RsightRadius = RabbitDefaults.sightRadius;
+                float RsightRadius = RabbitDefaults.SightRadius;
                 Entities.WithAll<IsRabbitTag>().ForEach((ref TargetData targetData) =>
                 {
-                    targetData.sightRadius = RsightRadius;
+                    targetData.SightRadius = RsightRadius;
                 }).ScheduleParallel();
 
 
@@ -148,114 +150,114 @@ namespace Systems
                 /*FOX*/
 
                 //Update BasicNeedsData
-                float FthirstThreshold = FoxDefaults.thirstyThreshold;
-                float FthirstMax = FoxDefaults.thirstMax;
-                float FthirstIncrease = FoxDefaults.thirstIncrease;
-                float FdrinkingSpeed = FoxDefaults.drinkingSpeed;
+                float FthirstThreshold = FoxDefaults.ThirstyThreshold;
+                float FthirstMax = FoxDefaults.ThirstMax;
+                float FthirstIncrease = FoxDefaults.ThirstIncrease;
+                float FdrinkingSpeed = FoxDefaults.DrinkingSpeed;
 
-                float FhungerThreshold = FoxDefaults.hungryThreshold;
-                float FhungerMax = FoxDefaults.hungerMax;
-                float FhunderIncrease = FoxDefaults.hungerIncrease;
-                float FpregnancyHungerIncrease = FoxDefaults.pregnancyHungerIncrease;
-                float FyoungHungerIncrease = FoxDefaults.youngHungerIncrease;
-                float FadultHungerIncrease = FoxDefaults.adultHungerIncrease;
-                float FoldHungerIncrease = FoxDefaults.oldHungerIncrease;
-                float FeatingSpeed = FoxDefaults.eatingSpeed;
+                float FhungerThreshold = FoxDefaults.HungryThreshold;
+                float FhungerMax = FoxDefaults.HungerMax;
+                float FhunderIncrease = FoxDefaults.HungerIncrease;
+                float FpregnancyHungerIncrease = FoxDefaults.PregnancyHungerIncrease;
+                float FyoungHungerIncrease = FoxDefaults.YoungHungerIncrease;
+                float FadultHungerIncrease = FoxDefaults.AdultHungerIncrease;
+                float FoldHungerIncrease = FoxDefaults.OldHungerIncrease;
+                float FeatingSpeed = FoxDefaults.EatingSpeed;
                 Entities.WithAll<IsFoxTag>().ForEach((ref BasicNeedsData basicNeedsData) =>
                 {
-                    basicNeedsData.thirstyThreshold = FthirstThreshold;
-                    basicNeedsData.thirstMax = FthirstMax;
-                    basicNeedsData.thirstIncrease = FthirstIncrease;
-                    basicNeedsData.drinkingSpeed = FdrinkingSpeed;
+                    basicNeedsData.ThirstyThreshold = FthirstThreshold;
+                    basicNeedsData.ThirstMax = FthirstMax;
+                    basicNeedsData.ThirstIncrease = FthirstIncrease;
+                    basicNeedsData.DrinkingSpeed = FdrinkingSpeed;
 
-                    basicNeedsData.hungryThreshold = FhungerThreshold;
-                    basicNeedsData.hungerMax = FhungerMax;
-                    basicNeedsData.hungerIncrease = FhunderIncrease;
-                    basicNeedsData.pregnancyHungerIncrease = FpregnancyHungerIncrease;
-                    basicNeedsData.youngHungerIncrease = FyoungHungerIncrease;
-                    basicNeedsData.adultHungerIncrease = FadultHungerIncrease;
-                    basicNeedsData.oldHungerIncrease = FoldHungerIncrease;
-                    basicNeedsData.eatingSpeed = FeatingSpeed;
+                    basicNeedsData.HungryThreshold = FhungerThreshold;
+                    basicNeedsData.HungerMax = FhungerMax;
+                    basicNeedsData.HungerIncrease = FhunderIncrease;
+                    basicNeedsData.PregnancyHungerIncrease = FpregnancyHungerIncrease;
+                    basicNeedsData.YoungHungerIncrease = FyoungHungerIncrease;
+                    basicNeedsData.AdultHungerIncrease = FadultHungerIncrease;
+                    basicNeedsData.OldHungerIncrease = FoldHungerIncrease;
+                    basicNeedsData.EatingSpeed = FeatingSpeed;
                 }).ScheduleParallel();
 
                 //Update BioStatsData
-                float FageIncrease = FoxDefaults.ageIncrease;
-                float FageMax = FoxDefaults.ageMax;
+                float FageIncrease = FoxDefaults.AgeIncrease;
+                float FageMax = FoxDefaults.AgeMax;
                 Entities.WithAll<IsFoxTag>().ForEach((ref BioStatsData bioStatsData) =>
                 {
-                    bioStatsData.ageIncrease = FageIncrease;
-                    bioStatsData.ageMax = FageMax;
+                    bioStatsData.AgeIncrease = FageIncrease;
+                    bioStatsData.AgeMax = FageMax;
                 }).ScheduleParallel();
 
                 //Update EdibleData
-                float FnutritionalValueBase = FoxDefaults.nutritionalValue;
-                bool FcanBeEaten = FoxDefaults.canBeEaten;
+                float FnutritionalValueBase = FoxDefaults.NutritionalValue;
+                bool FcanBeEaten = FoxDefaults.CanBeEaten;
                 Entities.WithAll<IsFoxTag>().ForEach((ref EdibleData edibleData) =>
                 {
-                    edibleData.canBeEaten = FcanBeEaten;
-                    edibleData.nutritionalValueBase = FnutritionalValueBase;
+                    edibleData.CanBeEaten = FcanBeEaten;
+                    edibleData.NutritionalValueBase = FnutritionalValueBase;
                 }).ScheduleParallel();
 
                 //Update MovementData
-                float FmoveSpeed = FoxDefaults.moveSpeed;
-                float FpregnancyMoveMultiplier = FoxDefaults.pregnancyMoveMultiplier;
-                float FyoungMoveMultiplier = FoxDefaults.youngMoveMultiplier;
-                float FadultMoveMultiplier = FoxDefaults.adultMoveMultiplier;
-                float FoldMoveMultiplier = FoxDefaults.oldMoveMultiplier;
+                float FmoveSpeed = FoxDefaults.MoveSpeed;
+                float FpregnancyMoveMultiplier = FoxDefaults.PregnancyMoveMultiplier;
+                float FyoungMoveMultiplier = FoxDefaults.YoungMoveMultiplier;
+                float FadultMoveMultiplier = FoxDefaults.AdultMoveMultiplier;
+                float FoldMoveMultiplier = FoxDefaults.OldMoveMultiplier;
                 Entities.WithAll<IsFoxTag>().ForEach((ref MovementData movementData) =>
                 {
-                    movementData.moveSpeedBase = FmoveSpeed;
-                    movementData.pregnancyMoveMultiplier = FpregnancyMoveMultiplier;
-                    movementData.youngMoveMultiplier = FyoungMoveMultiplier;
-                    movementData.adultMoveMultiplier = FadultMoveMultiplier;
-                    movementData.oldMoveMultiplier = FadultMoveMultiplier;
+                    movementData.MoveSpeedBase = FmoveSpeed;
+                    movementData.PregnancyMoveMultiplier = FpregnancyMoveMultiplier;
+                    movementData.YoungMoveMultiplier = FyoungMoveMultiplier;
+                    movementData.AdultMoveMultiplier = FadultMoveMultiplier;
+                    movementData.OldMoveMultiplier = FadultMoveMultiplier;
                 }).ScheduleParallel();
 
                 //Update ReproductiveData
-                float FmatingDuration = FoxDefaults.matingDuration;
-                float FmatingThreshold = FoxDefaults.matingThreshold;
-                float FreproductiveUrgeIncrease = FoxDefaults.reproductiveUrgeIncreaseMale;
-                float FpregnancyLength = FoxDefaults.pregnancyLength;
-                float FbirthDuration = FoxDefaults.birthDuration;
-                int FlitterSizeMin = FoxDefaults.litterSizeMin;
-                int FlitterSizeMax = FoxDefaults.litterSizeMax;
-                int FlitterSizeAve = FoxDefaults.litterSizeAve;
+                float FmatingDuration = FoxDefaults.MatingDuration;
+                float FmatingThreshold = FoxDefaults.MatingThreshold;
+                float FreproductiveUrgeIncrease = FoxDefaults.ReproductiveUrgeIncreaseMale;
+                float FpregnancyLength = FoxDefaults.PregnancyLength;
+                float FbirthDuration = FoxDefaults.BirthDuration;
+                int FlitterSizeMin = FoxDefaults.LitterSizeMin;
+                int FlitterSizeMax = FoxDefaults.LitterSizeMax;
+                int FlitterSizeAve = FoxDefaults.LitterSizeAve;
                 Entities.WithAll<IsFoxTag>().ForEach((ref ReproductiveData reproductiveData) =>
                 {
-                    reproductiveData.matingDuration = FmatingDuration;
-                    reproductiveData.matingThreshold = FmatingThreshold;
-                    reproductiveData.reproductiveUrgeIncrease = FreproductiveUrgeIncrease;
-                    reproductiveData.defaultRepoductiveIncrease = FreproductiveUrgeIncrease;
-                    reproductiveData.pregnancyLengthBase = FpregnancyLength;
-                    reproductiveData.birthDuration = FbirthDuration;
-                    reproductiveData.litterSizeMin = FlitterSizeMin;
-                    reproductiveData.litterSizeMax = FlitterSizeMax;
-                    reproductiveData.litterSizeAve = FlitterSizeAve;
+                    reproductiveData.MatingDuration = FmatingDuration;
+                    reproductiveData.MatingThreshold = FmatingThreshold;
+                    reproductiveData.ReproductiveUrgeIncrease = FreproductiveUrgeIncrease;
+                    reproductiveData.DefaultReproductiveIncrease = FreproductiveUrgeIncrease;
+                    reproductiveData.PregnancyLengthBase = FpregnancyLength;
+                    reproductiveData.BirthDuration = FbirthDuration;
+                    reproductiveData.LitterSizeMin = FlitterSizeMin;
+                    reproductiveData.LitterSizeMax = FlitterSizeMax;
+                    reproductiveData.LitterSizeAve = FlitterSizeAve;
                 }).ScheduleParallel();
 
                 //Update SizeData
                 //Update Scale dependent on gender
-                float FmaleSize = FoxDefaults.scaleMale;
-                float FfemaleSize = FoxDefaults.scaleFemale;
-                float FyoungSizeMultiplier = FoxDefaults.youngSizeMultiplier;
-                float FadultSizeMultiplier = FoxDefaults.adultSizeMultiplier;
-                float FoldSizeMultiplier = FoxDefaults.oldSizeMultiplier;
+                float FmaleSize = FoxDefaults.ScaleMale;
+                float FfemaleSize = FoxDefaults.ScaleFemale;
+                float FyoungSizeMultiplier = FoxDefaults.YoungSizeMultiplier;
+                float FadultSizeMultiplier = FoxDefaults.AdultSizeMultiplier;
+                float FoldSizeMultiplier = FoxDefaults.OldSizeMultiplier;
                 Entities.WithAll<IsFoxTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
                 {
-                    if (bioStatsData.gender == BioStatsData.Gender.Male)
+                    if (bioStatsData.Gender == BioStatsData.Genders.Male)
                         sizeData.size = FmaleSize;
-                    else if (bioStatsData.gender == BioStatsData.Gender.Female)
+                    else if (bioStatsData.Gender == BioStatsData.Genders.Female)
                         sizeData.size = FfemaleSize;
-                    sizeData.youngSizeMultiplier = FyoungSizeMultiplier;
-                    sizeData.adultSizeMultiplier = FadultSizeMultiplier;
-                    sizeData.oldSizeMultiplier = FoldSizeMultiplier;
+                    sizeData.YoungSizeMultiplier = FyoungSizeMultiplier;
+                    sizeData.AdultSizeMultiplier = FadultSizeMultiplier;
+                    sizeData.OldSizeMultiplier = FoldSizeMultiplier;
                 }).ScheduleParallel();
 
                 //Update TargetData
-                float FsightRadius = FoxDefaults.sightRadius;
+                float FsightRadius = FoxDefaults.SightRadius;
                 Entities.WithAll<IsFoxTag>().ForEach((ref TargetData targetData) =>
                 {
-                    targetData.sightRadius = FsightRadius;
+                    targetData.SightRadius = FsightRadius;
                 }).ScheduleParallel();
 
 
@@ -263,23 +265,23 @@ namespace Systems
                 /*GRASS*/
 
                 //Update EdibleData
-                float GrassnutritionalValueBase = GrassDefaults.nutritionalValue;
-                bool GrasscanBeEaten = GrassDefaults.canBeEaten;
+                float GrassnutritionalValueBase = GrassDefaults.NutritionalValue;
+                bool GrasscanBeEaten = GrassDefaults.CanBeEaten;
                 Entities.WithAll<IsGrassTag>().ForEach((ref EdibleData edibleData) =>
                 {
-                    edibleData.canBeEaten = GrasscanBeEaten;
-                    edibleData.nutritionalValueBase = GrassnutritionalValueBase;
+                    edibleData.CanBeEaten = GrasscanBeEaten;
+                    edibleData.NutritionalValueBase = GrassnutritionalValueBase;
                 }).ScheduleParallel();
 
                 //Update SizeData
-                float GrassSize = GrassDefaults.scale;
+                float GrassSize = GrassDefaults.Scale;
                 Entities.WithAll<IsGrassTag>().ForEach((ref SizeData sizeData) =>
                 {
                     sizeData.size = GrassSize;
                 }).ScheduleParallel();
 
 
-                somethingChangedFlag = false;
+                SomethingChangedFlag = false;
             }
         }
     }

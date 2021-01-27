@@ -8,14 +8,14 @@ namespace Tests
 {
     public class UITimeControlTest
     {
-        private UITimeControl uITimeControl;
-        private GameObject gameObject;
+        private UITimeControl _uITimeControl;
+        private GameObject _gameObject;
         
         [SetUp]
         public void SetUp()
         {
-            gameObject = new GameObject();
-            uITimeControl = gameObject.AddComponent<UITimeControl>();
+            _gameObject = new GameObject();
+            _uITimeControl = _gameObject.AddComponent<UITimeControl>();
         }
         
         [UnityTest]
@@ -23,40 +23,40 @@ namespace Tests
         {
             yield return null;
             
-            uITimeControl.Pause();
-            Assert.True(uITimeControl.GetPause());
+            _uITimeControl.Pause();
+            Assert.True(_uITimeControl.GetPause());
             
-            uITimeControl.Play();
-            Assert.False(uITimeControl.GetPause());
+            _uITimeControl.Play();
+            Assert.False(_uITimeControl.GetPause());
         }
         
         
         [Test]
         public void IncreaseSpeedTest()
         {
-            uITimeControl.fastForwardSpeed = 1f;
-            uITimeControl.IncreaseSpeed();
-            Assert.AreEqual(2f,uITimeControl.fastForwardSpeed);
+            _uITimeControl.FastForwardSpeed = 1f;
+            _uITimeControl.IncreaseSpeed();
+            Assert.AreEqual(2f,_uITimeControl.FastForwardSpeed);
             
-            uITimeControl.fastForwardSpeed = 0.2f;
-            uITimeControl.IncreaseSpeed();
-            Assert.AreEqual(0.4f,uITimeControl.fastForwardSpeed);
+            _uITimeControl.FastForwardSpeed = 0.2f;
+            _uITimeControl.IncreaseSpeed();
+            Assert.AreEqual(0.4f,_uITimeControl.FastForwardSpeed);
         }
         
         [Test]
         public void DecreaseSpeedTest()
         {
-            uITimeControl.fastForwardSpeed = 1f;
-            uITimeControl.DecreaseSpeed();
-            Assert.AreEqual(0.8f,uITimeControl.fastForwardSpeed);
+            _uITimeControl.FastForwardSpeed = 1f;
+            _uITimeControl.DecreaseSpeed();
+            Assert.AreEqual(0.8f,_uITimeControl.FastForwardSpeed);
             
-            uITimeControl.fastForwardSpeed = 0.2f;
-            uITimeControl.DecreaseSpeed();
-            Assert.AreEqual(0f,uITimeControl.fastForwardSpeed);
+            _uITimeControl.FastForwardSpeed = 0.2f;
+            _uITimeControl.DecreaseSpeed();
+            Assert.AreEqual(0f,_uITimeControl.FastForwardSpeed);
             
-            uITimeControl.fastForwardSpeed = 0.4f;
-            uITimeControl.DecreaseSpeed();
-            Assert.AreEqual(0.2f,uITimeControl.fastForwardSpeed);
+            _uITimeControl.FastForwardSpeed = 0.4f;
+            _uITimeControl.DecreaseSpeed();
+            Assert.AreEqual(0.2f,_uITimeControl.FastForwardSpeed);
         }
     }
 }

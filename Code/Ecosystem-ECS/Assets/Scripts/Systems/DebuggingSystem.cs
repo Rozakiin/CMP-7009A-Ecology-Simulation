@@ -13,28 +13,28 @@ namespace Systems
     {
         protected override void OnUpdate()
         {
-            if (SimulationManager.Instance.isDebugEnabled)
+            if (SimulationManager.Instance.IsDebugEnabled)
             {
                 Entities.ForEach((in Translation translation, in TargetData targetData) =>
                 {
                     //Debugging: draw a line to target
-                    Debug.DrawLine(translation.Value, targetData.currentTarget);
+                    Debug.DrawLine(translation.Value, targetData.Target);
 
-                    if (HasComponent<Translation>(targetData.entityToDrink))
+                    if (HasComponent<Translation>(targetData.EntityToDrink))
                     {
-                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value, Color.blue);
+                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.EntityToDrink].Value, Color.blue);
                     }
-                    if (HasComponent<Translation>(targetData.entityToEat))
+                    if (HasComponent<Translation>(targetData.EntityToEat))
                     {
-                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value, Color.green);
+                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.EntityToEat].Value, Color.green);
                     }
-                    if (HasComponent<Translation>(targetData.entityToMate))
+                    if (HasComponent<Translation>(targetData.EntityToMate))
                     {
-                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value, Color.magenta);
+                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.EntityToMate].Value, Color.magenta);
                     }
-                    if (HasComponent<Translation>(targetData.predatorEntity))
+                    if (HasComponent<Translation>(targetData.PredatorEntity))
                     {
-                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value, Color.red);
+                        Debug.DrawLine(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.PredatorEntity].Value, Color.red);
                     }
                 }).Run();
 
@@ -42,11 +42,11 @@ namespace Systems
                 Entities.ForEach((DynamicBuffer<PathPositionData> pathPositionDataBuffer, in PathFollowData pathFollowData) =>
                 {
                     //Debugging: draw a line to each node of path
-                    if (pathFollowData.pathIndex >= 0)
+                    if (pathFollowData.PathIndex >= 0)
                     {
                         for (int i = pathPositionDataBuffer.Length - 1; i > 0; i--)
                         {
-                            Debug.DrawLine(pathPositionDataBuffer[i].position, pathPositionDataBuffer[i - 1].position, Color.cyan);
+                            Debug.DrawLine(pathPositionDataBuffer[i].Position, pathPositionDataBuffer[i - 1].Position, Color.cyan);
                         }
                     }
                 }).Run();

@@ -5,20 +5,16 @@ namespace MonoBehaviourTools.UI
 {
     public class UITurnCounter : MonoBehaviour
     {
-        [SerializeField] private UIGraph uiGraph;
-        [SerializeField] private Text turnDisplay;
-        private float counter;
+        [SerializeField] private Text _turnDisplay;
 
         private void Start()
         {
-            counter = 0f;
-            turnDisplay.text = counter.ToString();
+            _turnDisplay.text = $"Turn: {Mathf.RoundToInt(Time.timeSinceLevelLoad)}";
         }
 
         private void Update()
         {
-            counter = Time.timeSinceLevelLoad;
-            turnDisplay.text = string.Format("Turn {0}:", Mathf.RoundToInt(counter).ToString());
+            _turnDisplay.text = $"Turn: {Mathf.RoundToInt(Time.timeSinceLevelLoad)}";
         }
     }
 }

@@ -14,6 +14,6 @@ namespace Components
             Grass,
             Water
         }
-        public ColliderType colliderType;
+        public ColliderType Collider;
     }
 }

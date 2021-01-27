@@ -11,7 +11,7 @@ namespace Systems
 {
     public class TargetingSystem : SystemBase
     {
-        private NativeArray<GridNode> gridNodeArray;
+        private NativeArray<GridNode> _gridNodeArray;
 
         /*
          * The system determines the target to move to based primarily on the current state 
@@ -22,16 +22,15 @@ namespace Systems
             // only run if grid has a size aka it has been created
             if (GridSetup.Instance.GridMaxSize > 0)
             {
-                if (!gridNodeArray.IsCreated)
-                    gridNodeArray = CreateGridNodeArray();
-                NativeArray<GridNode> grid = new NativeArray<GridNode>(gridNodeArray, Allocator.TempJob);
+                if (!_gridNodeArray.IsCreated)
+                    _gridNodeArray = CreateGridNodeArray();
+                NativeArray<GridNode> grid = new NativeArray<GridNode>(_gridNodeArray, Allocator.TempJob);
 
                 //Get grid data needed to check walkable
-                int2 gridSize = GridSetup.Instance.gridSize;
-                float2 worldSize = SimulationManager.worldSize;
-                float tileSize = SimulationManager.tileSize;
+                int2 gridSize = GridSetup.Instance.GridSize;
+                float2 worldSize = SimulationManager.WorldSize;
+                float tileSize = SimulationManager.TileSize;
 
-                float deltaTime = Time.DeltaTime;
                 float time = UnityEngine.Time.time;
                 float timeSeed = time * System.DateTimeOffset.Now.Millisecond;
 
@@ -47,59 +46,59 @@ namespace Systems
                         in StateData stateData
                     ) =>
                     {
-                        if (pathFollowData.pathIndex >= 0)
-                            targetData.atTarget = false;
+                        if (pathFollowData.PathIndex >= 0)
+                            targetData.AtTarget = false;
                         else
-                            targetData.atTarget = true;
+                            targetData.AtTarget = true;
 
                         // if not following a path
-                        if (pathFollowData.pathIndex < 0)
+                        if (pathFollowData.PathIndex < 0)
                         {
                             float3 targetPosition = float.PositiveInfinity; // should be further than everything else in scene
 
                             float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;//create unique seed for random
 
                             //Fleeing over other states
-                            if (stateData.isFleeing)
+                            if (stateData.IsFleeing)
                             {
-                                targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.predatorEntity].Value;
-                                targetData.currentTarget = targetPosition;
-                                targetData.atTarget = false;
+                                targetPosition = 2 * translation.Value - GetComponentDataFromEntity<Translation>(true)[targetData.PredatorEntity].Value;
+                                targetData.Target = targetPosition;
+                                targetData.AtTarget = false;
                             }
                             else
                             {
                                 //Prioritize finding a mate if the entity isn't about to die out of hunger or thirst
 
-                                bool isAboutToDieOfHunger = basicNeedsData.hunger > basicNeedsData.hungerMax * 0.9; //90% of max hunger
-                                bool isAboutToDieOfThirst = basicNeedsData.thirst > basicNeedsData.thirstMax * 0.9; //90% of max thirst
+                                bool isAboutToDieOfHunger = basicNeedsData.Hunger > basicNeedsData.HungerMax * 0.9; //90% of max hunger
+                                bool isAboutToDieOfThirst = basicNeedsData.Thirst > basicNeedsData.ThirstMax * 0.9; //90% of max thirst
 
-                                if (stateData.isSexuallyActive && !stateData.isMating && HasComponent<Translation>(targetData.entityToMate) && !isAboutToDieOfThirst && !isAboutToDieOfHunger)
+                                if (stateData.IsSexuallyActive && !stateData.IsMating && HasComponent<Translation>(targetData.EntityToMate) && !isAboutToDieOfThirst && !isAboutToDieOfHunger)
                                 {
-                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate].Value;
+                                    targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.EntityToMate].Value;
                                 }
                                 //choose target based on which need is higher
-                                else if ((stateData.isThirsty && !stateData.isDrinking) || (stateData.isHungry && !stateData.isEating))
+                                else if ((stateData.IsThirsty && !stateData.IsDrinking) || (stateData.IsHungry && !stateData.IsEating))
                                 {
                                     //cache result as HasComponent costly call
-                                    bool hasValidDrinkTarget = HasComponent<Translation>(targetData.entityToDrink);
-                                    bool hasValidEatTarget = HasComponent<Translation>(targetData.entityToEat);
+                                    bool hasValidDrinkTarget = HasComponent<Translation>(targetData.EntityToDrink);
+                                    bool hasValidEatTarget = HasComponent<Translation>(targetData.EntityToEat);
 
                                     //if thirst greater or eq than hunger, and has valid drink target
-                                    if ((basicNeedsData.thirst >= basicNeedsData.hunger) && stateData.isThirsty && hasValidDrinkTarget)
+                                    if ((basicNeedsData.Thirst >= basicNeedsData.Hunger) && stateData.IsThirsty && hasValidDrinkTarget)
                                     {
-                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.EntityToDrink].Value;
                                         //determine what side of the tile the entity is, and set target to that
                                         targetPosition = GetNearestSideOfTargetTile(translation.Value, targetPosition, tileSize);
                                     }
                                     //has hunger greater than thirst, and has valid eat target
-                                    else if (stateData.isHungry && hasValidEatTarget)
+                                    else if (stateData.IsHungry && hasValidEatTarget)
                                     {
-                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToEat].Value;
+                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.EntityToEat].Value;
                                     }
                                     //has hunger greater than thirst, and has valid drink target
-                                    else if (stateData.isThirsty && hasValidDrinkTarget)
+                                    else if (stateData.IsThirsty && hasValidDrinkTarget)
                                     {
-                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.entityToDrink].Value;
+                                        targetPosition = GetComponentDataFromEntity<Translation>(true)[targetData.EntityToDrink].Value;
                                         //determine what side of the tile the entity is, and set target to that
                                         targetPosition = GetNearestSideOfTargetTile(translation.Value, targetPosition, tileSize);
                                     }
@@ -112,22 +111,22 @@ namespace Systems
                                     //check that the target is walkable
                                     if (IsWorldPointWalkableFromGridNativeArray(targetPosition, worldSize, gridSize, grid))
                                     {
-                                        targetData.currentTarget = targetPosition;
-                                        targetData.atTarget = false;
+                                        targetData.Target = targetPosition;
+                                        targetData.AtTarget = false;
                                     }
                                     else //find a random target (same as wandering)
                                     {
-                                        targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                        targetData.currentTarget = targetPosition;
-                                        targetData.atTarget = false;
+                                        targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.SightRadius, seed, worldSize, gridSize, grid);
+                                        targetData.Target = targetPosition;
+                                        targetData.AtTarget = false;
                                     }
                                 }
                                 // if in a state where you should wander, find a random target
-                                else if (stateData.isWandering)
+                                else if (stateData.IsWandering)
                                 {
-                                    targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.sightRadius, seed, worldSize, gridSize, grid);
-                                    targetData.currentTarget = targetPosition;
-                                    targetData.atTarget = false;
+                                    targetPosition = FindRandomWalkableTargetInVision(translation.Value, targetData.SightRadius, seed, worldSize, gridSize, grid);
+                                    targetData.Target = targetPosition;
+                                    targetData.AtTarget = false;
                                 }
                             }
                         }
@@ -139,8 +138,8 @@ namespace Systems
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (gridNodeArray.IsCreated)
-                gridNodeArray.Dispose();
+            if (_gridNodeArray.IsCreated)
+                _gridNodeArray.Dispose();
         }
 
         private static float3 GetNearestSideOfTargetTile(float3 currentPosition, float3 targetPosition, float tileSize)
@@ -172,7 +171,7 @@ namespace Systems
             int x = Mathf.FloorToInt(math.min(gridSize.x * percentX, gridSize.x - 1));
             int y = Mathf.FloorToInt(math.min(gridSize.y * percentY, gridSize.y - 1));
 
-            return grid[x + y * gridSize.x].isWalkable;
+            return grid[x + y * gridSize.x].IsWalkable;
         }
 
         private static float3 FindRandomWalkableTargetInVision(float3 currentPosition, float sightRadius, float randomSeed, float2 worldSize, int2 gridSize, NativeArray<GridNode> grid)
@@ -208,8 +207,8 @@ namespace Systems
 
         private static NativeArray<GridNode> CreateGridNodeArray()
         {
-            GridNode[,] grid = GridSetup.Instance.grid;
-            int2 gridSize = GridSetup.Instance.gridSize;
+            GridNode[,] grid = GridSetup.Instance.Grid;
+            int2 gridSize = GridSetup.Instance.GridSize;
             int gridMaxSize = GridSetup.Instance.GridMaxSize;
             NativeArray<GridNode> gridNodeArray = new NativeArray<GridNode>(gridMaxSize, Allocator.Persistent);
 
@@ -219,12 +218,12 @@ namespace Systems
                 {
                     GridNode gridNode = new GridNode
                     {
-                        x = x,
-                        y = y,
+                        X = x,
+                        Y = y,
 
-                        isWalkable = grid[x, y].isWalkable,
-                        movementPenalty = grid[x, y].movementPenalty,
-                        worldPosition = grid[x, y].worldPosition,
+                        IsWalkable = grid[x, y].IsWalkable,
+                        MovementPenalty = grid[x, y].MovementPenalty,
+                        WorldPosition = grid[x, y].WorldPosition,
                     };
 
                     gridNodeArray[x + y * gridSize.x] = gridNode;

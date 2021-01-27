@@ -1,5 +1,4 @@
 ﻿using Components;
-using EntityDefaults;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -7,13 +6,13 @@ namespace Systems
 {
     public class MatingSystem : SystemBase
     {
-        private EndSimulationEntityCommandBufferSystem ecbSystem;
+        private EndSimulationEntityCommandBufferSystem _ecbSystem;
 
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            _ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         /*
@@ -23,7 +22,7 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            var ecb = ecbSystem.CreateCommandBuffer().ToConcurrent();
+            var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
             float deltaTime = Time.DeltaTime;
 
@@ -36,52 +35,52 @@ namespace Systems
             ) =>
             {
                 //Disable urge increase for non adults
-                if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
                 {
-                    reproductiveData.reproductiveUrgeIncrease = reproductiveData.defaultRepoductiveIncrease;
+                    reproductiveData.ReproductiveUrgeIncrease = reproductiveData.DefaultReproductiveIncrease;
                     // Increase reproductive urge
-                    reproductiveData.reproductiveUrge += reproductiveData.reproductiveUrgeIncrease * deltaTime;
+                    reproductiveData.ReproductiveUrge += reproductiveData.ReproductiveUrgeIncrease * deltaTime;
                 }
                 else
                 {
-                    reproductiveData.reproductiveUrgeIncrease = 0f;
+                    reproductiveData.ReproductiveUrgeIncrease = 0f;
                 }
 
                 //If it's in a state of looking for a mate
-                if (stateData.isSexuallyActive)
+                if (stateData.IsSexuallyActive)
                 {
-                    if (bioStatsData.ageGroup == BioStatsData.AgeGroup.Adult)
+                    if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
                     {
                         //If it has found an entity to mate with
-                        if (HasComponent<Translation>(targetData.entityToMate))
+                        if (HasComponent<Translation>(targetData.EntityToMate))
                         {
                             //If the mate is close enough to mate with
-                            if (targetData.shortestToMateDistance <= targetData.mateRadius)
+                            if (targetData.ShortestDistanceToMate <= targetData.MateRadius)
                             {
-                                reproductiveData.mateStartTime = bioStatsData.age;
+                                reproductiveData.MateStartTime = bioStatsData.Age;
                             }
                         }
                     }
                     else
                     {
-                        reproductiveData.reproductiveUrge = 0f;
+                        reproductiveData.ReproductiveUrge = 0f;
                     }
                 }
 
                 //If entity is mating
-                if (stateData.isMating)
+                if (stateData.IsMating)
                 {
                     //If the mating has ended, the female becomes pregnant
-                    if (bioStatsData.age - reproductiveData.mateStartTime >= reproductiveData.matingDuration)
+                    if (bioStatsData.Age - reproductiveData.MateStartTime >= reproductiveData.MatingDuration)
                     {
-                        if (bioStatsData.gender == BioStatsData.Gender.Female)
+                        if (bioStatsData.Gender == BioStatsData.Genders.Female)
                         {
-                            reproductiveData.pregnancyStartTime = bioStatsData.age;
-                            reproductiveData.babiesBorn = 0;
-                            reproductiveData.currentLitterSize = reproductiveData.LitterSize;
+                            reproductiveData.PregnancyStartTime = bioStatsData.Age;
+                            reproductiveData.BabiesBorn = 0;
+                            reproductiveData.CurrentLitterSize = reproductiveData.LitterSize;
                         }
 
-                        reproductiveData.reproductiveUrge = 0;
+                        reproductiveData.ReproductiveUrge = 0;
                     }
                 }
             }).ScheduleParallel();
@@ -94,38 +93,38 @@ namespace Systems
                 in StateData stateData
             ) =>
             {
-                if (stateData.isSexuallyActive)
+                if (stateData.IsSexuallyActive)
                 {
                     //if entityToMate exists (everything should have translation)
-                    if (HasComponent<Translation>(targetData.entityToMate))
+                    if (HasComponent<Translation>(targetData.EntityToMate))
                     {
                         //get stateData of entityToMate
-                        StateData mateStateData = GetComponentDataFromEntity<StateData>(true)[targetData.entityToMate];
+                        StateData mateStateData = GetComponentDataFromEntity<StateData>(true)[targetData.EntityToMate];
 
                         //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
-                        if (bioStatsData.gender == BioStatsData.Gender.Male &&
-                            stateData.isMating &&
-                            !mateStateData.isMating)
+                        if (bioStatsData.Gender == BioStatsData.Genders.Male &&
+                            stateData.IsMating &&
+                            !mateStateData.IsMating)
                         {
                             //Set the mate's state to Mating
-                            mateStateData.flagState |= StateData.FlagStates.Mating;
-                            ecb.SetComponent(entityInQueryIndex, targetData.entityToMate, mateStateData);
+                            mateStateData.FlagStateCurrent |= StateData.FlagStates.Mating;
+                            ecb.SetComponent(entityInQueryIndex, targetData.EntityToMate, mateStateData);
 
                             //GetComponent calls are slow so cache for multiple uses
-                            float mateAge = GetComponentDataFromEntity<BioStatsData>(true)[targetData.entityToMate].age;
+                            float mateAge = GetComponentDataFromEntity<BioStatsData>(true)[targetData.EntityToMate].Age;
                             ReproductiveData mateReproductiveData =
-                                GetComponentDataFromEntity<ReproductiveData>(true)[targetData.entityToMate];
+                                GetComponentDataFromEntity<ReproductiveData>(true)[targetData.EntityToMate];
 
                             //Set the mates mateStartTime to her age
-                            mateReproductiveData.mateStartTime = mateAge;
-                            ecb.SetComponent(entityInQueryIndex, targetData.entityToMate, mateReproductiveData);
+                            mateReproductiveData.MateStartTime = mateAge;
+                            ecb.SetComponent(entityInQueryIndex, targetData.EntityToMate, mateReproductiveData);
                         }
                     }
                 }
             }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(this.Dependency);
         }
     }
 }

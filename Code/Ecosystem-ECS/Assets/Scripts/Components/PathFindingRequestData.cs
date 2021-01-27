@@ -7,7 +7,7 @@ namespace Components
     [Serializable]
     public struct PathFindingRequestData : IComponentData
     {
-        public float3 startPosition;
-        public float3 endPosition;
+        public float3 StartPosition;
+        public float3 EndPosition;
     }
 }

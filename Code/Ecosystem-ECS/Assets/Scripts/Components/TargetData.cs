@@ -8,25 +8,25 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct TargetData : IComponentData
     {
-        public float3 currentTarget;
-        public float3 oldTarget;
-        public bool atTarget;
+        public float3 Target;
+        public float3 TargetOld;
+        public bool AtTarget;
 
-        public float sightRadius;
-        public float touchRadius;
-        public float mateRadius;
+        public float SightRadius;
+        public float TouchRadius;
+        public float MateRadius;
 
 
         // from lookingEntityData
-        public Entity predatorEntity; // if this is != null, rabbit go to Fleeing States 
-        public Entity entityToEat;
-        public Entity entityToDrink;
-        public Entity entityToMate;
+        public Entity PredatorEntity;
+        public Entity EntityToEat;
+        public Entity EntityToDrink;
+        public Entity EntityToMate;
 
         // just for test, #### don't forget to delete in the end;
-        public float shortestToEdibleDistance; // set initial distance to 100, must more than sight radius
-        public float shortestToWaterDistance;
-        public float shortestToPredatorDistance;
-        public float shortestToMateDistance;
+        public float ShortestDistanceToEdible;
+        public float ShortestDistanceToWater;
+        public float ShortestDistanceToPredator;
+        public float ShortestDistanceToMate;
     }
 }

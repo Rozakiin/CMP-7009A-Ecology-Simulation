@@ -8,12 +8,12 @@ namespace Systems
     public class PathFollowSystem : SystemBase
     {
         /*
-         * makes entity follow the path stored in pathpositiondatabuffer,
+         * makes entity follow the path stored in PathPositionDataBuffer,
          * entity rotates towards the target node
          */
         protected override void OnUpdate()
         {
-            float deltaTime = Time.DeltaTime;
+            var deltaTime = Time.DeltaTime;
 
             Entities.ForEach((
                 DynamicBuffer<PathPositionData> pathPositionDataBuffer,
@@ -24,14 +24,14 @@ namespace Systems
                 in TargetData targetData) =>
             {
                 // if currently following a path
-                if (pathFollowData.pathIndex >= 0)
+                if (pathFollowData.PathIndex >= 0)
                 {
                     //get the world position of next path node to follow
-                    float3 targetPosition = pathPositionDataBuffer[pathFollowData.pathIndex].position;
+                    float3 targetPosition = pathPositionDataBuffer[pathFollowData.PathIndex].Position;
 
                     //calc the direction to move
                     float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
-                    float rotationStep = movementData.rotationSpeed * deltaTime;// to be used to smoothly change rotation
+                    float rotationStep = movementData.RotationSpeed * deltaTime;// to be used to smoothly change rotation
                     float movementStep = movementData.MoveSpeed * deltaTime;// to be used to smoothly change movement
 
                     // if you have moved further away from target (ie overshot target)
@@ -51,10 +51,10 @@ namespace Systems
                     }
 
                     //If at the targetPosition
-                    if (math.distance(translation.Value, targetPosition) <= targetData.touchRadius)
+                    if (math.distance(translation.Value, targetPosition) <= targetData.TouchRadius)
                     {
                         // Next waypoint
-                        pathFollowData.pathIndex--;
+                        pathFollowData.PathIndex--;
                     }
                 }
             }).ScheduleParallel();

@@ -28,7 +28,7 @@ namespace MonoBehaviourTools.Map
                 // The using statement also closes the StreamReader.
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    char[] charSeparators = { ' ', '\n' }; // delimeters of space and newline
+                    char[] charSeparators = { ' ', '\n' }; // delimiters of space and newline
                     string[] words = reader.ReadToEnd().Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
 
                     int mapListIndex = 0;

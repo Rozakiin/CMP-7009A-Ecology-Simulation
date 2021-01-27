@@ -7,81 +7,81 @@ namespace MonoBehaviourTools.Map
 {
     public class MapFileGenerator : MonoBehaviour
     {
-        public int width;
-        public int height;
+        public int Width;
+        public int Height;
 
-        public string seed;
-        public bool useRandomSeed;
-        public Button mapGeneratorButton;
-        public Button saveFileButton;
-        public Slider widthSlider;
-        public Slider heightSlider;
-        public Slider waterFillSlider;
-        public Text widthSliderText;
-        public Text heightSliderText;
-        public Text waterFillSliderText;
-        public InputField seedInput;
+        public string Seed;
+        public bool UseRandomSeed;
+        public Button MapGeneratorButton;
+        public Button SaveFileButton;
+        public Slider WidthSlider;
+        public Slider HeightSlider;
+        public Slider WaterFillSlider;
+        public Text WidthSliderText;
+        public Text HeightSliderText;
+        public Text WaterFillSliderText;
+        public InputField SeedInput;
 
         [Range(0, 100)]
-        public int waterFillPercent;
+        public int WaterFillPercent;
 
-        int[,] map;
+        int[,] _map;
 
         //Tile Sprite rendering
-        public Texture2D grassTex;
-        public Texture2D waterTex;
-        public Texture2D sandTex;
-        public Texture2D rockTex;
+        public Texture2D GrassTex;
+        public Texture2D WaterTex;
+        public Texture2D SandTex;
+        public Texture2D RockTex;
 
-        public GameObject tilePrefab;
-        private GameObject[,] tiles;
+        public GameObject TilePrefab;
+        private GameObject[,] _tiles;
 
 
         private void Start()
         {
-            mapGeneratorButton.onClick.AddListener(TaskOnClick);
-            saveFileButton.onClick.AddListener(SaveFile);
+            MapGeneratorButton.onClick.AddListener(TaskOnClick);
+            SaveFileButton.onClick.AddListener(SaveFile);
 
-            widthSlider.onValueChanged.AddListener(SetWidth);
-            heightSlider.onValueChanged.AddListener(SetHeight);
-            waterFillSlider.onValueChanged.AddListener(SetWaterFillPercent);
+            WidthSlider.onValueChanged.AddListener(SetWidth);
+            HeightSlider.onValueChanged.AddListener(SetHeight);
+            WaterFillSlider.onValueChanged.AddListener(SetWaterFillPercent);
 
-            seedInput.onEndEdit.AddListener(SetSeed);
+            SeedInput.onEndEdit.AddListener(SetSeed);
         }
 
         private void SetSeed(string value)
         {
-            seed = value;
+            Seed = value;
         }
 
         private void SetWaterFillPercent(float value)
         {
-            waterFillPercent = (int)value;
-            waterFillSliderText.text = value.ToString();
+            WaterFillPercent = (int)value;
+            WaterFillSliderText.text = value.ToString();
         }
 
         private void SetHeight(float value)
         {
-            height = (int)value;
-            heightSliderText.text = value.ToString();
+            Height = (int)value;
+            HeightSliderText.text = value.ToString();
         }
 
         private void SetWidth(float value)
         {
-            width = (int)value;
-            widthSliderText.text = value.ToString();
+            Width = (int)value;
+            WidthSliderText.text = value.ToString();
         }
 
         void TaskOnClick()
         {
-            if (useRandomSeed == true)
+            if (UseRandomSeed == true)
             {
-                seed = DateTime.Now.ToString();
-                GenerateMap(seed);
+                Seed = DateTime.Now.ToString();
+                GenerateMap(Seed);
             }
             else
             {
-                GenerateMap(seed);
+                GenerateMap(Seed);
             }
         }
 
@@ -109,11 +109,11 @@ namespace MonoBehaviourTools.Map
                 using (StreamWriter sw = File.CreateText(path))
                 {
                     string output = "";
-                    for (int j = map.GetUpperBound(1); j > 0; j--)
+                    for (int j = _map.GetUpperBound(1); j > 0; j--)
                     {
-                        for (int i = 0; i < map.GetUpperBound(0); i++)
+                        for (int i = 0; i < _map.GetUpperBound(0); i++)
                         {
-                            output += map[i, j].ToString();
+                            output += _map[i, j].ToString();
                         }
                         sw.WriteLine(output);
                         output = "";
@@ -130,7 +130,7 @@ namespace MonoBehaviourTools.Map
 
         private void GenerateMap(string seed)
         {
-            map = new int[width, height];
+            _map = new int[Width, Height];
 
             RandomFillMap(seed);
 
@@ -145,16 +145,16 @@ namespace MonoBehaviourTools.Map
 
         private void CreateMoreTile()
         {
-            for (int i = 1; i < width; i++)
+            for (int i = 1; i < Width; i++)
             {
-                for (int j = 1; j < height - 1; j++)
+                for (int j = 1; j < Height - 1; j++)
                 {
-                    if (map[i, j] == 0)
+                    if (_map[i, j] == 0)
                     {
-                        map[i - 1, j] = (map[i - 1, j] == 0) ? 0 : 2;
-                        map[i + 1, j] = (map[i + 1, j] == 0) ? 0 : 2;
-                        map[i, j + 1] = (map[i, j + 1] == 0) ? 0 : 2;
-                        map[i, j - 1] = (map[i, j - 1] == 0) ? 0 : 2;
+                        _map[i - 1, j] = (_map[i - 1, j] == 0) ? 0 : 2;
+                        _map[i + 1, j] = (_map[i + 1, j] == 0) ? 0 : 2;
+                        _map[i, j + 1] = (_map[i, j + 1] == 0) ? 0 : 2;
+                        _map[i, j - 1] = (_map[i, j - 1] == 0) ? 0 : 2;
                     }
                 }
             }
@@ -165,17 +165,17 @@ namespace MonoBehaviourTools.Map
         {
             System.Random pseudoRandom = new System.Random(seed.GetHashCode());
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
+                    if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
                     {
-                        map[x, y] = 1;
+                        _map[x, y] = 1;
                     }
                     else
                     {
-                        map[x, y] = (pseudoRandom.Next(0, 100) < waterFillPercent) ? 1 : 0;
+                        _map[x, y] = (pseudoRandom.Next(0, 100) < WaterFillPercent) ? 1 : 0;
                     }
                 }
             }
@@ -183,16 +183,16 @@ namespace MonoBehaviourTools.Map
 
         private void SmoothMap()
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
                     int neighbourWallTiles = GetSurroundingWallCount(x, y);
 
                     if (neighbourWallTiles > 4)
-                        map[x, y] = 1;
+                        _map[x, y] = 1;
                     else if (neighbourWallTiles < 4)
-                        map[x, y] = 0;
+                        _map[x, y] = 0;
                 }
             }
         }
@@ -204,11 +204,11 @@ namespace MonoBehaviourTools.Map
             {
                 for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
                 {
-                    if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < height)
+                    if (neighbourX >= 0 && neighbourX < Width && neighbourY >= 0 && neighbourY < Height)
                     {
                         if (neighbourX != gridX || neighbourY != gridY)
                         {
-                            wallCount += map[neighbourX, neighbourY];
+                            wallCount += _map[neighbourX, neighbourY];
                         }
                     }
                     else
@@ -224,48 +224,48 @@ namespace MonoBehaviourTools.Map
 
         private void DrawTiles()
         {
-            if (tiles == null)
+            if (_tiles == null)
             {
-                tiles = new GameObject[width, height];
+                _tiles = new GameObject[Width, Height];
             }
 
-            if (map != null && tiles != null)
+            if (_map != null && _tiles != null)
             {
                 // Destroy old gameobjects
-                foreach (GameObject tile in tiles)
+                foreach (GameObject tile in _tiles)
                 {
                     Destroy(tile);
                 }
-                tiles = new GameObject[width, height];
+                _tiles = new GameObject[Width, Height];
 
-                float tileWidth = tilePrefab.GetComponent<RectTransform>().rect.width;
-                float tileHeight = tilePrefab.GetComponent<RectTransform>().rect.height;
+                float tileWidth = TilePrefab.GetComponent<RectTransform>().rect.width;
+                float tileHeight = TilePrefab.GetComponent<RectTransform>().rect.height;
           
-                for (int x = 0; x < map.GetUpperBound(0); x++)
+                for (int x = 0; x < _map.GetUpperBound(0); x++)
                 {
-                    for (int y = 0; y < map.GetUpperBound(1); y++)
+                    for (int y = 0; y < _map.GetUpperBound(1); y++)
                     {
                         var pos = new Vector3(x * tileWidth, y * tileHeight, 0);
-                        tiles[x, y] = Instantiate(tilePrefab); //Instantiate tile
-                        tiles[x, y].transform.SetParent(this.transform); // set parent as this
-                        tiles[x, y].transform.position = pos; // set position
+                        _tiles[x, y] = Instantiate(TilePrefab); //Instantiate tile
+                        _tiles[x, y].transform.SetParent(this.transform); // set parent as this
+                        _tiles[x, y].transform.position = pos; // set position
                         // change colour based on value
-                        switch (map[x, y])
+                        switch (_map[x, y])
                         {
                             case 0:
-                                tiles[x, y].GetComponent<Image>().color = Color.blue;
+                                _tiles[x, y].GetComponent<Image>().color = Color.blue;
                                 break;
                             case 1:
-                                tiles[x, y].GetComponent<Image>().color = Color.green;
+                                _tiles[x, y].GetComponent<Image>().color = Color.green;
                                 break;
                             case 2:
-                                tiles[x, y].GetComponent<Image>().color = Color.yellow;
+                                _tiles[x, y].GetComponent<Image>().color = Color.yellow;
                                 break;
                             case 3:
-                                tiles[x, y].GetComponent<Image>().color = Color.grey;
+                                _tiles[x, y].GetComponent<Image>().color = Color.grey;
                                 break;
                             default:
-                                tiles[x, y].GetComponent<Image>().color = Color.black;
+                                _tiles[x, y].GetComponent<Image>().color = Color.black;
                                 break;
                         }
                     }

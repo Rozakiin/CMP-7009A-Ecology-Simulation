@@ -8,29 +8,29 @@ namespace Components
     public struct BasicNeedsData : IComponentData
     {
         //Thirst
-        public float thirst;
-        public float thirstyThreshold;
-        public float thirstMax;
-        public float thirstIncrease;
-        public float drinkingSpeed;
+        public float Thirst;
+        public float ThirstyThreshold;
+        public float ThirstMax;
+        public float ThirstIncrease;
+        public float DrinkingSpeed;
 
         //Hunger
-        public float hunger;
-        public float hungryThreshold;
-        public float hungerMax;
-        public float hungerIncrease;
-        public float pregnancyHungerIncrease;
-        public float youngHungerIncrease;
-        public float adultHungerIncrease;
-        public float oldHungerIncrease;
-        public float eatingSpeed;
+        public float Hunger;
+        public float HungryThreshold;
+        public float HungerMax;
+        public float HungerIncrease;
+        public float PregnancyHungerIncrease;
+        public float YoungHungerIncrease;
+        public float AdultHungerIncrease;
+        public float OldHungerIncrease;
+        public float EatingSpeed;
 
-        public enum Diet
+        public enum DietType
         {
-            Carnivore = EdibleData.FoodType.Meat,
-            Herbivore = EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
-            Omnivore = EdibleData.FoodType.Meat | EdibleData.FoodType.Plant | EdibleData.FoodType.Fungi,
+            Carnivore = EdibleData.FoodTypes.Meat,
+            Herbivore = EdibleData.FoodTypes.Plant | EdibleData.FoodTypes.Fungi,
+            Omnivore = EdibleData.FoodTypes.Meat | EdibleData.FoodTypes.Plant | EdibleData.FoodTypes.Fungi,
         }
-        public Diet diet;
+        public DietType Diet;
     }
 }

@@ -13,13 +13,13 @@ namespace Systems
     [UpdateBefore(typeof(EndFramePhysicsSystem)), UpdateAfter(typeof(BuildPhysicsWorld))]
     public class LookingEntitySystem : SystemBase
     {
-        BuildPhysicsWorld buildPhysicsWorld;
+        BuildPhysicsWorld _buildPhysicsWorld;
 
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+            _buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
         }
 
         /*
@@ -33,7 +33,7 @@ namespace Systems
                 return;
             }
 
-            CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
+            CollisionWorld collisionWorld = _buildPhysicsWorld.PhysicsWorld.CollisionWorld;
 
             Entities.ForEach((
                 ref TargetData targetData,
@@ -56,8 +56,8 @@ namespace Systems
                 // hit certain area 
                 Aabb aabb = new Aabb
                 {
-                    Min = translation.Value + new float3(-targetData.sightRadius, 0, -targetData.sightRadius),
-                    Max = translation.Value + new float3(targetData.sightRadius, 0, targetData.sightRadius)
+                    Min = translation.Value + new float3(-targetData.SightRadius, 0, -targetData.SightRadius),
+                    Max = translation.Value + new float3(targetData.SightRadius, 0, targetData.SightRadius)
                 };
 
                 OverlapAabbInput overlapAabbInput = new OverlapAabbInput
@@ -69,10 +69,10 @@ namespace Systems
                 // input is filter and range, out all entity who has collider, Aabb is very famous in website a way to detect 3D collision world
                 if (collisionWorld.OverlapAabb(overlapAabbInput, ref hitsIndices))
                 {
-                    Entity EntityToEat = Entity.Null;
-                    Entity EntityToDrink = Entity.Null;
-                    Entity EntityToPredator = Entity.Null;
-                    Entity EntityToMate = Entity.Null;
+                    Entity entityToEat = Entity.Null;
+                    Entity entityToDrink = Entity.Null;
+                    Entity entityToPredator = Entity.Null;
+                    Entity entityToMate = Entity.Null;
                     float shortestToEdibleDistance = float.PositiveInfinity;
                     float shortestToWaterDistance = float.PositiveInfinity;
                     float shortestToPredatorDistance = float.PositiveInfinity;
@@ -86,22 +86,22 @@ namespace Systems
                         float distanceToEntity = math.distance(translation.Value,
                             GetComponentDataFromEntity<Translation>(true)[childEntity].Value);
                         ColliderTypeData.ColliderType childEntityNumber =
-                            GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].colliderType;
+                            GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].Collider;
 
                         // find food
                         if (HasComponent<EdibleData>(childEntity))
                         {
                             EdibleData childEdibleData = GetComponentDataFromEntity<EdibleData>(true)[childEntity];
-                            // if foodtype in diet and not same type
-                            if (((childEdibleData.foodType & (EdibleData.FoodType)basicNeedsData.diet) ==
-                                 childEdibleData.foodType) &&
-                                (childEdibleData.canBeEaten) &&
-                                (childEntityNumber != colliderTypeData.colliderType))
+                            // if foodtype in DietType and not same type
+                            if (((childEdibleData.FoodType & (EdibleData.FoodTypes)basicNeedsData.Diet) ==
+                                 childEdibleData.FoodType) &&
+                                (childEdibleData.CanBeEaten) &&
+                                (childEntityNumber != colliderTypeData.Collider))
                             {
                                 if (distanceToEntity < shortestToEdibleDistance)
                                 {
                                     shortestToEdibleDistance = distanceToEntity;
-                                    EntityToEat = childEntity;
+                                    entityToEat = childEntity;
                                 }
                             }
                         }
@@ -111,44 +111,44 @@ namespace Systems
                         {
                             DrinkableData childDrinkableData =
                                 GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
-                            if (childDrinkableData.canBeDrunk)
+                            if (childDrinkableData.CanBeDrunk)
                             {
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
                                     shortestToWaterDistance = distanceToEntity;
-                                    EntityToDrink = childEntity;
+                                    entityToDrink = childEntity;
                                 }
                             }
                         }
 
                         //find mate
-                        if (childEntityNumber == colliderTypeData.colliderType)
+                        if (childEntityNumber == colliderTypeData.Collider)
                         {
                             StateData childStateData = GetComponentDataFromEntity<StateData>(true)[childEntity];
                             BioStatsData childBioStatsData = GetComponentDataFromEntity<BioStatsData>(true)[childEntity];
-                            if ((childBioStatsData.gender == BioStatsData.Gender.Female) &&
-                                (childBioStatsData.ageGroup == BioStatsData.AgeGroup.Adult) &&
-                                (!childStateData.isPregnant) &&
-                                (!childStateData.isMating) &&
-                                (!childStateData.isGivingBirth))
+                            if ((childBioStatsData.Gender == BioStatsData.Genders.Female) &&
+                                (childBioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult) &&
+                                (!childStateData.IsPregnant) &&
+                                (!childStateData.IsMating) &&
+                                (!childStateData.IsGivingBirth))
                             {
                                 if (distanceToEntity < shortestToMateDistance)
                                 {
                                     //if not currently mating change to that closer entity, if mating keep current mate
-                                    if (!stateData.isMating)
+                                    if (!stateData.IsMating)
                                     {
                                         shortestToMateDistance = distanceToEntity;
-                                        EntityToMate = childEntity;
+                                        entityToMate = childEntity;
                                     }
                                     else
                                     {
                                         //recalc distance
-                                        if (HasComponent<Translation>(targetData.entityToMate))
+                                        if (HasComponent<Translation>(targetData.EntityToMate))
                                         {
                                             shortestToMateDistance = math.distance(translation.Value,
-                                                GetComponentDataFromEntity<Translation>(true)[targetData.entityToMate]
+                                                GetComponentDataFromEntity<Translation>(true)[targetData.EntityToMate]
                                                     .Value);
-                                            EntityToMate = targetData.entityToMate;
+                                            entityToMate = targetData.EntityToMate;
                                         }
                                     }
                                 }
@@ -158,16 +158,16 @@ namespace Systems
                         //find predator
                         if (HasComponent<BasicNeedsData>(childEntity))
                         {
-                            BasicNeedsData.Diet childDiet =
-                                GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].diet;
-                            // if child entity has diet that contains this entities foodtype ie predator
-                            if ((((EdibleData.FoodType)childDiet & edibleData.foodType) == edibleData.foodType) &&
-                                (childEntityNumber != colliderTypeData.colliderType))
+                            BasicNeedsData.DietType childDietType =
+                                GetComponentDataFromEntity<BasicNeedsData>(true)[childEntity].Diet;
+                            // if child entity has DietType that contains this entities foodtype ie predator
+                            if ((((EdibleData.FoodTypes)childDietType & edibleData.FoodType) == edibleData.FoodType) &&
+                                (childEntityNumber != colliderTypeData.Collider))
                             {
                                 if (distanceToEntity < shortestToPredatorDistance)
                                 {
                                     shortestToPredatorDistance = distanceToEntity;
-                                    EntityToPredator = childEntity;
+                                    entityToPredator = childEntity;
                                 }
                             }
                         }
@@ -176,16 +176,16 @@ namespace Systems
                     // if some type of entity didn't find in this frame so just set up to entity.null
                     // because statesystem will based on, for example predatorEntity is null or not to get into some states
                     // so if no predatorEntity rabbit will go back to wanfering states something like that
-                    targetData.entityToEat = EntityToEat;
-                    targetData.entityToDrink = EntityToDrink;
-                    targetData.predatorEntity = EntityToPredator;
-                    targetData.entityToMate = EntityToMate;
+                    targetData.EntityToEat = entityToEat;
+                    targetData.EntityToDrink = entityToDrink;
+                    targetData.PredatorEntity = entityToPredator;
+                    targetData.EntityToMate = entityToMate;
 
                     //just test, delete to user version
-                    targetData.shortestToEdibleDistance = shortestToEdibleDistance;
-                    targetData.shortestToPredatorDistance = shortestToPredatorDistance;
-                    targetData.shortestToWaterDistance = shortestToWaterDistance;
-                    targetData.shortestToMateDistance = shortestToMateDistance;
+                    targetData.ShortestDistanceToEdible = shortestToEdibleDistance;
+                    targetData.ShortestDistanceToPredator = shortestToPredatorDistance;
+                    targetData.ShortestDistanceToWater = shortestToWaterDistance;
+                    targetData.ShortestDistanceToMate = shortestToMateDistance;
                 }
 
                 hitsIndices.Dispose();

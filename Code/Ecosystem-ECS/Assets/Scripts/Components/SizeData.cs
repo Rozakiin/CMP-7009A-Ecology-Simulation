@@ -8,14 +8,14 @@ namespace Components
     public struct SizeData : IComponentData
     {
         public float size;
-        public float sizeMultiplier;
-        public float ageSizeMultiplier;
-        public float youngSizeMultiplier;
-        public float adultSizeMultiplier;
-        public float oldSizeMultiplier;
+        public float SizeMultiplier;
+        public float AgeSizeMultiplier;
+        public float YoungSizeMultiplier;
+        public float AdultSizeMultiplier;
+        public float OldSizeMultiplier;
         public float Size
         {
-            get { return size * sizeMultiplier * ageSizeMultiplier; }
+            get { return size * SizeMultiplier * AgeSizeMultiplier; }
         }
     }
 }

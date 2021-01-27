@@ -11,17 +11,17 @@ namespace MonoBehaviourTools.UI
     {
         #region UI Canvas'
 
-        [SerializeField] private GameObject uiSliderCanvas;
-        [SerializeField] private GameObject uiTimeCanvas;
-        [SerializeField] private GameObject uiTurnCanvas;
-        [SerializeField] private GameObject uiGraphCanvas;
+        [SerializeField] private GameObject _uiSliderCanvas;
+        [SerializeField] private GameObject _uiTimeCanvas;
+        [SerializeField] private GameObject _uiTurnCanvas;
+        [SerializeField] private GameObject _uiGraphCanvas;
 
         #endregion
 
         #region Initial Properties Linking
         [Header("Initial Properties")]
-        [SerializeField] private Dropdown dropdownPropertyDropdown;
-        [SerializeField] private InputField dropdownInputField;
+        [SerializeField] private Dropdown _dropdownPropertyDropdown;
+        [SerializeField] private InputField _dropdownInputField;
         #endregion
 
         #region Initialisation
@@ -108,16 +108,16 @@ namespace MonoBehaviourTools.UI
             "GrassSize"
             };
 
-            dropdownPropertyDropdown.ClearOptions();
-            dropdownPropertyDropdown.AddOptions(propertyOptions);
+            _dropdownPropertyDropdown.ClearOptions();
+            _dropdownPropertyDropdown.AddOptions(propertyOptions);
         }
 
         void Start()
         {
-            uiSliderCanvas.SetActive(true);
-            uiTimeCanvas.SetActive(true);
-            uiTurnCanvas.SetActive(true);
-            uiGraphCanvas.SetActive(true);
+            _uiSliderCanvas.SetActive(true);
+            _uiTimeCanvas.SetActive(true);
+            _uiTurnCanvas.SetActive(true);
+            _uiGraphCanvas.SetActive(true);
         }
 
         #endregion
@@ -125,50 +125,50 @@ namespace MonoBehaviourTools.UI
         /*change the input field text to the current value of the selected property from the dropdown*/
         public void OnSelectDropdown()
         {
-            string selectedOption = dropdownPropertyDropdown.options[dropdownPropertyDropdown.value].text;
+            string selectedOption = _dropdownPropertyDropdown.options[_dropdownPropertyDropdown.value].text;
             switch (selectedOption)
             {
                 case "None":
                     //used as the default when started so nothing runs
                     break;
                 case "RabbitAgeMax":
-                    dropdownInputField.text = RabbitDefaults.ageMax.ToString();
+                    _dropdownInputField.text = RabbitDefaults.AgeMax.ToString("N");
                     break;
                 case "RabbitNutritionalValue":
-                    dropdownInputField.text = RabbitDefaults.nutritionalValue.ToString();
+                    _dropdownInputField.text = RabbitDefaults.NutritionalValue.ToString();
                     break;
                 case "RabbitCanBeEaten":
-                    dropdownInputField.text = Convert.ToInt32(RabbitDefaults.canBeEaten).ToString();
+                    _dropdownInputField.text = Convert.ToInt32(RabbitDefaults.CanBeEaten).ToString();
                     break;
                 case "RabbitHungerMax":
-                    dropdownInputField.text = RabbitDefaults.hungerMax.ToString();
+                    _dropdownInputField.text = RabbitDefaults.HungerMax.ToString();
                     break;
                 case "RabbitHungerThreshold":
-                    dropdownInputField.text = RabbitDefaults.hungryThreshold.ToString();
+                    _dropdownInputField.text = RabbitDefaults.HungryThreshold.ToString();
                     break;
                 case "RabbitHungerIncreaseBase":
-                    dropdownInputField.text = RabbitDefaults.hungerIncrease.ToString();
+                    _dropdownInputField.text = RabbitDefaults.HungerIncrease.ToString();
                     break;
                 case "RabbitHungerIncreaseYoung":
-                    dropdownInputField.text = RabbitDefaults.youngHungerIncrease.ToString();
+                    _dropdownInputField.text = RabbitDefaults.YoungHungerIncrease.ToString();
                     break;
                 case "RabbitHungerIncreaseAdult":
-                    dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ScaleFemale.ToString();
                     break;
                 case "RabbitHungerIncreaseOld":
-                    dropdownInputField.text = RabbitDefaults.oldHungerIncrease.ToString();
+                    _dropdownInputField.text = RabbitDefaults.OldHungerIncrease.ToString();
                     break;
                 case "RabbitEatingSpeed":
-                    dropdownInputField.text = RabbitDefaults.eatingSpeed.ToString();
+                    _dropdownInputField.text = RabbitDefaults.EatingSpeed.ToString();
                     break;
                 case "RabbitThirstMax":
-                    dropdownInputField.text = RabbitDefaults.thirstMax.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ThirstMax.ToString();
                     break;
                 case "RabbitThirstThreshold":
-                    dropdownInputField.text = RabbitDefaults.thirstyThreshold.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ThirstyThreshold.ToString();
                     break;
                 case "RabbitThirstIncreaseBase":
-                    dropdownInputField.text = RabbitDefaults.thirstIncrease.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ThirstIncrease.ToString();
                     break;
                 case "RabbitThirstIncreaseYoung":
                     //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
@@ -180,97 +180,97 @@ namespace MonoBehaviourTools.UI
                     //dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
                     break;
                 case "RabbitDrinkingSpeed":
-                    dropdownInputField.text = RabbitDefaults.drinkingSpeed.ToString();
+                    _dropdownInputField.text = RabbitDefaults.DrinkingSpeed.ToString();
                     break;
                 case "RabbitMatingDuration":
-                    dropdownInputField.text = RabbitDefaults.matingDuration.ToString();
+                    _dropdownInputField.text = RabbitDefaults.MatingDuration.ToString();
                     break;
                 case "RabbitMatingThreshold":
-                    dropdownInputField.text = RabbitDefaults.matingThreshold.ToString();
+                    _dropdownInputField.text = RabbitDefaults.MatingThreshold.ToString();
                     break;
                 case "RabbitReproductiveUrgeIncrease":
-                    dropdownInputField.text = RabbitDefaults.reproductiveUrgeIncreaseMale.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ReproductiveUrgeIncreaseMale.ToString();
                     break;
                 case "RabbitPregnancyLength":
-                    dropdownInputField.text = RabbitDefaults.pregnancyLength.ToString();
+                    _dropdownInputField.text = RabbitDefaults.PregnancyLength.ToString();
                     break;
                 case "RabbitBirthDuration":
-                    dropdownInputField.text = RabbitDefaults.birthDuration.ToString();
+                    _dropdownInputField.text = RabbitDefaults.BirthDuration.ToString();
                     break;
                 case "RabbitLitterSizeMin":
-                    dropdownInputField.text = RabbitDefaults.litterSizeMin.ToString();
+                    _dropdownInputField.text = RabbitDefaults.LitterSizeMin.ToString();
                     break;
                 case "RabbitLitterSizeMax":
-                    dropdownInputField.text = RabbitDefaults.litterSizeMax.ToString();
+                    _dropdownInputField.text = RabbitDefaults.LitterSizeMax.ToString();
                     break;
                 case "RabbitLitterSizeAve":
-                    dropdownInputField.text = RabbitDefaults.litterSizeAve.ToString();
+                    _dropdownInputField.text = RabbitDefaults.LitterSizeAve.ToString();
                     break;
                 case "RabbitMovementSpeed":
-                    dropdownInputField.text = RabbitDefaults.moveSpeed.ToString();
+                    _dropdownInputField.text = RabbitDefaults.MoveSpeed.ToString();
                     break;
                 case "RabbitMovementMultiplierBase":
-                    dropdownInputField.text = RabbitDefaults.originalMoveMultiplier.ToString();
+                    _dropdownInputField.text = RabbitDefaults.OriginalMoveMultiplier.ToString();
                     break;
                 case "RabbitMovementMultiplierYoung":
-                    dropdownInputField.text = RabbitDefaults.youngMoveMultiplier.ToString();
+                    _dropdownInputField.text = RabbitDefaults.YoungMoveMultiplier.ToString();
                     break;
                 case "RabbitMovementMultiplierAdult":
-                    dropdownInputField.text = RabbitDefaults.adultMoveMultiplier.ToString();
+                    _dropdownInputField.text = RabbitDefaults.AdultMoveMultiplier.ToString();
                     break;
                 case "RabbitMovementMultiplierOld":
-                    dropdownInputField.text = RabbitDefaults.oldMoveMultiplier.ToString();
+                    _dropdownInputField.text = RabbitDefaults.OldMoveMultiplier.ToString();
                     break;
                 case "RabbitMovementMultiplierPregnant":
-                    dropdownInputField.text = RabbitDefaults.pregnancyMoveMultiplier.ToString();
+                    _dropdownInputField.text = RabbitDefaults.PregnancyMoveMultiplier.ToString();
                     break;
                 case "RabbitSightRadius":
-                    dropdownInputField.text = RabbitDefaults.sightRadius.ToString();
+                    _dropdownInputField.text = RabbitDefaults.SightRadius.ToString();
                     break;
                 case "RabbitSizeMale":
-                    dropdownInputField.text = RabbitDefaults.scaleMale.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ScaleMale.ToString();
                     break;
                 case "RabbitSizeFemale":
-                    dropdownInputField.text = RabbitDefaults.scaleFemale.ToString();
+                    _dropdownInputField.text = RabbitDefaults.ScaleFemale.ToString();
                     break;
                 case "FoxAgeMax":
-                    dropdownInputField.text = FoxDefaults.ageMax.ToString();
+                    _dropdownInputField.text = FoxDefaults.AgeMax.ToString();
                     break;
                 case "FoxNutritionalValue":
-                    dropdownInputField.text = FoxDefaults.nutritionalValue.ToString();
+                    _dropdownInputField.text = FoxDefaults.NutritionalValue.ToString();
                     break;
                 case "FoxCanBeEaten":
-                    dropdownInputField.text = Convert.ToInt32(FoxDefaults.canBeEaten).ToString();
+                    _dropdownInputField.text = Convert.ToInt32(FoxDefaults.CanBeEaten).ToString();
                     break;
                 case "FoxHungerMax":
-                    dropdownInputField.text = FoxDefaults.hungerMax.ToString();
+                    _dropdownInputField.text = FoxDefaults.HungerMax.ToString();
                     break;
                 case "FoxHungerThreshold":
-                    dropdownInputField.text = FoxDefaults.hungryThreshold.ToString();
+                    _dropdownInputField.text = FoxDefaults.HungryThreshold.ToString();
                     break;
                 case "FoxHungerIncreaseBase":
-                    dropdownInputField.text = FoxDefaults.hungerIncrease.ToString();
+                    _dropdownInputField.text = FoxDefaults.HungerIncrease.ToString();
                     break;
                 case "FoxHungerIncreaseYoung":
-                    dropdownInputField.text = FoxDefaults.youngHungerIncrease.ToString();
+                    _dropdownInputField.text = FoxDefaults.YoungHungerIncrease.ToString();
                     break;
                 case "FoxHungerIncreaseAdult":
-                    dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
+                    _dropdownInputField.text = FoxDefaults.ScaleFemale.ToString();
                     break;
                 case "FoxHungerIncreaseOld":
-                    dropdownInputField.text = FoxDefaults.oldHungerIncrease.ToString();
+                    _dropdownInputField.text = FoxDefaults.OldHungerIncrease.ToString();
                     break;
                 case "FoxEatingSpeed":
-                    dropdownInputField.text = FoxDefaults.eatingSpeed.ToString();
+                    _dropdownInputField.text = FoxDefaults.EatingSpeed.ToString();
                     break;
                 case "FoxThirstMax":
-                    dropdownInputField.text = FoxDefaults.thirstMax.ToString();
+                    _dropdownInputField.text = FoxDefaults.ThirstMax.ToString();
                     break;
                 case "FoxThirstThreshold":
-                    dropdownInputField.text = FoxDefaults.thirstyThreshold.ToString();
+                    _dropdownInputField.text = FoxDefaults.ThirstyThreshold.ToString();
                     break;
                 case "FoxThirstIncreaseBase":
-                    dropdownInputField.text = FoxDefaults.thirstIncrease.ToString();
+                    _dropdownInputField.text = FoxDefaults.ThirstIncrease.ToString();
                     break;
                 case "FoxThirstIncreaseYoung":
                     //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
@@ -282,67 +282,67 @@ namespace MonoBehaviourTools.UI
                     //dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
                     break;
                 case "FoxDrinkingSpeed":
-                    dropdownInputField.text = FoxDefaults.drinkingSpeed.ToString();
+                    _dropdownInputField.text = FoxDefaults.DrinkingSpeed.ToString();
                     break;
                 case "FoxMatingDuration":
-                    dropdownInputField.text = FoxDefaults.matingDuration.ToString();
+                    _dropdownInputField.text = FoxDefaults.MatingDuration.ToString();
                     break;
                 case "FoxMatingThreshold":
-                    dropdownInputField.text = FoxDefaults.matingThreshold.ToString();
+                    _dropdownInputField.text = FoxDefaults.MatingThreshold.ToString();
                     break;
                 case "FoxReproductiveUrgeIncrease":
-                    dropdownInputField.text = FoxDefaults.reproductiveUrgeIncreaseMale.ToString();
+                    _dropdownInputField.text = FoxDefaults.ReproductiveUrgeIncreaseMale.ToString();
                     break;
                 case "FoxPregnancyLength":
-                    dropdownInputField.text = FoxDefaults.pregnancyLength.ToString();
+                    _dropdownInputField.text = FoxDefaults.PregnancyLength.ToString();
                     break;
                 case "FoxBirthDuration":
-                    dropdownInputField.text = FoxDefaults.birthDuration.ToString();
+                    _dropdownInputField.text = FoxDefaults.BirthDuration.ToString();
                     break;
                 case "FoxLitterSizeMin":
-                    dropdownInputField.text = FoxDefaults.litterSizeMin.ToString();
+                    _dropdownInputField.text = FoxDefaults.LitterSizeMin.ToString();
                     break;
                 case "FoxLitterSizeMax":
-                    dropdownInputField.text = FoxDefaults.litterSizeMax.ToString();
+                    _dropdownInputField.text = FoxDefaults.LitterSizeMax.ToString();
                     break;
                 case "FoxLitterSizeAve":
-                    dropdownInputField.text = FoxDefaults.litterSizeAve.ToString();
+                    _dropdownInputField.text = FoxDefaults.LitterSizeAve.ToString();
                     break;
                 case "FoxMovementSpeed":
-                    dropdownInputField.text = FoxDefaults.moveSpeed.ToString();
+                    _dropdownInputField.text = FoxDefaults.MoveSpeed.ToString();
                     break;
                 case "FoxMovementMultiplierBase":
-                    dropdownInputField.text = FoxDefaults.originalMoveMultiplier.ToString();
+                    _dropdownInputField.text = FoxDefaults.OriginalMoveMultiplier.ToString();
                     break;
                 case "FoxMovementMultiplierYoung":
-                    dropdownInputField.text = FoxDefaults.youngMoveMultiplier.ToString();
+                    _dropdownInputField.text = FoxDefaults.YoungMoveMultiplier.ToString();
                     break;
                 case "FoxMovementMultiplierAdult":
-                    dropdownInputField.text = FoxDefaults.adultMoveMultiplier.ToString();
+                    _dropdownInputField.text = FoxDefaults.AdultMoveMultiplier.ToString();
                     break;
                 case "FoxMovementMultiplierOld":
-                    dropdownInputField.text = FoxDefaults.oldMoveMultiplier.ToString();
+                    _dropdownInputField.text = FoxDefaults.OldMoveMultiplier.ToString();
                     break;
                 case "FoxMovementMultiplierPregnant":
-                    dropdownInputField.text = FoxDefaults.pregnancyMoveMultiplier.ToString();
+                    _dropdownInputField.text = FoxDefaults.PregnancyMoveMultiplier.ToString();
                     break;
                 case "FoxSightRadius":
-                    dropdownInputField.text = FoxDefaults.sightRadius.ToString();
+                    _dropdownInputField.text = FoxDefaults.SightRadius.ToString();
                     break;
                 case "FoxSizeMale":
-                    dropdownInputField.text = FoxDefaults.scaleMale.ToString();
+                    _dropdownInputField.text = FoxDefaults.ScaleMale.ToString();
                     break;
                 case "FoxSizeFemale":
-                    dropdownInputField.text = FoxDefaults.scaleFemale.ToString();
+                    _dropdownInputField.text = FoxDefaults.ScaleFemale.ToString();
                     break;
                 case "GrassNutritionalValue":
-                    dropdownInputField.text = GrassDefaults.nutritionalValue.ToString();
+                    _dropdownInputField.text = GrassDefaults.NutritionalValue.ToString();
                     break;
                 case "GrassCanBeEaten":
-                    dropdownInputField.text = Convert.ToInt32(GrassDefaults.canBeEaten).ToString();
+                    _dropdownInputField.text = Convert.ToInt32(GrassDefaults.CanBeEaten).ToString();
                     break;
                 case "GrassSize":
-                    dropdownInputField.text = GrassDefaults.scale.ToString();
+                    _dropdownInputField.text = GrassDefaults.Scale.ToString();
                     break;
                 default:
                     Debug.LogWarning("Attempted to update unknown property in switch: " + selectedOption, this);
@@ -353,52 +353,52 @@ namespace MonoBehaviourTools.UI
         /*Set the respective default to the value of the input field, sets the somethingchanged flag to false so existing entities also get updated */
         public void DropdownPropertiesUpdate()
         {
-            string selectedOption = dropdownPropertyDropdown.options[dropdownPropertyDropdown.value].text;
+            string selectedOption = _dropdownPropertyDropdown.options[_dropdownPropertyDropdown.value].text;
             switch (selectedOption)
             {
                 case "None":
                     break;
                 case "RabbitAgeMax":
-                    RabbitDefaults.ageMax = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.AgeMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitNutritionalValue":
-                    RabbitDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.NutritionalValue = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitCanBeEaten":
-                    if (int.Parse(dropdownInputField.text) == 0)
-                        RabbitDefaults.canBeEaten = false;
+                    if (int.Parse(_dropdownInputField.text) == 0)
+                        RabbitDefaults.CanBeEaten = false;
                     else
-                        RabbitDefaults.canBeEaten = true;
+                        RabbitDefaults.CanBeEaten = true;
                     break;
                 case "RabbitHungerMax":
-                    RabbitDefaults.hungerMax = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.HungerMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitHungerThreshold":
-                    RabbitDefaults.hungryThreshold = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.HungryThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitHungerIncreaseBase":
-                    RabbitDefaults.hungerIncrease = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.HungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitHungerIncreaseYoung":
-                    RabbitDefaults.youngHungerIncrease = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.YoungHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitHungerIncreaseAdult":
-                    RabbitDefaults.adultHungerIncrease = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.AdultHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitHungerIncreaseOld":
-                    RabbitDefaults.oldHungerIncrease = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.OldHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitEatingSpeed":
-                    RabbitDefaults.eatingSpeed = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.EatingSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitThirstMax":
-                    RabbitDefaults.thirstMax = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ThirstMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitThirstThreshold":
-                    RabbitDefaults.thirstyThreshold = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ThirstyThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitThirstIncreaseBase":
-                    RabbitDefaults.thirstIncrease = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ThirstIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitThirstIncreaseYoung":
                     //RabbitDefaults. = float.Parse(dropdownInputField.text);
@@ -410,100 +410,100 @@ namespace MonoBehaviourTools.UI
                     //RabbitDefaults. = float.Parse(dropdownInputField.text);
                     break;
                 case "RabbitDrinkingSpeed":
-                    RabbitDefaults.drinkingSpeed = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.DrinkingSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMatingDuration":
-                    RabbitDefaults.matingDuration = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.MatingDuration = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMatingThreshold":
-                    RabbitDefaults.matingThreshold = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.MatingThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitReproductiveUrgeIncrease":
-                    RabbitDefaults.reproductiveUrgeIncreaseMale = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ReproductiveUrgeIncreaseMale = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitPregnancyLength":
-                    RabbitDefaults.pregnancyLength = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.PregnancyLength = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitBirthDuration":
-                    RabbitDefaults.birthDuration = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.BirthDuration = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitLitterSizeMin":
-                    RabbitDefaults.litterSizeMin = int.Parse(dropdownInputField.text);
+                    RabbitDefaults.LitterSizeMin = int.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitLitterSizeMax":
-                    RabbitDefaults.litterSizeMax = int.Parse(dropdownInputField.text);
+                    RabbitDefaults.LitterSizeMax = int.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitLitterSizeAve":
-                    RabbitDefaults.litterSizeAve = int.Parse(dropdownInputField.text);
+                    RabbitDefaults.LitterSizeAve = int.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementSpeed":
-                    RabbitDefaults.moveSpeed = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.MoveSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementMultiplierBase":
-                    RabbitDefaults.originalMoveMultiplier = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.OriginalMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementMultiplierYoung":
-                    RabbitDefaults.youngMoveMultiplier = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.YoungMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementMultiplierAdult":
-                    RabbitDefaults.adultMoveMultiplier = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.AdultMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementMultiplierOld":
-                    RabbitDefaults.oldMoveMultiplier = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.OldMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitMovementMultiplierPregnant":
-                    RabbitDefaults.pregnancyMoveMultiplier = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.PregnancyMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitSightRadius":
-                    RabbitDefaults.sightRadius = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.SightRadius = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitSizeMale":
-                    RabbitDefaults.scaleMale = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ScaleMale = float.Parse(_dropdownInputField.text);
                     break;
                 case "RabbitSizeFemale":
-                    RabbitDefaults.scaleFemale = float.Parse(dropdownInputField.text);
+                    RabbitDefaults.ScaleFemale = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxAgeMax":
-                    FoxDefaults.ageMax = float.Parse(dropdownInputField.text);
+                    FoxDefaults.AgeMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxNutritionalValue":
-                    FoxDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
+                    FoxDefaults.NutritionalValue = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxCanBeEaten":
-                    if (int.Parse(dropdownInputField.text) == 0)
-                        FoxDefaults.canBeEaten = false;
+                    if (int.Parse(_dropdownInputField.text) == 0)
+                        FoxDefaults.CanBeEaten = false;
                     else
-                        FoxDefaults.canBeEaten = true;
+                        FoxDefaults.CanBeEaten = true;
                     break;
                 case "FoxHungerMax":
-                    FoxDefaults.hungerMax = float.Parse(dropdownInputField.text);
+                    FoxDefaults.HungerMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxHungerThreshold":
-                    FoxDefaults.hungryThreshold = float.Parse(dropdownInputField.text);
+                    FoxDefaults.HungryThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxHungerIncreaseBase":
-                    FoxDefaults.hungerIncrease = float.Parse(dropdownInputField.text);
+                    FoxDefaults.HungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxHungerIncreaseYoung":
-                    FoxDefaults.youngHungerIncrease = float.Parse(dropdownInputField.text);
+                    FoxDefaults.YoungHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxHungerIncreaseAdult":
-                    FoxDefaults.adultHungerIncrease = float.Parse(dropdownInputField.text);
+                    FoxDefaults.AdultHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxHungerIncreaseOld":
-                    FoxDefaults.oldHungerIncrease = float.Parse(dropdownInputField.text);
+                    FoxDefaults.OldHungerIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxEatingSpeed":
-                    FoxDefaults.eatingSpeed = float.Parse(dropdownInputField.text);
+                    FoxDefaults.EatingSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxThirstMax":
-                    FoxDefaults.thirstMax = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ThirstMax = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxThirstThreshold":
-                    FoxDefaults.thirstyThreshold = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ThirstyThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxThirstIncreaseBase":
-                    FoxDefaults.thirstIncrease = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ThirstIncrease = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxThirstIncreaseYoung":
                     //FoxDefaults. = float.Parse(dropdownInputField.text);
@@ -515,77 +515,77 @@ namespace MonoBehaviourTools.UI
                     //FoxDefaults. = float.Parse(dropdownInputField.text);
                     break;
                 case "FoxDrinkingSpeed":
-                    FoxDefaults.drinkingSpeed = float.Parse(dropdownInputField.text);
+                    FoxDefaults.DrinkingSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMatingDuration":
-                    FoxDefaults.matingDuration = float.Parse(dropdownInputField.text);
+                    FoxDefaults.MatingDuration = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMatingThreshold":
-                    FoxDefaults.matingThreshold = float.Parse(dropdownInputField.text);
+                    FoxDefaults.MatingThreshold = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxReproductiveUrgeIncrease":
-                    FoxDefaults.reproductiveUrgeIncreaseMale = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ReproductiveUrgeIncreaseMale = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxPregnancyLength":
-                    FoxDefaults.pregnancyLength = float.Parse(dropdownInputField.text);
+                    FoxDefaults.PregnancyLength = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxBirthDuration":
-                    FoxDefaults.birthDuration = float.Parse(dropdownInputField.text);
+                    FoxDefaults.BirthDuration = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxLitterSizeMin":
-                    FoxDefaults.litterSizeMin = int.Parse(dropdownInputField.text);
+                    FoxDefaults.LitterSizeMin = int.Parse(_dropdownInputField.text);
                     break;
                 case "FoxLitterSizeMax":
-                    FoxDefaults.litterSizeMax = int.Parse(dropdownInputField.text);
+                    FoxDefaults.LitterSizeMax = int.Parse(_dropdownInputField.text);
                     break;
                 case "FoxLitterSizeAve":
-                    FoxDefaults.litterSizeAve = int.Parse(dropdownInputField.text);
+                    FoxDefaults.LitterSizeAve = int.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementSpeed":
-                    FoxDefaults.moveSpeed = float.Parse(dropdownInputField.text);
+                    FoxDefaults.MoveSpeed = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementMultiplierBase":
-                    FoxDefaults.originalMoveMultiplier = float.Parse(dropdownInputField.text);
+                    FoxDefaults.OriginalMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementMultiplierYoung":
-                    FoxDefaults.youngMoveMultiplier = float.Parse(dropdownInputField.text);
+                    FoxDefaults.YoungMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementMultiplierAdult":
-                    FoxDefaults.adultMoveMultiplier = float.Parse(dropdownInputField.text);
+                    FoxDefaults.AdultMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementMultiplierOld":
-                    FoxDefaults.oldMoveMultiplier = float.Parse(dropdownInputField.text);
+                    FoxDefaults.OldMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxMovementMultiplierPregnant":
-                    FoxDefaults.pregnancyMoveMultiplier = float.Parse(dropdownInputField.text);
+                    FoxDefaults.PregnancyMoveMultiplier = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxSightRadius":
-                    FoxDefaults.sightRadius = float.Parse(dropdownInputField.text);
+                    FoxDefaults.SightRadius = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxSizeMale":
-                    FoxDefaults.scaleMale = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ScaleMale = float.Parse(_dropdownInputField.text);
                     break;
                 case "FoxSizeFemale":
-                    FoxDefaults.scaleFemale = float.Parse(dropdownInputField.text);
+                    FoxDefaults.ScaleFemale = float.Parse(_dropdownInputField.text);
                     break;
                 case "GrassNutritionalValue":
-                    GrassDefaults.nutritionalValue = float.Parse(dropdownInputField.text);
+                    GrassDefaults.NutritionalValue = float.Parse(_dropdownInputField.text);
                     break;
                 case "GrassCanBeEaten":
-                    if (int.Parse(dropdownInputField.text) == 0)
-                        GrassDefaults.canBeEaten = false;
+                    if (int.Parse(_dropdownInputField.text) == 0)
+                        GrassDefaults.CanBeEaten = false;
                     else
-                        GrassDefaults.canBeEaten = true;
+                        GrassDefaults.CanBeEaten = true;
                     break;
                 case "GrassSize":
-                    GrassDefaults.scale = float.Parse(dropdownInputField.text);
+                    GrassDefaults.Scale = float.Parse(_dropdownInputField.text);
                     break;
                 default:
                     Debug.LogWarning("Attempted to update unknown property in switch: " + selectedOption, this);
                     break;
             }
 
-            UIUpdateSystem.Instance.somethingChangedFlag = true;
+            UIUpdateSystem.Instance.SomethingChangedFlag = true;
         }
     }
 }

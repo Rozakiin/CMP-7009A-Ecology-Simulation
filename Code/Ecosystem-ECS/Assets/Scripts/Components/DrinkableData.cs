@@ -9,6 +9,6 @@ namespace Components
     public struct DrinkableData : IComponentData
     {
         public float Value;
-        public bool canBeDrunk;
+        public bool CanBeDrunk;
     }
 }

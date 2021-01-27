@@ -7,23 +7,23 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct EdibleData : IComponentData
     {
-        public bool canBeEaten;
-        public float nutritionalValueBase;
-        public float nutritionalValueMultiplier;
+        public bool CanBeEaten;
+        public float NutritionalValueBase;
+        public float NutritionalValueMultiplier;
         public float NutritionalValue
         {
-            get { return nutritionalValueBase * nutritionalValueMultiplier; }
+            get { return NutritionalValueBase * NutritionalValueMultiplier; }
         }
         //Not ideal groupings but will work when only one type of predator
         //Allows FoodTypes to be OR bitwise to have multiple preferences
         [Flags]
-        public enum FoodType
+        public enum FoodTypes
         {
             Plant = 0b_0000_0001,//1
             Fungi = 0b_0000_0010, //2
             Meat = 0b_0000_0100,//4
         }
-        public FoodType foodType;
+        public FoodTypes FoodType;
 
     }
 }

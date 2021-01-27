@@ -8,24 +8,24 @@ namespace Components
     public struct BioStatsData : IComponentData
     {
         //Age data
-        public float age;
-        public float ageIncrease;
-        public float ageMax;
-        public AgeGroup ageGroup;
+        public float Age;
+        public float AgeIncrease;
+        public float AgeMax;
 
-        public float adultEntryTimer;
-        public float oldEntryTimer;
+        public float AdultEntryTimer;
+        public float OldEntryTimer;
 
-        public enum AgeGroup
+        public enum AgeGroups
         {
             Young, Adult, Old
         }
+        public AgeGroups AgeGroup;
 
         //Gender data
-        public enum Gender
+        public enum Genders
         {
             Male, Female
         }
-        public Gender gender;
+        public Genders Gender;
     }
 }

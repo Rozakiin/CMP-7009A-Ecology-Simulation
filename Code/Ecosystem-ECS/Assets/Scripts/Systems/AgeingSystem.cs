@@ -11,20 +11,20 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            float deltaTime = Time.DeltaTime;
+            var deltaTime = Time.DeltaTime;
 
             Entities.ForEach((ref BioStatsData bioStatsData) =>
             {
                 // Increase age
-                bioStatsData.age += bioStatsData.ageIncrease * deltaTime;
+                bioStatsData.Age += bioStatsData.AgeIncrease * deltaTime;
 
-                if (bioStatsData.age >= bioStatsData.oldEntryTimer)
+                if (bioStatsData.Age >= bioStatsData.OldEntryTimer)
                 {
-                    bioStatsData.ageGroup = BioStatsData.AgeGroup.Old;
+                    bioStatsData.AgeGroup = BioStatsData.AgeGroups.Old;
                 }
-                else if (bioStatsData.age >= bioStatsData.adultEntryTimer)
+                else if (bioStatsData.Age >= bioStatsData.AdultEntryTimer)
                 {
-                    bioStatsData.ageGroup = BioStatsData.AgeGroup.Adult;
+                    bioStatsData.AgeGroup = BioStatsData.AgeGroups.Adult;
                 }
             }).ScheduleParallel();
         }

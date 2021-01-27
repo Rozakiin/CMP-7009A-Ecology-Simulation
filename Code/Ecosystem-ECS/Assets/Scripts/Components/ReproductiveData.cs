@@ -8,42 +8,42 @@ namespace Components
     public struct ReproductiveData : IComponentData
     {
         //Mate
-        public float matingDuration;
-        public float mateStartTime;
-        public float reproductiveUrge;
-        public float defaultRepoductiveIncrease;
-        public float reproductiveUrgeIncrease;
-        public float matingThreshold;
+        public float MatingDuration;
+        public float MateStartTime;
+        public float ReproductiveUrge;
+        public float DefaultReproductiveIncrease;
+        public float ReproductiveUrgeIncrease;
+        public float MatingThreshold;
 
         //Pregnancy
-        public float birthDuration; //How long between babies being born
-        public float birthStartTime;
-        public int babiesBorn; //How many she has given birth to
-        public int litterSizeMin;
-        public int litterSizeMax;
+        public float BirthDuration; //How long between babies being born
+        public float BirthStartTime;
+        public int BabiesBorn; //How many she has given birth to
+        public int LitterSizeMin;
+        public int LitterSizeMax;
 
-        public int litterSizeAve;
+        public int LitterSizeAve;
 
         //How many the female is carrying right now
-        public int currentLitterSize;
+        public int CurrentLitterSize;
 
         public int LitterSize
         {
             get
             {
-                return UtilTools.ComponentTools.GaussianDistribution((litterSizeMax - litterSizeMin) / 2, litterSizeAve,
-                    birthStartTime);
+                return UtilTools.ComponentTools.GaussianDistribution((LitterSizeMax - LitterSizeMin) / 2, LitterSizeAve,
+                    BirthStartTime);
             }
         }
 
 
-        public float pregnancyStartTime;
-        public float pregnancyLengthBase;
-        public float pregnancyLengthModifier;
+        public float PregnancyStartTime;
+        public float PregnancyLengthBase;
+        public float PregnancyLengthModifier;
 
         public float PregnancyLength
         {
-            get { return pregnancyLengthBase * pregnancyLengthModifier; }
+            get { return PregnancyLengthBase * PregnancyLengthModifier; }
         }
     }
 }

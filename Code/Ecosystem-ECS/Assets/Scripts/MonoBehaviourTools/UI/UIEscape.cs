@@ -7,23 +7,23 @@ namespace MonoBehaviourTools.UI
 {
     public class UIEscape : MonoBehaviour
     {
-        [SerializeField] private GameObject escapeMenu;
-        [SerializeField] private Button resume;
-        [SerializeField] private Button save;
-        [SerializeField] private Button quit;
+        [SerializeField] private GameObject _escapeMenu;
+        [SerializeField] private Button _resume;
+        [SerializeField] private Button _save;
+        [SerializeField] private Button _quit;
         private void Awake()
         {
-            escapeMenu.SetActive(false);
-            resume.onClick.AddListener(ResumeGame);
-            save.onClick.AddListener(SaveFile);
-            quit.onClick.AddListener(QuitGame);
+            _escapeMenu.SetActive(false);
+            _resume.onClick.AddListener(ResumeGame);
+            _save.onClick.AddListener(SaveFile);
+            _quit.onClick.AddListener(QuitGame);
         }
         // Update is called once per frame
         private void Update()
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
-                if (escapeMenu.activeSelf)
+                if (_escapeMenu.activeSelf)
                 {
                     ResumeGame();
                 }
@@ -36,13 +36,13 @@ namespace MonoBehaviourTools.UI
 
         private void ResumeGame()
         {
-            escapeMenu.SetActive(false);
+            _escapeMenu.SetActive(false);
             UITimeControl.Instance.Play();
         }
 
         private void PauseGame()
         {
-            escapeMenu.SetActive(true);
+            _escapeMenu.SetActive(true);
             UITimeControl.Instance.Pause();
         }
 
@@ -87,12 +87,12 @@ namespace MonoBehaviourTools.UI
             XmlElement rOldEntryTimer = xmlDocument.CreateElement("oldEntryTimer");
 
             //public static BioStatsData.AgeGroup ageGroup = BioStatsData.AgeGroup.Young;
-            rAge.InnerText = RabbitDefaults.age.ToString();
-            rAgeIncrease.InnerText = RabbitDefaults.ageIncrease.ToString();
-            rAgeMax.InnerText = RabbitDefaults.ageMax.ToString();
-            rAgeGroup.InnerText = RabbitDefaults.ageGroup.ToString();
-            rAdultEntryTimer.InnerText = RabbitDefaults.adultEntryTimer.ToString();
-            rOldEntryTimer.InnerText = RabbitDefaults.oldEntryTimer.ToString();
+            rAge.InnerText = RabbitDefaults.Age.ToString();
+            rAgeIncrease.InnerText = RabbitDefaults.AgeIncrease.ToString();
+            rAgeMax.InnerText = RabbitDefaults.AgeMax.ToString();
+            rAgeGroup.InnerText = RabbitDefaults.AgeGroup.ToString();
+            rAdultEntryTimer.InnerText = RabbitDefaults.AdultEntryTimer.ToString();
+            rOldEntryTimer.InnerText = RabbitDefaults.OldEntryTimer.ToString();
 
             rAgeData.AppendChild(rAge);
             rAgeData.AppendChild(rAgeIncrease);
@@ -113,10 +113,10 @@ namespace MonoBehaviourTools.UI
             XmlElement rFoodtype = xmlDocument.CreateElement("foodType");
 
 
-            rNutritionalvalue.InnerText = RabbitDefaults.nutritionalValue.ToString();
-            rCanbeeaten.InnerText = RabbitDefaults.canBeEaten.ToString();
-            rNutritionalvaluemultiplier.InnerText = RabbitDefaults.nutritionalValueMultiplier.ToString();
-            rFoodtype.InnerText = RabbitDefaults.foodType.ToString();
+            rNutritionalvalue.InnerText = RabbitDefaults.NutritionalValue.ToString();
+            rCanbeeaten.InnerText = RabbitDefaults.CanBeEaten.ToString();
+            rNutritionalvaluemultiplier.InnerText = RabbitDefaults.NutritionalValueMultiplier.ToString();
+            rFoodtype.InnerText = RabbitDefaults.FoodType.ToString();
 
 
             rEdibledata.AppendChild(rNutritionalvalue);
@@ -139,19 +139,19 @@ namespace MonoBehaviourTools.UI
             XmlElement rAdulthungerincrease = xmlDocument.CreateElement("adultHungerIncrease");
             XmlElement rOldhungerincrease = xmlDocument.CreateElement("oldHungerIncrease");
             XmlElement rEatingspeed = xmlDocument.CreateElement("eatingSpeed");
-            XmlElement rDiet = xmlDocument.CreateElement("diet");
+            XmlElement rDiet = xmlDocument.CreateElement("DietType");
 
 
-            rHunger.InnerText = RabbitDefaults.hunger.ToString();
-            rHungermax.InnerText = RabbitDefaults.hungerMax.ToString();
-            rHungrythreshold.InnerText = RabbitDefaults.hungryThreshold.ToString();
-            rHungerincrease.InnerText = RabbitDefaults.hungerIncrease.ToString();
-            rPregnancyhungerincrease.InnerText = RabbitDefaults.pregnancyHungerIncrease.ToString();
-            rYounghungerincrease.InnerText = RabbitDefaults.youngHungerIncrease.ToString();
-            rAdulthungerincrease.InnerText = RabbitDefaults.adultHungerIncrease.ToString();
-            rOldhungerincrease.InnerText = RabbitDefaults.oldHungerIncrease.ToString();
-            rEatingspeed.InnerText = RabbitDefaults.eatingSpeed.ToString();
-            rDiet.InnerText = RabbitDefaults.diet.ToString();
+            rHunger.InnerText = RabbitDefaults.Hunger.ToString();
+            rHungermax.InnerText = RabbitDefaults.HungerMax.ToString();
+            rHungrythreshold.InnerText = RabbitDefaults.HungryThreshold.ToString();
+            rHungerincrease.InnerText = RabbitDefaults.HungerIncrease.ToString();
+            rPregnancyhungerincrease.InnerText = RabbitDefaults.PregnancyHungerIncrease.ToString();
+            rYounghungerincrease.InnerText = RabbitDefaults.YoungHungerIncrease.ToString();
+            rAdulthungerincrease.InnerText = RabbitDefaults.AdultHungerIncrease.ToString();
+            rOldhungerincrease.InnerText = RabbitDefaults.OldHungerIncrease.ToString();
+            rEatingspeed.InnerText = RabbitDefaults.EatingSpeed.ToString();
+            rDiet.InnerText = RabbitDefaults.Diet.ToString();
 
 
             rHungerdata.AppendChild(rHunger);
@@ -177,11 +177,11 @@ namespace MonoBehaviourTools.UI
             XmlElement rThirstIncrease = xmlDocument.CreateElement("thirstIncrease");
             XmlElement rDrinkingSpeed = xmlDocument.CreateElement("drinkingSpeed");
 
-            rThirst.InnerText = RabbitDefaults.thirst.ToString();
-            rThirstMax.InnerText = RabbitDefaults.thirstMax.ToString();
-            rThirstyThreshold.InnerText = RabbitDefaults.thirstyThreshold.ToString();
-            rThirstIncrease.InnerText = RabbitDefaults.thirstIncrease.ToString();
-            rDrinkingSpeed.InnerText = RabbitDefaults.drinkingSpeed.ToString();
+            rThirst.InnerText = RabbitDefaults.Thirst.ToString();
+            rThirstMax.InnerText = RabbitDefaults.ThirstMax.ToString();
+            rThirstyThreshold.InnerText = RabbitDefaults.ThirstyThreshold.ToString();
+            rThirstIncrease.InnerText = RabbitDefaults.ThirstIncrease.ToString();
+            rDrinkingSpeed.InnerText = RabbitDefaults.DrinkingSpeed.ToString();
 
             rThirstData.AppendChild(rThirst);
             rThirstData.AppendChild(rThirstMax);
@@ -204,12 +204,12 @@ namespace MonoBehaviourTools.UI
             XmlElement rMatingthreshold = xmlDocument.CreateElement("matingThreshold");
 
 
-            rMatestarttime.InnerText = RabbitDefaults.mateStartTime.ToString();
-            rMatingduration.InnerText = RabbitDefaults.matingDuration.ToString();
-            rReproductiveurge.InnerText = RabbitDefaults.reproductiveUrge.ToString();
-            rReproductiveurgeincreasemale.InnerText = RabbitDefaults.reproductiveUrgeIncreaseMale.ToString();
-            rReproductiveurgeincreasefemale.InnerText = RabbitDefaults.reproductiveUrgeIncreaseFemale.ToString();
-            rMatingthreshold.InnerText = RabbitDefaults.matingThreshold.ToString();
+            rMatestarttime.InnerText = RabbitDefaults.MateStartTime.ToString();
+            rMatingduration.InnerText = RabbitDefaults.MatingDuration.ToString();
+            rReproductiveurge.InnerText = RabbitDefaults.ReproductiveUrge.ToString();
+            rReproductiveurgeincreasemale.InnerText = RabbitDefaults.ReproductiveUrgeIncreaseMale.ToString();
+            rReproductiveurgeincreasefemale.InnerText = RabbitDefaults.ReproductiveUrgeIncreaseFemale.ToString();
+            rMatingthreshold.InnerText = RabbitDefaults.MatingThreshold.ToString();
 
 
             rMatedata.AppendChild(rMatestarttime);
@@ -237,16 +237,16 @@ namespace MonoBehaviourTools.UI
             XmlElement rLittersizemax = xmlDocument.CreateElement("litterSizeMax");
             XmlElement rLittersizeave = xmlDocument.CreateElement("litterSizeAve");
 
-            rPregnancystarttime.InnerText = RabbitDefaults.pregnancyStartTime.ToString();
-            rBabiesborn.InnerText = RabbitDefaults.babiesBorn.ToString();
-            rBirthstarttime.InnerText = RabbitDefaults.birthStartTime.ToString();
-            rCurrentlittersize.InnerText = RabbitDefaults.currentLitterSize.ToString();
-            rPregnancylengthmodifier.InnerText = RabbitDefaults.pregnancyLengthModifier.ToString();
-            rPregnancylength.InnerText = RabbitDefaults.pregnancyLength.ToString();
-            rBirthduration.InnerText = RabbitDefaults.birthDuration.ToString();
-            rLittersizemin.InnerText = RabbitDefaults.litterSizeMin.ToString();
-            rLittersizemax.InnerText = RabbitDefaults.litterSizeMax.ToString();
-            rLittersizeave.InnerText = RabbitDefaults.litterSizeAve.ToString();
+            rPregnancystarttime.InnerText = RabbitDefaults.PregnancyStartTime.ToString();
+            rBabiesborn.InnerText = RabbitDefaults.BabiesBorn.ToString();
+            rBirthstarttime.InnerText = RabbitDefaults.BirthStartTime.ToString();
+            rCurrentlittersize.InnerText = RabbitDefaults.CurrentLitterSize.ToString();
+            rPregnancylengthmodifier.InnerText = RabbitDefaults.PregnancyLengthModifier.ToString();
+            rPregnancylength.InnerText = RabbitDefaults.PregnancyLength.ToString();
+            rBirthduration.InnerText = RabbitDefaults.BirthDuration.ToString();
+            rLittersizemin.InnerText = RabbitDefaults.LitterSizeMin.ToString();
+            rLittersizemax.InnerText = RabbitDefaults.LitterSizeMax.ToString();
+            rLittersizeave.InnerText = RabbitDefaults.LitterSizeAve.ToString();
 
 
             rPregnancydata.AppendChild(rPregnancystarttime);
@@ -277,14 +277,14 @@ namespace MonoBehaviourTools.UI
             XmlElement rOldmovemultiplier = xmlDocument.CreateElement("oldMoveMultiplier");
 
 
-            rMovespeed.InnerText = RabbitDefaults.moveSpeed.ToString();
-            rRotationspeed.InnerText = RabbitDefaults.rotationSpeed.ToString();
-            rMovemultiplier.InnerText = RabbitDefaults.moveMultiplier.ToString();
-            rPregnancymovemultiplier.InnerText = RabbitDefaults.pregnancyMoveMultiplier.ToString();
-            rOriginalmovemultiplier.InnerText = RabbitDefaults.originalMoveMultiplier.ToString();
-            rYoungmovemultiplier.InnerText = RabbitDefaults.youngMoveMultiplier.ToString();
-            rAdultmovemultiplier.InnerText = RabbitDefaults.adultMoveMultiplier.ToString();
-            rOldmovemultiplier.InnerText = RabbitDefaults.oldMoveMultiplier.ToString();
+            rMovespeed.InnerText = RabbitDefaults.MoveSpeed.ToString();
+            rRotationspeed.InnerText = RabbitDefaults.RotationSpeed.ToString();
+            rMovemultiplier.InnerText = RabbitDefaults.MoveMultiplier.ToString();
+            rPregnancymovemultiplier.InnerText = RabbitDefaults.PregnancyMoveMultiplier.ToString();
+            rOriginalmovemultiplier.InnerText = RabbitDefaults.OriginalMoveMultiplier.ToString();
+            rYoungmovemultiplier.InnerText = RabbitDefaults.YoungMoveMultiplier.ToString();
+            rAdultmovemultiplier.InnerText = RabbitDefaults.AdultMoveMultiplier.ToString();
+            rOldmovemultiplier.InnerText = RabbitDefaults.OldMoveMultiplier.ToString();
 
 
             rMovementData.AppendChild(rMovespeed);
@@ -312,12 +312,12 @@ namespace MonoBehaviourTools.UI
             XmlElement rOldsizemultiplier = xmlDocument.CreateElement("oldSizeMultiplier");
 
 
-            rSizemultiplier.InnerText = RabbitDefaults.sizeMultiplier.ToString();
-            rScalemale.InnerText = RabbitDefaults.scaleMale.ToString();
-            rScalefemale.InnerText = RabbitDefaults.scaleFemale.ToString();
-            rYoungsizemultiplier.InnerText = RabbitDefaults.youngSizeMultiplier.ToString();
-            rAdultsizemultiplier.InnerText = RabbitDefaults.adultSizeMultiplier.ToString();
-            rOldsizemultiplier.InnerText = RabbitDefaults.oldSizeMultiplier.ToString();
+            rSizemultiplier.InnerText = RabbitDefaults.SizeMultiplier.ToString();
+            rScalemale.InnerText = RabbitDefaults.ScaleMale.ToString();
+            rScalefemale.InnerText = RabbitDefaults.ScaleFemale.ToString();
+            rYoungsizemultiplier.InnerText = RabbitDefaults.YoungSizeMultiplier.ToString();
+            rAdultsizemultiplier.InnerText = RabbitDefaults.AdultSizeMultiplier.ToString();
+            rOldsizemultiplier.InnerText = RabbitDefaults.OldSizeMultiplier.ToString();
 
 
             rSizeData.AppendChild(rSizemultiplier);
@@ -336,15 +336,15 @@ namespace MonoBehaviourTools.UI
             XmlElement rStatedata = xmlDocument.CreateElement("stateData");
 
             XmlElement rState = xmlDocument.CreateElement("flagState");
-            XmlElement rPreviousstate = xmlDocument.CreateElement("previousFlagState");
-            XmlElement rDeathreason = xmlDocument.CreateElement("deathReason");
+            XmlElement rPreviousstate = xmlDocument.CreateElement("FlagStatePrevious");
+            XmlElement rDeathreason = xmlDocument.CreateElement("DeathReason");
             XmlElement rBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-            rState.InnerText = RabbitDefaults.flagState.ToString();
-            rPreviousstate.InnerText = RabbitDefaults.previousFlagState.ToString();
-            rDeathreason.InnerText = RabbitDefaults.deathReason.ToString();
-            rBeeneaten.InnerText = RabbitDefaults.beenEaten.ToString();
+            rState.InnerText = RabbitDefaults.FlagState.ToString();
+            rPreviousstate.InnerText = RabbitDefaults.FlagStatePrevious.ToString();
+            rDeathreason.InnerText = RabbitDefaults.DeathReason.ToString();
+            rBeeneaten.InnerText = RabbitDefaults.BeenEaten.ToString();
 
 
             rStatedata.AppendChild(rState);
@@ -364,8 +364,8 @@ namespace MonoBehaviourTools.UI
             XmlElement rSightradius = xmlDocument.CreateElement("sightRadius");
 
 
-            rTouchradius.InnerText = RabbitDefaults.touchRadius.ToString();
-            rSightradius.InnerText = RabbitDefaults.sightRadius.ToString();
+            rTouchradius.InnerText = RabbitDefaults.TouchRadius.ToString();
+            rSightradius.InnerText = RabbitDefaults.SightRadius.ToString();
 
 
             rTargetData.AppendChild(rTouchradius);
@@ -384,10 +384,10 @@ namespace MonoBehaviourTools.UI
             XmlElement rShortesttomatedistance = xmlDocument.CreateElement("shortestToMateDistance");
 
 
-            rShortesttoedibledistance.InnerText = RabbitDefaults.shortestToEdibleDistance.ToString();
-            rShortesttowaterdistance.InnerText = RabbitDefaults.shortestToWaterDistance.ToString();
-            rShortesttopredatordistance.InnerText = RabbitDefaults.shortestToPredatorDistance.ToString();
-            rShortesttomatedistance.InnerText = RabbitDefaults.shortestToMateDistance.ToString();
+            rShortesttoedibledistance.InnerText = RabbitDefaults.ShortestToEdibleDistance.ToString();
+            rShortesttowaterdistance.InnerText = RabbitDefaults.ShortestToWaterDistance.ToString();
+            rShortesttopredatordistance.InnerText = RabbitDefaults.ShortestToPredatorDistance.ToString();
+            rShortesttomatedistance.InnerText = RabbitDefaults.ShortestToMateDistance.ToString();
 
 
             rLookingentitydata.AppendChild(rShortesttoedibledistance);
@@ -402,10 +402,10 @@ namespace MonoBehaviourTools.UI
             #region ColliderTypeData
             XmlElement rCollidertypedata = xmlDocument.CreateElement("ColliderTypeData");
 
-            XmlElement rCollidertype = xmlDocument.CreateElement("colliderType");
+            XmlElement rCollidertype = xmlDocument.CreateElement("Collider");
 
 
-            rCollidertype.InnerText = RabbitDefaults.colliderType.ToString();
+            rCollidertype.InnerText = RabbitDefaults.Collider.ToString();
 
 
             rCollidertypedata.AppendChild(rCollidertype);
@@ -432,12 +432,12 @@ namespace MonoBehaviourTools.UI
             XmlElement fOldentrytimer = xmlDocument.CreateElement("oldEntryTimer");
 
 
-            fAge.InnerText = FoxDefaults.age.ToString();
-            fAgeincrease.InnerText = FoxDefaults.ageIncrease.ToString();
-            fAgemax.InnerText = FoxDefaults.ageMax.ToString();
-            fAgegroup.InnerText = FoxDefaults.ageGroup.ToString();
-            fAdultentrytimer.InnerText = FoxDefaults.adultEntryTimer.ToString();
-            fOldentrytimer.InnerText = FoxDefaults.oldEntryTimer.ToString();
+            fAge.InnerText = FoxDefaults.Age.ToString();
+            fAgeincrease.InnerText = FoxDefaults.AgeIncrease.ToString();
+            fAgemax.InnerText = FoxDefaults.AgeMax.ToString();
+            fAgegroup.InnerText = FoxDefaults.AgeGroup.ToString();
+            fAdultentrytimer.InnerText = FoxDefaults.AdultEntryTimer.ToString();
+            fOldentrytimer.InnerText = FoxDefaults.OldEntryTimer.ToString();
 
 
             fAgedata.AppendChild(fAge);
@@ -459,10 +459,10 @@ namespace MonoBehaviourTools.UI
             XmlElement fFoodtype = xmlDocument.CreateElement("foodType");
 
 
-            fNutritionalvalue.InnerText = FoxDefaults.nutritionalValue.ToString();
-            fCanbeeaten.InnerText = FoxDefaults.canBeEaten.ToString();
-            fNutritionalvaluemultiplier.InnerText = FoxDefaults.nutritionalValueMultiplier.ToString();
-            fFoodtype.InnerText = FoxDefaults.foodType.ToString();
+            fNutritionalvalue.InnerText = FoxDefaults.NutritionalValue.ToString();
+            fCanbeeaten.InnerText = FoxDefaults.CanBeEaten.ToString();
+            fNutritionalvaluemultiplier.InnerText = FoxDefaults.NutritionalValueMultiplier.ToString();
+            fFoodtype.InnerText = FoxDefaults.FoodType.ToString();
 
 
             fEdibledata.AppendChild(fNutritionalvalue);
@@ -486,19 +486,19 @@ namespace MonoBehaviourTools.UI
             XmlElement fAdulthungerincrease = xmlDocument.CreateElement("adultHungerIncrease");
             XmlElement fOldhungerincrease = xmlDocument.CreateElement("oldHungerIncrease");
             XmlElement fEatingspeed = xmlDocument.CreateElement("eatingSpeed");
-            XmlElement fDiet = xmlDocument.CreateElement("diet");
+            XmlElement fDiet = xmlDocument.CreateElement("DietType");
 
 
-            fHunger.InnerText = FoxDefaults.hunger.ToString();
-            fHungermax.InnerText = FoxDefaults.hungerMax.ToString();
-            fHungrythreshold.InnerText = FoxDefaults.hungryThreshold.ToString();
-            fHungerincrease.InnerText = FoxDefaults.hungerIncrease.ToString();
-            fPregnancyhungerincrease.InnerText = FoxDefaults.pregnancyHungerIncrease.ToString();
-            fYounghungerincrease.InnerText = FoxDefaults.youngHungerIncrease.ToString();
-            fAdulthungerincrease.InnerText = FoxDefaults.adultHungerIncrease.ToString();
-            fOldhungerincrease.InnerText = FoxDefaults.oldHungerIncrease.ToString();
-            fEatingspeed.InnerText = FoxDefaults.eatingSpeed.ToString();
-            fDiet.InnerText = FoxDefaults.diet.ToString();
+            fHunger.InnerText = FoxDefaults.Hunger.ToString();
+            fHungermax.InnerText = FoxDefaults.HungerMax.ToString();
+            fHungrythreshold.InnerText = FoxDefaults.HungryThreshold.ToString();
+            fHungerincrease.InnerText = FoxDefaults.HungerIncrease.ToString();
+            fPregnancyhungerincrease.InnerText = FoxDefaults.PregnancyHungerIncrease.ToString();
+            fYounghungerincrease.InnerText = FoxDefaults.YoungHungerIncrease.ToString();
+            fAdulthungerincrease.InnerText = FoxDefaults.AdultHungerIncrease.ToString();
+            fOldhungerincrease.InnerText = FoxDefaults.OldHungerIncrease.ToString();
+            fEatingspeed.InnerText = FoxDefaults.EatingSpeed.ToString();
+            fDiet.InnerText = FoxDefaults.Diet.ToString();
 
 
             fHungerdata.AppendChild(fHunger);
@@ -527,11 +527,11 @@ namespace MonoBehaviourTools.UI
             XmlElement fDrinkingspeed = xmlDocument.CreateElement("drinkingSpeed");
 
 
-            fThirst.InnerText = FoxDefaults.thirst.ToString();
-            fThirstmax.InnerText = FoxDefaults.thirstMax.ToString();
-            fThirstythreshold.InnerText = FoxDefaults.thirstyThreshold.ToString();
-            fThirstincrease.InnerText = FoxDefaults.thirstIncrease.ToString();
-            fDrinkingspeed.InnerText = FoxDefaults.drinkingSpeed.ToString();
+            fThirst.InnerText = FoxDefaults.Thirst.ToString();
+            fThirstmax.InnerText = FoxDefaults.ThirstMax.ToString();
+            fThirstythreshold.InnerText = FoxDefaults.ThirstyThreshold.ToString();
+            fThirstincrease.InnerText = FoxDefaults.ThirstIncrease.ToString();
+            fDrinkingspeed.InnerText = FoxDefaults.DrinkingSpeed.ToString();
 
 
             fThirstdata.AppendChild(fThirst);
@@ -554,12 +554,12 @@ namespace MonoBehaviourTools.UI
             XmlElement fMatingthreshold = xmlDocument.CreateElement("matingThreshold");
 
 
-            fMatestarttime.InnerText = FoxDefaults.mateStartTime.ToString();
-            fMatingduration.InnerText = FoxDefaults.matingDuration.ToString();
-            fReproductiveurge.InnerText = FoxDefaults.reproductiveUrge.ToString();
-            fReproductiveurgeincreasemale.InnerText = FoxDefaults.reproductiveUrgeIncreaseMale.ToString();
-            fReproductiveurgeincreasefemale.InnerText = FoxDefaults.reproductiveUrgeIncreaseFemale.ToString();
-            fMatingthreshold.InnerText = FoxDefaults.matingThreshold.ToString();
+            fMatestarttime.InnerText = FoxDefaults.MateStartTime.ToString();
+            fMatingduration.InnerText = FoxDefaults.MatingDuration.ToString();
+            fReproductiveurge.InnerText = FoxDefaults.ReproductiveUrge.ToString();
+            fReproductiveurgeincreasemale.InnerText = FoxDefaults.ReproductiveUrgeIncreaseMale.ToString();
+            fReproductiveurgeincreasefemale.InnerText = FoxDefaults.ReproductiveUrgeIncreaseFemale.ToString();
+            fMatingthreshold.InnerText = FoxDefaults.MatingThreshold.ToString();
 
 
             fMatedata.AppendChild(fMatestarttime);
@@ -589,16 +589,16 @@ namespace MonoBehaviourTools.UI
             XmlElement fLittersizeave = xmlDocument.CreateElement("litterSizeAve");
 
 
-            fPregnancystarttime.InnerText = FoxDefaults.pregnancyStartTime.ToString();
-            fBabiesborn.InnerText = FoxDefaults.babiesBorn.ToString();
-            fBirthstarttime.InnerText = FoxDefaults.birthStartTime.ToString();
-            fCurrentlittersize.InnerText = FoxDefaults.currentLitterSize.ToString();
-            fPregnancylengthmodifier.InnerText = FoxDefaults.pregnancyLengthModifier.ToString();
-            fPregnancylength.InnerText = FoxDefaults.pregnancyLength.ToString();
-            fBirthduration.InnerText = FoxDefaults.birthDuration.ToString();
-            fLittersizemin.InnerText = FoxDefaults.litterSizeMin.ToString();
-            fLittersizemax.InnerText = FoxDefaults.litterSizeMax.ToString();
-            fLittersizeave.InnerText = FoxDefaults.litterSizeAve.ToString();
+            fPregnancystarttime.InnerText = FoxDefaults.PregnancyStartTime.ToString();
+            fBabiesborn.InnerText = FoxDefaults.BabiesBorn.ToString();
+            fBirthstarttime.InnerText = FoxDefaults.BirthStartTime.ToString();
+            fCurrentlittersize.InnerText = FoxDefaults.CurrentLitterSize.ToString();
+            fPregnancylengthmodifier.InnerText = FoxDefaults.PregnancyLengthModifier.ToString();
+            fPregnancylength.InnerText = FoxDefaults.PregnancyLength.ToString();
+            fBirthduration.InnerText = FoxDefaults.BirthDuration.ToString();
+            fLittersizemin.InnerText = FoxDefaults.LitterSizeMin.ToString();
+            fLittersizemax.InnerText = FoxDefaults.LitterSizeMax.ToString();
+            fLittersizeave.InnerText = FoxDefaults.LitterSizeAve.ToString();
 
             fPregnancydata.AppendChild(fPregnancystarttime);
             fPregnancydata.AppendChild(fBabiesborn);
@@ -629,14 +629,14 @@ namespace MonoBehaviourTools.UI
             XmlElement fOldmovemultiplier = xmlDocument.CreateElement("oldMoveMultiplier");
 
 
-            fMovespeed.InnerText = FoxDefaults.moveSpeed.ToString();
-            fRotationspeed.InnerText = FoxDefaults.rotationSpeed.ToString();
-            fMovemultiplier.InnerText = FoxDefaults.moveMultiplier.ToString();
-            fPregnancymovemultiplier.InnerText = FoxDefaults.pregnancyMoveMultiplier.ToString();
-            fOriginalmovemultiplier.InnerText = FoxDefaults.originalMoveMultiplier.ToString();
-            fYoungmovemultiplier.InnerText = FoxDefaults.youngMoveMultiplier.ToString();
-            fAdultmovemultiplier.InnerText = FoxDefaults.adultMoveMultiplier.ToString();
-            fOldmovemultiplier.InnerText = FoxDefaults.oldMoveMultiplier.ToString();
+            fMovespeed.InnerText = FoxDefaults.MoveSpeed.ToString();
+            fRotationspeed.InnerText = FoxDefaults.RotationSpeed.ToString();
+            fMovemultiplier.InnerText = FoxDefaults.MoveMultiplier.ToString();
+            fPregnancymovemultiplier.InnerText = FoxDefaults.PregnancyMoveMultiplier.ToString();
+            fOriginalmovemultiplier.InnerText = FoxDefaults.OriginalMoveMultiplier.ToString();
+            fYoungmovemultiplier.InnerText = FoxDefaults.YoungMoveMultiplier.ToString();
+            fAdultmovemultiplier.InnerText = FoxDefaults.AdultMoveMultiplier.ToString();
+            fOldmovemultiplier.InnerText = FoxDefaults.OldMoveMultiplier.ToString();
 
 
             fMovementdata.AppendChild(fMovespeed);
@@ -662,12 +662,12 @@ namespace MonoBehaviourTools.UI
             XmlElement fOldsizemultiplier = xmlDocument.CreateElement("oldSizeMultiplier");
 
 
-            fSizemultiplier.InnerText = FoxDefaults.sizeMultiplier.ToString();
-            fScalemale.InnerText = FoxDefaults.scaleMale.ToString();
-            fScalefemale.InnerText = FoxDefaults.scaleFemale.ToString();
-            fYoungsizemultiplier.InnerText = FoxDefaults.youngSizeMultiplier.ToString();
-            fAdultsizemultiplier.InnerText = FoxDefaults.adultSizeMultiplier.ToString();
-            fOldsizemultiplier.InnerText = FoxDefaults.oldSizeMultiplier.ToString();
+            fSizemultiplier.InnerText = FoxDefaults.SizeMultiplier.ToString();
+            fScalemale.InnerText = FoxDefaults.ScaleMale.ToString();
+            fScalefemale.InnerText = FoxDefaults.ScaleFemale.ToString();
+            fYoungsizemultiplier.InnerText = FoxDefaults.YoungSizeMultiplier.ToString();
+            fAdultsizemultiplier.InnerText = FoxDefaults.AdultSizeMultiplier.ToString();
+            fOldsizemultiplier.InnerText = FoxDefaults.OldSizeMultiplier.ToString();
 
 
             fSizedata.AppendChild(fSizemultiplier);
@@ -685,15 +685,15 @@ namespace MonoBehaviourTools.UI
             XmlElement fStatedata = xmlDocument.CreateElement("stateData");
 
             XmlElement fState = xmlDocument.CreateElement("flagState");
-            XmlElement fPreviousstate = xmlDocument.CreateElement("previousFlagState");
-            XmlElement fDeathreason = xmlDocument.CreateElement("deathReason");
+            XmlElement fPreviousstate = xmlDocument.CreateElement("FlagStatePrevious");
+            XmlElement fDeathreason = xmlDocument.CreateElement("DeathReason");
             XmlElement fBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-            fState.InnerText = FoxDefaults.flagState.ToString();
-            fPreviousstate.InnerText = FoxDefaults.previousFlagState.ToString();
-            fDeathreason.InnerText = FoxDefaults.deathReason.ToString();
-            fBeeneaten.InnerText = FoxDefaults.beenEaten.ToString();
+            fState.InnerText = FoxDefaults.FlagState.ToString();
+            fPreviousstate.InnerText = FoxDefaults.PreviousFlagState.ToString();
+            fDeathreason.InnerText = FoxDefaults.DeathReason.ToString();
+            fBeeneaten.InnerText = FoxDefaults.BeenEaten.ToString();
 
 
             fStatedata.AppendChild(fState);
@@ -712,8 +712,8 @@ namespace MonoBehaviourTools.UI
             XmlElement fSightradius = xmlDocument.CreateElement("sightRadius");
 
 
-            fTouchradius.InnerText = FoxDefaults.touchRadius.ToString();
-            fSightradius.InnerText = FoxDefaults.sightRadius.ToString();
+            fTouchradius.InnerText = FoxDefaults.TouchRadius.ToString();
+            fSightradius.InnerText = FoxDefaults.SightRadius.ToString();
 
 
             fTargetdata.AppendChild(fTouchradius);
@@ -732,10 +732,10 @@ namespace MonoBehaviourTools.UI
             XmlElement fShortesttomatedistance = xmlDocument.CreateElement("shortestToMateDistance");
 
 
-            fShortesttoedibledistance.InnerText = FoxDefaults.shortestToEdibleDistance.ToString();
-            fShortesttowaterdistance.InnerText = FoxDefaults.shortestToWaterDistance.ToString();
-            fShortesttopredatordistance.InnerText = FoxDefaults.shortestToPredatorDistance.ToString();
-            fShortesttomatedistance.InnerText = FoxDefaults.shortestToMateDistance.ToString();
+            fShortesttoedibledistance.InnerText = FoxDefaults.ShortestToEdibleDistance.ToString();
+            fShortesttowaterdistance.InnerText = FoxDefaults.ShortestToWaterDistance.ToString();
+            fShortesttopredatordistance.InnerText = FoxDefaults.ShortestToPredatorDistance.ToString();
+            fShortesttomatedistance.InnerText = FoxDefaults.ShortestToMateDistance.ToString();
 
 
             fLookingentitydata.AppendChild(fShortesttoedibledistance);
@@ -750,10 +750,10 @@ namespace MonoBehaviourTools.UI
             #region ColliderTypeData
             XmlElement fCollidertypedata = xmlDocument.CreateElement("ColliderTypeData");
 
-            XmlElement fCollidertype = xmlDocument.CreateElement("colliderType");
+            XmlElement fCollidertype = xmlDocument.CreateElement("Collider");
 
 
-            fCollidertype.InnerText = FoxDefaults.colliderType.ToString();
+            fCollidertype.InnerText = FoxDefaults.Collider.ToString();
 
 
             fCollidertypedata.AppendChild(fCollidertype);
@@ -779,10 +779,10 @@ namespace MonoBehaviourTools.UI
             XmlElement gFoodtype = xmlDocument.CreateElement("foodType");
 
 
-            gNutritionalvalue.InnerText = GrassDefaults.nutritionalValue.ToString();
-            gCanbeeaten.InnerText = GrassDefaults.canBeEaten.ToString();
-            gNutritionalvaluemultiplier.InnerText = GrassDefaults.nutritionalValueMultiplier.ToString();
-            gFoodtype.InnerText = GrassDefaults.foodType.ToString();
+            gNutritionalvalue.InnerText = GrassDefaults.NutritionalValue.ToString();
+            gCanbeeaten.InnerText = GrassDefaults.CanBeEaten.ToString();
+            gNutritionalvaluemultiplier.InnerText = GrassDefaults.NutritionalValueMultiplier.ToString();
+            gFoodtype.InnerText = GrassDefaults.FoodType.ToString();
 
 
             gEdibledata.AppendChild(gNutritionalvalue);
@@ -801,8 +801,8 @@ namespace MonoBehaviourTools.UI
             XmlElement gScale = xmlDocument.CreateElement("scale");
 
 
-            gSizemultiplier.InnerText = GrassDefaults.sizeMultiplier.ToString();
-            gScale.InnerText = GrassDefaults.scale.ToString();
+            gSizemultiplier.InnerText = GrassDefaults.SizeMultiplier.ToString();
+            gScale.InnerText = GrassDefaults.Scale.ToString();
 
 
             gSizedata.AppendChild(gSizemultiplier);
@@ -817,15 +817,15 @@ namespace MonoBehaviourTools.UI
             XmlElement gStatedata = xmlDocument.CreateElement("stateData");
 
             XmlElement gState = xmlDocument.CreateElement("flagState");
-            XmlElement gPreviousstate = xmlDocument.CreateElement("previousFlagState");
-            XmlElement gDeathreason = xmlDocument.CreateElement("deathReason");
+            XmlElement gPreviousstate = xmlDocument.CreateElement("FlagStatePrevious");
+            XmlElement gDeathreason = xmlDocument.CreateElement("DeathReason");
             XmlElement gBeeneaten = xmlDocument.CreateElement("beenEaten");
 
 
-            gState.InnerText = GrassDefaults.flagState.ToString();
-            gPreviousstate.InnerText = GrassDefaults.previousFlagState.ToString();
-            gDeathreason.InnerText = GrassDefaults.deathReason.ToString();
-            gBeeneaten.InnerText = GrassDefaults.beenEaten.ToString();
+            gState.InnerText = GrassDefaults.FlagState.ToString();
+            gPreviousstate.InnerText = GrassDefaults.PreviousFlagState.ToString();
+            gDeathreason.InnerText = GrassDefaults.DeathReason.ToString();
+            gBeeneaten.InnerText = GrassDefaults.BeenEaten.ToString();
 
 
             gStatedata.AppendChild(gState);
@@ -839,10 +839,10 @@ namespace MonoBehaviourTools.UI
             #region ColliderTypeData
             XmlElement gCollidertypedata = xmlDocument.CreateElement("ColliderTypeData");
 
-            XmlElement gCollidertype = xmlDocument.CreateElement("colliderType");
+            XmlElement gCollidertype = xmlDocument.CreateElement("Collider");
 
 
-            gCollidertype.InnerText = GrassDefaults.GrassColliderType.ToString();
+            gCollidertype.InnerText = GrassDefaults.Collider.ToString();
 
 
             gCollidertypedata.AppendChild(gCollidertype);
