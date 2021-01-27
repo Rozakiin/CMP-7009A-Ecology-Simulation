@@ -9,12 +9,12 @@ namespace MonoBehaviourTools.UI
         private readonly Vector2 _camYLimit;
         private Vector2 _camZLimit;
 
-        private float _yMin = 30f;
-        private float _camSpeedInitial = 1f;
-        private float _camSpeedMultiplier = 1f;
-        private float _scrollSpeed = 200f;
-        private float _cameraYMultiplier = 8.5f;
-        private float _cameraZMultiplier = -3f;
+        private readonly float _yMin = 30f;
+        private readonly float _camSpeedInitial = 1f;
+        private readonly float _camSpeedMultiplier = 1f;
+        private readonly float _scrollSpeed = 200f;
+        private readonly float _cameraYMultiplier = 8.5f;
+        private readonly float _cameraZMultiplier = -3f;
 
         private float _camSpeed;
         private readonly float _xMax;
