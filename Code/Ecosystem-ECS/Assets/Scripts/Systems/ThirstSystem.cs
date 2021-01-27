@@ -14,16 +14,18 @@ namespace Systems
         {
             var deltaTime = Time.DeltaTime;
 
-            Entities.ForEach((ref BasicNeedsData basicNeedsData, in TargetData targetData, in StateData stateData) =>
+            Entities.ForEach((
+                ref BasicNeedsData basicNeedsData,
+                in TargetData targetData,
+                in StateData stateData
+            ) =>
             {
                 // Increase thirst
                 basicNeedsData.Thirst += basicNeedsData.ThirstIncrease * deltaTime;
 
                 //If the entityToDrink exists and entity is drinking
                 if (HasComponent<DrinkableData>(targetData.EntityToDrink) && stateData.IsDrinking)
-                {
-                    basicNeedsData.Thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.EntityToDrink].Value * basicNeedsData.DrinkingSpeed * deltaTime; //gets drink Value from entityToDrink
-                }
+                    basicNeedsData.Thirst -= GetComponentDataFromEntity<DrinkableData>(true)[targetData.EntityToDrink].Value * basicNeedsData.DrinkingSpeed * deltaTime;
             }).ScheduleParallel();
         }
     }

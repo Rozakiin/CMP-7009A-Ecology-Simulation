@@ -13,8 +13,8 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            float tileSize = SimulationManager.TileSize;
-            float gridNodeDiameter = GridSetup.Instance.GridNodeDiameter;
+            var tileSize = SimulationManager.TileSize;
+            var gridNodeDiameter = GridSetup.Instance.GridNodeDiameter;
 
             Entities.ForEach((
                 ref StateData stateData,
@@ -24,7 +24,7 @@ namespace Systems
                 in BioStatsData bioStatsData
             ) =>
             {
-                // determine if the entity shouldn't be dead
+                // determine if the entity should be dead
                 if (stateData.BeenEaten)
                 {
                     stateData.FlagStatePrevious = stateData.FlagStateCurrent;
@@ -62,7 +62,7 @@ namespace Systems
                 else
                 {
                     stateData.FlagStatePrevious = stateData.FlagStateCurrent;
-                    stateData.FlagStateCurrent &= (~StateData.FlagStates.Fleeing); //disable fleeing
+                    stateData.FlagStateCurrent &= ~StateData.FlagStates.Fleeing; //disable fleeing
                 }
 
                 // if they are over mating threshold and Adult enable sexually active state
@@ -90,90 +90,70 @@ namespace Systems
 
                 /* SETTING OF STATES DUE TO CURRENT STATE */
                 //if not dead            
-                stateData.IsDead = ((stateData.FlagStateCurrent & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
+                stateData.IsDead = (stateData.FlagStateCurrent & StateData.FlagStates.Dead) == StateData.FlagStates.Dead;
                 if (!stateData.IsDead)
                 {
                     // enable eating state if close to entity to eat
-                    stateData.IsHungry = ((stateData.FlagStateCurrent & StateData.FlagStates.Hungry) ==
-                                          StateData.FlagStates.Hungry);
-                    stateData.IsEating = ((stateData.FlagStateCurrent & StateData.FlagStates.Eating) ==
-                                          StateData.FlagStates.Eating);
+                    stateData.IsHungry = (stateData.FlagStateCurrent & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry;
+                    stateData.IsEating = (stateData.FlagStateCurrent & StateData.FlagStates.Eating) == StateData.FlagStates.Eating;
                     if (stateData.IsHungry && !stateData.IsEating)
-                    {
                         if (HasComponent<Translation>(targetData.EntityToEat))
-                        {
                             if (targetData.ShortestDistanceToEdible <= targetData.TouchRadius)
                             {
                                 stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                                 stateData.FlagStateCurrent |= StateData.FlagStates.Eating;
                             }
-                        }
-                    }
 
 
                     // enable eating state if close to entity to eat
-                    stateData.IsThirsty = ((stateData.FlagStateCurrent & StateData.FlagStates.Thirsty) ==
-                                           StateData.FlagStates.Thirsty);
-                    stateData.IsDrinking = ((stateData.FlagStateCurrent & StateData.FlagStates.Drinking) ==
-                                            StateData.FlagStates.Drinking);
+                    stateData.IsThirsty = (stateData.FlagStateCurrent & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty;
+                    stateData.IsDrinking = (stateData.FlagStateCurrent & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking;
                     if (stateData.IsThirsty && !stateData.IsDrinking)
-                    {
                         if (HasComponent<Translation>(targetData.EntityToDrink))
-                        {
                             //sqrt due to square tiles (furthest point possible is right in corner of gridnode next to edge of tile
-                            if (targetData.ShortestDistanceToWater <= targetData.TouchRadius +
-                                math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter * gridNodeDiameter / 2))
+                            if (targetData.ShortestDistanceToWater <= targetData.TouchRadius + math.sqrt(tileSize * tileSize / 2) + math.sqrt(gridNodeDiameter * gridNodeDiameter / 2))
                             {
                                 stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                                 stateData.FlagStateCurrent &= ~StateData.FlagStates.Wandering; //disable wandering
                                 stateData.FlagStateCurrent |= StateData.FlagStates.Drinking; //enable drinking
                             }
-                        }
-                    }
 
 
                     // enable mating if close to entity to mate
-                    stateData.IsSexuallyActive = ((stateData.FlagStateCurrent & StateData.FlagStates.SexuallyActive) ==
-                                                  StateData.FlagStates.SexuallyActive);
-                    stateData.IsMating = ((stateData.FlagStateCurrent & StateData.FlagStates.Mating) ==
-                                          StateData.FlagStates.Mating);
+                    stateData.IsSexuallyActive = (stateData.FlagStateCurrent & StateData.FlagStates.SexuallyActive) == StateData.FlagStates.SexuallyActive;
+                    stateData.IsMating = (stateData.FlagStateCurrent & StateData.FlagStates.Mating) == StateData.FlagStates.Mating;
                     if (stateData.IsSexuallyActive && !stateData.IsMating)
                     {
                         if (HasComponent<Translation>(targetData.EntityToMate))
-                        {
                             if (targetData.ShortestDistanceToMate <= targetData.MateRadius)
                             {
                                 stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                                 stateData.FlagStateCurrent &= ~StateData.FlagStates.Wandering; //disable wandering
                                 stateData.FlagStateCurrent |= StateData.FlagStates.Mating; //enable mating
                             }
-                        }
 
                         if (bioStatsData.Gender == BioStatsData.Genders.Male)
-                        {
-                            //reproductive urge saited, disable sexually active and mating, enable wandering
+                            //reproductive urge sated, disable sexually active and mating, enable wandering
                             if (reproductiveData.ReproductiveUrge <= 0)
                             {
                                 stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                                 stateData.FlagStateCurrent |= StateData.FlagStates.Wandering;
                                 stateData.FlagStateCurrent &= ~StateData.FlagStates.SexuallyActive;
                             }
-                        }
                     }
 
 
-                    stateData.IsEating = ((stateData.FlagStateCurrent & StateData.FlagStates.Eating) ==
-                                          StateData.FlagStates.Eating);
+                    stateData.IsEating = (stateData.FlagStateCurrent & StateData.FlagStates.Eating) == StateData.FlagStates.Eating;
                     if (stateData.IsEating)
                     {
-                        //entity doesnt exist, disable eating
+                        //entity doesn't exist, disable eating
                         if (!HasComponent<Translation>(targetData.EntityToEat))
                         {
                             stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                             stateData.FlagStateCurrent &= ~StateData.FlagStates.Eating;
                         }
 
-                        //hunger saited, disable hungry and eating, enable wandering
+                        //hunger sated, disable hungry and eating, enable wandering
                         if (basicNeedsData.Hunger <= basicNeedsData.HungryThreshold)
                         {
                             stateData.FlagStatePrevious = stateData.FlagStateCurrent;
@@ -184,11 +164,10 @@ namespace Systems
                     }
 
 
-                    stateData.IsDrinking = ((stateData.FlagStateCurrent & StateData.FlagStates.Drinking) ==
-                                            StateData.FlagStates.Drinking);
+                    stateData.IsDrinking = (stateData.FlagStateCurrent & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking;
                     if (stateData.IsDrinking)
                     {
-                        //entity doesnt exist, disable drinking
+                        //entity doesn't exist, disable drinking
                         if (!HasComponent<Translation>(targetData.EntityToDrink))
                         {
                             stateData.FlagStatePrevious = stateData.FlagStateCurrent;
@@ -206,8 +185,7 @@ namespace Systems
                     }
 
 
-                    stateData.IsMating = ((stateData.FlagStateCurrent & StateData.FlagStates.Mating) ==
-                                          StateData.FlagStates.Mating);
+                    stateData.IsMating = (stateData.FlagStateCurrent & StateData.FlagStates.Mating) == StateData.FlagStates.Mating;
                     if (stateData.IsMating)
                     {
                         stateData.FlagStateCurrent &= ~StateData.FlagStates.Wandering;
@@ -228,53 +206,37 @@ namespace Systems
                     }
 
                     //The rabbit can still give birth when fleeing - bad luck I guess
-                    stateData.IsPregnant = ((stateData.FlagStateCurrent & StateData.FlagStates.Pregnant) ==
-                                            StateData.FlagStates.Pregnant);
+                    stateData.IsPregnant = (stateData.FlagStateCurrent & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant;
                     if (stateData.IsPregnant)
-                    {
                         if (bioStatsData.Age - reproductiveData.PregnancyStartTime >= reproductiveData.PregnancyLength)
                         {
                             stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                             stateData.FlagStateCurrent &= ~StateData.FlagStates.Pregnant;
                             stateData.FlagStateCurrent |= StateData.FlagStates.GivingBirth;
                         }
-                    }
 
-                    stateData.IsGivingBirth = ((stateData.FlagStateCurrent & StateData.FlagStates.GivingBirth) ==
-                                               StateData.FlagStates.GivingBirth);
+                    stateData.IsGivingBirth = (stateData.FlagStateCurrent & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth;
                     if (stateData.IsGivingBirth)
-                    {
                         if (reproductiveData.BabiesBorn >= reproductiveData.CurrentLitterSize)
                         {
                             stateData.FlagStatePrevious = stateData.FlagStateCurrent;
                             stateData.FlagStateCurrent &= ~StateData.FlagStates.Pregnant;
                             stateData.FlagStateCurrent &= ~StateData.FlagStates.GivingBirth;
                         }
-                    }
                 }
 
                 //Update states at the end
-                stateData.IsWandering = ((stateData.FlagStateCurrent & StateData.FlagStates.Wandering) ==
-                                         StateData.FlagStates.Wandering);
-                stateData.IsHungry =
-                    ((stateData.FlagStateCurrent & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry);
-                stateData.IsThirsty =
-                    ((stateData.FlagStateCurrent & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty);
-                stateData.IsEating =
-                    ((stateData.FlagStateCurrent & StateData.FlagStates.Eating) == StateData.FlagStates.Eating);
-                stateData.IsDrinking = ((stateData.FlagStateCurrent & StateData.FlagStates.Drinking) ==
-                                        StateData.FlagStates.Drinking);
-                stateData.IsSexuallyActive = ((stateData.FlagStateCurrent & StateData.FlagStates.SexuallyActive) ==
-                                              StateData.FlagStates.SexuallyActive);
-                stateData.IsMating =
-                    ((stateData.FlagStateCurrent & StateData.FlagStates.Mating) == StateData.FlagStates.Mating);
-                stateData.IsFleeing =
-                    ((stateData.FlagStateCurrent & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing);
-                stateData.IsDead = ((stateData.FlagStateCurrent & StateData.FlagStates.Dead) == StateData.FlagStates.Dead);
-                stateData.IsPregnant = ((stateData.FlagStateCurrent & StateData.FlagStates.Pregnant) ==
-                                        StateData.FlagStates.Pregnant);
-                stateData.IsGivingBirth = ((stateData.FlagStateCurrent & StateData.FlagStates.GivingBirth) ==
-                                           StateData.FlagStates.GivingBirth);
+                stateData.IsWandering = (stateData.FlagStateCurrent & StateData.FlagStates.Wandering) == StateData.FlagStates.Wandering;
+                stateData.IsHungry = (stateData.FlagStateCurrent & StateData.FlagStates.Hungry) == StateData.FlagStates.Hungry;
+                stateData.IsThirsty = (stateData.FlagStateCurrent & StateData.FlagStates.Thirsty) == StateData.FlagStates.Thirsty;
+                stateData.IsEating = (stateData.FlagStateCurrent & StateData.FlagStates.Eating) == StateData.FlagStates.Eating;
+                stateData.IsDrinking = (stateData.FlagStateCurrent & StateData.FlagStates.Drinking) == StateData.FlagStates.Drinking;
+                stateData.IsSexuallyActive = (stateData.FlagStateCurrent & StateData.FlagStates.SexuallyActive) == StateData.FlagStates.SexuallyActive;
+                stateData.IsMating = (stateData.FlagStateCurrent & StateData.FlagStates.Mating) == StateData.FlagStates.Mating;
+                stateData.IsFleeing = (stateData.FlagStateCurrent & StateData.FlagStates.Fleeing) == StateData.FlagStates.Fleeing;
+                stateData.IsDead = (stateData.FlagStateCurrent & StateData.FlagStates.Dead) == StateData.FlagStates.Dead;
+                stateData.IsPregnant = (stateData.FlagStateCurrent & StateData.FlagStates.Pregnant) == StateData.FlagStates.Pregnant;
+                stateData.IsGivingBirth = (stateData.FlagStateCurrent & StateData.FlagStates.GivingBirth) == StateData.FlagStates.GivingBirth;
             }).ScheduleParallel();
         }
     }

@@ -24,9 +24,9 @@ namespace Systems
         {
             var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
-            float deltaTime = Time.DeltaTime;
+            var deltaTime = Time.DeltaTime;
 
-            //for each that edits reproductivedata of the entity
+            //for each that edits reproductive data of the entity
             Entities.ForEach((
                 ref ReproductiveData reproductiveData,
                 in StateData stateData,
@@ -53,13 +53,9 @@ namespace Systems
                     {
                         //If it has found an entity to mate with
                         if (HasComponent<Translation>(targetData.EntityToMate))
-                        {
                             //If the mate is close enough to mate with
                             if (targetData.ShortestDistanceToMate <= targetData.MateRadius)
-                            {
                                 reproductiveData.MateStartTime = bioStatsData.Age;
-                            }
-                        }
                     }
                     else
                     {
@@ -69,7 +65,6 @@ namespace Systems
 
                 //If entity is mating
                 if (stateData.IsMating)
-                {
                     //If the mating has ended, the female becomes pregnant
                     if (bioStatsData.Age - reproductiveData.MateStartTime >= reproductiveData.MatingDuration)
                     {
@@ -82,7 +77,6 @@ namespace Systems
 
                         reproductiveData.ReproductiveUrge = 0;
                     }
-                }
             }).ScheduleParallel();
 
             //for each that edits the entityToMate components
@@ -94,12 +88,11 @@ namespace Systems
             ) =>
             {
                 if (stateData.IsSexuallyActive)
-                {
                     //if entityToMate exists (everything should have translation)
                     if (HasComponent<Translation>(targetData.EntityToMate))
                     {
                         //get stateData of entityToMate
-                        StateData mateStateData = GetComponentDataFromEntity<StateData>(true)[targetData.EntityToMate];
+                        var mateStateData = GetComponentDataFromEntity<StateData>(true)[targetData.EntityToMate];
 
                         //If it's a male, who's mating, and the mate is not mating yet, set state of mate to Mating
                         if (bioStatsData.Gender == BioStatsData.Genders.Male &&
@@ -111,8 +104,8 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, targetData.EntityToMate, mateStateData);
 
                             //GetComponent calls are slow so cache for multiple uses
-                            float mateAge = GetComponentDataFromEntity<BioStatsData>(true)[targetData.EntityToMate].Age;
-                            ReproductiveData mateReproductiveData =
+                            var mateAge = GetComponentDataFromEntity<BioStatsData>(true)[targetData.EntityToMate].Age;
+                            var mateReproductiveData =
                                 GetComponentDataFromEntity<ReproductiveData>(true)[targetData.EntityToMate];
 
                             //Set the mates mateStartTime to her age
@@ -120,11 +113,10 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, targetData.EntityToMate, mateReproductiveData);
                         }
                     }
-                }
             }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            _ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(Dependency);
         }
     }
 }

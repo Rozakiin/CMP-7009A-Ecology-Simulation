@@ -19,17 +19,11 @@ namespace Systems
                 if (!stateData.IsPregnant)
                 {
                     if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
-                    {
                         movementData.MoveMultiplier = movementData.YoungMoveMultiplier;
-                    }
                     else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
-                    {
                         movementData.MoveMultiplier = movementData.AdultMoveMultiplier;
-                    }
                     else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
-                    {
                         movementData.MoveMultiplier = movementData.OldMoveMultiplier;
-                    }
                 }
                 else
                 {
@@ -37,10 +31,7 @@ namespace Systems
                 }
 
                 //temp fix set movement to 0 when mating or giving birth
-                if (stateData.IsMating | stateData.IsGivingBirth)
-                {
-                    movementData.MoveMultiplier = 0;
-                }
+                if (stateData.IsMating | stateData.IsGivingBirth) movementData.MoveMultiplier = 0;
             }).ScheduleParallel();
         }
     }

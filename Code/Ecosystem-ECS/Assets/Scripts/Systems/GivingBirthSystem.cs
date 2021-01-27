@@ -1,4 +1,5 @@
-﻿using Components;
+﻿using System;
+using Components;
 using EntityDefaults;
 using Unity.Entities;
 using Unity.Transforms;
@@ -8,7 +9,7 @@ namespace Systems
 {
     public class GivingBirthSystem : SystemBase
     {
-        EndSimulationEntityCommandBufferSystem _ecbSystem;
+        private EndSimulationEntityCommandBufferSystem _ecbSystem;
 
 
         protected override void OnCreate()
@@ -25,8 +26,8 @@ namespace Systems
         {
             var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
-            float time = UnityEngine.Time.time;
-            float timeSeed = time * System.DateTimeOffset.Now.Millisecond;
+            var time = UnityEngine.Time.time;
+            var timeSeed = time * DateTimeOffset.Now.Millisecond;
 
             #region Default Rabbit stats
 
@@ -34,7 +35,7 @@ namespace Systems
             var rabbitNutritionalValue = RabbitDefaults.NutritionalValue;
             var rabbitCanBeEaten = RabbitDefaults.CanBeEaten;
             var rabbitNutritionalValueMultiplier = RabbitDefaults.NutritionalValueMultiplier;
-            EdibleData.FoodTypes rabbitFoodType = RabbitDefaults.FoodType;
+            var rabbitFoodType = RabbitDefaults.FoodType;
 
             //Movement
             var rabbitRotationSpeed = RabbitDefaults.RotationSpeed;
@@ -47,9 +48,9 @@ namespace Systems
             var rabbitOldMoveMultiplier = RabbitDefaults.OldMoveMultiplier;
 
             //States
-            StateData.FlagStates rabbitFlagState = RabbitDefaults.FlagState;
-            StateData.FlagStates rabbitPreviousFlagState = RabbitDefaults.FlagStatePrevious;
-            StateData.DeathReasons rabbitDeathReason = RabbitDefaults.DeathReason;
+            var rabbitFlagState = RabbitDefaults.FlagState;
+            var rabbitPreviousFlagState = RabbitDefaults.FlagStatePrevious;
+            var rabbitDeathReason = RabbitDefaults.DeathReason;
             var rabbitBeenEaten = RabbitDefaults.BeenEaten;
 
             //Target data
@@ -84,7 +85,7 @@ namespace Systems
             var rabbitAdultEntryTimer = RabbitDefaults.AdultEntryTimer;
             var rabbitOldEntryTimer = RabbitDefaults.OldEntryTimer;
 
-            //Reproducite data
+            //Reproductive data
             var rabbitMatingDuration = RabbitDefaults.MatingDuration;
             var rabbitMateStartTime = RabbitDefaults.MateStartTime;
             var rabbitReproductiveUrge = RabbitDefaults.ReproductiveUrge;
@@ -123,7 +124,7 @@ namespace Systems
             var foxNutritionalValue = FoxDefaults.NutritionalValue;
             var foxCanBeEaten = FoxDefaults.CanBeEaten;
             var foxNutritionalValueMultiplier = FoxDefaults.NutritionalValueMultiplier;
-            EdibleData.FoodTypes foxFoodType = FoxDefaults.FoodType;
+            var foxFoodType = FoxDefaults.FoodType;
 
             //Movement
             var foxRotationSpeed = FoxDefaults.RotationSpeed;
@@ -136,9 +137,9 @@ namespace Systems
             var foxOldMoveMultiplier = FoxDefaults.OldMoveMultiplier;
 
             //States
-            StateData.FlagStates foxFlagState = FoxDefaults.FlagState;
-            StateData.FlagStates foxPreviousFlagState = FoxDefaults.PreviousFlagState;
-            StateData.DeathReasons foxDeathReason = FoxDefaults.DeathReason;
+            var foxFlagState = FoxDefaults.FlagState;
+            var foxPreviousFlagState = FoxDefaults.PreviousFlagState;
+            var foxDeathReason = FoxDefaults.DeathReason;
             var foxBeenEaten = FoxDefaults.BeenEaten;
 
             //Target data
@@ -216,17 +217,18 @@ namespace Systems
             ) =>
             {
                 if (stateData.IsGivingBirth)
-                {
                     //Determine if enough time has passed since the last baby was born and if there are still babies to be born
-                    if ((bioStatsData.Age - reproductiveData.BirthStartTime >= reproductiveData.BirthDuration) &&
+                    if (bioStatsData.Age - reproductiveData.BirthStartTime >= reproductiveData.BirthDuration &&
                         reproductiveData.BabiesBorn < reproductiveData.CurrentLitterSize)
                     {
                         //give birth
+
                         #region Setting New Entity's Components
+
                         // determine if rabbit or fox giving birth - not very scalable
                         if (HasComponent<IsRabbitTag>(entity))
                         {
-                            Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
+                            var newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new MovementData
@@ -289,12 +291,12 @@ namespace Systems
                                     ThirstyThreshold = rabbitThirstyThreshold,
                                     ThirstMax = rabbitThirstMax,
                                     ThirstIncrease = rabbitThirstIncrease,
-                                    DrinkingSpeed = rabbitDrinkingSpeed,
+                                    DrinkingSpeed = rabbitDrinkingSpeed
                                 }
                             );
 
-                            float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
-                            Random randomGen = new Random((uint)seed + 2);
+                            var seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
+                            var randomGen = new Random((uint) seed + 2);
                             BioStatsData.Genders randGender = randomGen.NextInt(0, 2) == 1
                                 ? randGender = BioStatsData.Genders.Female
                                 : randGender = BioStatsData.Genders.Male;
@@ -318,12 +320,12 @@ namespace Systems
                                     MatingDuration = rabbitMatingDuration,
                                     MateStartTime = rabbitMateStartTime,
                                     ReproductiveUrge = rabbitReproductiveUrge,
-                                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female
+                                    ReproductiveUrgeIncrease = randGender == BioStatsData.Genders.Female
                                         ? rabbitReproductiveUrgeIncreaseFemale
-                                        : rabbitReproductiveUrgeIncreaseMale),
-                                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female
+                                        : rabbitReproductiveUrgeIncreaseMale,
+                                    DefaultReproductiveIncrease = randGender == BioStatsData.Genders.Female
                                         ? rabbitReproductiveUrgeIncreaseFemale
-                                        : rabbitReproductiveUrgeIncreaseMale),
+                                        : rabbitReproductiveUrgeIncreaseMale,
                                     MatingThreshold = rabbitMatingThreshold,
 
                                     BirthDuration = rabbitBirthDuration,
@@ -342,21 +344,20 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new SizeData
                                 {
-                                    SizeBase = (randGender == BioStatsData.Genders.Female
+                                    SizeBase = randGender == BioStatsData.Genders.Female
                                         ? rabbitScaleFemale
-                                        : rabbitScaleMale),
+                                        : rabbitScaleMale,
                                     SizeMultiplier = rabbitSizeMultiplier,
                                     AgeSizeMultiplier = rabbitAgeSizeMultiplier,
                                     YoungSizeMultiplier = rabbitYoungSizeMultiplier,
                                     AdultSizeMultiplier = rabbitAdultSizeMultiplier,
                                     OldSizeMultiplier = rabbitOldSizeMultiplier
-
                                 }
                             );
                         }
                         else if (HasComponent<IsFoxTag>(entity))
                         {
-                            Entity newEntity = ecb.Instantiate(entityInQueryIndex, entity);
+                            var newEntity = ecb.Instantiate(entityInQueryIndex, entity);
 
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new MovementData
@@ -419,12 +420,12 @@ namespace Systems
                                     ThirstyThreshold = foxThirstyThreshold,
                                     ThirstMax = foxThirstMax,
                                     ThirstIncrease = foxThirstIncrease,
-                                    DrinkingSpeed = foxDrinkingSpeed,
+                                    DrinkingSpeed = foxDrinkingSpeed
                                 }
                             );
 
-                            float seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
-                            Random randomGen = new Random((uint)seed + 2);
+                            var seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
+                            var randomGen = new Random((uint) seed + 2);
                             BioStatsData.Genders randGender = randomGen.NextInt(0, 2) == 1
                                 ? randGender = BioStatsData.Genders.Female
                                 : randGender = BioStatsData.Genders.Male;
@@ -448,12 +449,12 @@ namespace Systems
                                     MatingDuration = foxMatingDuration,
                                     MateStartTime = foxMateStartTime,
                                     ReproductiveUrge = foxReproductiveUrge,
-                                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female
+                                    ReproductiveUrgeIncrease = randGender == BioStatsData.Genders.Female
                                         ? foxReproductiveUrgeIncreaseFemale
-                                        : foxReproductiveUrgeIncreaseMale),
-                                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female
+                                        : foxReproductiveUrgeIncreaseMale,
+                                    DefaultReproductiveIncrease = randGender == BioStatsData.Genders.Female
                                         ? foxReproductiveUrgeIncreaseFemale
-                                        : foxReproductiveUrgeIncreaseMale),
+                                        : foxReproductiveUrgeIncreaseMale,
                                     MatingThreshold = foxMatingThreshold,
 
                                     BirthDuration = foxBirthDuration,
@@ -472,13 +473,13 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new SizeData
                                 {
-                                    SizeBase = (randGender == BioStatsData.Genders.Female ? foxScaleFemale : foxScaleMale),
+                                    SizeBase =
+                                        randGender == BioStatsData.Genders.Female ? foxScaleFemale : foxScaleMale,
                                     SizeMultiplier = foxSizeMultiplier,
                                     AgeSizeMultiplier = foxAgeSizeMultiplier,
                                     YoungSizeMultiplier = foxYoungSizeMultiplier,
                                     AdultSizeMultiplier = foxAdultSizeMultiplier,
                                     OldSizeMultiplier = foxOldSizeMultiplier
-
                                 }
                             );
                         }
@@ -489,9 +490,8 @@ namespace Systems
                         reproductiveData.BirthStartTime = bioStatsData.Age;
                         reproductiveData.BabiesBorn++;
                     }
-                }
             }).ScheduleParallel();
-            this.CompleteDependency();
+            CompleteDependency();
         }
     }
 }

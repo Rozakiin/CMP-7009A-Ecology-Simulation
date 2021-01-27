@@ -22,7 +22,7 @@ namespace Systems
         {
             var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
-            float deltaTime = Time.DeltaTime;
+            var deltaTime = Time.DeltaTime;
 
             Entities.ForEach((
                 int entityInQueryIndex,
@@ -35,17 +35,11 @@ namespace Systems
                 if (!stateData.IsPregnant)
                 {
                     if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
-                    {
                         basicNeedsData.HungerIncrease = basicNeedsData.YoungHungerIncrease;
-                    }
                     else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
-                    {
                         basicNeedsData.HungerIncrease = basicNeedsData.AdultHungerIncrease;
-                    }
                     else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
-                    {
                         basicNeedsData.HungerIncrease = basicNeedsData.OldHungerIncrease;
-                    }
                 }
                 else
                 {
@@ -55,15 +49,13 @@ namespace Systems
                 // Increase hunger
                 basicNeedsData.Hunger += basicNeedsData.HungerIncrease * deltaTime;
 
-                //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutritionvalue of entity
+                //If the entityToEat exists and entity is eating, set entityToEat state to dead and eaten.Decrease hunger by nutrition value of entity
                 if (HasComponent<EdibleData>(targetData.EntityToEat) && stateData.IsEating)
                 {
-                    basicNeedsData.Hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.EntityToEat]
-                        .NutritionalValue;
+                    basicNeedsData.Hunger -= GetComponentDataFromEntity<EdibleData>(true)[targetData.EntityToEat].NutritionalValue;
                     if (basicNeedsData.Hunger < 0) basicNeedsData.Hunger = 0;
                     //set beenEaten to true in entityToEat
                     if (HasComponent<StateData>(targetData.EntityToEat))
-                    {
                         ecb.SetComponent(entityInQueryIndex, targetData.EntityToEat,
                             new StateData
                             {
@@ -72,12 +64,11 @@ namespace Systems
                                 FlagStateCurrent = StateData.FlagStates.Dead
                             }
                         );
-                    }
                 }
             }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            _ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(Dependency);
         }
     }
 }

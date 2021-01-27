@@ -23,27 +23,30 @@ namespace Systems
             var ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent();
 
             // Makes a path request using the current target in TargetData 
-            Entities
-                .WithNone<PathFindingRequestData>()
-                .ForEach((
-                    Entity entity,
-                    int entityInQueryIndex,
-                    in TargetData targetData,
-                    in PathFollowData pathFollowData,
-                    in Translation translation
-                ) =>
+            Entities.WithNone<PathFindingRequestData>().ForEach((
+                Entity entity,
+                int entityInQueryIndex,
+                in TargetData targetData,
+                in PathFollowData pathFollowData,
+                in Translation translation
+            ) =>
+            {
+                //if not following a path and not at target
+                if (pathFollowData.PathIndex < 0 && targetData.AtTarget == false)
                 {
-                    //if not following a path and not at target
-                    if (pathFollowData.PathIndex < 0 && targetData.AtTarget == false)
-                    {
-                        // make a path finding request
-                        ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
-                        ecb.SetComponent(entityInQueryIndex, entity, new PathFindingRequestData { StartPosition = translation.Value, EndPosition = targetData.Target });
-                    }
-                }).ScheduleParallel();
+                    // make a path finding request
+                    ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);
+                    ecb.SetComponent(entityInQueryIndex, entity,
+                        new PathFindingRequestData
+                        {
+                            StartPosition = translation.Value,
+                            EndPosition = targetData.Target
+                        });
+                }
+            }).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
-            _ecbSystem.AddJobHandleForProducer(this.Dependency);
+            _ecbSystem.AddJobHandleForProducer(Dependency);
         }
     }
 }

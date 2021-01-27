@@ -18,17 +18,11 @@ namespace Systems
             ) =>
             {
                 if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Old)
-                {
                     sizeData.AgeSizeMultiplier = sizeData.OldSizeMultiplier;
-                }
                 else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Adult)
-                {
                     sizeData.AgeSizeMultiplier = sizeData.AdultSizeMultiplier;
-                }
                 else if (bioStatsData.AgeGroup == BioStatsData.AgeGroups.Young)
-                {
                     sizeData.AgeSizeMultiplier = sizeData.YoungSizeMultiplier;
-                }
 
                 scale.Value.c0.x = sizeData.Size;
                 scale.Value.c1.y = sizeData.Size;

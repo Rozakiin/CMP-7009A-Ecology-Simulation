@@ -1,5 +1,8 @@
-﻿using Components;
+﻿using System;
+using Components;
+using MonoBehaviourTools.UI;
 using Unity.Entities;
+using UtilTools;
 
 namespace Systems
 {
@@ -13,24 +16,24 @@ namespace Systems
         protected override void OnUpdate()
         {
             //catch to not run if paused
-            if (MonoBehaviourTools.UI.UITimeControl.Instance.GetPause())
-            {
-                return;
-            }
+            if (UITimeControl.Instance.GetPause()) return;
             // Checks What entity is dead, increment the dead count, decrement the living count, store how they died and destory the entity
             // Also counts the total number of each entity
 
-            int rabbitsDeadTotal = 0;
-            int rabbitsDeadAge = 0;
-            int rabbitsDeadEaten = 0;
-            int rabbitsDeadHunger = 0;
-            int rabbitsDeadThirst = 0;
+            var rabbitsDeadTotal = 0;
+            var rabbitsDeadAge = 0;
+            var rabbitsDeadEaten = 0;
+            var rabbitsDeadHunger = 0;
+            var rabbitsDeadThirst = 0;
 
-            int rabbitsTotal = 0;
-            Entities.WithAll<IsRabbitTag>().ForEach((Entity entity, in StateData stateData) =>
+            var rabbitsTotal = 0;
+            Entities.WithAll<IsRabbitTag>().ForEach((
+                Entity entity,
+                in StateData stateData
+            ) =>
             {
                 rabbitsTotal++;
-                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
+                if (ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
                 {
                     rabbitsDeadTotal++;
                     switch (stateData.DeathReason)
@@ -48,8 +51,9 @@ namespace Systems
                             rabbitsDeadThirst++;
                             break;
                         default:
-                            throw new System.NotImplementedException();
+                            throw new NotImplementedException();
                     }
+
                     EntityManager.DestroyEntity(entity);
                 }
             }).WithStructuralChanges().Run();
@@ -62,17 +66,19 @@ namespace Systems
             SimulationManager.Instance.NumberOfRabbitsDeadThirst += rabbitsDeadThirst;
 
 
-            int foxesDeadTotal = 0;
-            int foxesDeadAge = 0;
-            int foxesDeadEaten = 0;
-            int foxesDeadHunger = 0;
-            int foxesDeadThirst = 0;
+            var foxesDeadTotal = 0;
+            var foxesDeadAge = 0;
+            var foxesDeadEaten = 0;
+            var foxesDeadHunger = 0;
+            var foxesDeadThirst = 0;
 
-            int foxesTotal = 0;
-            Entities.WithAll<IsFoxTag>().ForEach((Entity entity, in StateData stateData) =>
+            var foxesTotal = 0;
+            Entities.WithAll<IsFoxTag>().ForEach((
+                Entity entity,
+                in StateData stateData) =>
             {
                 foxesTotal++;
-                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
+                if (ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
                 {
                     foxesDeadTotal++;
                     switch (stateData.DeathReason)
@@ -90,8 +96,9 @@ namespace Systems
                             foxesDeadThirst++;
                             break;
                         default:
-                            throw new System.NotImplementedException();
+                            throw new NotImplementedException();
                     }
+
                     EntityManager.DestroyEntity(entity);
                 }
             }).WithStructuralChanges().Run();
@@ -104,13 +111,13 @@ namespace Systems
             SimulationManager.Instance.NumberOfFoxesDeadThirst += foxesDeadThirst;
 
 
-            int grassEaten = 0;
-            int grassTotal = 0;
+            var grassEaten = 0;
+            var grassTotal = 0;
 
             Entities.WithAll<IsGrassTag>().ForEach((Entity entity, in StateData stateData) =>
             {
                 grassTotal++;
-                if (UtilTools.ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
+                if (ComponentTools.ContainsState(StateData.FlagStates.Dead, stateData.FlagStateCurrent))
                 {
                     grassEaten++;
                     EntityManager.DestroyEntity(entity);

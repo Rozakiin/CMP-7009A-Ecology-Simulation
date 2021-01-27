@@ -13,19 +13,17 @@ namespace Systems
         {
             var deltaTime = Time.DeltaTime;
 
-            Entities.ForEach((ref BioStatsData bioStatsData) =>
+            Entities.ForEach((
+                ref BioStatsData bioStatsData
+            ) =>
             {
                 // Increase age
                 bioStatsData.Age += bioStatsData.AgeIncrease * deltaTime;
 
                 if (bioStatsData.Age >= bioStatsData.OldEntryTimer)
-                {
                     bioStatsData.AgeGroup = BioStatsData.AgeGroups.Old;
-                }
                 else if (bioStatsData.Age >= bioStatsData.AdultEntryTimer)
-                {
                     bioStatsData.AgeGroup = BioStatsData.AgeGroups.Adult;
-                }
             }).ScheduleParallel();
         }
     }
