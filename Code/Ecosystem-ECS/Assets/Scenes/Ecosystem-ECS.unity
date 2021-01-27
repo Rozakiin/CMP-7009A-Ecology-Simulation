@@ -151,38 +151,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bd0d83777ba614d933f49e45a98412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugEnabled: 0
-  isSetupComplete: 0
-  grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
+  IsDebugEnabled: 0
+  IsSetupComplete: 0
+  _grassTile: {fileID: 8420600396935746894, guid: e1ae91fdb59dc0449a5eaf34b856e005,
     type: 3}
-  lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
+  _lightGrassTile: {fileID: 3562326775004995220, guid: 84aa1b47f178bc047bb1e038354aac64,
     type: 3}
-  waterTile: {fileID: 3742396586432582926, guid: 673326a1eede18341aaf073836f8e8a4,
+  _waterTile: {fileID: 3742396586432582926, guid: 673326a1eede18341aaf073836f8e8a4,
     type: 3}
-  sandTile: {fileID: 1084157945163860904, guid: 5c8daab8d59a11a45af5d3126dfd793f,
+  _sandTile: {fileID: 1084157945163860904, guid: 5c8daab8d59a11a45af5d3126dfd793f,
     type: 3}
-  rockTile: {fileID: 791125575439614700, guid: dd11c682782c1ad4ca327762d0bd9fea, type: 3}
-  rabbit: {fileID: 8401487155666583363, guid: 55972e5130a2f294e9760b2d60b812f2, type: 3}
-  fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
-  grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
-  collisionPlaneForMap: {fileID: 0}
-  numberOfRabbitsToSpawn: 10
-  numberOfFoxesToSpawn: 20
-  numberOfGrassToSpawn: 10
-  rabbitPopulation: 0
-  foxPopulation: 0
-  grassPopulation: 0
-  numberOfGrassEaten: 0
-  numberOfRabbitsDeadTotal: 0
-  numberOfRabbitsDeadHunger: 0
-  numberOfRabbitsDeadThirst: 0
-  numberOfRabbitsDeadEaten: 0
-  numberOfRabbitsDeadAge: 0
-  numberOfFoxesDeadTotal: 0
-  numberOfFoxesDeadHunger: 0
-  numberOfFoxesDeadThirst: 0
-  numberOfFoxesDeadEaten: 0
-  numberOfFoxesDeadAge: 0
+  _rockTile: {fileID: 791125575439614700, guid: dd11c682782c1ad4ca327762d0bd9fea,
+    type: 3}
+  _rabbit: {fileID: 8401487155666583363, guid: 55972e5130a2f294e9760b2d60b812f2, type: 3}
+  _fox: {fileID: 1698060286047908, guid: e8b9e166c8b997f4cb6b716f551a57e7, type: 3}
+  _grass: {fileID: 2319766486748558764, guid: 99e6b0246b9e9d744a3b7b2d72b6f3c7, type: 3}
+  MapCollisionPlane: {fileID: 0}
+  NumberOfRabbitsToSpawn: 50
+  NumberOfFoxesToSpawn: 2
+  NumberOfGrassToSpawn: 100
+  RabbitPopulation: 0
+  FoxPopulation: 0
+  GrassPopulation: 0
+  NumberOfGrassEaten: 0
+  NumberOfRabbitsDeadTotal: 0
+  NumberOfRabbitsDeadHunger: 0
+  NumberOfRabbitsDeadThirst: 0
+  NumberOfRabbitsDeadEaten: 0
+  NumberOfRabbitsDeadAge: 0
+  NumberOfFoxesDeadTotal: 0
+  NumberOfFoxesDeadHunger: 0
+  NumberOfFoxesDeadThirst: 0
+  NumberOfFoxesDeadEaten: 0
+  NumberOfFoxesDeadAge: 0
 --- !u!4 &508030574
 Transform:
   m_ObjectHideFlags: 0
@@ -209,17 +210,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 973c00c589726004db585fff81093531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayGridGizmos: 1
-  gridWorldSize:
+  _displayGridGizmos: 1
+  GridWorldSize:
     x: 0
     y: 0
-  gridSize:
+  GridSize:
     x: 0
     y: 0
-  gridNodeRadius: 1
-  distanceBetweenGridNodes: 0
-  gridNodeDiameter: 0
-  unwalkableProximityPenalty: 10
+  _gridNodeRadius: 1
+  _distanceBetweenGridNodes: 0
+  GridNodeDiameter: 0
+  _unwalkableProximityPenalty: 10
 --- !u!1 &788710890
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,10 +396,25 @@ PrefabInstance:
       propertyPath: uITimeControl
       value: 
       objectReference: {fileID: 1323496899}
+    - target: {fileID: 1115691778408076324, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -96.129395
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115691778408076324, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -190.14526
+      objectReference: {fileID: 0}
     - target: {fileID: 2281046952876205020, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6595962465683016292, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -130.1294
       objectReference: {fileID: 0}
     - target: {fileID: 6942748427998680664, guid: da6900d68d9224b4380a6d87d5d77c62,
         type: 3}
@@ -459,6 +475,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SimulationUIController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7978134038296322756, guid: da6900d68d9224b4380a6d87d5d77c62,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -85.129395
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da6900d68d9224b4380a6d87d5d77c62, type: 3}
@@ -570,4 +591,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0edc250bac6ed4087b75b02d2d261ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulationManager: {fileID: 508030573}
