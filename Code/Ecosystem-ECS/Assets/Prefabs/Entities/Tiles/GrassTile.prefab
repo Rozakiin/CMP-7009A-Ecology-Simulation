@@ -124,7 +124,7 @@ MonoBehaviour:
     m_SimplificationTolerance: 0.14999999
     m_BevelRadius: 0.05
     m_MinimumAngle: 2.5000002
-  m_CustomMesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_CustomMesh: {fileID: 0}
   m_ForceUnique: 0
   m_Material:
     m_SupportsTemplate: 1
