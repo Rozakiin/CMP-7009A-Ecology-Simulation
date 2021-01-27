@@ -255,9 +255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def12e8c4daf82a4fa9f7578cdbc7776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainType: 0
-  terrainPenalty: 0
-  isWalkable: 0
+  Terrain: 0
+  TerrainPenalty: 0
+  IsWalkable: 0
 --- !u!114 &9137307576216217085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 10
-  canBeDrunk: 1
+  CanBeDrunk: 1
 --- !u!114 &-3902668361414911274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,4 +297,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliderType: 3
+  Collider: 3

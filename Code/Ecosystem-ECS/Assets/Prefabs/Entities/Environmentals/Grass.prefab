@@ -110,10 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51c87e0fecb9d94fb9b7fce3d681953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBeEaten: 1
-  nutritionalValueBase: 0
-  nutritionalValueMultiplier: 0
-  foodType: 1
+  CanBeEaten: 0
+  NutritionalValueBase: 0
+  NutritionalValueMultiplier: 0
+  FoodType: 0
 --- !u!114 &-6082851943645634421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,11 +127,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 0
-  sizeMultiplier: 0
-  ageSizeMultiplier: 0
-  youngSizeMultiplier: 0
-  adultSizeMultiplier: 0
-  oldSizeMultiplier: 0
+  SizeMultiplier: 0
+  AgeSizeMultiplier: 0
+  YoungSizeMultiplier: 0
+  AdultSizeMultiplier: 0
+  OldSizeMultiplier: 0
 --- !u!114 &-7866654370977077799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,10 +144,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6e1526096fcd34e81c5ae7b6e53efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
-  previousState: 0
-  deathReason: 0
-  beenEaten: 0
+  DeathReason: 0
+  BeenEaten: 0
+  FlagStateCurrent: 0
+  FlagStatePrevious: 0
+  IsWandering: 0
+  IsHungry: 0
+  IsThirsty: 0
+  IsEating: 0
+  IsDrinking: 0
+  IsSexuallyActive: 0
+  IsMating: 0
+  IsFleeing: 0
+  IsDead: 0
+  IsPregnant: 0
+  IsGivingBirth: 0
 --- !u!114 &6972913385351861907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliderType: 0
+  Collider: 2
 --- !u!114 &8913226411348595302
 MonoBehaviour:
   m_ObjectHideFlags: 0

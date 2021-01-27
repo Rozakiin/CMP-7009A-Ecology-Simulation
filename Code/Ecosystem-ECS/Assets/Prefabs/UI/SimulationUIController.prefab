@@ -986,12 +986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0a4d2a013d0a418a86f092050ebd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  save: {fileID: 500298135160070407}
-  submit: {fileID: 2881723290549940684}
-  circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
-  inputField: {fileID: 7173791672388236274}
-  uITimeControl: {fileID: 0}
-  simulationManager: {fileID: 0}
+  _save: {fileID: 500298135160070407}
+  _submit: {fileID: 2881723290549940684}
+  _circleSprite: {fileID: 21300000, guid: e26464eeebb6949cfaddd1b7eb0c2e5d, type: 3}
+  _inputField: {fileID: 7173791672388236274}
+  _uITimeControl: {fileID: 0}
+  _simulationManager: {fileID: 0}
 --- !u!212 &4626331884982613217
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4971,12 +4971,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f558d7cb3eeaa4cb4c25b97e40b914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiSliderCanvas: {fileID: 6875578591821961268}
-  uiTimeCanvas: {fileID: 6460449383166524575}
-  uiTurnCanvas: {fileID: 3940321929799911572}
-  uiGraphCanvas: {fileID: 5698592599571887844}
-  dropdownPropertyDropdown: {fileID: 3357285199724261871}
-  dropdownInputField: {fileID: 686622459650857197}
+  _uiSliderCanvas: {fileID: 6875578591821961268}
+  _uiTimeCanvas: {fileID: 6460449383166524575}
+  _uiTurnCanvas: {fileID: 3940321929799911572}
+  _uiGraphCanvas: {fileID: 5698592599571887844}
+  _dropdownPropertyDropdown: {fileID: 3357285199724261871}
+  _dropdownInputField: {fileID: 686622459650857197}
 --- !u!114 &4760582213612601307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4989,8 +4989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3a4bb1361ba496f9d7b8ca5d19d383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiGraph: {fileID: 265633833014814715}
-  turnDisplay: {fileID: 8732237489688312611}
+  _turnDisplay: {fileID: 8732237489688312611}
 --- !u!114 &964520025276837570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5003,12 +5002,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729a183ebb97c419f832a81638146f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fastForwardSpeed: 0
-  speedDisplay: {fileID: 7429247658599838417}
-  playButton: {fileID: 2748985320343236906}
-  pauseButton: {fileID: 3697924906457980330}
-  fastButton: {fileID: 9054472252994641306}
-  slowButton: {fileID: 3705421226858723180}
+  FastForwardSpeed: 0
+  _speedDisplay: {fileID: 7429247658599838417}
+  _playButton: {fileID: 2748985320343236906}
+  _pauseButton: {fileID: 3697924906457980330}
+  _fastButton: {fileID: 9054472252994641306}
+  _slowButton: {fileID: 3705421226858723180}
 --- !u!114 &6301791609635858717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5021,10 +5020,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62e4d4296a74d4ff2ae9866b01d9ce7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escapeMenu: {fileID: 2281046952876205020}
-  resume: {fileID: 4933575748973551778}
-  save: {fileID: 500298135160070407}
-  quit: {fileID: 5328973228511363711}
+  _escapeMenu: {fileID: 2281046952876205020}
+  _resume: {fileID: 4933575748973551778}
+  _save: {fileID: 2393202945718053353}
+  _quit: {fileID: 5328973228511363711}
 --- !u!1 &7904985887230970572
 GameObject:
   m_ObjectHideFlags: 0

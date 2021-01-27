@@ -3528,168 +3528,168 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bcbdb54739de444ab8e0dc4b527da94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultBrightness: 1
-  defaultVolume: 0.5
-  _newGameButtonLevel: Scenes/Ecosystem-ECS
-  menuDefaultCanvas: {fileID: 1939101664952978}
-  GeneralSettingsCanvas: {fileID: 1053070176235954}
-  graphicsMenu: {fileID: 1181362766895746}
-  soundMenu: {fileID: 1579993891502314}
-  gameplayMenu: {fileID: 1439258321415800}
-  controlsMenu: {fileID: 1607287232231484}
-  confirmationMenu: {fileID: 1706612065132982}
-  initialPropertiesCanvas: {fileID: 8834961339577121779}
-  generateMapCanvas: {fileID: 3561171174563781168}
-  noSaveDialog: {fileID: 1207111332628262}
-  newGameDialog: {fileID: 1889607586039040}
-  loadGameDialog: {fileID: 1443681062563508}
-  brightnessEffect: {fileID: 0}
-  brightnessSlider: {fileID: 114414691622253428}
-  brightnessText: {fileID: 114954420297510558}
-  volumeText: {fileID: 114662438807354912}
-  volumeSlider: {fileID: 114272391833239024}
-  rabbitNumberInputField: {fileID: 3096990740066727296}
-  foxNumberInputField: {fileID: 2597206127099643863}
-  grassNumberInputField: {fileID: 3571858478382535148}
-  rabbitAgeMaxText: {fileID: 6412123629564495868}
-  rabbitAgeMaxSlider: {fileID: 2665903124697164210}
-  rabbitNutritionalValueText: {fileID: 2536280753080216820}
-  rabbitNutritionalValueSlider: {fileID: 674693422686857241}
-  rabbitCanBeEaten: {fileID: 4396208877482332839}
-  rabbitHungerMaxText: {fileID: 5618011361900052438}
-  rabbitHungerMaxSlider: {fileID: 6784177703847625525}
-  rabbitHungerThresholdText: {fileID: 2144267547133647554}
-  rabbitHungerThresholdSlider: {fileID: 6758086186351015010}
-  rabbitHungerIncreaseBaseText: {fileID: 9016787481702283071}
-  rabbitHungerIncreaseBaseSlider: {fileID: 3826323298195229690}
-  rabbitHungerIncreaseYoungText: {fileID: 5983175482872380122}
-  rabbitHungerIncreaseYoungSlider: {fileID: 5788718911316542716}
-  rabbitHungerIncreaseAdultText: {fileID: 2028586753483360857}
-  rabbitHungerIncreaseAdultSlider: {fileID: 5289680929768667412}
-  rabbitHungerIncreaseOldText: {fileID: 7493683376916111740}
-  rabbitHungerIncreaseOldSlider: {fileID: 6676725066310411639}
-  rabbitEatingSpeedText: {fileID: 6633753077634494122}
-  rabbitEatingSpeedSlider: {fileID: 4838935327748053959}
-  rabbitThirstMaxText: {fileID: 3924442619824553156}
-  rabbitThirstMaxSlider: {fileID: 1583701169930584400}
-  rabbitThirstThresholdText: {fileID: 2082510161143972662}
-  rabbitThirstThresholdSlider: {fileID: 4116058072252483807}
-  rabbitThirstIncreaseBaseText: {fileID: 5060542399969945311}
-  rabbitThirstIncreaseBaseSlider: {fileID: 738042467755066951}
-  rabbitThirstIncreaseYoungText: {fileID: 0}
-  rabbitThirstIncreaseYoungSlider: {fileID: 0}
-  rabbitThirstIncreaseAdultText: {fileID: 0}
-  rabbitThirstIncreaseAdultSlider: {fileID: 0}
-  rabbitThirstIncreaseOldText: {fileID: 0}
-  rabbitThirstIncreaseOldSlider: {fileID: 0}
-  rabbitDrinkingSpeedText: {fileID: 1808154729652113240}
-  rabbitDrinkingSpeedSlider: {fileID: 50564492662069825}
-  rabbitMatingDurationText: {fileID: 8139021261911617931}
-  rabbitMatingDurationSlider: {fileID: 3287337621360028430}
-  rabbitMatingThresholdText: {fileID: 5787794899278178954}
-  rabbitMatingThresholdSlider: {fileID: 9000131524130375234}
-  rabbitReproductiveUrgeIncreaseText: {fileID: 5707986012045419270}
-  rabbitReproductiveUrgeIncreaseSlider: {fileID: 3487152839788394710}
-  rabbitPregnancyLengthText: {fileID: 3532794229838012628}
-  rabbitPregnancyLengthSlider: {fileID: 2692234488432257645}
-  rabbitBirthDurationText: {fileID: 169664403595815023}
-  rabbitBirthDurationSlider: {fileID: 1943533376706670522}
-  rabbitLitterSizeMinText: {fileID: 4591832951111595234}
-  rabbitLitterSizeMinSlider: {fileID: 6220205225781729622}
-  rabbitLitterSizeMaxText: {fileID: 6263951894684250140}
-  rabbitLitterSizeMaxSlider: {fileID: 5219427104662686722}
-  rabbitLitterSizeAveText: {fileID: 4208003644002793524}
-  rabbitLitterSizeAveSlider: {fileID: 7396539244169310378}
-  rabbitMovementSpeedText: {fileID: 7947557334685432405}
-  rabbitMovementSpeedSlider: {fileID: 93121389991971183}
-  rabbitMovementMultiplierBaseText: {fileID: 5549322739032382426}
-  rabbitMovementMultiplierBaseSlider: {fileID: 4780837772265897233}
-  rabbitMovementMultiplierYoungText: {fileID: 1858889685546248043}
-  rabbitMovementMultiplierYoungSlider: {fileID: 6520616782728627596}
-  rabbitMovementMultiplierAdultText: {fileID: 2435721859637035291}
-  rabbitMovementMultiplierAdultSlider: {fileID: 8391624711165118174}
-  rabbitMovementMultiplierOldText: {fileID: 6566347331940128372}
-  rabbitMovementMultiplierOldSlider: {fileID: 3830330633145307192}
-  rabbitMovementMultiplierPregnantText: {fileID: 4334042794912096203}
-  rabbitMovementMultiplierPregnantSlider: {fileID: 3314884091592831738}
-  rabbitSightRadiusText: {fileID: 5335202097837423875}
-  rabbitSightRadiusSlider: {fileID: 5305799309691236930}
-  rabbitSizeMaleText: {fileID: 6858037330774512999}
-  rabbitSizeMaleSlider: {fileID: 4986845167027729466}
-  rabbitSizeFemaleText: {fileID: 8479136821925507909}
-  rabbitSizeFemaleSlider: {fileID: 5639817712506345711}
-  foxAgeMaxText: {fileID: 7234834337011120397}
-  foxAgeMaxSlider: {fileID: 6706381988640061523}
-  foxNutritionalValueText: {fileID: 7172438466511682444}
-  foxNutritionalValueSlider: {fileID: 5238225943409443349}
-  foxCanBeEaten: {fileID: 6040455343213266785}
-  foxHungerMaxText: {fileID: 8377076381820291256}
-  foxHungerMaxSlider: {fileID: 7474300030018569460}
-  foxHungerThresholdText: {fileID: 6055070961361515345}
-  foxHungerThresholdSlider: {fileID: 5503865853138934649}
-  foxHungerIncreaseBaseText: {fileID: 3498870645106012785}
-  foxHungerIncreaseBaseSlider: {fileID: 2793840008779185175}
-  foxHungerIncreaseYoungText: {fileID: 8109561022658101024}
-  foxHungerIncreaseYoungSlider: {fileID: 5667505585648962397}
-  foxHungerIncreaseAdultText: {fileID: 8526324122393961581}
-  foxHungerIncreaseAdultSlider: {fileID: 8779815564683153848}
-  foxHungerIncreaseOldText: {fileID: 3330774501536680684}
-  foxHungerIncreaseOldSlider: {fileID: 6518672293304467608}
-  foxEatingSpeedText: {fileID: 1464589146112443022}
-  foxEatingSpeedSlider: {fileID: 3852259704131555376}
-  foxThirstMaxText: {fileID: 3881741123051206169}
-  foxThirstMaxSlider: {fileID: 4001713634304844977}
-  foxThirstThresholdText: {fileID: 1249395533501222145}
-  foxThirstThresholdSlider: {fileID: 8459222413315075129}
-  foxThirstIncreaseBaseText: {fileID: 1562254795510972616}
-  foxThirstIncreaseBaseSlider: {fileID: 6620962862185418908}
-  foxThirstIncreaseYoungText: {fileID: 0}
-  foxThirstIncreaseYoungSlider: {fileID: 0}
-  foxThirstIncreaseAdultText: {fileID: 0}
-  foxThirstIncreaseAdultSlider: {fileID: 0}
-  foxThirstIncreaseOldText: {fileID: 0}
-  foxThirstIncreaseOldSlider: {fileID: 0}
-  foxDrinkingSpeedText: {fileID: 7574867228474499837}
-  foxDrinkingSpeedSlider: {fileID: 7828839769252825895}
-  foxMatingDurationText: {fileID: 8489748512279290222}
-  foxMatingDurationSlider: {fileID: 1815043035110157263}
-  foxMatingThresholdText: {fileID: 3380732666565900938}
-  foxMatingThresholdSlider: {fileID: 5585963448767623358}
-  foxReproductiveUrgeIncreaseText: {fileID: 557748759800763265}
-  foxReproductiveUrgeIncreaseSlider: {fileID: 1785993203153936569}
-  foxPregnancyLengthText: {fileID: 3212923519708914151}
-  foxPregnancyLengthSlider: {fileID: 7115757364011666224}
-  foxBirthDurationText: {fileID: 3637902088464085929}
-  foxBirthDurationSlider: {fileID: 7109165203905374498}
-  foxLitterSizeMinText: {fileID: 5411425293352372726}
-  foxLitterSizeMinSlider: {fileID: 3264556888676836788}
-  foxLitterSizeMaxText: {fileID: 6603316351642004443}
-  foxLitterSizeMaxSlider: {fileID: 1979422593313519527}
-  foxLitterSizeAveText: {fileID: 606562666040626741}
-  foxLitterSizeAveSlider: {fileID: 5461734052716576238}
-  foxMovementSpeedText: {fileID: 4662716785972485756}
-  foxMovementSpeedSlider: {fileID: 1385831479747188413}
-  foxMovementMultiplierBaseText: {fileID: 1304168935915635747}
-  foxMovementMultiplierBaseSlider: {fileID: 6287800362738699021}
-  foxMovementMultiplierYoungText: {fileID: 8082067479276231409}
-  foxMovementMultiplierYoungSlider: {fileID: 8680282802794103930}
-  foxMovementMultiplierAdultText: {fileID: 4756389507532183206}
-  foxMovementMultiplierAdultSlider: {fileID: 7496079903722307349}
-  foxMovementMultiplierOldText: {fileID: 1695150603338549528}
-  foxMovementMultiplierOldSlider: {fileID: 2561521700480004559}
-  foxMovementMultiplierPregnantText: {fileID: 723457960697094306}
-  foxMovementMultiplierPregnantSlider: {fileID: 4920677515633361452}
-  foxSightRadiusText: {fileID: 6890741857304184054}
-  foxSightRadiusSlider: {fileID: 7869388905592481667}
-  foxSizeMaleText: {fileID: 5312991460354978197}
-  foxSizeMaleSlider: {fileID: 5668988985609094299}
-  foxSizeFemaleText: {fileID: 7975576650175695266}
-  foxSizeFemaleSlider: {fileID: 2926269803374218970}
-  grassNutritionalValueText: {fileID: 8645965334000204484}
-  grassNutritionalValueSlider: {fileID: 6338056249835456962}
-  grassCanBeEaten: {fileID: 2620617961470066081}
-  grassSizeText: {fileID: 7575702727093092813}
-  grassSizeSlider: {fileID: 3691547819818731341}
+  _defaultBrightness: 1
+  _defaultVolume: 1
+  NewGameButtonLevel: Scene/Ecosystem-ECS
+  _menuDefaultCanvas: {fileID: 1939101664952978}
+  _generalSettingsCanvas: {fileID: 1053070176235954}
+  _graphicsMenu: {fileID: 1181362766895746}
+  _soundMenu: {fileID: 1579993891502314}
+  _gameplayMenu: {fileID: 1439258321415800}
+  _controlsMenu: {fileID: 1607287232231484}
+  _confirmationMenu: {fileID: 1706612065132982}
+  _initialPropertiesCanvas: {fileID: 8834961339577121779}
+  _generateMapCanvas: {fileID: 3561171174563781168}
+  _noSaveDialog: {fileID: 1207111332628262}
+  _newGameDialog: {fileID: 1889607586039040}
+  _loadGameDialog: {fileID: 1443681062563508}
+  _brightnessEffect: {fileID: 0}
+  _brightnessSlider: {fileID: 114414691622253428}
+  _brightnessText: {fileID: 114954420297510558}
+  _volumeText: {fileID: 114662438807354912}
+  _volumeSlider: {fileID: 114272391833239024}
+  _rabbitNumberInputField: {fileID: 3096990740066727296}
+  _foxNumberInputField: {fileID: 2597206127099643863}
+  _grassNumberInputField: {fileID: 3571858478382535148}
+  _rabbitAgeMaxText: {fileID: 6412123629564495868}
+  _rabbitAgeMaxSlider: {fileID: 2665903124697164210}
+  _rabbitNutritionalValueText: {fileID: 2536280753080216820}
+  _rabbitNutritionalValueSlider: {fileID: 674693422686857241}
+  _rabbitCanBeEaten: {fileID: 4396208877482332839}
+  _rabbitHungerMaxText: {fileID: 5618011361900052438}
+  _rabbitHungerMaxSlider: {fileID: 6784177703847625525}
+  _rabbitHungerThresholdText: {fileID: 2144267547133647554}
+  _rabbitHungerThresholdSlider: {fileID: 6758086186351015010}
+  _rabbitHungerIncreaseBaseText: {fileID: 9016787481702283071}
+  _rabbitHungerIncreaseBaseSlider: {fileID: 3826323298195229690}
+  _rabbitHungerIncreaseYoungText: {fileID: 5983175482872380122}
+  _rabbitHungerIncreaseYoungSlider: {fileID: 5788718911316542716}
+  _rabbitHungerIncreaseAdultText: {fileID: 2028586753483360857}
+  _rabbitHungerIncreaseAdultSlider: {fileID: 5289680929768667412}
+  _rabbitHungerIncreaseOldText: {fileID: 7493683376916111740}
+  _rabbitHungerIncreaseOldSlider: {fileID: 6676725066310411639}
+  _rabbitEatingSpeedText: {fileID: 6633753077634494122}
+  _rabbitEatingSpeedSlider: {fileID: 4838935327748053959}
+  _rabbitThirstMaxText: {fileID: 3924442619824553156}
+  _rabbitThirstMaxSlider: {fileID: 1583701169930584400}
+  _rabbitThirstThresholdText: {fileID: 2082510161143972662}
+  _rabbitThirstThresholdSlider: {fileID: 4116058072252483807}
+  _rabbitThirstIncreaseBaseText: {fileID: 5060542399969945311}
+  _rabbitThirstIncreaseBaseSlider: {fileID: 738042467755066951}
+  _rabbitThirstIncreaseYoungText: {fileID: 0}
+  _rabbitThirstIncreaseYoungSlider: {fileID: 0}
+  _rabbitThirstIncreaseAdultText: {fileID: 0}
+  _rabbitThirstIncreaseAdultSlider: {fileID: 0}
+  _rabbitThirstIncreaseOldText: {fileID: 0}
+  _rabbitThirstIncreaseOldSlider: {fileID: 0}
+  _rabbitDrinkingSpeedText: {fileID: 1808154729652113240}
+  _rabbitDrinkingSpeedSlider: {fileID: 50564492662069825}
+  _rabbitMatingDurationText: {fileID: 8139021261911617931}
+  _rabbitMatingDurationSlider: {fileID: 3287337621360028430}
+  _rabbitMatingThresholdText: {fileID: 5787794899278178954}
+  _rabbitMatingThresholdSlider: {fileID: 9000131524130375234}
+  _rabbitReproductiveUrgeIncreaseText: {fileID: 5707986012045419270}
+  _rabbitReproductiveUrgeIncreaseSlider: {fileID: 3487152839788394710}
+  _rabbitPregnancyLengthText: {fileID: 3532794229838012628}
+  _rabbitPregnancyLengthSlider: {fileID: 2692234488432257645}
+  _rabbitBirthDurationText: {fileID: 169664403595815023}
+  _rabbitBirthDurationSlider: {fileID: 1943533376706670522}
+  _rabbitLitterSizeMinText: {fileID: 4591832951111595234}
+  _rabbitLitterSizeMinSlider: {fileID: 6220205225781729622}
+  _rabbitLitterSizeMaxText: {fileID: 6263951894684250140}
+  _rabbitLitterSizeMaxSlider: {fileID: 5219427104662686722}
+  _rabbitLitterSizeAveText: {fileID: 4208003644002793524}
+  _rabbitLitterSizeAveSlider: {fileID: 7396539244169310378}
+  _rabbitMovementSpeedText: {fileID: 7947557334685432405}
+  _rabbitMovementSpeedSlider: {fileID: 93121389991971183}
+  _rabbitMovementMultiplierBaseText: {fileID: 5549322739032382426}
+  _rabbitMovementMultiplierBaseSlider: {fileID: 4780837772265897233}
+  _rabbitMovementMultiplierYoungText: {fileID: 1858889685546248043}
+  _rabbitMovementMultiplierYoungSlider: {fileID: 6520616782728627596}
+  _rabbitMovementMultiplierAdultText: {fileID: 2435721859637035291}
+  _rabbitMovementMultiplierAdultSlider: {fileID: 8391624711165118174}
+  _rabbitMovementMultiplierOldText: {fileID: 6566347331940128372}
+  _rabbitMovementMultiplierOldSlider: {fileID: 3830330633145307192}
+  _rabbitMovementMultiplierPregnantText: {fileID: 4334042794912096203}
+  _rabbitMovementMultiplierPregnantSlider: {fileID: 3314884091592831738}
+  _rabbitSightRadiusText: {fileID: 5335202097837423875}
+  _rabbitSightRadiusSlider: {fileID: 5305799309691236930}
+  _rabbitSizeMaleText: {fileID: 6858037330774512999}
+  _rabbitSizeMaleSlider: {fileID: 4986845167027729466}
+  _rabbitSizeFemaleText: {fileID: 8479136821925507909}
+  _rabbitSizeFemaleSlider: {fileID: 5639817712506345711}
+  _foxAgeMaxText: {fileID: 7234834337011120397}
+  _foxAgeMaxSlider: {fileID: 6706381988640061523}
+  _foxNutritionalValueText: {fileID: 7172438466511682444}
+  _foxNutritionalValueSlider: {fileID: 5238225943409443349}
+  _foxCanBeEaten: {fileID: 6040455343213266785}
+  _foxHungerMaxText: {fileID: 8377076381820291256}
+  _foxHungerMaxSlider: {fileID: 7474300030018569460}
+  _foxHungerThresholdText: {fileID: 6055070961361515345}
+  _foxHungerThresholdSlider: {fileID: 5503865853138934649}
+  _foxHungerIncreaseBaseText: {fileID: 3498870645106012785}
+  _foxHungerIncreaseBaseSlider: {fileID: 2793840008779185175}
+  _foxHungerIncreaseYoungText: {fileID: 8109561022658101024}
+  _foxHungerIncreaseYoungSlider: {fileID: 5667505585648962397}
+  _foxHungerIncreaseAdultText: {fileID: 8526324122393961581}
+  _foxHungerIncreaseAdultSlider: {fileID: 8779815564683153848}
+  _foxHungerIncreaseOldText: {fileID: 3330774501536680684}
+  _foxHungerIncreaseOldSlider: {fileID: 6518672293304467608}
+  _foxEatingSpeedText: {fileID: 1464589146112443022}
+  _foxEatingSpeedSlider: {fileID: 3852259704131555376}
+  _foxThirstMaxText: {fileID: 3881741123051206169}
+  _foxThirstMaxSlider: {fileID: 4001713634304844977}
+  _foxThirstThresholdText: {fileID: 1249395533501222145}
+  _foxThirstThresholdSlider: {fileID: 8459222413315075129}
+  _foxThirstIncreaseBaseText: {fileID: 1562254795510972616}
+  _foxThirstIncreaseBaseSlider: {fileID: 6620962862185418908}
+  _foxThirstIncreaseYoungText: {fileID: 0}
+  _foxThirstIncreaseYoungSlider: {fileID: 0}
+  _foxThirstIncreaseAdultText: {fileID: 0}
+  _foxThirstIncreaseAdultSlider: {fileID: 0}
+  _foxThirstIncreaseOldText: {fileID: 0}
+  _foxThirstIncreaseOldSlider: {fileID: 0}
+  _foxDrinkingSpeedText: {fileID: 7574867228474499837}
+  _foxDrinkingSpeedSlider: {fileID: 7828839769252825895}
+  _foxMatingDurationText: {fileID: 8489748512279290222}
+  _foxMatingDurationSlider: {fileID: 1815043035110157263}
+  _foxMatingThresholdText: {fileID: 3380732666565900938}
+  _foxMatingThresholdSlider: {fileID: 5585963448767623358}
+  _foxReproductiveUrgeIncreaseText: {fileID: 557748759800763265}
+  _foxReproductiveUrgeIncreaseSlider: {fileID: 1785993203153936569}
+  _foxPregnancyLengthText: {fileID: 3212923519708914151}
+  _foxPregnancyLengthSlider: {fileID: 7115757364011666224}
+  _foxBirthDurationText: {fileID: 3637902088464085929}
+  _foxBirthDurationSlider: {fileID: 7109165203905374498}
+  _foxLitterSizeMinText: {fileID: 5411425293352372726}
+  _foxLitterSizeMinSlider: {fileID: 3264556888676836788}
+  _foxLitterSizeMaxText: {fileID: 6603316351642004443}
+  _foxLitterSizeMaxSlider: {fileID: 1979422593313519527}
+  _foxLitterSizeAveText: {fileID: 606562666040626741}
+  _foxLitterSizeAveSlider: {fileID: 5461734052716576238}
+  _foxMovementSpeedText: {fileID: 4662716785972485756}
+  _foxMovementSpeedSlider: {fileID: 1385831479747188413}
+  _foxMovementMultiplierBaseText: {fileID: 1304168935915635747}
+  _foxMovementMultiplierBaseSlider: {fileID: 6287800362738699021}
+  _foxMovementMultiplierYoungText: {fileID: 8082067479276231409}
+  _foxMovementMultiplierYoungSlider: {fileID: 8680282802794103930}
+  _foxMovementMultiplierAdultText: {fileID: 4756389507532183206}
+  _foxMovementMultiplierAdultSlider: {fileID: 7496079903722307349}
+  _foxMovementMultiplierOldText: {fileID: 1695150603338549528}
+  _foxMovementMultiplierOldSlider: {fileID: 2561521700480004559}
+  _foxMovementMultiplierPregnantText: {fileID: 723457960697094306}
+  _foxMovementMultiplierPregnantSlider: {fileID: 4920677515633361452}
+  _foxSightRadiusText: {fileID: 6890741857304184054}
+  _foxSightRadiusSlider: {fileID: 7869388905592481667}
+  _foxSizeMaleText: {fileID: 5312991460354978197}
+  _foxSizeMaleSlider: {fileID: 5668988985609094299}
+  _foxSizeFemaleText: {fileID: 7975576650175695266}
+  _foxSizeFemaleSlider: {fileID: 2926269803374218970}
+  _grassNutritionalValueText: {fileID: 8645965334000204484}
+  _grassNutritionalValueSlider: {fileID: 6338056249835456962}
+  _grassCanBeEaten: {fileID: 2620617961470066081}
+  _grassSizeText: {fileID: 7575702727093092813}
+  _grassSizeSlider: {fileID: 3691547819818731341}
 --- !u!1 &1439258321415800
 GameObject:
   m_ObjectHideFlags: 0
@@ -5774,7 +5774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &224663700911643926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18738,7 +18738,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 1.00
 --- !u!1 &2595874317395379951
 GameObject:
   m_ObjectHideFlags: 0
@@ -47462,25 +47462,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d30ca144e10a884c9678f7320396884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
-  height: 0
-  seed: 
-  useRandomSeed: 0
-  mapGeneratorButton: {fileID: 2325150261404755294}
-  saveFileButton: {fileID: 1293186429310438194}
-  widthSlider: {fileID: 6332654219702308575}
-  heightSlider: {fileID: 3155636327619337059}
-  waterFillSlider: {fileID: 2311131531049051204}
-  widthSliderText: {fileID: 4662228020799001698}
-  heightSliderText: {fileID: 5604960016699838277}
-  waterFillSliderText: {fileID: 6612257202621723177}
-  seedInput: {fileID: 2543179575821607944}
-  waterFillPercent: 0
-  grassTex: {fileID: 0}
-  waterTex: {fileID: 0}
-  sandTex: {fileID: 0}
-  rockTex: {fileID: 0}
-  tilePrefab: {fileID: 5576002603043139895, guid: e2844e84999ca0547a35a20c54cbbf62,
+  Width: 0
+  Height: 0
+  Seed: 
+  UseRandomSeed: 0
+  MapGeneratorButton: {fileID: 2325150261404755294}
+  SaveFileButton: {fileID: 1293186429310438194}
+  WidthSlider: {fileID: 6332654219702308575}
+  HeightSlider: {fileID: 3155636327619337059}
+  WaterFillSlider: {fileID: 2311131531049051204}
+  WidthSliderText: {fileID: 4662228020799001698}
+  HeightSliderText: {fileID: 5604960016699838277}
+  WaterFillSliderText: {fileID: 6612257202621723177}
+  SeedInput: {fileID: 2543179575821607944}
+  WaterFillPercent: 0
+  GrassTex: {fileID: 0}
+  WaterTex: {fileID: 0}
+  SandTex: {fileID: 0}
+  RockTex: {fileID: 0}
+  TilePrefab: {fileID: 5576002603043139895, guid: e2844e84999ca0547a35a20c54cbbf62,
     type: 3}
 --- !u!1 &8207914234932949895
 GameObject:

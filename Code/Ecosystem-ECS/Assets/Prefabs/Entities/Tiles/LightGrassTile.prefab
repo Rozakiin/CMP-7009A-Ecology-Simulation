@@ -253,9 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def12e8c4daf82a4fa9f7578cdbc7776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainType: 1
-  terrainPenalty: 0
-  isWalkable: 0
+  Terrain: 1
+  TerrainPenalty: 0
+  IsWalkable: 1
 --- !u!114 &-3563493020794789953
 MonoBehaviour:
   m_ObjectHideFlags: 0

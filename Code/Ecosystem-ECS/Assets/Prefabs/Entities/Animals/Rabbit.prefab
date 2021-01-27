@@ -149,10 +149,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51c87e0fecb9d94fb9b7fce3d681953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBeEaten: 1
-  nutritionalValueBase: 10
-  nutritionalValueMultiplier: 1
-  foodType: 4
+  CanBeEaten: 0
+  NutritionalValueBase: 0
+  NutritionalValueMultiplier: 0
+  FoodType: 0
 --- !u!114 &-9147605867028636769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,14 +165,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d888542d94f0704bb82df48ca8a0f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 1
-  moveSpeedBase: 10
-  moveMultiplier: 1
-  pregnancyMoveMultiplier: 0
-  originalMoveMultiplier: 0
-  youngMoveMultiplier: 0
-  adultMoveMultiplier: 0
-  oldMoveMultiplier: 0
+  RotationSpeed: 0
+  MoveSpeedBase: 0
+  MoveMultiplier: 0
+  PregnancyMoveMultiplier: 0
+  OriginalMoveMultiplier: 0
+  YoungMoveMultiplier: 0
+  AdultMoveMultiplier: 0
+  OldMoveMultiplier: 0
 --- !u!114 &-7479947182873029247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,11 +186,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 1
-  sizeMultiplier: 1
-  ageSizeMultiplier: 0
-  youngSizeMultiplier: 0
-  adultSizeMultiplier: 0
-  oldSizeMultiplier: 0
+  SizeMultiplier: 0
+  AgeSizeMultiplier: 0
+  YoungSizeMultiplier: 0
+  AdultSizeMultiplier: 0
+  OldSizeMultiplier: 0
 --- !u!114 &-3378324085052062256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,10 +203,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6e1526096fcd34e81c5ae7b6e53efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
-  previousState: 0
-  deathReason: 0
-  beenEaten: 0
+  DeathReason: 0
+  BeenEaten: 0
+  FlagStateCurrent: 0
+  FlagStatePrevious: 0
+  IsWandering: 0
+  IsHungry: 0
+  IsThirsty: 0
+  IsEating: 0
+  IsDrinking: 0
+  IsSexuallyActive: 0
+  IsMating: 0
+  IsFleeing: 0
+  IsDead: 0
+  IsPregnant: 0
+  IsGivingBirth: 0
 --- !u!114 &1699504912102838281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,25 +230,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a37f09c822df843b2951f79f7f30bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTarget:
+  Target:
     x: 0
     y: 0
     z: 0
-  oldTarget:
+  TargetOld:
     x: 0
     y: 0
     z: 0
-  atTarget: 1
-  sightRadius: 0
-  touchRadius: 0
-  predatorEntity: {fileID: 0}
-  entityToEat: {fileID: 0}
-  entityToDrink: {fileID: 0}
-  entityToMate: {fileID: 0}
-  shortestToEdibleDistance: 0
-  shortestToWaterDistance: 0
-  shortestToPredatorDistance: 0
-  shortestToMateDistance: 0
+  AtTarget: 0
+  SightRadius: 0
+  TouchRadius: 0
+  MateRadius: 0
+  PredatorEntity: {fileID: 0}
+  EntityToEat: {fileID: 0}
+  EntityToDrink: {fileID: 0}
+  EntityToMate: {fileID: 0}
+  ShortestDistanceToEdible: 0
+  ShortestDistanceToWater: 0
+  ShortestDistanceToPredator: 0
+  ShortestDistanceToMate: 0
 --- !u!114 &-5089060519100572234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,21 +262,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1a2d81b5aa3e74e96e03eab5a2aeec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thirst: 0
-  thirstyThreshold: 0
-  thirstMax: 0
-  thirstIncrease: 0
-  drinkingSpeed: 0
-  hunger: 0
-  hungryThreshold: 0
-  hungerMax: 0
-  hungerIncrease: 0
-  pregnancyHungerIncrease: 0
-  youngHungerIncrease: 0
-  adultHungerIncrease: 0
-  oldHungerIncrease: 0
-  eatingSpeed: 0
-  diet: 0
+  Thirst: 0
+  ThirstyThreshold: 0
+  ThirstMax: 0
+  ThirstIncrease: 0
+  DrinkingSpeed: 0
+  Hunger: 0
+  HungryThreshold: 0
+  HungerMax: 0
+  HungerIncrease: 0
+  PregnancyHungerIncrease: 0
+  YoungHungerIncrease: 0
+  AdultHungerIncrease: 0
+  OldHungerIncrease: 0
+  EatingSpeed: 0
+  Diet: 0
 --- !u!114 &-4092187666830348072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,13 +289,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a28cc594aa3b2442a872af38b1fecbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  age: 0
-  ageIncrease: 0
-  ageMax: 0
-  ageGroup: 0
-  adultEntryTimer: 0
-  oldEntryTimer: 0
-  gender: 0
+  Age: 0
+  AgeIncrease: 0
+  AgeMax: 0
+  AdultEntryTimer: 0
+  OldEntryTimer: 0
+  AgeGroup: 0
+  Gender: 0
 --- !u!114 &8782963010654111548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,23 +308,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37719ffb9bb3564448ebb4eaa16690c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matingDuration: 0
-  mateStartTime: 0
-  reproductiveUrge: 0
-  defaultRepoductiveIncrease: 0
-  reproductiveUrgeIncrease: 0
-  matingThreshold: 0
-  pregnant: 0
-  birthDuration: 0
-  birthStartTime: 0
-  babiesBorn: 0
-  litterSizeMin: 0
-  litterSizeMax: 0
-  litterSizeAve: 0
-  currentLitterSize: 0
-  pregnancyStartTime: 0
-  pregnancyLengthBase: 0
-  pregnancyLengthModifier: 0
+  MatingDuration: 0
+  MateStartTime: 0
+  ReproductiveUrge: 0
+  DefaultReproductiveIncrease: 0
+  ReproductiveUrgeIncrease: 0
+  MatingThreshold: 0
+  BirthDuration: 0
+  BirthStartTime: 0
+  BabiesBorn: 0
+  LitterSizeMin: 0
+  LitterSizeMax: 0
+  LitterSizeAve: 0
+  CurrentLitterSize: 0
+  PregnancyStartTime: 0
+  PregnancyLengthBase: 0
+  PregnancyLengthModifier: 0
 --- !u!114 &6327829983723291044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5367f22afb6ca43ba5d634aa811140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathIndex: -1
+  PathIndex: 0
 --- !u!114 &-114518658351010783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,7 +520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acd8479f81d84158b4173b2582d0fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliderType: 0
+  Collider: 1
 --- !u!1 &8464762711059254192
 GameObject:
   m_ObjectHideFlags: 0
