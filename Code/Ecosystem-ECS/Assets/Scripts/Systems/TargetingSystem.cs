@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Components;
 using MonoBehaviourTools.Grid;
 using Unity.Collections;
@@ -57,7 +57,7 @@ namespace Systems
                         {
                             float3 targetPosition = float.PositiveInfinity; // should be further than everything else in scene
 
-                            var seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index; //create unique seed for random
+                            var seed = timeSeed * (+translation.Value.x * +translation.Value.z) + entity.Index; //create unique seed for random
 
                             //Fleeing over other states
                             if (stateData.IsFleeing)
