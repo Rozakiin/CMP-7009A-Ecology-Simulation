@@ -4,15 +4,8 @@ using Components;
 
 namespace EntityDefaults
 {
-    public static class GrassDefaults
+    public class GrassDefaults : DefaultsBase
     {
-        //time periods in hours
-        private const int Year = 8766;
-        private const int Month = 730;
-        private const int Week = 168;
-        private const int Day = 24;
-        private const int Hour = 1;
-
         //Edible
         public static float NutritionalValue = 25f;
         public static bool CanBeEaten = true;

@@ -4,16 +4,8 @@ using Unity.Entities;
 /* Use this class to define all the default values for components related to Rabbit Entities */
 namespace EntityDefaults
 {
-    public static class RabbitDefaults
+    public class RabbitDefaults : DefaultsBase
     {
-        //time periods in hours
-        private const int Year = 8766;
-        private const int Month = 730;
-        private const int Week = 168;
-        private const int Day = 24;
-        private const int Hour = 1;
-
-
         //Age
         public static float Age = 0f;
         public static float AgeIncrease = 1f;
