@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using UnityEngine;
 
 
 // this system must update in the end of frame
@@ -77,11 +78,10 @@ namespace Systems
                     var shortestToPredatorDistance = float.PositiveInfinity;
                     var shortestToMateDistance = float.PositiveInfinity;
 
-                    //Foreach detected unitsGroup check we compare the unitsGroup node vs the one of the units
-                    for (var i = 0; i < hitsIndices.Length; i++)
+                    // foreach not supported by Burst so must be for loop
+                    for (var i= 0; i < hitsIndices.Length; i++)
                     {
-                        var childEntity = collisionWorld.Bodies[i].Entity;
-
+                        var childEntity = collisionWorld.Bodies[hitsIndices[i]].Entity;
                         var distanceToEntity = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[childEntity].Value);
                         var childEntityNumber = GetComponentDataFromEntity<ColliderTypeData>(true)[childEntity].Collider;
 
@@ -103,8 +103,7 @@ namespace Systems
                         //find drink
                         if (HasComponent<DrinkableData>(childEntity))
                         {
-                            var childDrinkableData =
-                                GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
+                            var childDrinkableData = GetComponentDataFromEntity<DrinkableData>(true)[childEntity];
                             if (childDrinkableData.CanBeDrunk)
                                 if (distanceToEntity < shortestToWaterDistance)
                                 {
@@ -136,8 +135,7 @@ namespace Systems
                                         //recalc distance
                                         if (HasComponent<Translation>(targetData.EntityToMate))
                                         {
-                                            shortestToMateDistance = math.distance(translation.Value,
-                                                GetComponentDataFromEntity<Translation>(true)[targetData.EntityToMate].Value);
+                                            shortestToMateDistance = math.distance(translation.Value, GetComponentDataFromEntity<Translation>(true)[targetData.EntityToMate].Value);
                                             entityToMate = targetData.EntityToMate;
                                         }
                                     }
@@ -162,7 +160,7 @@ namespace Systems
 
                     // if some type of entity didn't find in this frame so just set up to entity.null
                     // because statesystem will based on, for example predatorEntity is null or not to get into some states
-                    // so if no predatorEntity rabbit will go back to wanfering states something like that
+                    // so if no predatorEntity rabbit will go back to wandering states something like that
                     targetData.EntityToEat = entityToEat;
                     targetData.EntityToDrink = entityToDrink;
                     targetData.PredatorEntity = entityToPredator;
