@@ -1,5 +1,6 @@
 using System;
 using Unity.Entities;
+using UtilTools;
 
 namespace Components
 {
@@ -27,23 +28,14 @@ namespace Components
         //How many the female is carrying right now
         public int CurrentLitterSize;
 
-        public int LitterSize
-        {
-            get
-            {
-                return UtilTools.ComponentTools.GaussianDistribution((LitterSizeMax - LitterSizeMin) / 2, LitterSizeAve,
-                    BirthStartTime);
-            }
-        }
+        public int LitterSize =>
+            ComponentTools.GaussianDistribution((LitterSizeMax - LitterSizeMin) / 2, LitterSizeAve, BirthStartTime);
 
 
         public float PregnancyStartTime;
         public float PregnancyLengthBase;
         public float PregnancyLengthModifier;
 
-        public float PregnancyLength
-        {
-            get { return PregnancyLengthBase * PregnancyLengthModifier; }
-        }
+        public float PregnancyLength => PregnancyLengthBase * PregnancyLengthModifier;
     }
 }

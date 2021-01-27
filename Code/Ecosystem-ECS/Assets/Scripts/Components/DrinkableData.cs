@@ -5,7 +5,6 @@ namespace Components
 {
     [Serializable]
     [GenerateAuthoringComponent]
-
     public struct DrinkableData : IComponentData
     {
         public float Value;

@@ -201,7 +201,7 @@ public class SimulationManager : MonoBehaviour
                 return false;
         }
 
-        // Create a GameObject the size of the map with collider for UnityEngine.Physics ray hits
+        // Create a GameObject the SizeBase of the map with collider for UnityEngine.Physics ray hits
         MapCollisionPlane = new GameObject
         {
             name = "MapCollisionPlane"
@@ -255,12 +255,12 @@ public class SimulationManager : MonoBehaviour
                         //Set Component Data for the entity
                         _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS)
                         _entityManager.SetName(prototypeTile, "WaterTile " + y + "," + x);
-                        //_entityManager.SetComponentData(prototypeTile,
-                        //    new ColliderTypeData
-                        //    {
-                        //        Collider = ColliderTypeData.ColliderType.Water
-                        //    }
-                        //);
+                        _entityManager.SetComponentData(prototypeTile,
+                            new ColliderTypeData
+                            {
+                                Collider = ColliderTypeData.ColliderType.Water
+                            }
+                        );
                         break;
                     case MapReader.TerrainCost.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
@@ -488,11 +488,11 @@ public class SimulationManager : MonoBehaviour
                 }
             );
 
-        //set size differing on gender
+        //set SizeBase differing on gender
         _entityManager.SetComponentData(prototypeFox,
             new SizeData
             {
-                size = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ScaleFemale : FoxDefaults.ScaleMale),
+                SizeBase = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ScaleFemale : FoxDefaults.ScaleMale),
                 SizeMultiplier = FoxDefaults.SizeMultiplier,
                 AgeSizeMultiplier = FoxDefaults.AgeSizeMultiplier,
                 YoungSizeMultiplier = FoxDefaults.YoungSizeMultiplier,
@@ -548,11 +548,11 @@ public class SimulationManager : MonoBehaviour
             }
         );
 
-        //set size differing on gender
+        //set SizeBase differing on gender
         _entityManager.SetComponentData(prototypeGrass,
             new SizeData
             {
-                size = GrassDefaults.Scale,
+                SizeBase = GrassDefaults.Scale,
                 SizeMultiplier = GrassDefaults.SizeMultiplier,
                 AgeSizeMultiplier = 1f,
             }
@@ -717,11 +717,11 @@ public class SimulationManager : MonoBehaviour
                 }
             );
 
-        //set size differing on gender
+        //set SizeBase differing on gender
         _entityManager.SetComponentData(prototypeRabbit,
             new SizeData
             {
-                size = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ScaleFemale : RabbitDefaults.ScaleMale),
+                SizeBase = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ScaleFemale : RabbitDefaults.ScaleMale),
                 SizeMultiplier = RabbitDefaults.SizeMultiplier,
                 AgeSizeMultiplier = RabbitDefaults.AgeSizeMultiplier,
                 YoungSizeMultiplier = RabbitDefaults.YoungSizeMultiplier,

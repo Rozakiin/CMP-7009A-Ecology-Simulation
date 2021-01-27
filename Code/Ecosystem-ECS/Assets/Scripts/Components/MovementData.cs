@@ -15,9 +15,6 @@ namespace Components
         public float YoungMoveMultiplier;
         public float AdultMoveMultiplier;
         public float OldMoveMultiplier;
-        public float MoveSpeed
-        {
-            get { return MoveSpeedBase * MoveMultiplier; }
-        }
+        public float MoveSpeed => MoveSpeedBase * MoveMultiplier;
     }
 }

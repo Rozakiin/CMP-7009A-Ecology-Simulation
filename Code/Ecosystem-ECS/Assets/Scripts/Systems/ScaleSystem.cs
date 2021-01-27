@@ -7,7 +7,7 @@ namespace Systems
     public class ScaleSystem : SystemBase
     {
         /*
-         * update the size of the entity model base on age for entities with biostatsdata
+         * update the SizeBase of the entity model base on age for entities with biostatsdata
          */
         protected override void OnUpdate()
         {

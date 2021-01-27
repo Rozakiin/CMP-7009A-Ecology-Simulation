@@ -7,14 +7,14 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct BasicNeedsData : IComponentData
     {
-        //Thirst
+        /*Thirst*/
         public float Thirst;
         public float ThirstyThreshold;
         public float ThirstMax;
         public float ThirstIncrease;
         public float DrinkingSpeed;
 
-        //Hunger
+        /*Hunger*/
         public float Hunger;
         public float HungryThreshold;
         public float HungerMax;
@@ -29,8 +29,9 @@ namespace Components
         {
             Carnivore = EdibleData.FoodTypes.Meat,
             Herbivore = EdibleData.FoodTypes.Plant | EdibleData.FoodTypes.Fungi,
-            Omnivore = EdibleData.FoodTypes.Meat | EdibleData.FoodTypes.Plant | EdibleData.FoodTypes.Fungi,
+            Omnivore = EdibleData.FoodTypes.Meat | EdibleData.FoodTypes.Plant | EdibleData.FoodTypes.Fungi
         }
+
         public DietType Diet;
     }
 }

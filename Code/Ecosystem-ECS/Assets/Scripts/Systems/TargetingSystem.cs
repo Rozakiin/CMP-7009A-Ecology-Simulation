@@ -19,7 +19,7 @@ namespace Systems
          */
         protected override void OnUpdate()
         {
-            // only run if grid has a size aka it has been created
+            // only run if grid has a SizeBase aka it has been created
             if (GridSetup.Instance.GridMaxSize > 0)
             {
                 if (!_gridNodeArray.IsCreated)

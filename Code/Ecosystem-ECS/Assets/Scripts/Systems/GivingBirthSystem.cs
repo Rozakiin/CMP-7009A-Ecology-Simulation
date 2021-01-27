@@ -342,7 +342,7 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new SizeData
                                 {
-                                    size = (randGender == BioStatsData.Genders.Female
+                                    SizeBase = (randGender == BioStatsData.Genders.Female
                                         ? rabbitScaleFemale
                                         : rabbitScaleMale),
                                     SizeMultiplier = rabbitSizeMultiplier,
@@ -472,7 +472,7 @@ namespace Systems
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new SizeData
                                 {
-                                    size = (randGender == BioStatsData.Genders.Female ? foxScaleFemale : foxScaleMale),
+                                    SizeBase = (randGender == BioStatsData.Genders.Female ? foxScaleFemale : foxScaleMale),
                                     SizeMultiplier = foxSizeMultiplier,
                                     AgeSizeMultiplier = foxAgeSizeMultiplier,
                                     YoungSizeMultiplier = foxYoungSizeMultiplier,

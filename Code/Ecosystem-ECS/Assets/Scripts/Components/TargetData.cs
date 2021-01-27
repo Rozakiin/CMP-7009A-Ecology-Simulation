@@ -17,13 +17,12 @@ namespace Components
         public float MateRadius;
 
 
-        // from lookingEntityData
+        /*lookingEntityData*/
         public Entity PredatorEntity;
         public Entity EntityToEat;
         public Entity EntityToDrink;
         public Entity EntityToMate;
 
-        // just for test, #### don't forget to delete in the end;
         public float ShortestDistanceToEdible;
         public float ShortestDistanceToWater;
         public float ShortestDistanceToPredator;

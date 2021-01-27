@@ -130,9 +130,9 @@ namespace Systems
                 Entities.WithAll<IsRabbitTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
                 {
                     if (bioStatsData.Gender == BioStatsData.Genders.Male)
-                        sizeData.size = RmaleSize;
+                        sizeData.SizeBase = RmaleSize;
                     else if (bioStatsData.Gender == BioStatsData.Genders.Female)
-                        sizeData.size = RfemaleSize;
+                        sizeData.SizeBase = RfemaleSize;
                     sizeData.YoungSizeMultiplier = RyoungSizeMultiplier;
                     sizeData.AdultSizeMultiplier = RadultSizeMultiplier;
                     sizeData.OldSizeMultiplier = RoldSizeMultiplier;
@@ -245,9 +245,9 @@ namespace Systems
                 Entities.WithAll<IsFoxTag>().ForEach((ref SizeData sizeData, in BioStatsData bioStatsData) =>
                 {
                     if (bioStatsData.Gender == BioStatsData.Genders.Male)
-                        sizeData.size = FmaleSize;
+                        sizeData.SizeBase = FmaleSize;
                     else if (bioStatsData.Gender == BioStatsData.Genders.Female)
-                        sizeData.size = FfemaleSize;
+                        sizeData.SizeBase = FfemaleSize;
                     sizeData.YoungSizeMultiplier = FyoungSizeMultiplier;
                     sizeData.AdultSizeMultiplier = FadultSizeMultiplier;
                     sizeData.OldSizeMultiplier = FoldSizeMultiplier;
@@ -277,7 +277,7 @@ namespace Systems
                 float GrassSize = GrassDefaults.Scale;
                 Entities.WithAll<IsGrassTag>().ForEach((ref SizeData sizeData) =>
                 {
-                    sizeData.size = GrassSize;
+                    sizeData.SizeBase = GrassSize;
                 }).ScheduleParallel();
 
 

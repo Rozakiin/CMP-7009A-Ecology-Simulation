@@ -7,25 +7,29 @@ namespace Components
     [GenerateAuthoringComponent]
     public struct BioStatsData : IComponentData
     {
-        //Age data
+        /*Age data*/
         public float Age;
         public float AgeIncrease;
         public float AgeMax;
-
         public float AdultEntryTimer;
         public float OldEntryTimer;
 
         public enum AgeGroups
         {
-            Young, Adult, Old
+            Young,
+            Adult,
+            Old
         }
+
         public AgeGroups AgeGroup;
 
-        //Gender data
+        /*Gender data*/
         public enum Genders
         {
-            Male, Female
+            Male,
+            Female
         }
+
         public Genders Gender;
     }
 }

@@ -6,6 +6,5 @@ namespace Components
     [Serializable]
     public struct IsRabbitTag : IComponentData
     {
-
     }
 }

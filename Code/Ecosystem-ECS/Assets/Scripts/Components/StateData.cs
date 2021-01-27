@@ -12,27 +12,29 @@ namespace Components
             Eaten,
             Hunger,
             Thirst,
-            Age,
+            Age
         }
+
         public DeathReasons DeathReason;
         public bool BeenEaten;
 
         [Flags]
         public enum FlagStates
         {
-            None = 0,               // 000000000000
-            Wandering = 1,          // 000000000001
-            Hungry = 2,             // 000000000010
-            Thirsty = 4,            // 000000000100
-            Eating = 8,             // 000000001000
-            Drinking = 16,          // 000000010000
-            SexuallyActive = 32,    // 000000100000
-            Mating = 64,            // 000001000000
-            Fleeing = 128,          // 000010000000
-            Dead = 256,             // 000100000000
-            Pregnant = 512,         // 001000000000
-            GivingBirth = 1024,     // 010000000000
+            None = 0b_0000_0000_0000,
+            Wandering = 0b_0000_0000_0001,
+            Hungry = 0b_0000_0000_0010,
+            Thirsty = 0b_0000_0000_0100,
+            Eating = 0b_0000_0000_1000,
+            Drinking = 0b_0000_0001_0000,
+            SexuallyActive = 0b_0000_0010_0000,
+            Mating = 0b_0000_0100_0000,
+            Fleeing = 0b_0000_1000_0000,
+            Dead = 0b_0001_0000_0000,
+            Pregnant = 0b_0010_0000_0000,
+            GivingBirth = 0b_0100_0000_0000
         }
+
         public FlagStates FlagStateCurrent;
         public FlagStates FlagStatePrevious;
 
