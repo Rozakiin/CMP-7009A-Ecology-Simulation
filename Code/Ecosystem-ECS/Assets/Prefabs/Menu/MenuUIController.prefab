@@ -3530,7 +3530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultBrightness: 1
   _defaultVolume: 1
-  NewGameButtonLevel: Scene/Ecosystem-ECS
+  NewGameButtonLevel: Scenes/Ecosystem-ECS
   _menuDefaultCanvas: {fileID: 1939101664952978}
   _generalSettingsCanvas: {fileID: 1053070176235954}
   _graphicsMenu: {fileID: 1181362766895746}
