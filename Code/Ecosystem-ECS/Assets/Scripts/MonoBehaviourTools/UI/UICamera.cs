@@ -9,7 +9,7 @@ namespace MonoBehaviourTools.UI
 
         private void Start()
         {
-            Vector2 mapSize = SimulationManager.MapSize();
+            Vector2 mapSize = new Vector2(SimulationManager.TileMapSize.x, SimulationManager.TileMapSize.y);
             float tileSize = SimulationManager.TileSize;
             _cameraFunction = new UICameraFunction(mapSize, tileSize);
             transform.position = _cameraFunction.GetInitialPosition();

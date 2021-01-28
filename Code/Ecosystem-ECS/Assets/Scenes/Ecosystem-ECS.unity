@@ -219,7 +219,7 @@ MonoBehaviour:
     y: 0
   _gridNodeRadius: 1
   _distanceBetweenGridNodes: 0
-  GridNodeDiameter: 0
+  GridNodeDiameter: 3
   _unwalkableProximityPenalty: 10
 --- !u!1 &788710890
 GameObject:

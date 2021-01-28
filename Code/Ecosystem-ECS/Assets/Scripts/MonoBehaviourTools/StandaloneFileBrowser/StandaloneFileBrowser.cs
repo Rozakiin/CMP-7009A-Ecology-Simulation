@@ -16,14 +16,14 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
 
     public class StandaloneFileBrowser
     {
-        private static readonly IStandaloneFileBrowser _platformWrapper = null;
+        private static readonly IStandaloneFileBrowser PlatformWrapper = null;
 
         static StandaloneFileBrowser()
         {
 #if UNITY_STANDALONE_OSX
             _platformWrapper = new StandaloneFileBrowserMac();
 #elif UNITY_STANDALONE_WIN
-            _platformWrapper = new StandaloneFileBrowserWindows();
+            PlatformWrapper = new StandaloneFileBrowserWindows();
 #elif UNITY_STANDALONE_LINUX
             _platformWrapper = new StandaloneFileBrowserLinux();
 #elif UNITY_EDITOR
@@ -55,7 +55,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <returns>Returns array of chosen paths. Zero length array when cancelled</returns>
         public static string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
         {
-            return _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect);
+            return PlatformWrapper.OpenFilePanel(title, directory, extensions, multiselect);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <param name="cb">Callback")</param>
         public static void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb)
         {
-            _platformWrapper.OpenFilePanelAsync(title, directory, extensions, multiselect, cb);
+            PlatformWrapper.OpenFilePanelAsync(title, directory, extensions, multiselect, cb);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <returns>Returns array of chosen paths. Zero length array when cancelled</returns>
         public static string[] OpenFolderPanel(string title, string directory, bool multiselect)
         {
-            return _platformWrapper.OpenFolderPanel(title, directory, multiselect);
+            return PlatformWrapper.OpenFolderPanel(title, directory, multiselect);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <param name="cb">Callback")</param>
         public static void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
         {
-            _platformWrapper.OpenFolderPanelAsync(title, directory, multiselect, cb);
+            PlatformWrapper.OpenFolderPanelAsync(title, directory, multiselect, cb);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <returns>Returns chosen path. Empty string when cancelled</returns>
         public static string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
         {
-            return _platformWrapper.SaveFilePanel(title, directory, defaultName, extensions);
+            return PlatformWrapper.SaveFilePanel(title, directory, defaultName, extensions);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
         /// <param name="cb">Callback")</param>
         public static void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb)
         {
-            _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, cb);
+            PlatformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, cb);
         }
     }
 }

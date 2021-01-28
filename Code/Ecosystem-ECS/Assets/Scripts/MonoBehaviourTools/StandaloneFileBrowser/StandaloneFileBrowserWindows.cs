@@ -16,7 +16,7 @@ namespace MonoBehaviourTools.StandaloneFileBrowser
     {
         private readonly IntPtr _hwnd;
         public WindowWrapper(IntPtr handle) { _hwnd = handle; }
-        public IntPtr Handle { get { return _hwnd; } }
+        public IntPtr Handle => _hwnd;
     }
 
     public class StandaloneFileBrowserWindows : IStandaloneFileBrowser

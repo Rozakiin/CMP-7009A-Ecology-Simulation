@@ -9,46 +9,47 @@ namespace MonoBehaviourTools.MenuScripts.GUI_Elements.UI_BrightnessShader
 
         /// Provides a shader property that is set in the inspector
         /// and a material instantiated from the shader
-        public Shader shaderDerp;
-        Material m_Material;
+        public Shader ShaderDerp;
+
+        private Material _material;
 
         [Range(0.5f, 2f)]
         public float brightness = 1f;
 
-        void Start()
+        private void Start()
         {
             // Disable the image effect if the shader can't
             // run on the users graphics card
-            if (!shaderDerp || !shaderDerp.isSupported)
+            if (!ShaderDerp || !ShaderDerp.isSupported)
                 enabled = false;
         }
 
 
-        Material Material
+        private Material Material
         {
             get
             {
-                if (m_Material == null)
+                if (_material == null)
                 {
-                    m_Material = new Material(shaderDerp)
+                    _material = new Material(ShaderDerp)
                     {
                         hideFlags = HideFlags.HideAndDontSave
                     };
                 }
-                return m_Material;
+                return _material;
             }
         }
 
 
-        void OnDisable()
+        private void OnDisable()
         {
-            if (m_Material)
+            if (_material)
             {
-                DestroyImmediate(m_Material);
+                DestroyImmediate(_material);
             }
         }
 
-        void OnRenderImage(RenderTexture source, RenderTexture destination)
+        private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             Material.SetFloat("_Brightness", brightness);
             Graphics.Blit(source, destination, Material);

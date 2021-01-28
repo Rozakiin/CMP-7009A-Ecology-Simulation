@@ -14,7 +14,7 @@ namespace Systems
         protected override void OnUpdate()
         {
             var tileSize = SimulationManager.TileSize;
-            var gridNodeDiameter = GridSetup.Instance.GridNodeDiameter;
+            var gridNodeDiameter = GridManager.Instance.GridNodeDiameter;
 
             Entities.ForEach((
                 ref StateData stateData,

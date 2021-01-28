@@ -6,7 +6,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
-using UnityEngine;
 
 
 // this system must update in the end of frame
@@ -79,6 +78,7 @@ namespace Systems
                     var shortestToMateDistance = float.PositiveInfinity;
 
                     // foreach not supported by Burst so must be for loop
+                    // ReSharper disable once ForCanBeConvertedToForeach
                     for (var i= 0; i < hitsIndices.Length; i++)
                     {
                         var childEntity = collisionWorld.Bodies[hitsIndices[i]].Entity;

@@ -7,16 +7,18 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class SimulationManager : MonoBehaviour
 {
     private const int MaxPopulation = 50000;
 
-    EntityManager _entityManager;
+    private EntityManager _entityManager;
     public GameObjectConversionSettings Settings;
     public static SimulationManager Instance;
     public bool IsDebugEnabled;
-    public bool IsSetupComplete;
+    private bool _isSetupComplete;
 
     private int _secondsOfLastGrassSpawn;
 
@@ -41,7 +43,7 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] private GameObject _rabbit;
     [SerializeField] private GameObject _fox;
     [SerializeField] private GameObject _grass;
-    public GameObject MapCollisionPlane;
+    private GameObject MapCollisionPlane;
     #endregion
 
     #region Numbers for Entity Spawning 
@@ -83,31 +85,33 @@ public class SimulationManager : MonoBehaviour
     [Header("Map Data")]
     public static string MapPath;
     public static string MapString;
-    public static int GridWidth;
-    public static int GridHeight;
-    public static float2 WorldSize;
-    public static Vector3 WorldBottomLeft;
+    public static int2 TileMapSize;
+    public static float2 WorldSize => new float2(TileMapSize.x * TileSize, TileMapSize.y * TileSize);
+    public static float3 WorldBottomLeft => Instance.transform.position - Vector3.right* WorldSize.x / 2 - Vector3.forward* WorldSize.y / 2;
     public static float TileSize;
-    public static float LeftLimit;
-    public static float UpLimit;
-    public static float RightLimit;
-    public static float DownLimit;
     #endregion
     #region Initialisation
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
-        IsSetupComplete = false;
 
+        _isSetupComplete = false;
+        _secondsOfLastGrassSpawn = 0;
+
+        SetNumberOfEntitiesToSpawn();
+    }
+
+    private void SetNumberOfEntitiesToSpawn()
+    {
         if (InitialRabbitsToSpawn >= 0)
             NumberOfRabbitsToSpawn = InitialRabbitsToSpawn;
         if (InitialFoxesToSpawn >= 0)
             NumberOfFoxesToSpawn = InitialFoxesToSpawn;
         if (InitialGrassToSpawn >= 0)
             NumberOfGrassToSpawn = InitialGrassToSpawn;
-        _secondsOfLastGrassSpawn = 0;
     }
+
     private void Start()
     {
 
@@ -133,21 +137,17 @@ public class SimulationManager : MonoBehaviour
     private void Update()
     {
         //Emergency Pause to stop excessive population explosion that could cause freezing
-        if (RabbitPopulation > MaxPopulation || FoxPopulation > MaxPopulation)
-        {
-            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
-            //TODO: should display message to user saying sim is paused due to excessive population
-        }
+        PauseOnExceedPopulation(MaxPopulation);
 
         //check if the setup has completed yet, finish setup
-        if (!IsSetupComplete)
+        if (!_isSetupComplete)
         {
-            if (GridSetup.Instance.CreateGrid())
+            if (GridManager.Instance.TrySetupGrid())
             {
                 CreateEntitiesFromGameObject(_grass, NumberOfGrassToSpawn);
                 CreateEntitiesFromGameObject(_rabbit, NumberOfRabbitsToSpawn);
                 CreateEntitiesFromGameObject(_fox, NumberOfFoxesToSpawn);
-                IsSetupComplete = true;
+                _isSetupComplete = true;
             }
         }
         else
@@ -155,28 +155,41 @@ public class SimulationManager : MonoBehaviour
             SpawnRabbitAtPosOnLClick();
             SpawnFoxAtPosOnRClick();
             SpawnGrassAtPosOnMClick();
-            /* Spawn grass entity at random location once every 10 in game seconds */
-            if ((int)Time.timeSinceLevelLoad % 10 == 0 && _secondsOfLastGrassSpawn != (int)Time.timeSinceLevelLoad)
-            {
-                _secondsOfLastGrassSpawn = (int)Time.timeSinceLevelLoad; //update the time in seconds the code was ran
-                if (GrassPopulation < 2 * GridHeight * GridHeight)//limit to 2x grass per grid square
-                    CreateEntitiesFromGameObject(_grass, (int)math.ceil(GrassPopulation / 10));
-            }
+            GrowGrass();
+        }
+    }
+
+    private void GrowGrass()
+    {
+        /* Spawn grass entity at random location once every 10 in game seconds */
+        if ((int) Time.timeSinceLevelLoad % 10 == 0 && _secondsOfLastGrassSpawn != (int) Time.timeSinceLevelLoad)
+        {
+            _secondsOfLastGrassSpawn = (int) Time.timeSinceLevelLoad; //update the time in seconds the code was ran
+            if (GrassPopulation < 2 * TileMapSize.x * TileMapSize.y) //limit to 2x grass per tile
+                CreateEntitiesFromGameObject(_grass, (int) math.ceil(GrassPopulation / 10));
+        }
+    }
+
+    private void PauseOnExceedPopulation(int population)
+    {
+        if (RabbitPopulation > population || FoxPopulation > population)
+        {
+            MonoBehaviourTools.UI.UITimeControl.Instance.Pause();
+            //TODO: should display message to user saying sim is paused due to excessive population
         }
     }
 
     private void OnDestroy()
     {
-        //dispose of blobassetstore on destroy
-        if (Settings != null)
-            Settings.BlobAssetStore.Dispose();
+        //dispose of blob asset store on destroy
+        Settings?.BlobAssetStore.Dispose();
     }
 
     #region Map Creation Methods
     // Creates the map with entities
     private bool CreateMap()
     {
-        List<List<MapReader.TerrainCost>> mapList = new List<List<MapReader.TerrainCost>>();
+        var mapList = new List<List<TerrainTypeData.TerrainType>>();
         if (MapPath != null)
         {
             if (MapReader.ReadInMapFromFile(MapPath, ref mapList))
@@ -201,6 +214,13 @@ public class SimulationManager : MonoBehaviour
                 return false;
         }
 
+        CreateMapCollisionPlane();
+
+        return true;
+    }
+
+    private void CreateMapCollisionPlane()
+    {
         // Create a GameObject the SizeBase of the map with collider for UnityEngine.Physics ray hits
         MapCollisionPlane = new GameObject
         {
@@ -210,20 +230,11 @@ public class SimulationManager : MonoBehaviour
         MapCollisionPlane.AddComponent<BoxCollider>();
         var collisionPlaneCollider = MapCollisionPlane.GetComponent<BoxCollider>();
         collisionPlaneCollider.size = new Vector3(WorldSize.x, 0, WorldSize.y);
-
-        SetLimits();
-        return true;
     }
 
-    private void CreateEntityTilesFromMapList(in List<List<MapReader.TerrainCost>> mapList)
+    private void CreateEntityTilesFromMapList(in List<List<TerrainTypeData.TerrainType>> mapList)
     {
-        // Set world map data
-        GridWidth = mapList[0].Count;
-        GridHeight = mapList.Count;
-        TileSize = _grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
-        WorldSize.x = GridWidth * TileSize;
-        WorldSize.y = GridHeight * TileSize;
-        WorldBottomLeft = transform.position - Vector3.right * WorldSize.x / 2 - Vector3.forward * WorldSize.y / 2;//Get the real world position of the bottom left of the grid.
+        SetTileMapData(mapList);
 
         // Create entity prefabs from the game objects hierarchy once
         if (ConversionGrassTile == Entity.Null)
@@ -238,16 +249,16 @@ public class SimulationManager : MonoBehaviour
             ConversionRockTile = GameObjectConversionUtility.ConvertGameObjectHierarchy(_rockTile, Settings);
 
 
-        for (int y = 0; y < GridHeight; y++)
+        for (var y = 0; y < TileMapSize.y; y++)
         {
-            for (int x = 0; x < GridWidth; x++)
+            for (var x = 0; x < TileMapSize.x; x++)
             {
-                Vector3 worldPoint = WorldBottomLeft + Vector3.right * (x * TileSize + TileSize / 2) + Vector3.forward * (y * TileSize + TileSize / 2);//Get the world co ordinates of the tile from the bottom left of the graph
+                var worldPoint = WorldBottomLeft + new float3(x * TileSize + TileSize / 2,0,y * TileSize + TileSize / 2);//Get the world co ordinates of the tile from the bottom left of the graph
                 Entity prototypeTile;
 
                 switch (mapList[y][x])
                 {
-                    case MapReader.TerrainCost.Water:
+                    case TerrainTypeData.TerrainType.Water:
                         // Efficiently instantiate an entity from the already converted entity prefab
                         prototypeTile = _entityManager.Instantiate(ConversionWaterTile);
 
@@ -262,7 +273,7 @@ public class SimulationManager : MonoBehaviour
                             }
                         );
                         break;
-                    case MapReader.TerrainCost.Grass:
+                    case TerrainTypeData.TerrainType.Grass:
                         // Efficiently instantiate an entity from the already converted entity prefab
                         prototypeTile = _entityManager.Instantiate(ConversionGrassTile);
 
@@ -271,7 +282,7 @@ public class SimulationManager : MonoBehaviour
                         _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         _entityManager.SetName(prototypeTile, "GrassTile " + y + "," + x);
                         break;
-                    case MapReader.TerrainCost.Sand:
+                    case TerrainTypeData.TerrainType.Sand:
                         // Efficiently instantiate an entity from the already converted entity prefab
                         prototypeTile = _entityManager.Instantiate(ConversionSandTile);
 
@@ -280,7 +291,7 @@ public class SimulationManager : MonoBehaviour
                         _entityManager.SetComponentData(prototypeTile, new Translation { Value = worldPoint }); // set position data (called translation in ECS) 
                         _entityManager.SetName(prototypeTile, "SandTile " + y + "," + x);
                         break;
-                    case MapReader.TerrainCost.Rock:
+                    case TerrainTypeData.TerrainType.Rock:
                         // Efficiently instantiate an entity from the already converted entity prefab
                         prototypeTile = _entityManager.Instantiate(ConversionRockTile);
 
@@ -303,29 +314,29 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    private void SetLimits()
+    private void SetTileMapData(in List<List<TerrainTypeData.TerrainType>> mapList)
     {
-        LeftLimit = -WorldSize.x / 2;
-        RightLimit = WorldSize.x / 2;
-        DownLimit = -WorldSize.y / 2;
-        UpLimit = WorldSize.y / 2;
+        // Set world map data
+        TileMapSize = new int2(mapList[0].Count, mapList.Count);
+        TileSize = _grassTile.GetComponent<Renderer>().bounds.size.x; //Get the width of the tile
     }
+
     #endregion
 
     #region Entity Spawning
     // Creates entities from a gameobject in a given quantity
     private void CreateEntitiesFromGameObject(Object objectToCreate, int quantity)
     {
-        for (int i = 0; i < quantity; i++)
+        for (var i = 0; i < quantity; i++)
         {
             // Get the random world co ordinates from the bottom left of the graph
-            Vector3 worldPoint;
+            float3 worldPoint;
             do
             {
                 // Calc random point on map
-                int randWidth = UnityEngine.Random.Range(0, GridWidth);
-                int randHeight = UnityEngine.Random.Range(0, GridHeight);
-                worldPoint = WorldBottomLeft + Vector3.right * (randWidth * TileSize + TileSize / 2) + Vector3.forward * (randHeight * TileSize + TileSize / 2);
+                var randWidth = UnityEngine.Random.Range(0, WorldSize.x);
+                var randHeight = UnityEngine.Random.Range(0, WorldSize.y);
+                worldPoint = WorldBottomLeft + new float3(randWidth * TileSize + TileSize / 2,0, randHeight * TileSize + TileSize / 2);
             } while (!UtilTools.GridTools.IsWorldPointOnWalkableTile(worldPoint, _entityManager));
 
             // Place the instantiated entity in a random point on the map
@@ -349,7 +360,7 @@ public class SimulationManager : MonoBehaviour
     {
         if (ConversionFox == Entity.Null)
             ConversionFox = GameObjectConversionUtility.ConvertGameObjectHierarchy(_fox, Settings);
-        Entity prototypeFox = _entityManager.Instantiate(ConversionFox);
+        var prototypeFox = _entityManager.Instantiate(ConversionFox);
 
         //set name of entity
         _entityManager.SetName(prototypeFox, $"Fox {FoxPopulation}");
@@ -358,7 +369,7 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeFox,
             new Translation
             {
-                Value = worldPoint,
+                Value = worldPoint
             }
         );
 
@@ -368,7 +379,7 @@ public class SimulationManager : MonoBehaviour
                 CanBeEaten = FoxDefaults.CanBeEaten,
                 NutritionalValueBase = FoxDefaults.NutritionalValue,
                 NutritionalValueMultiplier = FoxDefaults.NutritionalValueMultiplier,
-                FoodType = FoxDefaults.FoodType,
+                FoodType = FoxDefaults.FoodType
             }
         );
 
@@ -382,7 +393,7 @@ public class SimulationManager : MonoBehaviour
                 OriginalMoveMultiplier = FoxDefaults.OriginalMoveMultiplier,
                 YoungMoveMultiplier = FoxDefaults.YoungMoveMultiplier,
                 AdultMoveMultiplier = FoxDefaults.AdultMoveMultiplier,
-                OldMoveMultiplier = FoxDefaults.OldMoveMultiplier,
+                OldMoveMultiplier = FoxDefaults.OldMoveMultiplier
             }
         );
 
@@ -392,7 +403,7 @@ public class SimulationManager : MonoBehaviour
                 FlagStateCurrent = FoxDefaults.FlagState,
                 FlagStatePrevious = FoxDefaults.PreviousFlagState,
                 DeathReason = FoxDefaults.DeathReason,
-                BeenEaten = FoxDefaults.BeenEaten,
+                BeenEaten = FoxDefaults.BeenEaten
             }
         );
 
@@ -414,14 +425,14 @@ public class SimulationManager : MonoBehaviour
                 ShortestDistanceToEdible = FoxDefaults.ShortestToEdibleDistance,
                 ShortestDistanceToWater = FoxDefaults.ShortestToWaterDistance,
                 ShortestDistanceToPredator = FoxDefaults.ShortestToPredatorDistance,
-                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance,
+                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance
             }
         );
 
         _entityManager.SetComponentData(prototypeFox,
             new PathFollowData
             {
-                PathIndex = -1,
+                PathIndex = -1
             }
         );
 
@@ -443,12 +454,12 @@ public class SimulationManager : MonoBehaviour
                 ThirstyThreshold = FoxDefaults.ThirstyThreshold,
                 ThirstMax = FoxDefaults.ThirstMax,
                 ThirstIncrease = FoxDefaults.ThirstIncrease,
-                DrinkingSpeed = FoxDefaults.DrinkingSpeed,
+                DrinkingSpeed = FoxDefaults.DrinkingSpeed
             }
         );
 
         //randomise gender of fox - equal distribution
-        BioStatsData.Genders randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
+        var randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
         //set gender differing components
 
         _entityManager.SetComponentData(prototypeFox,
@@ -460,7 +471,7 @@ public class SimulationManager : MonoBehaviour
                 AgeGroup = FoxDefaults.AgeGroup,
                 AdultEntryTimer = FoxDefaults.AdultEntryTimer,
                 OldEntryTimer = FoxDefaults.OldEntryTimer,
-                Gender = randGender,
+                Gender = randGender
             }
         );
 
@@ -471,8 +482,8 @@ public class SimulationManager : MonoBehaviour
                     MatingDuration = FoxDefaults.MatingDuration,
                     MateStartTime = FoxDefaults.MateStartTime,
                     ReproductiveUrge = FoxDefaults.ReproductiveUrge,
-                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale),
-                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale),
+                    ReproductiveUrgeIncrease = randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale,
+                    DefaultReproductiveIncrease = randGender == BioStatsData.Genders.Female ? FoxDefaults.ReproductiveUrgeIncreaseFemale : FoxDefaults.ReproductiveUrgeIncreaseMale,
                     MatingThreshold = FoxDefaults.MatingThreshold,
 
                     BirthDuration = FoxDefaults.BirthDuration,
@@ -484,7 +495,7 @@ public class SimulationManager : MonoBehaviour
                     LitterSizeAve = FoxDefaults.LitterSizeAve,
                     PregnancyLengthBase = FoxDefaults.PregnancyLength,
                     PregnancyLengthModifier = FoxDefaults.PregnancyLengthModifier,
-                    PregnancyStartTime = FoxDefaults.PregnancyStartTime,
+                    PregnancyStartTime = FoxDefaults.PregnancyStartTime
                 }
             );
 
@@ -492,19 +503,19 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeFox,
             new SizeData
             {
-                SizeBase = (randGender == BioStatsData.Genders.Female ? FoxDefaults.ScaleFemale : FoxDefaults.ScaleMale),
+                SizeBase = randGender == BioStatsData.Genders.Female ? FoxDefaults.ScaleFemale : FoxDefaults.ScaleMale,
                 SizeMultiplier = FoxDefaults.SizeMultiplier,
                 AgeSizeMultiplier = FoxDefaults.AgeSizeMultiplier,
                 YoungSizeMultiplier = FoxDefaults.YoungSizeMultiplier,
                 AdultSizeMultiplier = FoxDefaults.AdultSizeMultiplier,
-                OldSizeMultiplier = FoxDefaults.OldSizeMultiplier,
+                OldSizeMultiplier = FoxDefaults.OldSizeMultiplier
             }
         );
         // set ColliderTypeData to Fox entity
         _entityManager.SetComponentData(prototypeFox,
             new ColliderTypeData
             {
-                Collider = FoxDefaults.Collider,
+                Collider = FoxDefaults.Collider
             }
         );
 
@@ -515,7 +526,7 @@ public class SimulationManager : MonoBehaviour
     {
         if (ConversionGrass == Entity.Null)
             ConversionGrass = GameObjectConversionUtility.ConvertGameObjectHierarchy(_grass, Settings);
-        Entity prototypeGrass = _entityManager.Instantiate(ConversionGrass);
+        var prototypeGrass = _entityManager.Instantiate(ConversionGrass);
 
         //set name of entity
         _entityManager.SetName(prototypeGrass, $"Grass {GrassPopulation}");
@@ -524,7 +535,7 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeGrass,
             new Translation
             {
-                Value = worldPoint,
+                Value = worldPoint
             }
         );
 
@@ -534,7 +545,7 @@ public class SimulationManager : MonoBehaviour
                 CanBeEaten = GrassDefaults.CanBeEaten,
                 NutritionalValueBase = GrassDefaults.NutritionalValue,
                 NutritionalValueMultiplier = GrassDefaults.NutritionalValueMultiplier,
-                FoodType = GrassDefaults.FoodType,
+                FoodType = GrassDefaults.FoodType
             }
         );
 
@@ -544,7 +555,7 @@ public class SimulationManager : MonoBehaviour
                 FlagStateCurrent = GrassDefaults.FlagState,
                 FlagStatePrevious = GrassDefaults.PreviousFlagState,
                 DeathReason = GrassDefaults.DeathReason,
-                BeenEaten = GrassDefaults.BeenEaten,
+                BeenEaten = GrassDefaults.BeenEaten
             }
         );
 
@@ -554,7 +565,7 @@ public class SimulationManager : MonoBehaviour
             {
                 SizeBase = GrassDefaults.Scale,
                 SizeMultiplier = GrassDefaults.SizeMultiplier,
-                AgeSizeMultiplier = 1f,
+                AgeSizeMultiplier = 1f
             }
         );
 
@@ -562,7 +573,7 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeGrass,
             new ColliderTypeData
             {
-                Collider = GrassDefaults.Collider,
+                Collider = GrassDefaults.Collider
             }
         );
 
@@ -575,7 +586,7 @@ public class SimulationManager : MonoBehaviour
     {
         if (ConversionRabbit == Entity.Null)
             ConversionRabbit = GameObjectConversionUtility.ConvertGameObjectHierarchy(_rabbit, Settings);
-        Entity prototypeRabbit = _entityManager.Instantiate(ConversionRabbit);
+        var prototypeRabbit = _entityManager.Instantiate(ConversionRabbit);
 
         //set name of entity
         _entityManager.SetName(prototypeRabbit, $"Rabbit {RabbitPopulation}");
@@ -584,7 +595,7 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeRabbit,
             new Translation
             {
-                Value = worldPoint,
+                Value = worldPoint
             }
         );
 
@@ -595,7 +606,7 @@ public class SimulationManager : MonoBehaviour
                 CanBeEaten = RabbitDefaults.CanBeEaten,
                 NutritionalValueBase = RabbitDefaults.NutritionalValue,
                 NutritionalValueMultiplier = RabbitDefaults.NutritionalValueMultiplier,
-                FoodType = RabbitDefaults.FoodType,
+                FoodType = RabbitDefaults.FoodType
             }
         );
 
@@ -609,7 +620,7 @@ public class SimulationManager : MonoBehaviour
                 OriginalMoveMultiplier = RabbitDefaults.OriginalMoveMultiplier,
                 YoungMoveMultiplier = RabbitDefaults.YoungMoveMultiplier,
                 AdultMoveMultiplier = RabbitDefaults.AdultMoveMultiplier,
-                OldMoveMultiplier = RabbitDefaults.OldMoveMultiplier,
+                OldMoveMultiplier = RabbitDefaults.OldMoveMultiplier
             }
         );
 
@@ -619,7 +630,7 @@ public class SimulationManager : MonoBehaviour
                 FlagStateCurrent = RabbitDefaults.FlagState,
                 FlagStatePrevious = RabbitDefaults.FlagStatePrevious,
                 DeathReason = RabbitDefaults.DeathReason,
-                BeenEaten = RabbitDefaults.BeenEaten,
+                BeenEaten = RabbitDefaults.BeenEaten
             }
         );
 
@@ -641,14 +652,14 @@ public class SimulationManager : MonoBehaviour
                 ShortestDistanceToEdible = FoxDefaults.ShortestToEdibleDistance,
                 ShortestDistanceToWater = FoxDefaults.ShortestToWaterDistance,
                 ShortestDistanceToPredator = FoxDefaults.ShortestToPredatorDistance,
-                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance,
+                ShortestDistanceToMate = FoxDefaults.ShortestToMateDistance
             }
         );
 
         _entityManager.SetComponentData(prototypeRabbit,
             new PathFollowData
             {
-                PathIndex = -1,
+                PathIndex = -1
             }
         );
 
@@ -670,13 +681,13 @@ public class SimulationManager : MonoBehaviour
                 ThirstyThreshold = RabbitDefaults.ThirstyThreshold,
                 ThirstMax = RabbitDefaults.ThirstMax,
                 ThirstIncrease = RabbitDefaults.ThirstIncrease,
-                DrinkingSpeed = RabbitDefaults.DrinkingSpeed,
+                DrinkingSpeed = RabbitDefaults.DrinkingSpeed
 
             }
         );
 
         //randomise gender of rabbit - equal distribution
-        BioStatsData.Genders randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
+        var randGender = UnityEngine.Random.Range(0, 2) == 1 ? BioStatsData.Genders.Female : BioStatsData.Genders.Male;
         //set gender differing components
 
         _entityManager.SetComponentData(prototypeRabbit,
@@ -688,7 +699,7 @@ public class SimulationManager : MonoBehaviour
                 AgeGroup = RabbitDefaults.AgeGroup,
                 AdultEntryTimer = RabbitDefaults.AdultEntryTimer,
                 OldEntryTimer = RabbitDefaults.OldEntryTimer,
-                Gender = randGender,
+                Gender = randGender
             }
         );
 
@@ -699,8 +710,8 @@ public class SimulationManager : MonoBehaviour
                     MatingDuration = RabbitDefaults.MatingDuration,
                     MateStartTime = RabbitDefaults.MateStartTime,
                     ReproductiveUrge = RabbitDefaults.ReproductiveUrge,
-                    ReproductiveUrgeIncrease = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale),
-                    DefaultReproductiveIncrease = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale),
+                    ReproductiveUrgeIncrease = randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale,
+                    DefaultReproductiveIncrease = randGender == BioStatsData.Genders.Female ? RabbitDefaults.ReproductiveUrgeIncreaseFemale : RabbitDefaults.ReproductiveUrgeIncreaseMale,
                     MatingThreshold = RabbitDefaults.MatingThreshold,
 
 
@@ -713,7 +724,7 @@ public class SimulationManager : MonoBehaviour
                     LitterSizeAve = RabbitDefaults.LitterSizeAve,
                     PregnancyLengthBase = RabbitDefaults.PregnancyLength,
                     PregnancyLengthModifier = RabbitDefaults.PregnancyLengthModifier,
-                    PregnancyStartTime = RabbitDefaults.PregnancyStartTime,
+                    PregnancyStartTime = RabbitDefaults.PregnancyStartTime
                 }
             );
 
@@ -721,12 +732,12 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeRabbit,
             new SizeData
             {
-                SizeBase = (randGender == BioStatsData.Genders.Female ? RabbitDefaults.ScaleFemale : RabbitDefaults.ScaleMale),
+                SizeBase = randGender == BioStatsData.Genders.Female ? RabbitDefaults.ScaleFemale : RabbitDefaults.ScaleMale,
                 SizeMultiplier = RabbitDefaults.SizeMultiplier,
                 AgeSizeMultiplier = RabbitDefaults.AgeSizeMultiplier,
                 YoungSizeMultiplier = RabbitDefaults.YoungSizeMultiplier,
                 AdultSizeMultiplier = RabbitDefaults.AdultSizeMultiplier,
-                OldSizeMultiplier = RabbitDefaults.OldSizeMultiplier,
+                OldSizeMultiplier = RabbitDefaults.OldSizeMultiplier
             }
         );
 
@@ -734,7 +745,7 @@ public class SimulationManager : MonoBehaviour
         _entityManager.SetComponentData(prototypeRabbit,
             new ColliderTypeData
             {
-                Collider = RabbitDefaults.Collider,
+                Collider = RabbitDefaults.Collider
             }
         );
 
@@ -749,10 +760,10 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hit))
                 {
-                    Vector3 targetPosition = hit.point;
+                    var targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
                     if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateRabbitAtWorldPoint(targetPosition);
@@ -768,10 +779,10 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hit))
                 {
-                    Vector3 targetPosition = hit.point;
+                    var targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
                     if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateFoxAtWorldPoint(targetPosition);
@@ -787,10 +798,10 @@ public class SimulationManager : MonoBehaviour
             // if not over the UI
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hit))
                 {
-                    Vector3 targetPosition = hit.point;
+                    var targetPosition = hit.point;
                     Debug.Log(targetPosition.ToString());
                     if (UtilTools.GridTools.IsWorldPointOnWalkableTile(targetPosition, _entityManager))
                         CreateGrassAtWorldPoint(targetPosition);
@@ -799,9 +810,4 @@ public class SimulationManager : MonoBehaviour
         }
     }
     #endregion
-
-    public static Vector2 MapSize()
-    {
-        return new Vector2(GridWidth, GridHeight);
-    }
 }

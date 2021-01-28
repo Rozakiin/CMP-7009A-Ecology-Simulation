@@ -1,44 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Components;
 using UnityEngine;
 
 namespace MonoBehaviourTools.Map
 {
     public class MapReader
     {
-        public enum TerrainCost
-        {
-            Water,
-            Grass,
-            Sand,
-            Rock
-        }
-
 
         /*
          * Reads in from file a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
          * This is stored in mapList which is a List of lists passed by reference.
          */
-        public static bool ReadInMapFromFile(string filePath, ref List<List<TerrainCost>> mapList)
+        public static bool ReadInMapFromFile(string filePath, ref List<List<TerrainTypeData.TerrainType>> mapList)
         {
             try
             {
                 // Create an instance of StreamReader to read from a file.
                 // The using statement also closes the StreamReader.
-                using (StreamReader reader = new StreamReader(filePath))
+                using (var reader = new StreamReader(filePath))
                 {
                     char[] charSeparators = { ' ', '\n' }; // delimiters of space and newline
-                    string[] words = reader.ReadToEnd().Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
+                    var words = reader.ReadToEnd().Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove empty entries
 
-                    int mapListIndex = 0;
-                    foreach (string word in words) //iterate over each string in the words array
+                    var mapListIndex = 0;
+                    foreach (var word in words) //iterate over each string in the words array
                     {
-                        mapList.Add(new List<TerrainCost>()); // add a list of TerrainCost to end of mapList
+                        mapList.Add(new List<TerrainTypeData.TerrainType>()); // add a list of TerrainCost to end of mapList
                         words[mapListIndex] = word.Trim(); // trim whitespace off start and end of string
-                        foreach (char cost in words[mapListIndex]) // iterate over each char the string at words[mapListIndex] (each row)
+                        foreach (var cost in words[mapListIndex]) // iterate over each char the string at words[mapListIndex] (each row)
                         {
-                            mapList[mapListIndex].Add((TerrainCost)Char.GetNumericValue(cost)); // convert the char to numericvalue of char to terraincost and add to list
+                            mapList[mapListIndex].Add((TerrainTypeData.TerrainType)char.GetNumericValue(cost)); // convert the char to numeric value of char to terrain cost and add to list
                         }
                         mapListIndex++; //increment the index position accessing the words array
                     }
@@ -60,21 +53,21 @@ namespace MonoBehaviourTools.Map
          * Reads in from string a text representation of the map grid with terrain types as numeric value of the TerrainCost enum.
          * This is stored in mapList which is a List of lists passed by reference.
          */
-        public static bool ReadInMapFromString(string map, ref List<List<TerrainCost>> mapList)
+        public static bool ReadInMapFromString(string map, ref List<List<TerrainTypeData.TerrainType>> mapList)
         {
             try
             {
-                char[] charSeparators = { ' ', '\n' }; // delimeters of space and newline
-                string[] words = map.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove emplty entries
+                char[] charSeparators = { ' ', '\n' }; // delimiters of space and newline
+                var words = map.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries); // split file into array of strings, remove empty entries
 
-                int mapListIndex = 0;
-                foreach (string word in words) //iterate over each string in the words array
+                var mapListIndex = 0;
+                foreach (var word in words) //iterate over each string in the words array
                 {
-                    mapList.Add(new List<TerrainCost>()); // add a list of TerrainCost to end of mapList
+                    mapList.Add(new List<TerrainTypeData.TerrainType>()); // add a list of TerrainCost to end of mapList
                     words[mapListIndex] = word.Trim(); // trim whitespace off start and end of string
-                    foreach (char cost in words[mapListIndex]) // iterate over each char the string at words[mapListIndex] (each row)
+                    foreach (var cost in words[mapListIndex]) // iterate over each char the string at words[mapListIndex] (each row)
                     {
-                        mapList[mapListIndex].Add((TerrainCost)Char.GetNumericValue(cost)); // convert the char to numericvalue of char to terraincost and add to list
+                        mapList[mapListIndex].Add((TerrainTypeData.TerrainType)char.GetNumericValue(cost)); // convert the char to numeric value of char to terrain cost and add to list
                     }
                     mapListIndex++; //increment the index position accessing the words array
                 }

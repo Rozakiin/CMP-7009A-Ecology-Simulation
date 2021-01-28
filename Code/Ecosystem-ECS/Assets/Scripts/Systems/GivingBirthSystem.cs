@@ -298,8 +298,8 @@ namespace Systems
                             var seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
                             var randomGen = new Random((uint) seed + 2);
                             BioStatsData.Genders randGender = randomGen.NextInt(0, 2) == 1
-                                ? randGender = BioStatsData.Genders.Female
-                                : randGender = BioStatsData.Genders.Male;
+                                ? BioStatsData.Genders.Female
+                                : BioStatsData.Genders.Male;
 
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new BioStatsData
@@ -427,8 +427,8 @@ namespace Systems
                             var seed = timeSeed * (translation.Value.x * translation.Value.z) + entity.Index;
                             var randomGen = new Random((uint) seed + 2);
                             BioStatsData.Genders randGender = randomGen.NextInt(0, 2) == 1
-                                ? randGender = BioStatsData.Genders.Female
-                                : randGender = BioStatsData.Genders.Male;
+                                ? BioStatsData.Genders.Female
+                                : BioStatsData.Genders.Male;
 
                             ecb.SetComponent(entityInQueryIndex, newEntity,
                                 new BioStatsData

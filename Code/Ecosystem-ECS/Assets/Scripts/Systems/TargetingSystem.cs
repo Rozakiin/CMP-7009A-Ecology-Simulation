@@ -21,14 +21,14 @@ namespace Systems
         protected override void OnUpdate()
         {
             // only run if grid has a SizeBase aka it has been created
-            if (GridSetup.Instance.GridMaxSize > 0)
+            if (GridManager.Instance.GridMaxSize > 0)
             {
                 if (!_gridNodeArray.IsCreated)
                     _gridNodeArray = CreateGridNodeArray();
                 var grid = new NativeArray<GridNode>(_gridNodeArray, Allocator.TempJob);
 
                 //Get grid data needed to check walkable
-                var gridSize = GridSetup.Instance.GridSize;
+                var gridSize = GridManager.Instance.GridSize;
                 var worldSize = SimulationManager.WorldSize;
                 var tileSize = SimulationManager.TileSize;
 
@@ -47,13 +47,10 @@ namespace Systems
                         in StateData stateData
                     ) =>
                     {
-                        if (pathFollowData.PathIndex >= 0)
-                            targetData.AtTarget = false;
-                        else
-                            targetData.AtTarget = true;
+                        targetData.AtTarget = pathFollowData.PathIndex < 0;
 
                         // if not following a path
-                        if (pathFollowData.PathIndex < 0)
+                        if (targetData.AtTarget)
                         {
                             float3 targetPosition = float.PositiveInfinity; // should be further than everything else in scene
 
@@ -216,9 +213,9 @@ namespace Systems
 
         private static NativeArray<GridNode> CreateGridNodeArray()
         {
-            var grid = GridSetup.Instance.Grid;
-            var gridSize = GridSetup.Instance.GridSize;
-            var gridMaxSize = GridSetup.Instance.GridMaxSize;
+            var grid = GridManager.Instance.Grid;
+            var gridSize = GridManager.Instance.GridSize;
+            var gridMaxSize = GridManager.Instance.GridMaxSize;
             var gridNodeArray = new NativeArray<GridNode>(gridMaxSize, Allocator.Persistent);
 
             for (var x = 0; x < gridSize.x; x++)

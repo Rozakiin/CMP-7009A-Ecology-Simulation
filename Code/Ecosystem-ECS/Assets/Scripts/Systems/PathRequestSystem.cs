@@ -32,7 +32,7 @@ namespace Systems
             ) =>
             {
                 //if not following a path and not at target
-                if (pathFollowData.PathIndex < 0 && targetData.AtTarget == false)
+                if (pathFollowData.PathIndex < 0 && !targetData.AtTarget)
                 {
                     // make a path finding request
                     ecb.AddComponent<PathFindingRequestData>(entityInQueryIndex, entity);

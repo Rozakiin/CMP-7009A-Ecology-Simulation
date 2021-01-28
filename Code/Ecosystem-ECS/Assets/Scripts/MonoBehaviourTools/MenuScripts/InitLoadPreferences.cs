@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace MonoBehaviourTools.MenuScripts
 {
-    public class Init_LoadPreferences : MonoBehaviour
+    public class InitLoadPreferences : MonoBehaviour
     {
         #region Variables
         //BRIGHTNESS
@@ -34,7 +34,7 @@ namespace MonoBehaviourTools.MenuScripts
                 {
                     if (PlayerPrefs.HasKey("masterBrightness"))
                     {
-                        float localBrightness = PlayerPrefs.GetFloat("masterBrightness");
+                        var localBrightness = PlayerPrefs.GetFloat("masterBrightness");
 
                         brightnessText.text = localBrightness.ToString("0.0");
                         brightnessSlider.value = localBrightness;
@@ -50,7 +50,7 @@ namespace MonoBehaviourTools.MenuScripts
                 //VOLUME
                 if (PlayerPrefs.HasKey("masterVolume"))
                 {
-                    float localVolume = PlayerPrefs.GetFloat("masterVolume");
+                    var localVolume = PlayerPrefs.GetFloat("masterVolume");
 
                     volumeText.text = localVolume.ToString("0.0");
                     volumeSlider.value = localVolume;

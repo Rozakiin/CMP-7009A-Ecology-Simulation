@@ -39,8 +39,8 @@ namespace Systems
                 _pathNodeArray = CreatePathNodeArray();
             var tempArray = new NativeArray<PathNode>(_pathNodeArray, Allocator.TempJob);
 
-            var gridWorldSize = GridSetup.Instance.GridWorldSize;
-            var gridSize = GridSetup.Instance.GridSize;
+            var worldSize = SimulationManager.WorldSize;
+            var gridSize = GridManager.Instance.GridSize;
 
             // goes through each entity requesting a path and finds a path
             Entities.ForEach((
@@ -59,8 +59,8 @@ namespace Systems
                 {
                     GridSize = gridSize,
                     PathNodeArray = tmpPathNodeArray,
-                    StartNode = NodeFromWorldPoint(pathFindingRequestData.StartPosition, gridWorldSize, gridSize, tmpPathNodeArray),
-                    TargetNode = NodeFromWorldPoint(pathFindingRequestData.EndPosition, gridWorldSize, gridSize, tmpPathNodeArray),
+                    StartNode = NodeFromWorldPoint(pathFindingRequestData.StartPosition, worldSize, gridSize, tmpPathNodeArray),
+                    TargetNode = NodeFromWorldPoint(pathFindingRequestData.EndPosition, worldSize, gridSize, tmpPathNodeArray),
                     IterationLimit = 10 * (int) targetData.SightRadius //arbitrary decision should have better way to determine how long a path should be
                 };
                 findPathJob.Execute(); //execute the find path job
@@ -68,7 +68,7 @@ namespace Systems
                 //sets the buffer in the entity to follow the path
                 var setBufferPathJob = new SetBufferPathJob
                 {
-                    WorldSize = gridWorldSize,
+                    WorldSize = worldSize,
                     GridSize = gridSize,
                     PathNodeArray = findPathJob.PathNodeArray,
                     PathfindingRequestData = pathFindingRequestData,
@@ -79,6 +79,7 @@ namespace Systems
 
                 //update the edited component data from SetBufferPathJob
                 pathFollowData = setBufferPathJob.PathFollowData;
+                // ReSharper disable once RedundantAssignment
                 pathPositionDataBuffer = setBufferPathJob.PathPositionDataBuffer;
 
                 ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity); //remove the PathFindingRequestData from entity
@@ -121,9 +122,9 @@ namespace Systems
         //Creates a PathNode NativeArray for use in pathfinding from the GridNode array
         private NativeArray<PathNode> CreatePathNodeArray()
         {
-            var grid = GridSetup.Instance.Grid;
-            var gridSize = GridSetup.Instance.GridSize;
-            var gridMaxSize = GridSetup.Instance.GridMaxSize;
+            var grid = GridManager.Instance.Grid;
+            var gridSize = GridManager.Instance.GridSize;
+            var gridMaxSize = GridManager.Instance.GridMaxSize;
             var pathNodeArray = new NativeArray<PathNode>(gridMaxSize, Allocator.Persistent);
 
             for (var x = 0; x < gridSize.x; x++)
@@ -268,6 +269,7 @@ namespace Systems
 
 
                         //Loop through each neighbor of the current node
+                        // ReSharper disable once ForCanBeConvertedToForeach
                         for (var i = 0; i < neighbourOffsetArray.Length; i++)
                         {
                             var neighbourOffset = neighbourOffsetArray[i];
