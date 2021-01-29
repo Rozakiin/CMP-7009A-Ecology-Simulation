@@ -210,14 +210,14 @@ namespace Systems
                 {
                     var neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp)
                     {
-                        [0] = new(-1, 0), // Left
-                        [1] = new(+1, 0), // Right
-                        [2] = new(0, +1), // Up
-                        [3] = new(0, -1), // Down
-                        [4] = new(-1, -1), // Left Down
-                        [5] = new(-1, +1), // Left Up
-                        [6] = new(+1, -1), // Right Down
-                        [7] = new(+1, +1) // Right Up
+                        [0] = new int2(-1, 0), // Left
+                        [1] = new int2(+1, 0), // Right
+                        [2] = new int2(0, +1), // Up
+                        [3] = new int2(0, -1), // Down
+                        [4] = new int2(-1, -1), // Left Down
+                        [5] = new int2(-1, +1), // Left Up
+                        [6] = new int2(+1, -1), // Right Down
+                        [7] = new int2(+1, +1) // Right Up
                     };
 
                     var openList = new NativeList<int>(Allocator.Temp); //openlist of indexes of nodes 
