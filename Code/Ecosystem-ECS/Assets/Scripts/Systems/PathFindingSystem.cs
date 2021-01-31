@@ -59,33 +59,20 @@ namespace Systems
                 var findPathJob = new FindPathJob
                 {
                     GridSize = gridSize,
+                    WorldSize = worldSize,
                     PathNodeArray = tmpPathNodeArray,
-                    StartNode = NodeFromWorldPoint(pathFindingRequestData.StartPosition, worldSize, gridSize,
-                        tmpPathNodeArray),
-                    TargetNode = NodeFromWorldPoint(pathFindingRequestData.EndPosition, worldSize, gridSize,
-                        tmpPathNodeArray),
-                    IterationLimit =
-                        10 * (int) targetData
-                            .SightRadius //arbitrary decision should have better way to determine how long a path should be
-                };
-                findPathJob.Execute(); //execute the find path job
-
-                //sets the buffer in the entity to follow the path
-                var setBufferPathJob = new SetBufferPathJob
-                {
-                    PathNodeArray = findPathJob.PathNodeArray,
-                    EndNode = NodeFromWorldPoint(pathFindingRequestData.EndPosition, worldSize, gridSize,
-                        findPathJob.PathNodeArray),
+                    StartPosition = pathFindingRequestData.StartPosition,
+                    EndPosition = pathFindingRequestData.EndPosition,
+                    IterationLimit = 10 * (int) targetData.SightRadius, //arbitrary decision should have better way to determine how long a path should be
                     PathFollowData = pathFollowData,
                     PathPositionDataBuffer = pathPositionDataBuffer
                 };
-                setBufferPathJob.Execute(); //execute the set buffer path job
+                findPathJob.Execute(); //execute the find path job
+                
+                //update the edited component data from findPathJob
+                pathFollowData = findPathJob.PathFollowData;
 
-                //update the edited component data from SetBufferPathJob
-                pathFollowData = setBufferPathJob.PathFollowData;
-
-                ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex,
-                    entity); //remove the PathFindingRequestData from entity
+                ecb.RemoveComponent<PathFindingRequestData>(entityInQueryIndex, entity); //remove the PathFindingRequestData from entity
             }).WithDeallocateOnJobCompletion(tempArray).ScheduleParallel();
 
             // Make sure that the ECB system knows about our job
@@ -196,17 +183,33 @@ namespace Systems
         private struct FindPathJob : IJob
         {
             public int2 GridSize;
+            public float2 WorldSize;
 
             public NativeArray<PathNode> PathNodeArray;
-            [ReadOnly] public PathNode StartNode;
-            [ReadOnly] public PathNode TargetNode;
+            public float3 StartPosition;
+            public float3 EndPosition;
+
+            private PathNode _startNode;
+            private PathNode _targetNode;
 
             public int IterationLimit;
 
+            public PathFollowData PathFollowData;
+            public DynamicBuffer<PathPositionData> PathPositionDataBuffer;
             public void Execute()
             {
+                _startNode = NodeFromWorldPoint(StartPosition, WorldSize, GridSize, PathNodeArray);
+                _targetNode = NodeFromWorldPoint(EndPosition, WorldSize, GridSize, PathNodeArray);
+                FindPath();
+
+                var endNode = NodeFromWorldPoint(EndPosition, WorldSize, GridSize, PathNodeArray);
+                SetBufferPath(PathNodeArray, endNode, ref PathFollowData, ref PathPositionDataBuffer);
+            }
+
+            private void FindPath()
+            {
                 //Only path find if start and end are walkable
-                if (StartNode.IsWalkable && TargetNode.IsWalkable)
+                if (_startNode.IsWalkable && _targetNode.IsWalkable)
                 {
                     var neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp)
                     {
@@ -220,32 +223,50 @@ namespace Systems
                         [7] = new int2(+1, +1) // Right Up
                     };
 
-                    var openList = new NativeList<int>(Allocator.Temp); //openlist of indexes of nodes 
-                    var closedList = new NativeList<int>(Allocator.Temp); //closedlist of indexes of nodes 
+                    //open and closed list of indexes of nodes 
+                    var openList = new NativeList<int>(Allocator.Temp); 
+                    var closedList = new NativeList<int>(Allocator.Temp); 
 
-                    openList.Add(StartNode.Index); //Add the starting node to the open list to begin the program
+                    //Add the starting node to the open list
+                    openList.Add(_startNode.Index); 
 
-                    while (openList.Length > 0 && IterationLimit > 0) //Whilst there is something in the open list
+                    var closestNode = _startNode;
+
+                    //Whilst there is something in the open list
+                    while (openList.Length > 0) 
                     {
-                        var currentNodeIndex =
-                            GetLowestCostFNodeIndex(openList,
-                                PathNodeArray); //set current node to item with lowest F cost in open list
-                        var currentNode = PathNodeArray[currentNodeIndex]; //get currentnode as pathnode
+                        //set current node to item with lowest F cost in open list
+                        var currentNodeIndex = GetLowestCostFNodeIndex(openList, PathNodeArray); 
+                        //get currentnode as pathnode
+                        var currentNode = PathNodeArray[currentNodeIndex]; 
 
-                        //If the current node is the same as the target node
-                        if (currentNode.Index == TargetNode.Index)
-                            //Found the Path!
+                        //If the current node is the same as the target node, Found the Path!
+                        if (currentNode.Index == _targetNode.Index)
                             break;
+
+                        // calc the closest node visited to the Targetnode, used if run out of iterations
+                        if ((GetDistance(currentNode, _targetNode) < GetDistance(closestNode, _targetNode)) && currentNode.IsWalkable)
+                            closestNode = currentNode;
+                        // Path might still be obtainable but we've run out of allowed iterations
+                        if (IterationLimit == 0)
+                        {
+                            // Return the best result we've found so far
+                            // Need to update goal so we can reconstruct the shorter path
+                            EndPosition = closestNode.Position;
+                            break;
+                        }
 
                         // Remove current node from Open List
                         for (var i = 0; i < openList.Length; i++)
                             if (openList[i] == currentNodeIndex)
                             {
-                                openList.RemoveAtSwapBack(i); //remove from openlist (swapback more performant)
+                                //remove from openlist (swapback more performant)
+                                openList.RemoveAtSwapBack(i); 
                                 break;
                             }
 
-                        closedList.Add(currentNodeIndex); //Add it to the closed List
+                        //Add it to the closed List
+                        closedList.Add(currentNodeIndex); 
 
 
                         //Loop through each neighbor of the current node
@@ -255,44 +276,46 @@ namespace Systems
                             var neighbourOffset = neighbourOffsetArray[i];
                             var neighbourGridPosition =
                                 new int2(currentNode.X + neighbourOffset.x, currentNode.Y + neighbourOffset.y);
-
+                            
+                            // Neighbour not valid position
                             if (!IsPositionInsideGrid(neighbourGridPosition, GridSize))
-                                // Neighbour not valid position
                                 continue;
 
-                            var neighbourNodeIndex = CalculateIndex(neighbourGridPosition.x, neighbourGridPosition.y,
-                                GridSize.x);
+                            var neighbourNodeIndex = CalculateIndex(neighbourGridPosition.x, neighbourGridPosition.y, GridSize.x);
 
-                            //If the neighbor has already been checked
-                            if (closedList.Contains(neighbourNodeIndex)) continue; //Skip it
+                            //If the neighbor has already been checked, Skip it
+                            if (closedList.Contains(neighbourNodeIndex)) continue; 
 
-                            var neighbourNode = PathNodeArray[neighbourNodeIndex]; //Get neighbour node as pathnode
+                            //Get neighbour node as pathnode
+                            var neighbourNode = PathNodeArray[neighbourNodeIndex]; 
 
-                            //if the neighbour is unwalkable
+                            //if the neighbour is unwalkable, Skip it
                             if (!neighbourNode.IsWalkable) continue; //Skip
-
-                            var moveCost =
-                                currentNode.GCost + GetDistance(currentNode, neighbourNode) +
-                                neighbourNode.Penalty; //Get the total cost of that neighbor
+                            
+                            //Get the total cost of that neighbor
+                            var moveCost = currentNode.GCost + GetDistance(currentNode, neighbourNode) + neighbourNode.Penalty; 
 
                             //If the total cost is greater than the g cost or it is not in the open list
                             if (moveCost < neighbourNode.GCost || !openList.Contains(neighbourNodeIndex))
                             {
-                                neighbourNode.GCost = moveCost; //Set the g cost to the total cost
-                                neighbourNode.HCost = GetDistance(neighbourNode, TargetNode); //Set the h cost
-                                neighbourNode.CameFromNodeIndex =
-                                    currentNodeIndex; //Set the parent of the node for retracing steps
-                                PathNodeArray[neighbourNodeIndex] =
-                                    neighbourNode; //save back to original neighbour node(neighbourNode is a copy, not reference)
+                                //Set the g cost to the total cost
+                                neighbourNode.GCost = moveCost; 
+                                //Set the h cost
+                                neighbourNode.HCost = GetDistance(neighbourNode, _targetNode); 
+                                //Set the parent of the node for retracing steps
+                                neighbourNode.CameFromNodeIndex = currentNodeIndex; 
+                                //save back to original neighbour node(neighbourNode is a copy, not reference)
+                                PathNodeArray[neighbourNodeIndex] = neighbourNode; 
 
-                                //If the neighbor is not in the openList
+                                //If the neighbor is not in the openList, Add it to the list
                                 if (!openList.Contains(neighbourNodeIndex))
-                                    openList.Add(neighbourNodeIndex); //Add it to the list
+                                    openList.Add(neighbourNodeIndex);
                             }
                         }
 
                         IterationLimit--;
                     }
+
 
                     //Dispose of arrays
                     neighbourOffsetArray.Dispose();
@@ -300,46 +323,35 @@ namespace Systems
                     closedList.Dispose();
                 }
             }
-        }
 
-        [BurstCompile]
-        private struct SetBufferPathJob : IJob
-        {
-            [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<PathNode> PathNodeArray;
-
-            [ReadOnly] public PathNode EndNode;
-            public PathFollowData PathFollowData;
-            public DynamicBuffer<PathPositionData> PathPositionDataBuffer;
-
-            public void Execute()
+            private static void SetBufferPath(in NativeArray<PathNode> pathNodeArray, in PathNode endNode, ref PathFollowData pathFollowData, ref DynamicBuffer<PathPositionData> pathPositionDataBuffer)
             {
-                PathPositionDataBuffer.Clear();
+                pathPositionDataBuffer.Clear();
 
-                if (EndNode.CameFromNodeIndex == -1)
+                if (endNode.CameFromNodeIndex == -1)
                 {
                     // Didn't find a path!
-                    PathFollowData = new PathFollowData {PathIndex = -1};
+                    pathFollowData.PathIndex = -1 ;
                 }
                 else
                 {
                     // Found a path
-                    CalculatePath(PathNodeArray, EndNode, ref PathPositionDataBuffer);
-                    PathFollowData = new PathFollowData {PathIndex = PathPositionDataBuffer.Length - 1};
+                    CalculatePath(pathNodeArray, endNode, ref pathPositionDataBuffer);
+                    pathFollowData.PathIndex = pathPositionDataBuffer.Length - 1;
                 }
             }
-
+            
             //Retrace path through the nodes(reversed) could maybe simplify path?
-            private static void CalculatePath(in NativeArray<PathNode> pathNodeArray, in PathNode endNode,
-                ref DynamicBuffer<PathPositionData> pathPositionDataBuffer)
+            private static void CalculatePath(in NativeArray<PathNode> pathNodeArray, in PathNode endNode, ref DynamicBuffer<PathPositionData> pathPositionDataBuffer)
             {
                 // Found a path
-                pathPositionDataBuffer.Add(new PathPositionData {Position = endNode.Position});
+                pathPositionDataBuffer.Add(new PathPositionData { Position = endNode.Position });
 
                 var currentNode = endNode;
                 while (currentNode.CameFromNodeIndex != -1)
                 {
                     var cameFromNode = pathNodeArray[currentNode.CameFromNodeIndex];
-                    pathPositionDataBuffer.Add(new PathPositionData {Position = cameFromNode.Position});
+                    pathPositionDataBuffer.Add(new PathPositionData { Position = cameFromNode.Position });
                     currentNode = cameFromNode;
                 }
             }
@@ -347,20 +359,29 @@ namespace Systems
 
         private struct PathNode
         {
-            public int X; // X position in Node Array
-            public int Y; // Y position in Node Array
+            // X,Y position in Node Array
+            public int X; 
+            public int Y;
 
-            public int Index; //index in Node Array
+            //index in Node Array
+            public int Index; 
 
-            public int GCost; // Cost to move to next node
-            public int HCost; // Distance to end from this node
-            public int FCost => GCost + HCost; //Total Cost of the Node;
+            // Cost to move to next node
+            public int GCost; 
+            // Distance to end from this node
+            public int HCost; 
+            //Total Cost of the Node;
+            public int FCost => GCost + HCost; 
 
-            public bool IsWalkable; // Is node obstructed
-            public int Penalty; //penaty for walking the node
-            public float3 Position; // World position of node
+            // Is node obstructed
+            public bool IsWalkable; 
+            //penalty for walking the node
+            public int Penalty; 
+            // World position of node
+            public float3 Position; 
 
-            public int CameFromNodeIndex; // For A* algo, store previous node came from to trace path
+            // For A* algo, store previous node came from to trace path
+            public int CameFromNodeIndex; 
 
             public int CompareTo(in PathNode nodeToCompare)
             {
