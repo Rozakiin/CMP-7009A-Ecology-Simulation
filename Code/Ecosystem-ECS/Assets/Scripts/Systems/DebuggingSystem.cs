@@ -1,5 +1,6 @@
 ﻿using Components;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -41,9 +42,21 @@ namespace Systems
                         GetComponentDataFromEntity<Translation>(true)[targetData.PredatorEntity].Value, Color.red);
             }).Run();
 
+            Entities.ForEach((
+                in Translation translation,
+                in TargetData targetData) =>
+            {
+                //Debugging: draw aabb 
+                var min = translation.Value + new float3(-targetData.SightRadius, 0, -targetData.SightRadius);
+                var max = translation.Value + new float3(targetData.SightRadius, 0, targetData.SightRadius);
+                Debug.DrawLine(min, new float3(min.x, min.y, max.z));
+                Debug.DrawLine(min, new float3(max.x, min.y, min.z));
+                Debug.DrawLine(max, new float3(min.x, min.y, max.z));
+                Debug.DrawLine(max, new float3(max.x, min.y, min.z));
+            }).Run();
 
             Entities.ForEach((
-                DynamicBuffer<PathPositionData> pathPositionDataBuffer,
+                in DynamicBuffer<PathPositionData> pathPositionDataBuffer,
                 in PathFollowData pathFollowData
             ) =>
             {
